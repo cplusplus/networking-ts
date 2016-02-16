@@ -1561,7 +1561,7 @@ basic_socket(io_context& ctx, const protocol_type& protocol,
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{native_socket} is a native handle to an open socket.
+\requires \tcode{native_socket} is a native handle to an open socket.
 
 \pnum
 \effects Assigns the existing native socket into this socket as if by calling \tcode{assign(protocol, native_socket)}.
@@ -1613,7 +1613,7 @@ template<class OtherProtocol>
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_socket<Protocol>} that refers to the state originally represented by \tcode{rhs}.
@@ -1690,7 +1690,7 @@ template<class OtherProtocol>
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
 
 \pnum
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this socket. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}. Disables the linger socket option to prevent the assignment from blocking, and releases socket resources as if by POSIX \tcode{close(native_handle())}. Moves into \tcode{*this} the state originally represented by \tcode{rhs}.
@@ -1776,7 +1776,7 @@ void assign(const protocol_type& protocol,
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{native_socket} is a native handle to an open socket.
+\requires \tcode{native_socket} is a native handle to an open socket.
 
 \pnum
 \effects Assigns the native socket handle to this socket object.
@@ -2344,7 +2344,7 @@ template<class OtherProtocol>
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
@@ -2376,7 +2376,7 @@ template<class OtherProtocol>
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
 
 \pnum
 \effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
@@ -2967,7 +2967,7 @@ template<class OtherProtocol>
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_stream_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
@@ -2999,7 +2999,7 @@ template<class OtherProtocol>
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
 
 \pnum
 \effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
@@ -3489,7 +3489,7 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{native_acceptor} is a native handle to an open acceptor.
+\requires \tcode{native_acceptor} is a native handle to an open acceptor.
 
 \pnum
 \effects Assigns the existing native acceptor into this acceptor as if by calling \tcode{assign(protocol, native_acceptor)}.
@@ -3543,7 +3543,7 @@ template<class OtherProtocol>
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol>} that refers to the state originally represented by \tcode{rhs}.
@@ -3626,7 +3626,7 @@ template<class OtherProtocol>
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
 
 \pnum
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this acceptor, and releases acceptor resources as if by POSIX \tcode{close(native_handle())}. Then moves into \tcode{*this} the state originally represented by \tcode{rhs}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
@@ -3718,7 +3718,7 @@ void assign(const protocol_type& protocol,
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{native_acceptor} is a native handle to an open acceptor.
+\requires \tcode{native_acceptor} is a native handle to an open acceptor.
 
 \pnum
 \effects Assigns the native acceptor handle to this acceptor object.

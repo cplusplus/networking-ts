@@ -1726,7 +1726,7 @@ template<> struct hash<experimental::net::v1::ip::address_v6>;
 
 \begin{itemdescr}
 \pnum
-Requires: the template specializations shall meet the requirements of class template \tcode{hash} (\CppXref{unord.hash}).
+\requires the template specializations shall meet the requirements of class template \tcode{hash} (\CppXref{unord.hash}).
 \end{itemdescr}
 
 
@@ -2612,7 +2612,7 @@ constexpr basic_endpoint(const protocol_type& proto,
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{proto == protocol_type::v4() || proto == protocol_type::v6()}.
+\requires \tcode{proto == protocol_type::v4() || proto == protocol_type::v6()}.
 
 \pnum
 \postconditions 

@@ -1080,7 +1080,7 @@ dynamic_vector_buffer(vector<T, Allocator>& vec,
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{vec.size() <= maximum_size}.
+\requires \tcode{vec.size() <= maximum_size}.
 
 \pnum
 \effects Initializes \tcode{vec_} with \tcode{vec}, \tcode{size_} with \tcode{vec.size()}, and \tcode{max_size_} with \tcode{maximum_size}.
@@ -1236,7 +1236,7 @@ dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str,
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{str.size() <= maximum_size}.
+\requires \tcode{str.size() <= maximum_size}.
 
 \pnum
 \effects Initializes \tcode{str_} with \tcode{str}, \tcode{size_} with \tcode{str.size()}, and \tcode{max_size_} with \tcode{maximum_size}.

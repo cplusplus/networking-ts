@@ -1081,7 +1081,7 @@ template<class Service, class... Args> Service&
 
 \begin{itemdescr}
 \pnum
-Requires: A service object of type \tcode{Service::key_type} does not already exist in the \tcode{execution_context} set identified by \tcode{ctx}.
+\requires A service object of type \tcode{Service::key_type} does not already exist in the \tcode{execution_context} set identified by \tcode{ctx}.
 
 \pnum
 \effects Creates an object of type \tcode{Service}, initialized as \tcode{Service(ctx, forward<Args>(args)...)}, and adds it to the \tcode{execution_context} set identified by \tcode{ctx}.
@@ -1462,7 +1462,7 @@ template<class U, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-Requires: If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
+\requires If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
 
 \pnum
 \effects Initializes \tcode{ex_} with \tcode{other.get_executor()}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{other.get()} and the executor \tcode{ex_}.
@@ -1475,7 +1475,7 @@ template<class U, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-Requires: If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
+\requires If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
 
 \pnum
 \effects Initializes \tcode{ex_} with \tcode{other.get_executor()}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{std::move(other.get())} and the executor \tcode{ex_}.
@@ -1489,7 +1489,7 @@ template<class U, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-Requires: If \tcode{U} is not convertible to \tcode{T} the program is ill-formed.
+\requires If \tcode{U} is not convertible to \tcode{T} the program is ill-formed.
 
 \pnum
 \effects Initializes \tcode{ex_} with \tcode{ex}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{other.get()} and the executor \tcode{ex_}.
@@ -1503,7 +1503,7 @@ template<class U, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{U} is \tcode{T} or convertible to \tcode{T}.
+\requires \tcode{U} is \tcode{T} or convertible to \tcode{T}.
 
 \pnum
 \effects Initializes \tcode{ex_} with \tcode{ex}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{std::move(other.get())} and the executor \tcode{ex_}.
@@ -2379,7 +2379,7 @@ execution_context& context() noexcept;
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{*this != nullptr}.
+\requires \tcode{*this != nullptr}.
 
 \pnum
 \returns \tcode{e.context()}, where \tcode{e} is the target object of \tcode{*this}.
@@ -2391,7 +2391,7 @@ void on_work_started() noexcept;
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{*this != nullptr}.
+\requires \tcode{*this != nullptr}.
 
 \pnum
 \effects \tcode{e.on_work_started()}, where \tcode{e} is the target object of \tcode{*this}.
@@ -2403,7 +2403,7 @@ void on_work_finished() noexcept;
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{*this != nullptr}.
+\requires \tcode{*this != nullptr}.
 
 \pnum
 \effects \tcode{e.on_work_finished()}, where \tcode{e} is the target object of \tcode{*this}.
@@ -2988,7 +2988,7 @@ template<class OtherExecutor> strand(const strand<OtherExecutor>& other) noexcep
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}.
+\requires \tcode{OtherExecutor} is convertible to \tcode{Executor}.
 
 \pnum
 \effects Initializes \tcode{inner_ex_} as \tcode{inner_ex_(other.inner_ex_)}.
@@ -3003,7 +3003,7 @@ template<class OtherExecutor> strand(strand<OtherExecutor>&& other) noexcept;
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}.
+\requires \tcode{OtherExecutor} is convertible to \tcode{Executor}.
 
 \pnum
 \effects Initializes \tcode{inner_ex_} as \tcode{inner_ex_(std::move(other.inner_ex_))}.
@@ -3022,7 +3022,7 @@ strand& operator=(const strand& other) noexcept;
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
+\requires \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
 \postconditions 
@@ -3043,7 +3043,7 @@ strand& operator=(strand&& other) noexcept;
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).
+\requires \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
 \postconditions 
@@ -3064,7 +3064,7 @@ template<class OtherExecutor> strand& operator=(const strand<OtherExecutor>& oth
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
+\requires \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
 \effects Assigns \tcode{other.inner_ex_} to \tcode{inner_ex_}.
@@ -3082,7 +3082,7 @@ template<class OtherExecutor> strand& operator=(strand<OtherExecutor>&& other) n
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).
+\requires \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
 \effects Assigns \tcode{std::move(other.inner_ex_)} to \tcode{inner_ex_}.
