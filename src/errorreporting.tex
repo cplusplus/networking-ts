@@ -63,7 +63,7 @@ if (ec) throw system_error(ec, S);
 \end{codeblock}
 
 \pnum
-except that the type thrown may differ as specified above. \tcode{S} is an NTBS indicating where the exception was thrown. \enternote A possible value for \tcode{S} is \tcode{__func__}. \exitnote
+except that the type thrown may differ as specified above. \tcode{S} is an \ntbs indicating where the exception was thrown. \enternote A possible value for \tcode{S} is \tcode{__func__}. \exitnote
 
 \pnum
  For both overloads, failure to allocate storage is reported by throwing an exception as described in the \Cpp standard (\CppXref{res.on.exception.handling}).

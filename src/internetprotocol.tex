@@ -3500,7 +3500,7 @@ results_type resolve(string_view host_name, string_view service_name,
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{host_name.data() != nullptr}, let H be an NTBS constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an NTBS constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Resolves a host name and service name, as if by POSIX: 
+\effects If \tcode{host_name.data() != nullptr}, let H be an \ntbs constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an \ntbs constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Resolves a host name and service name, as if by POSIX:
 \begin{codeblock}
 addrinfo hints;
 hints.ai_flags = static_cast<int>(f);
@@ -3542,7 +3542,7 @@ template<class CompletionToken>
 \completionsig \tcode{void(error_code ec, results_type r)}.
 
 \pnum
-\effects If \tcode{host_name.data() != nullptr}, let H be an NTBS constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an NTBS constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Initiates an asynchronous operation to resolve a host name and service name, as if by POSIX: 
+\effects If \tcode{host_name.data() != nullptr}, let H be an \ntbs constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an \ntbs constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Initiates an asynchronous operation to resolve a host name and service name, as if by POSIX:
 \begin{codeblock}
 addrinfo hints;
 hints.ai_flags = static_cast<int>(f);
@@ -3583,7 +3583,7 @@ results_type resolve(const protocol_type& protocol,
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{host_name.data() != nullptr}, let H be an NTBS constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an NTBS constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Resolves a host name and service name, as if by POSIX: 
+\effects If \tcode{host_name.data() != nullptr}, let H be an \ntbs constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an \ntbs constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Resolves a host name and service name, as if by POSIX:
 \begin{codeblock}
 addrinfo hints;
 hints.ai_flags = static_cast<int>(f);
@@ -3627,7 +3627,7 @@ template<class CompletionToken>
 \completionsig \tcode{void(error_code ec, results_type r)}.
 
 \pnum
-\effects If \tcode{host_name.data() != nullptr}, let H be an NTBS constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an NTBS constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Initiates an asynchronous operation to resolve a host name and service name, as if by POSIX: 
+\effects If \tcode{host_name.data() != nullptr}, let H be an \ntbs constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an \ntbs constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Initiates an asynchronous operation to resolve a host name and service name, as if by POSIX:
 \begin{codeblock}
 addrinfo hints;
 hints.ai_flags = static_cast<int>(f);
@@ -3651,7 +3651,7 @@ results_type resolve(const endpoint_type& e, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Let \tcode{S1} and \tcode{S2} be \impldef{maximum length of host and service names} values that are sufficiently large to hold the host name and service name respectively. Resolves an endpoint as if by POSIX: 
+\effects Let \tcode{S1} and \tcode{S2} be \impldef{maximum length of host and service names} values that are sufficiently large to hold the host name and service name respectively. Resolves an endpoint as if by POSIX:
 \begin{codeblock}
 char host_name[S1];
 char service_name[S2];
@@ -3688,7 +3688,7 @@ template<class CompletionToken>
 \completionsig \tcode{void(error_code ec, results_type r)}.
 
 \pnum
-\effects Let \tcode{S1} and \tcode{S2} be \impldef{maximum length of host and service names} values that are sufficiently large to hold the host name and service name respectively. Initiates an asynchronous operation to resolve an endpoint as if by POSIX: 
+\effects Let \tcode{S1} and \tcode{S2} be \impldef{maximum length of host and service names} values that are sufficiently large to hold the host name and service name respectively. Initiates an asynchronous operation to resolve an endpoint as if by POSIX:
 \begin{codeblock}
 char host_name[S1];
 char service_name[S2];
