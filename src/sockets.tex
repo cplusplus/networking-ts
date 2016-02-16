@@ -197,7 +197,8 @@ When there are multiple outstanding asynchronous write operations~(\ref{buffer.r
 \rSec2[socket.reqmts.native]{Native handles}
 
 \pnum
-Several classes described in this Technical Specification have a member type \tcode{native_handle_type}, a member function \tcode{native_handle}, and member functions that accept arguments of type \tcode{native_handle_type}. The presence of these members and their semantics is implementation-defined.
+Several classes described in this Technical Specification have a member type \tcode{native_handle_type}, a member function \tcode{native_handle}, and member functions that accept arguments of type \tcode{native_handle_type}. The presence of these members and their semantics is
+\impldef{presence and meaning of \tcode{native_handle_type} and \tcode{native_handle}}.
 
 \pnum
 \enternote These members allow implementations to provide access to their implementation details. Their names are specified to facilitate portable compile-time detection. Actual use of these members is inherently non-portable. For operating systems that are based on POSIX, implementations are encouraged to define the \tcode{native_handle_type} for sockets as \tcode{int}, representing the native file descriptor associated with the socket. \exitnote
@@ -1084,7 +1085,7 @@ Wait until the socket has a pending error condition.For a given socket, when a \
 
 \tcode{max_listen_connections}  &
 \tcode{SOMAXCONN}  &
- The implementation-defined limit on the length of the queue of pending incoming connections.  \\
+ The \impldef{maximum length of the queue of pending incoming connections} limit on the length of the queue of pending incoming connections.  \\
 
 \end{libreqtab3}
 
@@ -3784,7 +3785,7 @@ void cancel(error_code& ec);
 \item
 \tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \item
-\tcode{errc::operation_not_supported} --- current conditions do not permit cancelation. The conditions under which cancelation of asynchronous operations is permitted are implementation-defined.
+\tcode{errc::operation_not_supported} --- current conditions do not permit cancelation. The conditions under which cancelation of asynchronous operations is permitted are \impldef{conditions under which cancelation of asynchronous operations is permitted}.
 \end{itemize}
 \end{itemdescr}
 

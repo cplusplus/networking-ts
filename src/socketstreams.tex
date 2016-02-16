@@ -112,7 +112,7 @@ basic_socket_streambuf(basic_socket_streambuf&& rhs);
 
 \begin{itemdescr}
 \pnum
-\effects Move constructs from the rvalue \tcode{rhs}. It is implementation-defined whether the sequence pointers in \tcode{*this} (\tcode{eback()}, \tcode{gptr()}, \tcode{egptr()}, \tcode{pbase()}, \tcode{pptr()}, \tcode{epptr()}) obtain the values which \tcode{rhs} had. Whether they do or not, \tcode{*this} and \tcode{rhs} reference separate buffers (if any at all) after the construction. Additionally \tcode{*this} references the socket which \tcode{rhs} did before the construction, and \tcode{rhs} references no open socket after the construction.
+\effects Move constructs from the rvalue \tcode{rhs}. It is \impldef{whether the sequence pointers in \tcode{basic_socket_streambuf} obtain the source object's values after move-construction} whether the sequence pointers in \tcode{*this} (\tcode{eback()}, \tcode{gptr()}, \tcode{egptr()}, \tcode{pbase()}, \tcode{pptr()}, \tcode{epptr()}) obtain the values which \tcode{rhs} had. Whether they do or not, \tcode{*this} and \tcode{rhs} reference separate buffers (if any at all) after the construction. Additionally \tcode{*this} references the socket which \tcode{rhs} did before the construction, and \tcode{rhs} references no open socket after the construction.
 
 \pnum
 \postconditions Let \tcode{rhs_p} refer to the state of \tcode{rhs} just prior to this construction and let \tcode{rhs_a} refer to the state of \tcode{rhs} just after this construction.

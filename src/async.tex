@@ -2118,7 +2118,8 @@ bad_executor() noexcept;
 \effects constructs a \tcode{bad_executor} object.
 
 \pnum
-\postconditions \tcode{what()} returns an implementation-defined NTBS.
+\postconditions
+\tcode{what()} returns an \impldef{result of \tcode{bad_executor::what}} \ntbs.
 \end{itemdescr}
 
 
@@ -3235,7 +3236,7 @@ inline namespace v1 {
     template<class OtherProtoAllocator> use_future_t<OtherProtoAllocator>
       rebind(const OtherProtoAllocator& a) const noexcept;
     allocator_type get_allocator() const noexcept;
-    template <class F> @\textit{unspecified}@ operator()(F&& f) const;
+    template <class F> @\unspec@ operator()(F&& f) const;
   };
 
 } // inline namespace v1
@@ -3289,7 +3290,7 @@ allocator_type get_allocator() const noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-template <class F> @\textit{unspecified}@ operator()(F&& f) const;
+template <class F> @\unspec@ operator()(F&& f) const;
 \end{itemdecl}
 
 \begin{itemdescr}

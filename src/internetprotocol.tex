@@ -104,13 +104,13 @@ namespace ip {
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>&, const address_v6&);
 
-  template<class> class basic_address_iterator; @\textit{// not defined}@
+  template<class> class basic_address_iterator; // \notdef
   template<> class basic_address_iterator<address_v4>;
   typedef basic_address_iterator<address_v4> address_v4_iterator;
   template<> class basic_address_iterator<address_v6>;
   typedef basic_address_iterator<address_v6> address_v6_iterator;
 
-  template<class> class basic_address_range; @\textit{// not defined}@
+  template<class> class basic_address_range; // \notdef
   template<> class basic_address_range<address_v4>;
   typedef basic_address_range<address_v4> address_v4_range;
   template<> class basic_address_range<address_v6>;
@@ -1520,7 +1520,7 @@ template<class Allocator = allocator<char>>
 
 \begin{itemdescr}
 \pnum
-\effects Converts an address into a textual representation. If \tcode{scope_id() == 0}, converts as if by POSIX inet_ntop when invoked with address family \tcode{AF_INET6}. If \tcode{scope_id() != 0}, the format is \tcode{address}\tcode{\%}\tcode{scope-id}, where \tcode{address} is the textual representation of the equivalent address having \tcode{scope_id() == 0}, and \tcode{scope-id} is an implementation-defined textual representation of the scope identifier.
+\effects Converts an address into a textual representation. If \tcode{scope_id() == 0}, converts as if by POSIX inet_ntop when invoked with address family \tcode{AF_INET6}. If \tcode{scope_id() != 0}, the format is \tcode{address}\tcode{\%}\tcode{scope-id}, where \tcode{address} is the textual representation of the equivalent address having \tcode{scope_id() == 0}, and \tcode{scope-id} is an \impldef{textual representation of IPv6 scope identifiers} textual representation of the scope identifier.
 
 \pnum
 \returns If successful, the textual representation of the address. Otherwise \tcode{basic_string<char, char_traits<char>, Allocator>(a)}.
@@ -1647,7 +1647,7 @@ address_v6 make_address_v6(string_view str, error_code& ec) noexcept;
 
 \begin{itemdescr}
 \pnum
-\effects Converts a textual representation of an address into a corresponding \tcode{address_v6} value. The format is either \tcode{address} or \tcode{address}\tcode{\%}\tcode{scope-id}, where \tcode{address} is in the format specified by POSIX inet_pton when invoked with address family \tcode{AF_INET6}, and \tcode{scope-id} is an optional string specifying the scope identifier. All implementations accept as \tcode{scope-id} a textual representation of an unsigned decimal integer. It is implementation-defined whether alternative scope identifier representations are permitted. If \tcode{scope-id} is not supplied, an \tcode{address_v6} object is returned such that \tcode{scope_id() == 0}.
+\effects Converts a textual representation of an address into a corresponding \tcode{address_v6} value. The format is either \tcode{address} or \tcode{address}\tcode{\%}\tcode{scope-id}, where \tcode{address} is in the format specified by POSIX inet_pton when invoked with address family \tcode{AF_INET6}, and \tcode{scope-id} is an optional string specifying the scope identifier. All implementations accept as \tcode{scope-id} a textual representation of an unsigned decimal integer. It is \impldef{whether alternative IPv6 scope identifier representations are permitted} whether alternative scope identifier representations are permitted. If \tcode{scope-id} is not supplied, an \tcode{address_v6} object is returned such that \tcode{scope_id() == 0}.
 
 \pnum
 \returns If successful, an \tcode{address_v6} value corresponding to the string \tcode{str}. Otherwise returns \tcode{address_v6()}.
@@ -1711,7 +1711,7 @@ bad_address_cast() noexcept;
 \effects constructs a \tcode{bad_address_cast} object.
 
 \pnum
-\postconditions \tcode{what()} returns an implementation-defined NTBS.
+\postconditions \tcode{what()} returns an \impldef{result of \tcode{bad_address_cast::what}} \ntbs.
 \end{itemdescr}
 
 
@@ -3021,7 +3021,7 @@ namespace ip {
     typedef basic_resolver_entry<protocol_type> value_type;
     typedef const value_type& const_reference;
     typedef value_type& reference;
-    typedef @\textit{implementation-defined}@ const_iterator;
+    typedef @\impldef{type of \tcode{basic_resolver_results::const_iterator}}@ const_iterator;
     typedef const_iterator iterator;
     typedef ptrdiff_t difference_type;
     typedef size_t size_type;
@@ -3651,7 +3651,7 @@ results_type resolve(const endpoint_type& e, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Let \tcode{S1} and \tcode{S2} be implementation-defined values that are sufficiently large to hold the host name and service name respectively. Resolves an endpoint as if by POSIX: 
+\effects Let \tcode{S1} and \tcode{S2} be \impldef{maximum length of host and service names} values that are sufficiently large to hold the host name and service name respectively. Resolves an endpoint as if by POSIX: 
 \begin{codeblock}
 char host_name[S1];
 char service_name[S2];
@@ -3688,7 +3688,7 @@ template<class CompletionToken>
 \completionsig \tcode{void(error_code ec, results_type r)}.
 
 \pnum
-\effects Let \tcode{S1} and \tcode{S2} be implementation-defined values that are sufficiently large to hold the host name and service name respectively. Initiates an asynchronous operation to resolve an endpoint as if by POSIX: 
+\effects Let \tcode{S1} and \tcode{S2} be \impldef{maximum length of host and service names} values that are sufficiently large to hold the host name and service name respectively. Initiates an asynchronous operation to resolve an endpoint as if by POSIX: 
 \begin{codeblock}
 char host_name[S1];
 char service_name[S2];
@@ -4026,7 +4026,7 @@ ip::v6_only  &
 \tcode{IPPROTO_IPV6}  &
 \tcode{IPV6_V6ONLY}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements.Determines whether a socket created for an IPv6 protocol is restricted to IPv6 communications only.Implementations are not required to support setting the \tcode{v6_only} option to \tcode{false}, and the initial value of the \tcode{v6_only} option for a socket is implementation-defined. \enternote As not all operating systems support dual stack IP networking. Some operating systems that do provide dual stack support offer a configuration option to disable it or to set the initial value of the \tcode{v6_only} socket option. \exitnote  \\ \rowsep
+Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements.Determines whether a socket created for an IPv6 protocol is restricted to IPv6 communications only.Implementations are not required to support setting the \tcode{v6_only} option to \tcode{false}, and the initial value of the \tcode{v6_only} option for a socket is \impldef{initial value of the \tcode{v6_only} option for a socket}. \enternote As not all operating systems support dual stack IP networking. Some operating systems that do provide dual stack support offer a configuration option to disable it or to set the initial value of the \tcode{v6_only} socket option. \exitnote  \\ \rowsep
 
 ip::unicast::hops  &
 \tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &

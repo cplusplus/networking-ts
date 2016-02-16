@@ -1,4 +1,4 @@
-%!TEX root = ts.tex
+%!TEX root = std.tex
 % Definitions and redefinitions of special commands
 
 %%--------------------------------------------------
@@ -105,7 +105,7 @@
 \newcommand{\defn}[1]{\defnx{#1}{#1}}
 \newcommand{\term}[1]{\textit{#1}\xspace}
 \newcommand{\grammarterm}[1]{\textit{#1}\xspace}
-\newcommand{\placeholder}[1]{\textit{#1}\xspace}
+\newcommand{\placeholder}[1]{\textit{#1}}
 
 %%--------------------------------------------------
 %% allow line break if needed for justification
@@ -120,6 +120,7 @@
 \newcommand{\Cpp}{\mbox{C\Rplus\Rplus}\xspace}
 \newcommand{\CppIII}{\Cpp 2003\xspace}
 \newcommand{\CppXI}{\Cpp 2011\xspace}
+\newcommand{\CppXIV}{\Cpp 2014\xspace}
 \newcommand{\opt}{{\ensuremath{_\mathit{opt}}}\xspace}
 \newcommand{\shl}{<{<}}
 \newcommand{\shr}{>{>}}
@@ -175,7 +176,6 @@
 \newcommand{\sync}{\Fundesc{Synchronization}}
 \newcommand{\implimits}{\Fundesc{Implementation limits}}
 \newcommand{\replaceable}{\Fundesc{Replaceable}}
-\newcommand{\exceptionsafety}{\Fundesc{Exception safety}}
 \newcommand{\returntype}{\Fundesc{Return type}}
 \newcommand{\cvalue}{\Fundesc{Value}}
 \newcommand{\ctype}{\Fundesc{Type}}
@@ -200,15 +200,32 @@
 \newcommand{\EXPO}[1]{\textit{#1}}
 \newcommand{\expos}{\EXPO{exposition only}}
 \newcommand{\impdef}{\EXPO{implementation-defined}}
+\newcommand{\impdefnc}{\EXPO{implementation-defined\nocorr}}
 \newcommand{\impdefx}[1]{\indeximpldef{#1}\EXPO{implementation-defined}}
 \newcommand{\notdef}{\EXPO{not defined}}
 
 \newcommand{\UNSP}[1]{\textit{\texttt{#1}}}
-\newcommand{\unspec}{\UNSP{unspecified}\xspace}
+\newcommand{\UNSPnc}[1]{\textit{\texttt{#1}\nocorr}}
+\newcommand{\unspec}{\UNSP{unspecified}}
+\newcommand{\unspecnc}{\UNSPnc{unspecified}}
 \newcommand{\unspecbool}{\UNSP{unspecified-bool-type}}
 \newcommand{\seebelow}{\UNSP{see below}}
+\newcommand{\seebelownc}{\UNSPnc{see below}}
 \newcommand{\unspecuniqtype}{\UNSP{unspecified unique type}}
 \newcommand{\unspecalloctype}{\UNSP{unspecified allocator type}}
+
+\newcommand{\EXPLICIT}{\textit{\texttt{EXPLICIT}}}
+
+%% Manual insertion of italic corrections, for aligning in the presence
+%% of the above annotations.
+\newlength{\itcorrwidth}
+\newlength{\itletterwidth}
+\newcommand{\itcorr}[1][]{%
+ \settowidth{\itcorrwidth}{\textit{x\/}}%
+ \settowidth{\itletterwidth}{\textit{x\nocorr}}%
+ \addtolength{\itcorrwidth}{-1\itletterwidth}%
+ \makebox[#1\itcorrwidth]{}%
+}
 
 %% Double underscore
 \newcommand{\ungap}{\kern.5pt}
@@ -217,7 +234,7 @@
 \newcommand{\mname}[1]{\tcode{\unun\ungap#1\ungap\unun}}
 
 %% Ranges
-\newcommand{\Range}[4]{\tcode{#1\brk{}#3,\brk{}#4\brk{}#2}\xspace}
+\newcommand{\Range}[4]{\tcode{#1#3,~\brk{}#4#2}\xspace}
 \newcommand{\crange}[2]{\Range{[}{]}{#1}{#2}}
 \newcommand{\brange}[2]{\Range{(}{]}{#1}{#2}}
 \newcommand{\orange}[2]{\Range{(}{)}{#1}{#2}}
@@ -232,7 +249,7 @@
 \newcommand{\howwide}{\diffdef{How widely used}}
 
 %% Miscellaneous
-\newcommand{\uniquens}{\textrm{\textit{\textbf{unique}}} }
+\newcommand{\uniquens}{\textrm{\textit{\textbf{unique}}}}
 \newcommand{\stage}[1]{\item{\textbf{Stage #1:}}\xspace}
 \newcommand{\doccite}[1]{\textit{#1}\xspace}
 \newcommand{\cvqual}[1]{\textit{#1}}
@@ -270,6 +287,7 @@
  \renewcommand{\term}[1]{\textit{##1}}
  \renewcommand{\grammarterm}[1]{\textit{##1}}
 }
+
 \lstnewenvironment{codeblock}{\CodeBlockSetup}{}
 
 % A code block in which single-quotes are digit separators
@@ -483,9 +501,6 @@
 % usage: \definition{name}{xref}
 %\newcommand{\definition}[2]{\rSec2[#2]{#1}}
 % for ISO format, use:
-\newcommand{\definition}[2]
- {\hfill\vspace{.25ex plus .5ex minus .2ex}\\
- \addtocounter{subsection}{1}%
- \textbf{\thesubsection\hfill\relax[#2]}\\
- \textbf{#1}\label{#2}\\
- }
+\newcommand{\definition}[2]{%
+\subsection[#1]{\hfill[#2]}\vspace{-.3\onelineskip}\label{#2}\textbf{#1}\\%
+}
