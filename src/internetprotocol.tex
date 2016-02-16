@@ -1195,12 +1195,10 @@ address_v4 make_address_v4(string_view str, error_code& ec) noexcept;
 \returns If successful, an \tcode{address_v4} value corresponding to the string \tcode{str}. Otherwise \tcode{address_v4()}.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::invalid_argument}
-\item
- if \tcode{str} is not a valid textual representation of an IPv4 address.
+\tcode{errc::invalid_argument} --- if \tcode{str} is not a valid textual representation of an IPv4 address.
 \end{itemize}
 \end{itemdescr}
 
@@ -1655,12 +1653,10 @@ address_v6 make_address_v6(string_view str, error_code& ec) noexcept;
 \returns If successful, an \tcode{address_v6} value corresponding to the string \tcode{str}. Otherwise returns \tcode{address_v6()}.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::invalid_argument}
-\item
- if \tcode{str} is not a valid textual representation of an IPv6 address.
+\tcode{errc::invalid_argument} --- if \tcode{str} is not a valid textual representation of an IPv6 address.
 \end{itemize}
 \end{itemdescr}
 
@@ -2231,12 +2227,10 @@ network_v4 make_network_v4(string_view str, error_code& ec) noexcept;
 \returns If \tcode{str} contains a value of the form address \tcode{'/'} prefix-length, a \tcode{network_v4} object constructed with the result of applying \tcode{make_address_v4()} to the address portion of the string, and the result of converting prefix-length to an integer of type \tcode{int}. Otherwise returns \tcode{network_v4()} and sets \tcode{ec} to reflect the error.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::invalid_argument}
-\item
- if \tcode{str} is not a valid textual representation of an IPv4 address and prefix length.
+\tcode{errc::invalid_argument} --- if \tcode{str} is not a valid textual representation of an IPv4 address and prefix length.
 \end{itemize}
 \end{itemdescr}
 
@@ -2469,12 +2463,10 @@ network_v6 make_network_v6(const string_v6& str, error_code& ec) noexcept;
 \returns If \tcode{str} contains a value of the form address \tcode{'/'} prefix-length, a \tcode{network_v6} object constructed with the result of applying \tcode{make_address_v6()} to the address portion of the string, and the result of converting prefix-length to an integer of type \tcode{int}. Otherwise returns \tcode{network_v6()} and sets \tcode{ec} to reflect the error.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::invalid_argument}
-\item
- if \tcode{str} is not a valid textual representation of an IPv6 address and prefix length.
+\tcode{errc::invalid_argument} --- if \tcode{str} is not a valid textual representation of an IPv6 address and prefix length.
 \end{itemize}
 \end{itemdescr}
 

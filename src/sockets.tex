@@ -1760,12 +1760,10 @@ void open(const protocol_type& protocol, error_code& ec);
 \end{itemize}
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{socket_errc::already_open}
-\item
- if \tcode{is_open() == true}.
+\tcode{socket_errc::already_open} --- if \tcode{is_open() == true}.
 \end{itemize}
 \end{itemdescr}
 
@@ -1795,12 +1793,10 @@ Requires: \tcode{native_socket} is a native handle to an open socket.
 \end{itemize}
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{socket_errc::already_open}
-\item
- if \tcode{is_open() == true}.
+\tcode{socket_errc::already_open} --- if \tcode{is_open() == true}.
 \end{itemize}
 \end{itemdescr}
 
@@ -1836,12 +1832,10 @@ void cancel(error_code& ec);
 \effects Cancels all outstanding asynchronous operations associated with this socket. Completion handlers for canceled asynchronous operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::bad_file_descriptor}
-\item
- if \tcode{is_open()} is \tcode{false}.
+\tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \end{itemize}
 
 \pnum
@@ -1903,12 +1897,10 @@ void non_blocking(bool mode, error_code& ec);
 \effects Sets the non-blocking mode of this socket. The non-blocking mode determines whether subsequent synchronous socket operations~(\ref{socket.reqmts.sync}) on \tcode{*this} block the calling thread.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::bad_file_descriptor}
-\item
- if \tcode{is_open()} is \tcode{false}.
+\tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \end{itemize}
 
 \pnum
@@ -1952,16 +1944,12 @@ if (flags >= 0)
  The native non-blocking mode has no effect on the behavior of the synchronous or asynchronous operations specified in this clause.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::bad_file_descriptor}
+\tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \item
- if \tcode{is_open()} is \tcode{false}.
-\item
-\tcode{errc::invalid_argument}
-\item
- if \tcode{mode == false} and \tcode{non_blocking() == true}. \enternote As the combination does not make sense. \exitnote
+\tcode{errc::invalid_argument} --- if \tcode{mode == false} and \tcode{non_blocking() == true}. \enternote As the combination does not make sense. \exitnote
 \end{itemize}
 \end{itemdescr}
 
@@ -2000,12 +1988,10 @@ size_t available(error_code& ec) const;
 \returns An indication of the number of bytes that may be read without blocking, or \tcode{0} if an error occurs.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::bad_file_descriptor}
-\item
- if \tcode{is_open()} is \tcode{false}.
+\tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \end{itemize}
 \end{itemdescr}
 
@@ -2110,12 +2096,10 @@ void wait(wait_type w, error_code& ec);
 \effects Waits for this socket to be ready to read, ready to write, or to have error conditions pending, as if by POSIX poll.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::bad_file_descriptor}
-\item
- if \tcode{is_open()} is \tcode{false}.
+\tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \end{itemize}
 \end{itemdescr}
 
@@ -2135,12 +2119,10 @@ template<class CompletionToken>
 When there are multiple outstanding asynchronous wait operations on this socket with the same \tcode{wait_type} value, all of these operations complete when this socket enters the corresponding ready state. The order of invocation of the completion handlers for these operations is unspecified.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::bad_file_descriptor}
-\item
- if \tcode{is_open()} is \tcode{false}.
+\tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \end{itemize}
 \end{itemdescr}
 
@@ -2502,12 +2484,10 @@ If the operation completes successfully, \tcode{n} is the number of bytes receiv
  \enternote This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \exitnote
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::invalid_argument}
-\item
- if \tcode{socket_base::message_peek} is set in flags.
+\tcode{errc::invalid_argument} --- if \tcode{socket_base::message_peek} is set in flags.
 \end{itemize}
 \end{itemdescr}
 
@@ -2616,12 +2596,10 @@ If the operation completes successfully, \tcode{n} is the number of bytes receiv
  \enternote This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \exitnote
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::invalid_argument}
-\item
- if \tcode{socket_base::message_peek} is set in flags.
+\tcode{errc::invalid_argument} --- if \tcode{socket_base::message_peek} is set in flags.
 \end{itemize}
 \end{itemdescr}
 
@@ -3082,12 +3060,10 @@ recvmsg(native_handle(), &message, static_cast<int>(flags));
 \returns On success, the number of bytes received. Otherwise \tcode{0}.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{stream_errc::eof}
-\item
- if there is no data to be received and the peer performed an orderly shutdown.
+\tcode{stream_errc::eof} --- if there is no data to be received and the peer performed an orderly shutdown.
 \end{itemize}
 \end{itemdescr}
 
@@ -3135,14 +3111,12 @@ recvmsg(native_handle(), &message, static_cast<int>(flags));
 If the operation completes successfully, \tcode{n} is the number of bytes received. Otherwise \tcode{n} is \tcode{0}.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::invalid_argument}
+\tcode{errc::invalid_argument} --- if \tcode{socket_base::message_peek} is set in flags.
 \item
- if \tcode{socket_base::message_peek} is set in flags. --- \tcode{stream_errc::eof}
-\item
- if there is no data to be received and the peer performed an orderly shutdown.
+\tcode{stream_errc::eof} --- if there is no data to be received and the peer performed an orderly shutdown.
 \end{itemize}
 \end{itemdescr}
 
@@ -3728,12 +3702,10 @@ void open(const protocol_type& protocol, error_code& ec);
 \end{itemize}
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{socket_errc::already_open}
-\item
- if \tcode{is_open()} is \tcode{true}.
+\tcode{socket_errc::already_open} --- if \tcode{is_open()} is \tcode{true}.
 \end{itemize}
 \end{itemdescr}
 
@@ -3765,12 +3737,10 @@ Requires: \tcode{native_acceptor} is a native handle to an open acceptor.
 \end{itemize}
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{socket_errc::already_open}
-\item
- if \tcode{is_open()} is \tcode{true}.
+\tcode{socket_errc::already_open} --- if \tcode{is_open()} is \tcode{true}.
 \end{itemize}
 \end{itemdescr}
 
@@ -3806,16 +3776,12 @@ void cancel(error_code& ec);
 \effects Cancels all outstanding asynchronous operations associated with this acceptor. Completion handlers for canceled asynchronous operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::bad_file_descriptor}
+\tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \item
- if \tcode{is_open()} is \tcode{false}.
-\item
-\tcode{errc::operation_not_supported}
-\item
- Current conditions do not permit cancelation. The conditions under which cancelation of asynchronous operations is permitted are implementation-defined.
+\tcode{errc::operation_not_supported} --- current conditions do not permit cancelation. The conditions under which cancelation of asynchronous operations is permitted are implementation-defined.
 \end{itemize}
 \end{itemdescr}
 
@@ -3874,12 +3840,10 @@ void non_blocking(bool mode, error_code& ec);
 \effects Sets the non-blocking mode of this acceptor. The non-blocking mode determines whether subsequent synchronous socket operations~(\ref{socket.reqmts.sync}) on \tcode{*this} block the calling thread.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::bad_file_descriptor}
-\item
- if \tcode{is_open()} is \tcode{false}.
+\tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \end{itemize}
 
 \pnum
@@ -3923,16 +3887,12 @@ if (flags >= 0)
  The native non-blocking mode has no effect on the behavior of the synchronous or asynchronous operations specified in this clause.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::bad_file_descriptor}
+\tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \item
- if \tcode{is_open()} is \tcode{false}.
-\item
-\tcode{errc::invalid_argument}
-\item
- if \tcode{mode == false} and \tcode{non_blocking() == true}. \enternote As the combination does not make sense. \exitnote
+\tcode{errc::invalid_argument} --- if \tcode{mode == false} and \tcode{non_blocking() == true}. \enternote As the combination does not make sense. \exitnote
 \end{itemize}
 \end{itemdescr}
 
@@ -3998,12 +3958,10 @@ void enable_connection_aborted(bool mode);
 \effects If \tcode{mode} is true, subsequent synchronous or asynchronous accept operations on this acceptor are permitted to fail with error condition \tcode{errc::connection_aborted}. If \tcode{mode} is \tcode{false}, subsequent accept operations will not fail with \tcode{errc::connection_aborted}. \enternote If \tcode{mode} is \tcode{false}, the implementation will restart the call to POSIX accept if it fails with \tcode{ECONNABORTED}. \exitnote
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::bad_file_descriptor}
-\item
- if \tcode{is_open()} is \tcode{false}.
+\tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \end{itemize}
 \end{itemdescr}
 
@@ -4163,12 +4121,10 @@ template<class CompletionToken>
 When multiple asynchronous wait operations are initiated with the same \tcode{wait_type} value, all outstanding operations complete when the acceptor enters the corresponding ready state. The order of invocation of the completions handlers for these operations is unspecified.
 
 \pnum
-Error conditions: 
+\errors
 \begin{itemize}
 \item
-\tcode{errc::bad_file_descriptor}
-\item
- if \tcode{is_open()} is \tcode{false}.
+\tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \end{itemize}
 \end{itemdescr}
 
