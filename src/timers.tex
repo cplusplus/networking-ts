@@ -69,7 +69,7 @@ The \tcode{basic_waitable_timer} template uses wait traits to allow programs to 
 \item
  Preventing duration overflow. That is, a program may set a timer's expiry\tcode{e} to be \tcode{Clock::max()}(meaning never reached) or \tcode{Clock::min()}(meaning always in the past). As a result, computing the duration until timer expiry as \tcode{e - Clock::now()} may cause overflow. \exitnote
 \end{itemize}\pnum
-For a type \tcode{Clock} meeting the \tcode{Clock} requirements (C++Std [time.clock.req]), a type \tcode{X} meets the \tcode{WaitTraits} requirements if it satisfies the requirements listed below.
+For a type \tcode{Clock} meeting the \tcode{Clock} requirements (\CppXref{time.clock.req}), a type \tcode{X} meets the \tcode{WaitTraits} requirements if it satisfies the requirements listed below.
 
 \pnum
 In the table below, \tcode{t} denotes a (possibly const) value of type \tcode{Clock::time_point}; and \tcode{d} denotes a (possibly const) value of type \tcode{Clock::duration}.
@@ -127,7 +127,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Class template \tcode{wait_traits} satisfies the \tcode{WaitTraits}~(\ref{timer.reqmts.waittraits}) type requirements. Template argument \tcode{Clock} is a type meeting the \tcode{Clock} requirements (C++Std [time.clock.req]).
+Class template \tcode{wait_traits} satisfies the \tcode{WaitTraits}~(\ref{timer.reqmts.waittraits}) type requirements. Template argument \tcode{Clock} is a type meeting the \tcode{Clock} requirements (\CppXref{time.clock.req}).
 
 \begin{itemdecl}
 static typename Clock::duration to_wait_duration(
@@ -209,7 +209,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_waitable_timer} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), and \tcode{MoveAssignable} (C++Std [moveassignable]).
+Instances of class template \tcode{basic_waitable_timer} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), and \tcode{MoveAssignable} (\CppXref{moveassignable}).
 
 
 \rSec2[timer.waitable.cons]{\tcode{basic_waitable_timer} constructors}
@@ -335,7 +335,7 @@ size_t cancel();
 \returns The number of operations that were canceled.
 
 \pnum
-\remarks Does not block (C++Std [defns.block]) the calling thread pending completion of the canceled operations.
+\remarks Does not block (\CppXref{defns.block}) the calling thread pending completion of the canceled operations.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -350,7 +350,7 @@ size_t cancel_one();
 \returns \tcode{1} if an operation was cancelled, otherwise \tcode{0}.
 
 \pnum
-\remarks Does not block (C++Std [defns.block]) the calling thread pending completion of the canceled operation.
+\remarks Does not block (\CppXref{defns.block}) the calling thread pending completion of the canceled operation.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -393,7 +393,7 @@ void wait(error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Establishes the postcondition as if by repeatedly blocking the calling thread (C++Std [defns.block]) for the relative time produced by \tcode{WaitTraits::to_wait_duration(expiry())}.
+\effects Establishes the postcondition as if by repeatedly blocking the calling thread (\CppXref{defns.block}) for the relative time produced by \tcode{WaitTraits::to_wait_duration(expiry())}.
 
 \pnum
 \postconditions \tcode{ec || expiry() <= clock_type::now()}.

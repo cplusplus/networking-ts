@@ -144,7 +144,7 @@ Meets the requirements for a write operation~(\ref{buffer.reqmts.read.write}) an
 A completion condition is a function object that is used with the algorithms \tcode{read}~(\ref{buffer.read}), \tcode{async_read}~(\ref{buffer.async.read}), \tcode{write}~(\ref{buffer.write}), and \tcode{async_write}~(\ref{buffer.async.write}) to determine when the algorithm has completed transferring data.
 
 \pnum
-A type \tcode{X} meets the \tcode{CompletionCondition} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{CopyConstructible} (C++Std [copyconstructible]), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{CompletionCondition} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
 
 \pnum
 In the table below, \tcode{x} denotes a value of type \tcode{X}, \tcode{ec} denotes a (possibly const) value of type \tcode{error_code}, and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.

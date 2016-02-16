@@ -325,7 +325,7 @@ Returns \tcode{!(a == b)}.  \\
 \rSec2[internet.reqmts.opt.mcast]{Multicast group socket options}
 
 \pnum
-A type \tcode{X} meets the \tcode{MulticastGroupSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{CopyAssignable} (C++Std [copyassignable]), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{MulticastGroupSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
 
 \pnum
 In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{b} denotes a (possibly const) value of type \tcode{address}, \tcode{c} and \tcode{d} denote (possibly const) values of type \tcode{address_v4}, \tcode{e} denotes a (possibly const) value of type \tcode{address_v6}, \tcode{f} denotes a (possibly const) value of type \tcode{unsigned int}, and \tcode{u} denotes an identifier.
@@ -570,7 +570,7 @@ namespace ip {
 \end{codeblock}
 
 \pnum
-\tcode{address} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+\tcode{address} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 
 \rSec2[internet.address.cons]{\tcode{ip::address} constructors}
@@ -924,7 +924,7 @@ namespace ip {
 \end{codeblock}
 
 \pnum
-\tcode{address_v4} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+\tcode{address_v4} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 
 \rSec2[internet.address.v4.bytes]{Struct \tcode{ip::address_v4::bytes_type}}
@@ -1305,7 +1305,7 @@ namespace ip {
 \end{codeblock}
 
 \pnum
-\tcode{address_v6} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+\tcode{address_v6} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
 \enternote The implementations of the functions \tcode{is_unspecified}, \tcode{is_loopback}, \tcode{is_multicast}, \tcode{is_link_local}, \tcode{is_site_local}, \tcode{is_v4_mapped}, \tcode{is_multicast_node_local}, \tcode{is_multicast_link_local}, \tcode{is_multicast_site_local}, \tcode{is_multicast_org_local} and \tcode{is_multicast_global} are determined by [RFC4291]. \exitnote
@@ -1730,7 +1730,7 @@ template<> struct hash<experimental::net::v1::ip::address_v6>;
 
 \begin{itemdescr}
 \pnum
-Requires: the template specializations shall meet the requirements of class template \tcode{hash} (C++Std [unord.hash]).
+Requires: the template specializations shall meet the requirements of class template \tcode{hash} (\CppXref{unord.hash}).
 \end{itemdescr}
 
 
@@ -1768,7 +1768,7 @@ namespace ip {
     basic_address_iterator& operator--() noexcept;
     basic_address_iterator operator--(int) noexcept;
 
-    // other members as required by C++Std [input.iterators]
+    // other members as required by \CppXref{input.iterators}
 
   private:
     @\textit{Address}@ address_; // \expos
@@ -1782,7 +1782,7 @@ namespace ip {
 \end{codeblock}
 
 \pnum
-Specializations of \tcode{basic_address_iterator} satisfy the requirements for input iterators (C++Std [input.iterators]).
+Specializations of \tcode{basic_address_iterator} satisfy the requirements for input iterators (\CppXref{input.iterators}).
 
 \begin{itemdecl}
 basic_address_iterator(const @\textit{Address}@& a) noexcept;
@@ -1900,7 +1900,7 @@ namespace ip {
 \end{codeblock}
 
 \pnum
-Specializations of \tcode{basic_address_range} satisfy the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+Specializations of \tcode{basic_address_range} satisfy the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \begin{itemdecl}
 basic_address_range() noexcept;
@@ -2036,7 +2036,7 @@ namespace ip {
 \end{codeblock}
 
 \pnum
-\tcode{network_v4} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+\tcode{network_v4} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 
 \rSec2[internet.network.v4.cons]{\tcode{ip::network_v4} constructors}
@@ -2316,7 +2316,7 @@ namespace ip {
 \end{codeblock}
 
 \pnum
-\tcode{network_v6} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+\tcode{network_v6} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 
 \rSec2[internet.network.v6.cons]{\tcode{ip::network_v6} constructors}
@@ -3073,7 +3073,7 @@ namespace ip {
 \end{codeblock}
 
 \pnum
-The class template \tcode{basic_resolver_results} satisfies the requirements of a sequence container (C++Std [sequence.reqmts]), except that only the operations defined for const-qualified sequence containers are supported. The class template \tcode{basic_resolver_results} supports forward iterators.
+The class template \tcode{basic_resolver_results} satisfies the requirements of a sequence container (\CppXref{sequence.reqmts}), except that only the operations defined for const-qualified sequence containers are supported. The class template \tcode{basic_resolver_results} supports forward iterators.
 
 \pnum
 A default-constructed \tcode{basic_resolver_results} object is empty. A non-empty results object is obtained only by calling a \tcode{basic_resolver} object's \tcode{wait} or \tcode{async_wait} operations, or otherwise by copy construction, move construction, assignment, or swap from another non-empty results object.
@@ -3485,7 +3485,7 @@ void cancel();
 \effects Cancels all outstanding asynchronous resolve operations associated with \tcode{*this}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
 
 \pnum
-\remarks Does not block (C++Std [defns.block]) the calling thread pending completion of the canceled operations.
+\remarks Does not block (\CppXref{defns.block}) the calling thread pending completion of the canceled operations.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4105,7 +4105,7 @@ namespace multicast {
 \end{codeblock}
 
 \pnum
-\tcode{outbound_interface} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{CopyAssignable} (C++Std [copyassignable]), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
+\tcode{outbound_interface} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
 
 \pnum
  Extensible implementations provide the following member functions:

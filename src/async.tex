@@ -191,7 +191,7 @@ inline namespace v1 {
 \rSec2[async.reqmts.proto.allocator]{Proto-allocator requirements}
 
 \pnum
-A type \tcode{A} meets the proto-allocator requirements if \tcode{A} is \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{Destructible} (C++Std [destructible]), and \tcode{allocator_traits<A>::rebind_alloc<U>} meets the allocator requirements (C++Std [allocator.requirements]), where \tcode{U} is an object type. \enternote For example, \tcode{std::allocator<void>} meets the proto-allocator requirements but not the allocator requirements. \exitnote No constructor, comparison operator, copy operation, move operation, or swap operation on these types shall exit via an exception.
+A type \tcode{A} meets the proto-allocator requirements if \tcode{A} is \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{Destructible} (\CppXref{destructible}), and \tcode{allocator_traits<A>::rebind_alloc<U>} meets the allocator requirements (\CppXref{allocator.requirements}), where \tcode{U} is an object type. \enternote For example, \tcode{std::allocator<void>} meets the proto-allocator requirements but not the allocator requirements. \exitnote No constructor, comparison operator, copy operation, move operation, or swap operation on these types shall exit via an exception.
 
 
 
@@ -201,7 +201,7 @@ A type \tcode{A} meets the proto-allocator requirements if \tcode{A} is \tcode{C
 The library describes a standard set of requirements for executors. A type meeting the \tcode{Executor} requirements embodies a set of rules for determining how submitted function objects are to be executed.
 
 \pnum
-A type \tcode{X} meets the \tcode{Executor} requirements if it satisfies the requirements of \tcode{CopyConstructible} (C++Std [copyconstructible]) and \tcode{Destructible} (C++Std [destructible]), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{Executor} requirements if it satisfies the requirements of \tcode{CopyConstructible} (\CppXref{copyconstructible}) and \tcode{Destructible} (\CppXref{destructible}), as well as the additional requirements listed below.
 
 \pnum
 No constructor, comparison operator, copy operation, move operation, swap operation, or member functions \tcode{context}, \tcode{on_work_started}, and \tcode{on_work_finished} on these types shall exit via an exception.
@@ -213,7 +213,7 @@ No constructor, comparison operator, copy operation, move operation, swap operat
 Let \tcode{ctx} be the execution context returned by the executor's \tcode{context()} member function. An executor becomes invalid when the first call to \tcode{ctx.shutdown()} returns. The effect of calling \tcode{on_work_started}, \tcode{on_work_finished}, \tcode{dispatch}, \tcode{post}, or \tcode{defer} on an invalid executor is undefined. \enternote The copy constructor, comparison operators, and \tcode{context()} member function continue to remain valid until \tcode{ctx} is destroyed. \exitnote
 
 \pnum
-In the table below, \tcode{x1} and \tcode{x2} denote values of type \tcode{X}, \tcode{cx1} and \tcode{cx2} denote (possibly const) values of type \tcode{X}, \tcode{mx1} denotes an xvalue of type \tcode{X}, \tcode{f} denotes a \tcode{MoveConstructible} (C++Std [moveconstructible]) function object callable with zero arguments, \tcode{a} denotes a (possibly const) value of type \tcode{A} meeting the \tcode{Allocator} requirements (C++Std [allocator.requirements]), and \tcode{u} denotes an identifier.
+In the table below, \tcode{x1} and \tcode{x2} denote values of type \tcode{X}, \tcode{cx1} and \tcode{cx2} denote (possibly const) values of type \tcode{X}, \tcode{mx1} denotes an xvalue of type \tcode{X}, \tcode{f} denotes a \tcode{MoveConstructible} (\CppXref{moveconstructible}) function object callable with zero arguments, \tcode{a} denotes a (possibly const) value of type \tcode{A} meeting the \tcode{Allocator} requirements (\CppXref{allocator.requirements}), and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
 {Executor requirements}
@@ -260,14 +260,14 @@ Shall not exit via an exception.Precondition: A preceding call \tcode{x2.on_work
 
 \tcode{x1.dispatch(std::move(f),a)}  &
   &
-\effects Creates an object \tcode{f1} initialized with DECAY_COPY\tcode{(forward<Func>(f))} (C++Std [thread.decaycopy]) in the current thread of execution . Calls \tcode{f1()} at most once. The executor may block forward progress of the caller until \tcode{f1()} finishes execution.Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote\br
-\sync The invocation of \tcode{dispatch} synchronizes with (C++Std [intro.multithread]) the invocation of \tcode{f1}.  \\ \rowsep
+\effects Creates an object \tcode{f1} initialized with DECAY_COPY\tcode{(forward<Func>(f))} (\CppXref{thread.decaycopy}) in the current thread of execution . Calls \tcode{f1()} at most once. The executor may block forward progress of the caller until \tcode{f1()} finishes execution.Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote\br
+\sync The invocation of \tcode{dispatch} synchronizes with (\CppXref{intro.multithread}) the invocation of \tcode{f1}.  \\ \rowsep
 
 \tcode{x1.post(std::move(f),a)}\br
 \tcode{x1.defer(std::move(f),a)}  &
   &
 \effects Creates an object \tcode{f1} initialized with DECAY_COPY\tcode{(forward<Func>(f))} in the current thread of execution. Calls \tcode{f1()} at most once. The executor shall not block forward progress of the caller pending completion of \tcode{f1()}.Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote\br
-\sync The invocation of \tcode{post} or \tcode{defer} synchronizes with (C++Std [intro.multithread]) the invocation of \tcode{f1}.\enternote Although the requirements placed on \tcode{defer} are identical to \tcode{post}, the use of \tcode{post} conveys a preference that the caller does notblock the first step of f1's progress, whereas \tcode{defer} conveys a preference that the caller doesblock the first step of f1. One use of \tcode{defer} is to convey the intention of the caller that f1is a continuation of the current call context. The executor may use this information to optimize or otherwise adjust the way in which \tcode{f1} is invoked. \exitnote  \\
+\sync The invocation of \tcode{post} or \tcode{defer} synchronizes with (\CppXref{intro.multithread}) the invocation of \tcode{f1}.\enternote Although the requirements placed on \tcode{defer} are identical to \tcode{post}, the use of \tcode{post} conveys a preference that the caller does notblock the first step of f1's progress, whereas \tcode{defer} conveys a preference that the caller doesblock the first step of f1. One use of \tcode{defer} is to convey the intention of the caller that f1is a continuation of the current call context. The executor may use this information to optimize or otherwise adjust the way in which \tcode{f1} is invoked. \exitnote  \\
 
 \end{libreqtab3}
 
@@ -315,7 +315,7 @@ type meeting \tcode{Executor}~(\ref{async.reqmts.executor}) requirements  &
 \rSec2[async.reqmts.service]{Service requirements}
 
 \pnum
-A class is a service if it is publicly and unambiguously derived from \tcode{execution_context::service}, or if it is publicly and unambiguously derived from another service. For a service \tcode{S}, \tcode{S::key_type} shall be valid and denote a type (C++Std [temp.deduct]), \tcode{is_base_of_v<typename S::key_type, S>} shall be \tcode{true}, and \tcode{S} shall satisfy the \tcode{Destructible} requirements (C++Std [destructible]).
+A class is a service if it is publicly and unambiguously derived from \tcode{execution_context::service}, or if it is publicly and unambiguously derived from another service. For a service \tcode{S}, \tcode{S::key_type} shall be valid and denote a type (\CppXref{temp.deduct}), \tcode{is_base_of_v<typename S::key_type, S>} shall be \tcode{true}, and \tcode{S} shall satisfy the \tcode{Destructible} requirements (\CppXref{destructible}).
 
 \pnum
 The first parameter of all service constructors shall be an lvalue reference to \tcode{execution_context}. This parameter denotes the \tcode{execution_context} object that represents a set of services, of which the service object will be a member. \enternote These constructors may be called by the \tcode{make_service} function. \exitnote
@@ -349,7 +349,7 @@ A service's \tcode{shutdown} member function shall destroy all copies of user-de
 \rSec2[async.reqmts.signature]{Signature requirements}
 
 \pnum
- A type satisfies the signature requirements if it is a call signature (C++Std [func.def]).
+ A type satisfies the signature requirements if it is a call signature (\CppXref{func.def}).
 
 
 
@@ -479,14 +479,14 @@ are function templates with template parameter \tcode{CompletionToken};
 accept, as the final parameter, a completion token object \tcode{token} of type \tcode{CompletionToken};
 
 \item
-specify a completion signature, which is a call signature (C++Std [func.def]) \tcode{Signature} that determines the arguments to the completion handler.
+specify a completion signature, which is a call signature (\CppXref{func.def}) \tcode{Signature} that determines the arguments to the completion handler.
 \end{itemize}
 
 \pnum
 An initiating function determines the type \tcode{CompletionHandler} of its completion handler function object by performing \tcode{typename async_result<decay_t<CompletionToken>, Signature>::completion_handler_type}. The completion handler object \tcode{completion_handler} is initialized with \tcode{forward<CompletionToken>(token)}. \enternote No other requirements are placed on the type \tcode{CompletionToken}. \exitnote
 
 \pnum
-The type \tcode{CompletionHandler} must satisfy the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{MoveConstructible} (C++Std [moveconstructible]), and be callable with the specified call signature.
+The type \tcode{CompletionHandler} must satisfy the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), and be callable with the specified call signature.
 
 \pnum
 In this Technical Specification, all initiating functions specify a
@@ -577,7 +577,7 @@ Otherwise, the implementation must not assume the validity of the argument after
 \rSec3[async.reqmts.async.non.blocking]{Non-blocking requirements on initiating functions}
 
 \pnum
- An initiating function shall not block (C++Std [defns.block]) the calling thread pending completion of the outstanding operation.
+ An initiating function shall not block (\CppXref{defns.block}) the calling thread pending completion of the outstanding operation.
 
 \pnum
  \enternote Initiating functions may still block the calling thread for other reasons. For example, an initiating function may lock a mutex in order to synchronize access to shared data. \exitnote
@@ -657,7 +657,7 @@ Prior to completion handler execution, deallocate any memory allocated using the
 \end{itemize}
 
 \pnum
- \enternote The implementation may perform operating system or underlying API calls that perform memory allocations not using the associated allocator. Invocations of the allocator functions may not introduce data races (See C++Std [res.on.data.races]). \exitnote
+ \enternote The implementation may perform operating system or underlying API calls that perform memory allocations not using the associated allocator. Invocations of the allocator functions may not introduce data races (See \CppXref{res.on.data.races}). \exitnote
 
 
 
@@ -686,7 +686,7 @@ If an asynchonous operation completes immediately (that is, within the thread of
 \rSec1[async.async.result]{Class template \tcode{async_result}}
 
 \pnum
-The \tcode{async_result} class template is a customization point for asynchronous operations. Template parameter \tcode{CompletionToken} specifies the model used to obtain the result of the asynchronous operation. Template parameter \tcode{Signature} is the call signature (C++Std [func.def]) for the completion handler type invoked on completion of the asynchronous operation. The \tcode{async_result} template:
+The \tcode{async_result} class template is a customization point for asynchronous operations. Template parameter \tcode{CompletionToken} specifies the model used to obtain the result of the asynchronous operation. Template parameter \tcode{Signature} is the call signature (\CppXref{func.def}) for the completion handler type invoked on completion of the asynchronous operation. The \tcode{async_result} template:
 
 \begin{itemize}
 \item
@@ -723,10 +723,10 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-The template parameter \tcode{CompletionToken} shall be an object type. The template parameter \tcode{Signature} shall be a call signature (C++Std [func.def]).
+The template parameter \tcode{CompletionToken} shall be an object type. The template parameter \tcode{Signature} shall be a call signature (\CppXref{func.def}).
 
 \pnum
-Specializations of \tcode{async_result} shall satisfy the \tcode{Destructible} requirements (C++Std [destructible]) in addition to the requirements in the table below. In this table, \tcode{R} is a specialization of \tcode{async_result}; \tcode{r} is a modifiable lvalue of type \tcode{R}; and \tcode{h} is a modifiable lvalue of type \tcode{R::completion_handler_type}.
+Specializations of \tcode{async_result} shall satisfy the \tcode{Destructible} requirements (\CppXref{destructible}) in addition to the requirements in the table below. In this table, \tcode{R} is a specialization of \tcode{async_result}; \tcode{r} is a modifiable lvalue of type \tcode{R}; and \tcode{h} is a modifiable lvalue of type \tcode{R::completion_handler_type}.
 
 \begin{libreqtab3}
 {async_result specialization requirements}
@@ -745,11 +745,11 @@ Specializations of \tcode{async_result} shall satisfy the \tcode{Destructible} r
 
 \tcode{R::completion_handler_type}  &
   &
-A type satisfying \tcode{MoveConstructible} requirements (C++Std [moveconstructible]), An object of type \tcode{completion_handler_type} shall be a function object with call signature \tcode{Signature}, and \tcode{completion_handler_type} shall be constructible with an rvalue of type \tcode{CompletionToken}.  \\ \rowsep
+A type satisfying \tcode{MoveConstructible} requirements (\CppXref{moveconstructible}), An object of type \tcode{completion_handler_type} shall be a function object with call signature \tcode{Signature}, and \tcode{completion_handler_type} shall be constructible with an rvalue of type \tcode{CompletionToken}.  \\ \rowsep
 
 \tcode{R::return_type}  &
   &
-\tcode{void}; or a type satisfying \tcode{MoveConstructible} requirements (C++Std [moveconstructible])  \\ \rowsep
+\tcode{void}; or a type satisfying \tcode{MoveConstructible} requirements (\CppXref{moveconstructible})  \\ \rowsep
 
 \tcode{R r(h);}  &
   &
@@ -796,7 +796,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-The template parameter \tcode{Signature} shall be a call signature (C++Std [func.def]).
+The template parameter \tcode{Signature} shall be a call signature (\CppXref{func.def}).
 
 \begin{itemdecl}
 explicit async_completion(CompletionToken& t);
@@ -1183,7 +1183,7 @@ inline namespace v1 {
 \tcode{T} shall be a complete type.
 
 \pnum
-Class template \tcode{is_executor} is a UnaryTypeTrait (C++Std [meta.rqmts]) with a BaseCharacteristic of \tcode{true_type} if the type \tcode{T} meets the syntactic requirements for \tcode{Executor}~(\ref{async.reqmts.executor}), otherwise \tcode{false_type}.
+Class template \tcode{is_executor} is a UnaryTypeTrait (\CppXref{meta.rqmts}) with a BaseCharacteristic of \tcode{true_type} if the type \tcode{T} meets the syntactic requirements for \tcode{Executor}~(\ref{async.reqmts.executor}), otherwise \tcode{false_type}.
 
 
 
@@ -1229,7 +1229,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Remark: Detects whether \tcode{T} has a nested \tcode{executor_type} that is convertible from \tcode{Executor}. Meets the \tcode{BinaryTypeTrait} requirements (C++Std [meta.rqmts]). The implementation provides a definition that is derived from \tcode{true_type} if a type \tcode{T::executor_type} exists and \tcode{is_convertible<Executor, T::executor_type>::value != false}, otherwise it is derived from \tcode{false_type}. A program may specialize this template to derive from \tcode{true_type} for a user-defined type \tcode{T} that does not have a nested \tcode{executor_type} but nonetheless can be constructed with an executor if the first argument of a constructor has type \tcode{executor_arg_t} and the second argument has type \tcode{Executor}.
+Remark: Detects whether \tcode{T} has a nested \tcode{executor_type} that is convertible from \tcode{Executor}. Meets the \tcode{BinaryTypeTrait} requirements (\CppXref{meta.rqmts}). The implementation provides a definition that is derived from \tcode{true_type} if a type \tcode{T::executor_type} exists and \tcode{is_convertible<Executor, T::executor_type>::value != false}, otherwise it is derived from \tcode{false_type}. A program may specialize this template to derive from \tcode{true_type} for a user-defined type \tcode{T} that does not have a nested \tcode{executor_type} but nonetheless can be constructed with an executor if the first argument of a constructor has type \tcode{executor_arg_t} and the second argument has type \tcode{Executor}.
 
 
 
@@ -1545,7 +1545,7 @@ template<class... Args>
 
 \begin{itemdescr}
 \pnum
-\returns INVOKE\tcode{(get(), forward<Args>(args)...)} (C++Std [func.require]).
+\returns INVOKE\tcode{(get(), forward<Args>(args)...)} (\CppXref{func.require}).
 \end{itemdescr}
 
 
@@ -1924,7 +1924,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Class \tcode{system_executor} satisfies the \tcode{Destructible} (C++Std [destructible]), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), and \tcode{Executor}~(\ref{async.reqmts.executor}) type requirements.
+Class \tcode{system_executor} satisfies the \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), and \tcode{Executor}~(\ref{async.reqmts.executor}) type requirements.
 
 \pnum
 To satisfy the \tcode{Executor} requirements for the \tcode{post} and \tcode{defer} member functions, the system executor may create \tcode{thread} objects to run the submitted function objects. These \tcode{thread} objects are collectively referred to as system threads.
@@ -1948,7 +1948,7 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to DECAY_COPY\tcode{(forward<Func>(f))()} (C++Std [thread.decaycopy]).
+\effects Equivalent to DECAY_COPY\tcode{(forward<Func>(f))()} (\CppXref{thread.decaycopy}).
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2079,10 +2079,10 @@ void join();
 
 \begin{itemdescr}
 \pnum
-\effects Blocks the calling thread (C++Std [defns.block]) until all system threads have completed.
+\effects Blocks the calling thread (\CppXref{defns.block}) until all system threads have completed.
 
 \pnum
-\sync The completion of each system thread synchronizes with (C++Std [intro.multithread]) the corresponding successful \tcode{join()} return.
+\sync The completion of each system thread synchronizes with (\CppXref{intro.multithread}) the corresponding successful \tcode{join()} return.
 \end{itemdescr}
 
 
@@ -2212,7 +2212,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Class \tcode{executor} meets the requirements of \tcode{Executor}~(\ref{async.reqmts.executor}), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+Class \tcode{executor} meets the requirements of \tcode{Executor}~(\ref{async.reqmts.executor}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
 \enternote To meet the \tcode{noexcept} requirements for executor copy constructors and move constructors, implementations may share a target between two or more \tcode{executor} objects. \exitnote
@@ -2416,7 +2416,7 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdescr}
 \pnum
-Let \tcode{e} be the target object of \tcode{*this}. Let \tcode{a1} be the allocator that was specified when the target was set. Let \tcode{fd} be the result of \tcode{DECAY_COPY(f)} (C++Std [thread.decaycopy]).
+Let \tcode{e} be the target object of \tcode{*this}. Let \tcode{a1} be the allocator that was specified when the target was set. Let \tcode{fd} be the result of \tcode{DECAY_COPY(f)} (\CppXref{thread.decaycopy}).
 
 \pnum
 \effects \tcode{e.dispatch(g, a1)}, where \tcode{g} is a function object of unspecified type that, when called as \tcode{g()}, performs \tcode{fd()}. The allocator \tcode{a} is used to allocate any memory required to implement \tcode{g}.
@@ -2924,7 +2924,7 @@ strand();
 \effects Constructs an object of class \tcode{strand<Executor>} that represents a unique ordered, non-concurrent state. Initializes \tcode{inner_ex_} as \tcode{inner_ex_()}.
 
 \pnum
-\remarks This overload shall not participate in overload resolution unless \tcode{Executor} satisfies the \tcode{DefaultConstructible} requirements (C++Std [defaultconstructible]).
+\remarks This overload shall not participate in overload resolution unless \tcode{Executor} satisfies the \tcode{DefaultConstructible} requirements (\CppXref{defaultconstructible}).
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3022,7 +3022,7 @@ strand& operator=(const strand& other) noexcept;
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{Executor} is \tcode{CopyAssignable} (C++Std [copyassignable]).
+Requires: \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
 \postconditions 
@@ -3043,7 +3043,7 @@ strand& operator=(strand&& other) noexcept;
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{Executor} is \tcode{MoveAssignable} (C++Std [moveassignable]).
+Requires: \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
 \postconditions 
@@ -3064,7 +3064,7 @@ template<class OtherExecutor> strand& operator=(const strand<OtherExecutor>& oth
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{CopyAssignable} (C++Std [copyassignable]).
+Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
 \effects Assigns \tcode{other.inner_ex_} to \tcode{inner_ex_}.
@@ -3082,7 +3082,7 @@ template<class OtherExecutor> strand& operator=(strand<OtherExecutor>&& other) n
 
 \begin{itemdescr}
 \pnum
-Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{MoveAssignable} (C++Std [moveassignable]).
+Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
 \effects Assigns \tcode{std::move(other.inner_ex_)} to \tcode{inner_ex_}.
@@ -3163,7 +3163,7 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{running_in_this_thread() == true}, calls DECAY_COPY\tcode{(forward<Func>(f))()} (C++Std [thread.decaycopy]). \enternote If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \exitnote Otherwise, requests invocation of \tcode{f}, as if by forwarding the function object \tcode{f} and allocator \tcode{a} to the executor \tcode{inner_ex_}, such that the guarantees of ordering and non-concurrency are met.
+\effects If \tcode{running_in_this_thread() == true}, calls DECAY_COPY\tcode{(forward<Func>(f))()} (\CppXref{thread.decaycopy}). \enternote If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \exitnote Otherwise, requests invocation of \tcode{f}, as if by forwarding the function object \tcode{f} and allocator \tcode{a} to the executor \tcode{inner_ex_}, such that the guarantees of ordering and non-concurrency are met.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3214,7 +3214,7 @@ bool operator!=(const strand<Executor>& a, const strand<Executor>& b);
 \rSec1[async.use.future]{Class template \tcode{use_future_t}}
 
 \pnum
-The class template \tcode{use_future_t} defines a set of types that, when passed as a completion token~(\ref{async.reqmts.async.token}) to an asynchronous operation's initiating function, cause the result of the asynchronous operation to be delivered via a future (C++Std [futures.unique_future]).
+The class template \tcode{use_future_t} defines a set of types that, when passed as a completion token~(\ref{async.reqmts.async.token}) to an asynchronous operation's initiating function, cause the result of the asynchronous operation to be delivered via a future (\CppXref{futures.uniquefuture}).
 
 \begin{codeblock}
 namespace std {
@@ -3300,10 +3300,10 @@ Let T be a completion token type. Let H be a completion handler type and let h b
 \returns A completion token \tcode{t} of type \tcode{T}.
 
 \pnum
-\remarks The return type \tcode{T} satisfies the \tcode{Destructible} (C++Std [destructible]) and \tcode{MoveConstructible} (C++Std [moveconstructible]) requirements.
+\remarks The return type \tcode{T} satisfies the \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}) requirements.
 
 \pnum
-The object \tcode{h} of type \tcode{H} is an asynchronous provider with an associated shared state (C++Std [futures.state]). The effect of h(a0, ..., aN-1) is to atomically store the result of INVOKE(fd, forward<A0>(a0), ..., forward<AN-1>(aN-1)) (C++Std [func.require]) in the shared state and make the shared state ready. If \tcode{fd} exits via an exception then that exception is atomically stored in the shared state and the shared state is made ready.
+The object \tcode{h} of type \tcode{H} is an asynchronous provider with an associated shared state (\CppXref{futures.state}). The effect of h(a0, ..., aN-1) is to atomically store the result of INVOKE(fd, forward<A0>(a0), ..., forward<AN-1>(aN-1)) (\CppXref{func.require}) in the shared state and make the shared state ready. If \tcode{fd} exits via an exception then that exception is atomically stored in the shared state and the shared state is made ready.
 
 \pnum
 The implementation provides a partial specialization template <class Result, class... Args> async_result<T, Result(Args...)> such that:
@@ -3344,7 +3344,7 @@ class async_result<use_future_t<ProtoAllocator>, Result(Args...)>
 Let \tcode{R} be the type \tcode{async_result<use_future_t<ProtoAllocator>, Result(Args...)>}. Let \tcode{F} be the nested function object type \tcode{R::completion_handler_type}.
 
 \pnum
-An object \tcode{t1} of type \tcode{F} is an asynchronous provider with an associated shared state (C++Std [futures.state]). The type \tcode{F} provides \tcode{F::operator()} such that the expression \tcode{t1(declval<Args>()...)} is well formed.
+An object \tcode{t1} of type \tcode{F} is an asynchronous provider with an associated shared state (\CppXref{futures.state}). The type \tcode{F} provides \tcode{F::operator()} such that the expression \tcode{t1(declval<Args>()...)} is well formed.
 
 \pnum
 The implementation specializes \tcode{associated_executor} for \tcode{F}. For function objects executed using the associated executor's \tcode{dispatch()}, \tcode{post()} or \tcode{defer()} functions, any exception thrown is caught by the executor and stored in the associated shared state.

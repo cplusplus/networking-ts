@@ -227,7 +227,7 @@ template<class Clock, class Duration>
 
 \begin{itemdescr}
 \pnum
-\effects If the \tcode{io_context} object has no outstanding work, performs \tcode{stop()}. Otherwise, blocks while the io_context has outstanding work, or until the expiration of the absolute timeout (C++Std [thread.req.timing]) specified by \tcode{abs_time}, or until the \tcode{io_context} is stopped, or until one function object has been executed.
+\effects If the \tcode{io_context} object has no outstanding work, performs \tcode{stop()}. Otherwise, blocks while the io_context has outstanding work, or until the expiration of the absolute timeout (\CppXref{thread.req.timing}) specified by \tcode{abs_time}, or until the \tcode{io_context} is stopped, or until one function object has been executed.
 
 \pnum
 If an executed function object throws an exception, the exception propagates to the caller of \tcode{run_one()}. The \tcode{io_context} state is as if the function object had returned normally.
@@ -460,7 +460,7 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{running_in_this_thread()} is \tcode{true}, calls DECAY_COPY\tcode{(forward<Func>(f))()} (C++Std [thread.decaycopy]). \enternote If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \exitnote Otherwise, calls \tcode{post(forward<Func>(f), a)}.
+\effects If \tcode{running_in_this_thread()} is \tcode{true}, calls DECAY_COPY\tcode{(forward<Func>(f))()} (\CppXref{thread.decaycopy}). \enternote If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \exitnote Otherwise, calls \tcode{post(forward<Func>(f), a)}.
 \end{itemdescr}
 
 \begin{itemdecl}

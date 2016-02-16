@@ -140,7 +140,7 @@ In this section, synchronous socket operations are those member functions specif
 \end{codeblock}
 
 \pnum
-For an object \tcode{s}, the conditions under which its synchronous socket operations may block the calling thread (C++Std [defns.block]) are determined as follows.
+For an object \tcode{s}, the conditions under which its synchronous socket operations may block the calling thread (\CppXref{defns.block}) are determined as follows.
 
 \pnum
  If:
@@ -206,7 +206,7 @@ Several classes described in this Technical Specification have a member type \tc
 \rSec2[socket.reqmts.endpoint]{Endpoint requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{Endpoint} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{Endpoint} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}), as well as the additional requirements listed below.
 
 \pnum
 In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
@@ -283,7 +283,7 @@ Returns a value suitable for passing as the \tcode{address_len} argument to func
 \rSec2[socket.reqmts.endpointsequence]{Endpoint sequence requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{EndpointSequence} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{CopyConstructible} (C++Std [copyconstructible]), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{EndpointSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
 
 \pnum
 In the table below, \tcode{x} denotes a (possibly const) value of type \tcode{X}.
@@ -304,7 +304,7 @@ In the table below, \tcode{x} denotes a (possibly const) value of type \tcode{X}
 \endhead
 
 \tcode{x.begin()}\tcode{x.end()}  &
-A type meeting the requirements for forward iterators (C++Std [forward.iterators]) whose value type is convertible to a type satisfying the \tcode{Endpoint}~(\ref{socket.reqmts.endpoint}) requirements.  &
+A type meeting the requirements for forward iterators (\CppXref{forward.iterators}) whose value type is convertible to a type satisfying the \tcode{Endpoint}~(\ref{socket.reqmts.endpoint}) requirements.  &
 \range{\tcode{x.begin()},\tcode{x.end()}}\ is a valid range.  \\
 
 \end{libreqtab3}
@@ -314,7 +314,7 @@ A type meeting the requirements for forward iterators (C++Std [forward.iterators
 \rSec2[socket.reqmts.protocol]{Protocol requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{Protocol} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{Protocol} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}), as well as the additional requirements listed below.
 
 \begin{libreqtab3}
 {Protocol requirements}
@@ -392,7 +392,7 @@ A type \tcode{X} meets the \tcode{AcceptableProtocol} requirements if it satisfi
 \endhead
 
 \tcode{X::socket}  &
-A type that satisfies the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{MoveConstructible} (C++Std [moveconstructible]), and that is publicly and unambiguously derived from \tcode{basic_socket<X>}.  &
+A type that satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), and that is publicly and unambiguously derived from \tcode{basic_socket<X>}.  &
   \\
 
 \end{libreqtab3}
@@ -492,7 +492,7 @@ Returns a value suitable for passing as the option_len argument to POSIX setsock
 \rSec2[socket.reqmts.opt.bool]{Boolean socket options}
 
 \pnum
-A type \tcode{X} meets the \tcode{BooleanSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{CopyAssignable} (C++Std [copyassignable]), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), \tcode{X} is contextually convertible to bool, and \tcode{X} satisfies the additional requirements listed below.
+A type \tcode{X} meets the \tcode{BooleanSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), \tcode{X} is contextually convertible to bool, and \tcode{X} satisfies the additional requirements listed below.
 
 \pnum
 In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{b} denotes a (possibly const) value of type \tcode{bool}, and \tcode{u} denotes an identifier.
@@ -693,7 +693,7 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 \rSec2[socket.reqmts.opt.int]{Integer socket options}
 
 \pnum
-A type \tcode{X} meets the \tcode{IntegerSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{CopyAssignable} (C++Std [copyassignable]), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{IntegerSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
 
 \pnum
 In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{b} denotes a (possibly const) value of type \tcode{int}, and \tcode{u} denotes an identifier.
@@ -900,7 +900,7 @@ Returns a value suitable for passing as the request argument to POSIX \tcode{ioc
 \rSec2[socket.reqmts.connectcondition]{Connect condition requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{ConnectCondition} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{CopyConstructible} (C++Std [copyconstructible]), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{ConnectCondition} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
 
 \pnum
 In the table below, \tcode{x} denotes a value of type \tcode{X}, \tcode{ec} denotes a (possibly const) value of type \tcode{error_code}, and \tcode{ep} denotes a (possibly const) value of some type satisfying the endpoint~(\ref{socket.reqmts.endpoint}) requirements.
@@ -1216,7 +1216,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-\tcode{linger} satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{CopyAssignable} (C++Std [copyassignable]), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
+\tcode{linger} satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
 
 \pnum
  Extensible implementations provide the following member functions:
@@ -1486,7 +1486,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_socket} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), and \tcode{MoveAssignable} (C++Std [moveassignable]).
+Instances of class template \tcode{basic_socket} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), and \tcode{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
 When an operation has its effects specified as if by passing the result of \tcode{native_handle()} to a POSIX function, then the operation fails with error condition \tcode{errc::bad_file_descriptor} if \tcode{is_open() == false} at the point in the effects when the POSIX function is called.
@@ -1849,7 +1849,7 @@ Error conditions:
 \end{itemize}
 
 \pnum
-\remarks Does not block (C++Std [defns.block]) the calling thread pending completion of the canceled operations.
+\remarks Does not block (\CppXref{defns.block}) the calling thread pending completion of the canceled operations.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2299,7 +2299,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_datagram_socket} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), and \tcode{MoveAssignable} (C++Std [moveassignable]).
+Instances of class template \tcode{basic_datagram_socket} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), and \tcode{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
 If a program performs a synchronous operation on this socket, other than \tcode{close}, \tcode{cancel}, \tcode{shutdown}, \tcode{send}, or \tcode{send_to}, while there is an outstanding asynchronous read operation, the behavior is undefined.
@@ -2926,7 +2926,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_stream_socket} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), \tcode{MoveAssignable} (C++Std [moveassignable]), \tcode{SyncReadStream}~(\ref{buffer.stream.reqmts.syncreadstream}), \tcode{SyncWriteStream}~(\ref{buffer.stream.reqmts.syncwritestream}), \tcode{AsyncReadStream}~(\ref{buffer.stream.reqmts.asyncreadstream}), and \tcode{AsyncWriteStream}~(\ref{buffer.stream.reqmts.asyncwritestream}).
+Instances of class template \tcode{basic_stream_socket} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), \tcode{MoveAssignable} (\CppXref{moveassignable}), \tcode{SyncReadStream}~(\ref{buffer.stream.reqmts.syncreadstream}), \tcode{SyncWriteStream}~(\ref{buffer.stream.reqmts.syncwritestream}), \tcode{AsyncReadStream}~(\ref{buffer.stream.reqmts.asyncreadstream}), and \tcode{AsyncWriteStream}~(\ref{buffer.stream.reqmts.asyncwritestream}).
 
 \pnum
 If a program performs a synchronous operation on this socket, other than \tcode{close}, \tcode{cancel}, \tcode{shutdown}, or \tcode{send}, while there is an outstanding asynchronous read operation, the behavior is undefined.
@@ -3429,7 +3429,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_socket_acceptor} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), and \tcode{MoveAssignable} (C++Std [moveassignable]).
+Instances of class template \tcode{basic_socket_acceptor} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), and \tcode{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
  When there are multiple outstanding asynchronous accept operations the order in which the incoming connections are dequeued, and the order of invocation of the completion handlers for these operations, is unspecified.
