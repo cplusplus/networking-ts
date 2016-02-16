@@ -1,0 +1,20 @@
+%!TEX root = ts.tex
+
+\rSec0[feature.test]{Feature test macros (Informative)}
+
+\pnum
+These macros allow users to determine which version of this Technical Specification is supported by the headers defined by the specification. All headers in this Technical Specification shall define the \tcode{__cpp_lib_experimental_net} feature test macro in Table~\ref{tab:info.features}.
+
+\pnum
+If an implementation supplies all of the conditionally-supported features specified in \ref{conformance.conditional}, all headers in this Technical Specification shall additionally define the \tcode{__cpp_lib_experimental_net_extensible} feature test macro.
+
+\begin{floattable}{Feature-test macro(s)}{tab:info.features}
+{ll}
+\topline
+\lhdr{Macro name} & \rhdr{Value} \\
+\capsep
+\tcode{__cpp_lib_experimental_net}  & \tcode{201602}      \\
+\tcode{__cpp_lib_experimental_net_extensible}  & \tcode{201602}      \\
+\end{floattable}
+
+

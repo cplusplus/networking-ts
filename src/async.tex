@@ -1,0 +1,3482 @@
+%!TEX root = ts.tex
+
+\rSec0[async]{Asynchronous model}
+
+
+\rSec1[async.synop]{Header \tcode{<experimental/executor>} synopsis}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class CompletionToken, class Signature, class = void>
+    class async_result;
+
+  template<class CompletionToken, class Signature>
+    struct async_completion;
+
+  template<class T, class ProtoAllocator = allocator<void>>
+    struct associated_allocator;
+
+  template<class T, class ProtoAllocator = allocator<void>>
+    using associated_allocator_t = typename associated_allocator<T, ProtoAllocator>::type;
+
+  // get_associated_allocator:
+
+  template<class T>
+    associated_allocator_t<T> get_associated_allocator(const T& t) noexcept;
+  template<class T, class ProtoAllocator>
+    associated_allocator_t<T, ProtoAllocator>
+      get_associated_allocator(const T& t, const ProtoAllocator& a) noexcept;
+
+  enum class fork_event {
+    prepare,
+    parent,
+    child
+  };
+
+  class execution_context;
+
+  class service_already_exists;
+
+  template<class Service> Service& use_service(execution_context& ctx);
+  template<class Service, class... Args> Service&
+    make_service(execution_context& ctx, Args&&... args);
+  template<class Service> bool has_service(execution_context& ctx) noexcept;
+
+  template<class T> struct is_executor;
+
+  struct executor_arg_t { };
+  constexpr executor_arg_t executor_arg = executor_arg_t();
+
+  template<class T, class Executor> struct uses_executor;
+
+  template<class T, class Executor = system_executor>
+    struct associated_executor;
+
+  template<class T, class Executor = system_executor>
+    using associated_executor_t = typename associated_executor<T, Executor>::type;
+
+  // get_associated_executor:
+
+  template<class T>
+    associated_executor_t<T> get_associated_executor(const T& t) noexcept;
+  template<class T, class Executor>
+    associated_executor_t<T, Executor>
+      get_associated_executor(const T& t, const Executor& ex) noexcept;
+  template<class T, class ExecutionContext>
+    associated_executor_t<T, typename ExecutionContext::executor_type>
+      get_associated_executor(const T& t, ExecutionContext& ctx) noexcept;
+
+  template<class T, class Executor>
+    class executor_binder;
+
+  template<class T, class Executor, class Signature>
+    class async_result<executor_binder<T, Executor>, Signature>;
+
+  template<class T, class Executor, class ProtoAllocator>
+    struct associated_allocator<executor_binder<T, Executor>, ProtoAllocator>;
+
+  template<class T, class Executor, class Executor1>
+    struct associated_executor<executor_binder<T, Executor>, Executor1>;
+
+  // bind_executor:
+
+  template<class Executor, class T>
+    executor_binder<decay_t<T>, Executor>
+      bind_executor(const Executor& ex, T&& t);
+  template<class ExecutionContext, class T>
+    executor_binder<decay_t<T>, typename ExecutionContext::executor_type>
+      bind_executor(ExecutionContext& ctx, T&& t);
+
+  template<class Executor>
+    class executor_work_guard;
+
+  // make_work_guard:
+
+  template<class Executor>
+    executor_work_guard<Executor>
+      make_work_guard(const Executor& ex);
+  template<class ExecutionContext>
+    executor_work_guard<typename ExecutionContext::executor_type>
+      make_work_guard(ExecutionContext& ctx);
+  template<class T>
+    executor_work_guard<associated_executor_t<T>>
+      make_work_guard(const T& t);
+  template<class T, class U>
+    auto make_work_guard(const T& t, U&& u)
+      -> decltype(make_work_guard(get_associated_executor(t, forward<U>(u))));
+
+  class system_executor;
+  class system_context;
+
+  bool operator==(const system_executor&, const system_executor&);
+  bool operator!=(const system_executor&, const system_executor&);
+
+  class bad_executor;
+
+  class executor;
+
+  bool operator==(const executor& a, const executor& b) noexcept;
+  bool operator==(const executor& e, nullptr_t) noexcept;
+  bool operator==(nullptr_t, const executor& e) noexcept;
+  bool operator!=(const executor& a, const executor& b) noexcept;
+  bool operator!=(const executor& e, nullptr_t) noexcept;
+  bool operator!=(nullptr_t, const executor& e) noexcept;
+
+  // dispatch:
+
+  template<class CompletionToken>
+    @\textit{DEDUCED}@ dispatch(CompletionToken&& token);
+  template<class Executor, class CompletionToken>
+    @\textit{DEDUCED}@ dispatch(const Executor& ex, CompletionToken&& token);
+  template<class ExecutionContext, class CompletionToken>
+    @\textit{DEDUCED}@ dispatch(ExecutionContext& ctx, CompletionToken&& token);
+
+  // post:
+
+  template<class CompletionToken>
+    @\textit{DEDUCED}@ post(CompletionToken&& token);
+  template<class Executor, class CompletionToken>
+    @\textit{DEDUCED}@ post(const Executor& ex, CompletionToken&& token);
+  template<class ExecutionContext, class CompletionToken>
+    @\textit{DEDUCED}@ post(ExecutionContext& ctx, CompletionToken&& token);
+
+  // defer:
+
+  template<class CompletionToken>
+    @\textit{DEDUCED}@ defer(CompletionToken&& token);
+  template<class Executor, class CompletionToken>
+    @\textit{DEDUCED}@ defer(const Executor& ex, CompletionToken&& token);
+  template<class ExecutionContext, class CompletionToken>
+    @\textit{DEDUCED}@ defer(ExecutionContext& ctx, CompletionToken&& token);
+
+  template<class Executor>
+    class strand;
+
+  template<class Executor>
+    bool operator==(const strand<Executor>& a, const strand<Executor>& b);
+  template<class Executor>
+    bool operator!=(const strand<Executor>& a, const strand<Executor>& b);
+
+  template<class ProtoAllocator = allocator<void>>
+    class use_future_t;
+
+  constexpr use_future_t<> use_future = use_future_t<>();
+
+  template<class ProtoAllocator, class Result, class... Args>
+    class async_result<use_future_t<ProtoAllocator>, Result(Args...)>;
+
+  template<class R, class... Args, class Signature>
+    class async_result<packaged_task<Result(Args...)>, Signature>;
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+
+  template<class Allocator>
+    struct uses_allocator<experimental::net::v1::executor, Allocator>
+      : true_type {};
+
+} // namespace std
+\end{codeblock}
+
+
+
+\rSec1[async.reqmts]{Requirements}
+
+
+\rSec2[async.reqmts.proto.allocator]{Proto-allocator requirements}
+
+\pnum
+A type \tcode{A} meets the proto-allocator requirements if \tcode{A} is \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{Destructible} (C++Std [destructible]), and \tcode{allocator_traits<A>::rebind_alloc<U>} meets the allocator requirements (C++Std [allocator.requirements]), where \tcode{U} is an object type. \enternote For example, \tcode{std::allocator<void>} meets the proto-allocator requirements but not the allocator requirements. \exitnote No constructor, comparison operator, copy operation, move operation, or swap operation on these types shall exit via an exception.
+
+
+
+\rSec2[async.reqmts.executor]{Executor requirements}
+
+\pnum
+The library describes a standard set of requirements for executors. A type meeting the \tcode{Executor} requirements embodies a set of rules for determining how submitted function objects are to be executed.
+
+\pnum
+A type \tcode{X} meets the \tcode{Executor} requirements if it satisfies the requirements of \tcode{CopyConstructible} (C++Std [copyconstructible]) and \tcode{Destructible} (C++Std [destructible]), as well as the additional requirements listed below.
+
+\pnum
+No constructor, comparison operator, copy operation, move operation, swap operation, or member functions \tcode{context}, \tcode{on_work_started}, and \tcode{on_work_finished} on these types shall exit via an exception.
+
+\pnum
+ The executor copy constructor, comparison operators, and other member functions defined in these requirements shall not introduce data races as a result of concurrent calls to those functions from different threads.
+
+\pnum
+Let \tcode{ctx} be the execution context returned by the executor's \tcode{context()} member function. An executor becomes invalid when the first call to \tcode{ctx.shutdown()} returns. The effect of calling \tcode{on_work_started}, \tcode{on_work_finished}, \tcode{dispatch}, \tcode{post}, or \tcode{defer} on an invalid executor is undefined. \enternote The copy constructor, comparison operators, and \tcode{context()} member function continue to remain valid until \tcode{ctx} is destroyed. \exitnote
+
+\pnum
+In the table below, \tcode{x1} and \tcode{x2} denote values of type \tcode{X}, \tcode{cx1} and \tcode{cx2} denote (possibly const) values of type \tcode{X}, \tcode{mx1} denotes an xvalue of type \tcode{X}, \tcode{f} denotes a \tcode{MoveConstructible} (C++Std [moveconstructible]) function object callable with zero arguments, \tcode{a} denotes a (possibly const) value of type \tcode{A} meeting the \tcode{Allocator} requirements (C++Std [allocator.requirements]), and \tcode{u} denotes an identifier.
+
+\begin{libreqtab3}
+{Executor requirements}
+{async.reqmts.executor.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions} \\ \capsep
+\endhead
+
+\tcode{X u(cx1);}  &
+  &
+Shall not exit via an exception.post: \tcode{u == cx1} and \tcode{std::addressof(u.context()) == std::addressof(cx1.context()).}  \\ \rowsep
+
+\tcode{X u(mx1);}  &
+  &
+Shall not exit via an exception.post: \tcode{u}equals the prior value of \tcode{mx1} and \tcode{std::addressof(u.context())}equals the prior value of \tcode{std::addressof(mx1.context())}.  \\ \rowsep
+
+\tcode{cx1 == cx2}  &
+\tcode{bool}  &
+Returns \tcode{true} only if \tcode{cx1} and \tcode{cx2} can be interchanged with identical effects in any of the expressions defined in these type requirements. \enternote Returning \tcode{false} does not necessarily imply that the effects are not identical. \exitnote \tcode{operator==} shall be reflexive, symmetric, and transitive, and shall not exit via an exception.  \\ \rowsep
+
+\tcode{cx1 != cx2}  &
+\tcode{bool}  &
+Same as \tcode{!(cx1 == cx2)}.  \\ \rowsep
+
+\tcode{x1.context()}  &
+\tcode{execution_context\&}, or \tcode{E\&} where \tcode{E} is a type that satifisfies the \tcode{ExecutionContext}~(\ref{async.reqmts.executioncontext}) requirements.  &
+Shall not exit via an exception. The comparison operators and member functions defined in these requirements shall not alter the reference returned by this function.  \\ \rowsep
+
+\tcode{x1.on_work_started()}  &
+  &
+ Shall not exit via an exception.  \\ \rowsep
+
+\tcode{x1.on_work_finished()}  &
+  &
+Shall not exit via an exception.Precondition: A preceding call \tcode{x2.on_work_started()}where \tcode{x1 == x2}.  \\ \rowsep
+
+\tcode{x1.dispatch(std::move(f),a)}  &
+  &
+Effects: Creates an object \tcode{f1} initialized with DECAY_COPY\tcode{(forward<Func>(f))} (C++Std [thread.decaycopy]) in the current thread of execution . Calls \tcode{f1()} at most once. The executor may block forward progress of the caller until \tcode{f1()} finishes execution.Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote Synchronization: The invocation of \tcode{dispatch}synchronizes with (C++Std [intro.multithread]) the invocation of \tcode{f1}.  \\ \rowsep
+
+\tcode{x1.post(std::move(f),a)}\tcode{x1.defer(std::move(f),a)}  &
+  &
+Effects: Creates an object \tcode{f1} initialized with DECAY_COPY\tcode{(forward<Func>(f))} in the current thread of execution. Calls \tcode{f1()} at most once. The executor shall not block forward progress of the caller pending completion of \tcode{f1()}.Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote Synchronization: The invocation of \tcode{post}or \tcode{defer}synchronizes with (C++Std [intro.multithread]) the invocation of \tcode{f1}.\enternote Although the requirements placed on \tcode{defer}are identical to \tcode{post}, the use of \tcode{post}conveys a preference that the caller does notblock the first step of f1's progress, whereas \tcode{defer}conveys a preference that the caller doesblock the first step of f1. One use of \tcode{defer} is to convey the intention of the caller that f1is a continuation of the current call context. The executor may use this information to optimize or otherwise adjust the way in which \tcode{f1} is invoked. \exitnote  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[async.reqmts.executioncontext]{Execution context requirements}
+
+\pnum
+A type \tcode{X} meets the \tcode{ExecutionContext} requirements if it is publicly and unambiguously derived from \tcode{execution_context}, and satisfies the additional requirements listed below.
+
+\pnum
+In the table below, \tcode{x} denotes a value of type \tcode{X}.
+
+\begin{libreqtab3}
+{ExecutionContext requirements}
+{async.reqmts.executioncontext.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition} \\ \capsep
+\endhead
+
+\tcode{X::executor_type}  &
+type meeting \tcode{Executor}~(\ref{async.reqmts.executor}) requirements  &
+  \\ \rowsep
+
+\tcode{x.~X()}  &
+  &
+ Destroys all unexecuted function objects that were submitted via an executor object that is associated with the execution context.  \\ \rowsep
+
+\tcode{x.get_executor()}  &
+\tcode{X::executor_type}  &
+ Returns an executor object that is associated with the execution context.  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[async.reqmts.service]{Service requirements}
+
+\pnum
+A class is a service if it is publicly and unambiguously derived from \tcode{execution_context::service}, or if it is publicly and unambiguously derived from another service. For a service \tcode{S}, \tcode{S::key_type} shall be valid and denote a type (C++Std [temp.deduct]), \tcode{is_base_of_v<typename S::key_type, S>} shall be \tcode{true}, and \tcode{S} shall satisfy the \tcode{Destructible} requirements (C++Std [destructible]).
+
+\pnum
+The first parameter of all service constructors shall be an lvalue reference to \tcode{execution_context}. This parameter denotes the \tcode{execution_context} object that represents a set of services, of which the service object will be a member. \enternote These constructors may be called by the \tcode{make_service} function. \exitnote
+
+\pnum
+A service shall provide an explicit constructor with a single parameter of lvalue reference to \tcode{execution_context}. \enternote This constructor may be called by the \tcode{use_service} function. \exitnote
+
+\pnum
+\enterexample 
+
+\pnum
+
+\begin{codeblock}
+class my_service : public execution_context::service
+{
+public:
+  typedef my_service key_type;
+  explicit my_service(execution_context& ctx);
+  my_service(execution_context& ctx, int some_value);
+private:
+  virtual void shutdown() noexcept override;
+  ...
+};
+\end{codeblock}
+
+
+\pnum
+ \exitexample
+
+\pnum
+A service's \tcode{shutdown} member function shall destroy all copies of user-defined function objects that are held by the service.
+
+
+
+\rSec2[async.reqmts.signature]{Signature requirements}
+
+\pnum
+ A type satisfies the signature requirements if it is a call signature (C++Std [func.def]).
+
+
+
+\rSec2[async.reqmts.associator]{Associator requirements}
+
+\pnum
+An associator defines a relationship between different types and objects where, given:
+
+\begin{itemize}
+\item
+a source object \tcode{s} of type \tcode{S},
+
+\item
+type requirements \tcode{R}, and
+
+\item
+a candidate object \tcode{c} of type \tcode{C} meeting the type requirements \tcode{R}
+\end{itemize}
+
+\pnum
+an associated type \tcode{A} meeting the type requirements \tcode{R} may be computed, and an associated object \tcode{a} of type \tcode{A} may be obtained.
+
+\pnum
+An associator shall be a class template that takes two template type arguments. The first template argument is the source type \tcode{S}. The second template argument is the candidate type \tcode{C}. The second template argument shall be defaulted to some default candidate type \tcode{D} that satisfies the type requirements \tcode{R}.
+
+\pnum
+An associator shall additionally satisfy the requirements in the table below. In this table, \tcode{X} is a class template that meets the associator requirements, \tcode{S} is the source type, \tcode{s} is a (possibly const) value of type \tcode{S}, \tcode{C} is the candidate type, \tcode{c} is a (possibly const) value of type \tcode{C}, \tcode{D} is the default candidate type, and \tcode{d} is a (possibly const) value of type \tcode{D} that is the default candidate object.
+
+\begin{libreqtab3}
+{Associator requirements}
+{async.reqmts.associator.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-conditions} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-conditions} \\ \capsep
+\endhead
+
+\tcode{X<S>::type}  &
+\tcode{X<S, D>::type}  &
+  \\ \rowsep
+
+\tcode{X<S, C>::type}  &
+  &
+ The associated type.  \\ \rowsep
+
+\tcode{X<S>::get(s)}  &
+\tcode{X<S>::type}  &
+Returns \tcode{X<S>::get(S, d)}.  \\ \rowsep
+
+\tcode{X<S, C>::get(s, c)}  &
+\tcode{X<S, C>::type}  &
+ Returns the associated object.  \\
+
+\end{libreqtab3}
+
+\pnum
+The associator's primary template shall be defined. A program may partially specialize the associator class template for some user-defined type \tcode{S}.
+
+\pnum
+ Finally, the associator shall provide the following type alias and function template in the enclosing namespace:
+
+\begin{codeblock}
+template<class S, class C = D> using @\textit{X}@_t = typename X<S, C>::type;
+
+template<class S, class C = D>
+typename X<S, C>::type get_@\textit{X}@(const S& s, const C& c = d)
+{
+  return X<S, C>::get(s, c);
+}
+\end{codeblock}
+
+\pnum
+where X is replaced with the name of the associator class template. \enternote This function template is provided as a convenience, to automatically deduce the source and candidate types. \exitnote
+
+
+
+\rSec2[async.reqmts.async]{Requirements on asynchronous operations}
+
+\pnum
+This section uses the names \tcode{Alloc1}, \tcode{Alloc2}, \tcode{alloc1}, \tcode{alloc2}, \tcode{Args}, \tcode{CompletionHandler}, \tcode{completion_handler}, \tcode{Executor1}, \tcode{Executor2}, \tcode{ex1}, \tcode{ex2}, \tcode{f}, i, N, \tcode{Signature}, \tcode{token}, Ti, ti, \tcode{work1}, and \tcode{work2} as placeholders for specifying the requirements below.
+
+
+\rSec3[async.reqmts.async.concepts]{General asynchronous operation concepts}
+
+\pnum
+An initiating function is a function which may be called to start an asynchronous operation. A completion handler is a function object that will be invoked, at most once, with the result of the asynchronous operation.
+
+\pnum
+ The lifecycle of an asynchronous operation is comprised of the following events and phases:
+
+\begin{itemize}
+\item
+Event 1: The asynchronous operation is started by a call to the initiating function.
+
+\item
+Phase 1: The asynchronous operation is now outstanding.
+
+\item
+Event 2: The externally observable side effects of the asynchronous operation, if any, are fully established. The completion handler is submitted to an executor.
+
+\item
+Phase 2: The asynchronous operation is now completed.
+
+\item
+Event 3: The completion handler is called with the result of the asynchronous operation.
+\end{itemize}
+
+\pnum
+In this Technical Specification, all functions with the prefix \tcode{async_} are initiating functions.
+
+
+
+\rSec3[async.reqmts.async.token]{Completion tokens and handlers}
+
+\pnum
+ Initiating functions:
+
+\begin{itemize}
+\item
+are function templates with template parameter \tcode{CompletionToken};
+
+\item
+accept, as the final parameter, a completion token object \tcode{token} of type \tcode{CompletionToken};
+
+\item
+specify a completion signature, which is a call signature (C++Std [func.def]) \tcode{Signature} that determines the arguments to the completion handler.
+\end{itemize}
+
+\pnum
+An initiating function determines the type \tcode{CompletionHandler} of its completion handler function object by performing \tcode{typename async_result<decay_t<CompletionToken>, Signature>::completion_handler_type}. The completion handler object \tcode{completion_handler} is initialized with \tcode{forward<CompletionToken>(token)}. \enternote No other requirements are placed on the type \tcode{CompletionToken}. \exitnote
+
+\pnum
+The type \tcode{CompletionHandler} must satisfy the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{MoveConstructible} (C++Std [moveconstructible]), and be callable with the specified call signature.
+
+\pnum
+In this Technical Specification, all initiating functions specify a Completion signature element that defines the call signature \tcode{Signature}. The Completion signature elements in this Technical Specification have named parameters, and the results of an asynchronous operation are specified in terms of these names.
+
+
+
+\rSec3[async.reqmts.async.return.type]{Automatic deduction of initiating function return type}
+
+\pnum
+The return type of an initiating function is \tcode{typename async_result<decay_t<CompletionToken>, Signature>::return_type}.
+
+\pnum
+For the sake of exposition, this Technical Specification sometimes annotates functions with a return type \tcode{DEDUCED}. For every function declaration that returns \tcode{DEDUCED}, the meaning is equivalent to specifying the return type as \tcode{typename async_result<decay_t<CompletionToken>, Signature>::return_type}.
+
+
+
+\rSec3[async.reqmts.async.return.value]{Production of initiating function return value}
+
+\pnum
+ An initiating function produces its return type as follows:
+
+\begin{itemize}
+\item
+constructing an object \tcode{result} of type \tcode{async_result<decay_t<CompletionToken>, Signature>}, initialized as \tcode{result(completion_handler)}; and
+
+\item
+using \tcode{result.get()} as the operand of the return statement.
+\end{itemize}
+
+\pnum
+[Example: Given an asynchronous operation with Completion signature \tcode{void(R1 r1, R2 r2)}, an initiating function meeting these requirements may be implemented as follows:
+
+\begin{codeblock}
+template<class CompletionToken>
+auto async_xyz(T1 t1, T2 t2, CompletionToken&& token)
+{
+  typename async_result<decay_t<CompletionToken>, void(R1, R2)>::completion_handler_type
+    completion_handler(forward<CompletionToken>(token));
+
+  async_result<decay_t<CompletionToken>, void(R1, R2)> result(completion_handler);
+
+  // initiate the operation and cause completion_handler to be invoked with
+  // the result
+
+  return result.get();
+}
+\end{codeblock}
+
+\pnum
+For convenience, initiating functions may be implemented using the \tcode{async_completion} template:
+
+\begin{codeblock}
+template<class CompletionToken>
+auto async_xyz(T1 t1, T2 t2, CompletionToken&& token)
+{
+  async_completion<CompletionToken, void(R1, R2)> init(token);
+
+  // initiate the operation and cause init.completion_handler to be invoked
+  // with the result
+
+  return init.result.get();
+}
+\end{codeblock}
+
+\pnum
+—end example]
+
+
+
+\rSec3[async.reqmts.async.lifetime]{Lifetime of initiating function arguments}
+
+\pnum
+ Unless otherwise specified, the lifetime of arguments to initiating functions shall be treated as follows:
+
+\begin{itemize}
+\item
+If the parameter has a pointer type or has a type of lvalue reference to non-const, the implementation may assume the validity of the pointee or referent, respectively, until the completion handler is invoked. \enternote In other words, the program must guarantee the validity of the argument until the completion handler is invoked. \exitnote
+
+\item
+Otherwise, the implementation must not assume the validity of the argument after the initiating function completes. \enternote In other words, the program is not required to guarantee the validity of the argument after the initiating function completes. \exitnote The implementation may make copies of the argument, and all copies shall be destroyed no later than immediately after invocation of the completion handler.
+\end{itemize}
+
+
+
+\rSec3[async.reqmts.async.non.blocking]{Non-blocking requirements on initiating functions}
+
+\pnum
+ An initiating function shall not block (C++Std [defns.block]) the calling thread pending completion of the outstanding operation.
+
+\pnum
+ \enternote Initiating functions may still block the calling thread for other reasons. For example, an initiating function may lock a mutex in order to synchronize access to shared data. \exitnote
+
+
+
+\rSec3[async.reqmts.async.assoc.exec]{Associated executor}
+
+\pnum
+Certain objects that participate in asynchronous operations have an associated executor. These are obtained as specified below.
+
+
+
+\rSec3[async.reqmts.async.io.exec]{I/O executor}
+
+\pnum
+An asynchronous operation has an associated executor satisfying the \tcode{Executor}~(\ref{async.reqmts.executor}) requirements. If not otherwise specified by the asynchronous operation, this associated executor is an object of type \tcode{system_executor}.
+
+\pnum
+ All asynchronous operations in this Technical Specification have an associated executor object that is determined as follows:
+
+\begin{itemize}
+\item
+If the initiating function is a member function, the associated executor is that returned by the \tcode{get_executor} member function on the same object.
+
+\item
+If the initiating function is not a member function, the associated executor is that returned by the \tcode{get_executor} member function of the first argument to the initiating function.
+\end{itemize}
+
+\pnum
+Let \tcode{Executor1} be the type of the associated executor. Let \tcode{ex1} be a value of type \tcode{Executor1}, representing the associated executor object obtained as described above.
+
+
+
+\rSec3[async.reqmts.async.handler.exec]{Completion handler executor}
+
+\pnum
+A completion handler object of type \tcode{CompletionHandler} has an associated executor of type \tcode{Executor2} satisfying the Executor requirements~(\ref{async.reqmts.executor}). The type \tcode{Executor2} is \tcode{associated_executor_t<CompletionHandler, Executor1>}. Let \tcode{ex2} be a value of type \tcode{Executor2} obtained by performing \tcode{get_associated_executor(completion_handler, ex1)}.
+
+
+
+\rSec3[async.reqmts.async.work]{Outstanding work}
+
+\pnum
+ Until the asynchronous operation has completed, the asynchronous operation shall maintain:
+
+\begin{itemize}
+\item
+an object \tcode{work1} of type \tcode{executor_work_guard<Executor1>}, initialized as \tcode{work1(ex1)}, and where \tcode{work1.owns_work() == true}; and
+
+\item
+an object \tcode{work2} of type \tcode{executor_work_guard<Executor2>}, initialized as \tcode{work2(ex2)}, and where \tcode{work2.owns_work() == true}.
+\end{itemize}
+
+
+
+\rSec3[async.reqmts.async.alloc]{Allocation of intermediate storage}
+
+\pnum
+Asynchronous operations may allocate memory. \enternote Such as a data structure to store copies of the \tcode{completion_handler} object and the initiating function's arguments. \exitnote
+
+\pnum
+Let \tcode{Alloc1} be a type, satisfying the \tcode{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) requirements, that represents the asynchronous operation's default allocation strategy. \enternote Typically \tcode{std::allocator<void>}. \exitnote Let \tcode{alloc1} be a value of type \tcode{Alloc1}.
+
+\pnum
+A completion handler object of type \tcode{CompletionHandler} has an associated allocator object \tcode{alloc2} of type \tcode{Alloc2} satisfying the \tcode{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) requirements. The type \tcode{Alloc2} is \tcode{associated_allocator_t<CompletionHandler, Alloc1>}. Let \tcode{alloc2} be a value of type \tcode{Alloc2} obtained by performing \tcode{get_associated_allocator(completion_handler, alloc1)}.
+
+\pnum
+ The asynchronous operations defined in this Technical Specification:
+
+\begin{itemize}
+\item
+If required, allocate memory using only the completion handler's associated allocator.
+
+\item
+Prior to completion handler execution, deallocate any memory allocated using the completion handler's associated allocator.
+\end{itemize}
+
+\pnum
+ \enternote The implementation may perform operating system or underlying API calls that perform memory allocations not using the associated allocator. Invocations of the allocator functions may not introduce data races (See C++Std [res.on.data.races]). \exitnote
+
+
+
+\rSec3[async.reqmts.async.completion]{Execution of completion handler on completion of asynchronous operation}
+
+\pnum
+Let \tcode{Args...} be the argument types of the completion signature \tcode{Signature} and let N be \tcode{sizeof...(Args)}. Let i be in the range [\tcode{0},N). Let Ti be the ith type in \tcode{Args...} and let ti be the ith completion handler argument associated with Ti.
+
+\pnum
+Let \tcode{f} be a function object, callable as \tcode{f()}, that invokes \tcode{completion_handler} as if by \tcode{completion_handler(forward<T0>(t0), ..., forward<TN-1>(tN-1))}.
+
+\pnum
+If an asynchonous operation completes immediately (that is, within the thread of execution calling the initiating function, and before the initiating function returns), the completion handler shall be submitted for execution as if by performing \tcode{ex2.post(std::move(f), alloc2)}. Otherwise, the completion handler shall be submitted for execution as if by performing \tcode{ex2.dispatch(std::move(f), alloc2)}.
+
+
+
+\rSec3[async.reqmts.async.exceptions]{Completion handlers and exceptions}
+
+\pnum
+ Completion handlers are permitted to throw exceptions. The effect of any exception propagated from the execution of a completion handler is determined by the executor which is executing the completion handler.
+
+
+
+
+
+\rSec1[async.async.result]{Class template \tcode{async_result}}
+
+\pnum
+The \tcode{async_result} class template is a customization point for asynchronous operations. Template parameter \tcode{CompletionToken} specifies the model used to obtain the result of the asynchronous operation. Template parameter \tcode{Signature} is the call signature (C++Std [func.def]) for the completion handler type invoked on completion of the asynchronous operation. The \tcode{async_result} template:
+
+\begin{itemize}
+\item
+transforms a \tcode{CompletionToken} into a completion handler type that is based on a \tcode{Signature}; and
+
+\item
+determines the return type and return value of an asynchronous operation's initiating function.
+\end{itemize}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class CompletionToken, class Signature, class = void>
+  class async_result
+  {
+  public:
+    typedef CompletionToken completion_handler_type;
+    typedef void return_type;
+
+    explicit async_result(completion_handler_type&) {}
+    async_result(const async_result&) = delete;
+    async_result& operator=(const async_result&) = delete;
+
+    return_type get() {}
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The template parameter \tcode{CompletionToken} shall be an object type. The template parameter \tcode{Signature} shall be a call signature (C++Std [func.def]).
+
+\pnum
+Specializations of \tcode{async_result} shall satisfy the \tcode{Destructible} requirements (C++Std [destructible]) in addition to the requirements in the table below. In this table, \tcode{R} is a specialization of \tcode{async_result}; \tcode{r} is a modifiable lvalue of type \tcode{R}; and \tcode{h} is a modifiable lvalue of type \tcode{R::completion_handler_type}.
+
+\begin{libreqtab3}
+{async_result specialization requirements}
+{async.async.result.requirements}
+\\ \topline
+\lhdr{Expression}  &
+\chdr{Return type}  &
+\rhdr{Requirement} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{Expression}  &
+\chdr{Return type}  &
+\rhdr{Requirement} \\ \capsep
+\endhead
+
+\tcode{R::completion_handler_type}  &
+  &
+A type satisfying \tcode{MoveConstructible} requirements (C++Std [moveconstructible]), An object of type \tcode{completion_handler_type} shall be a function object with call signature \tcode{Signature}, and \tcode{completion_handler_type} shall be constructible with an rvalue of type \tcode{CompletionToken}.  \\ \rowsep
+
+\tcode{R::return_type}  &
+  &
+\tcode{void}; or a type satisfying \tcode{MoveConstructible} requirements (C++Std [moveconstructible])  \\ \rowsep
+
+\tcode{R r(h);}  &
+  &
+  \\ \rowsep
+
+\tcode{r.get()}  &
+\tcode{R::return_type}  &
+\enternote An asynchronous operation's initiating function uses the \tcode{get()} member function as the sole operand of a return statement. \exitnote  \\
+
+\end{libreqtab3}
+
+
+
+\rSec1[async.async.completion]{Class template \tcode{async_completion}}
+
+\pnum
+Class template \tcode{async_completion} is provided as a convenience, to simplify the implementation of asynchronous operations that use \tcode{async_result}.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class CompletionToken, class Signature>
+  struct async_completion
+  {
+    typedef async_result<decay_t<CompletionToken>,
+      Signature>::completion_handler_type
+        completion_handler_type;
+
+    explicit async_completion(CompletionToken& t);
+    async_completion(const async_completion&) = delete;
+    async_completion& operator=(const async_completion&) = delete;
+
+    @\textit{see below}@ completion_handler;
+    async_result<decay_t<CompletionToken>, Signature> result;
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The template parameter \tcode{Signature} shall be a call signature (C++Std [func.def]).
+
+\begin{itemdecl}
+explicit async_completion(CompletionToken& t);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{CompletionToken} and \tcode{completion_handler_type} are the same type, binds \tcode{completion_handler} to \tcode{t}; otherwise, initializes \tcode{completion_handler} with the result of \tcode{forward<CompletionToken>(t)}. Initializes \tcode{result} with \tcode{completion_handler}.
+\end{itemdescr}
+
+\begin{itemdecl}
+@\textit{see below}@ completion_handler;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Type: \tcode{completion_handler_type\&} if \tcode{CompletionToken} and \tcode{completion_handler_type} are the same type; otherwise, \tcode{completion_handler_type}.
+\end{itemdescr}
+
+
+
+\rSec1[async.assoc.alloc]{Class template \tcode{associated_allocator}}
+
+\pnum
+Class template \tcode{associated_allocator} is an associator~(\ref{async.reqmts.associator}) for the \tcode{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) type requirements, with default candidate type \tcode{allocator<void>} and default candidate object \tcode{allocator<void>()}.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class T, class ProtoAllocator = allocator<void>>
+  struct associated_allocator
+  {
+    typedef @\textit{see below}@ type;
+
+    static type get(const T& t, const ProtoAllocator& a = ProtoAllocator()) noexcept;
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Specializations of \tcode{associated_allocator} shall satisfy the requirements in the table below. In this table, \tcode{X} is a specialization of \tcode{associated_allocator} for the template parameters \tcode{T} and \tcode{ProtoAllocator}; \tcode{t} is a value of (possibly const) \tcode{T}; and \tcode{a} is an object of type \tcode{ProtoAllocator}.
+
+\begin{libreqtab3}
+{associated_allocator specialization requirements}
+{async.assoc.alloc.requirements}
+\\ \topline
+\lhdr{Expression}  &
+\chdr{Return type}  &
+\rhdr{Note}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{Expression}  &
+\chdr{Return type}  &
+\rhdr{Note}  \\ \capsep
+\endhead
+
+\tcode{typename X::type}  &
+A type meeting the proto-allocator~(\ref{async.reqmts.proto.allocator}) requirements.  &
+  \\ \rowsep
+
+\tcode{X::get(t)}  &
+\tcode{X::type}  &
+Shall not exit via an exception.Equivalent to \tcode{X::get(t, ProtoAllocator())}.  \\ \rowsep
+
+\tcode{X::get(t, a)}  &
+\tcode{X::type}  &
+ Shall not exit via an exception.  \\
+
+\end{libreqtab3}
+
+
+\rSec2[async.assoc.alloc.members]{\tcode{associated_allocator} members}
+
+\begin{itemdecl}
+typedef @\textit{see below}@ type;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Type: If \tcode{T} has a nested type \tcode{allocator_type}, \tcode{typename T::allocator_type}. Otherwise \tcode{ProtoAllocator}.
+\end{itemdescr}
+
+\begin{itemdecl}
+type get(const T& t, const ProtoAllocator& a = ProtoAllocator()) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{T} has a nested type \tcode{allocator_type}, \tcode{t.get_allocator()}. Otherwise \tcode{a}.
+\end{itemdescr}
+
+
+
+
+\rSec1[async.assoc.alloc.get]{Function \tcode{get_associated_allocator}}
+
+\begin{itemdecl}
+template<class T>
+  associated_allocator_t<T> get_associated_allocator(const T& t) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{associated_allocator<T>::get(t)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class T, class ProtoAllocator>
+  associated_allocator_t<T, ProtoAllocator>
+    get_associated_allocator(const T& t, const ProtoAllocator& a) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{associated_allocator<T, ProtoAllocator>::get(t, a)}.
+\end{itemdescr}
+
+
+
+\rSec1[async.exec.ctx]{Class \tcode{execution_context}}
+
+\pnum
+Class \tcode{execution_context} implements an extensible, type-safe, polymorphic set of services, indexed by service type.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class execution_context
+  {
+  public:
+    class service;
+
+    // construct / copy / destroy:
+
+    execution_context();
+    execution_context(const execution_context&) = delete;
+    execution_context& operator=(const execution_context&) = delete;
+    virtual ~execution_context();
+
+    // execution context operations:
+
+    void notify_fork(fork_event e);
+
+  protected:
+
+    // execution context protected operations:
+
+    void shutdown() noexcept;
+    void destroy() noexcept;
+  };
+
+  // service access:
+  template<class Service> typename Service::key_type&
+    use_service(execution_context& ctx);
+  template<class Service, class... Args> Service&
+    make_service(execution_context& ctx, Args&&... args);
+  template<class Service> bool has_service(const execution_context& ctx) noexcept;
+  class service_already_exists : public logic_error { };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Access to the services of an \tcode{execution_context} is via three function templates, \tcode{use_service<>}, \tcode{make_service<>} and \tcode{has_service<>}.
+
+\pnum
+In a call to \tcode{use_service<Service>()}, the type argument chooses a service. If the service is not present in an \tcode{execution_context}, an object of type \tcode{Service} is created and added to the \tcode{execution_context}. A program can check if an \tcode{execution_context} implements a particular service with the function template \tcode{has_service<Service>()}.
+
+\pnum
+Service objects may be explicitly added to an \tcode{execution_context} using the function template \tcode{make_service<Service>()}. If the service is already present, \tcode{make_service} exits via an exception of type \tcode{service_already_exists}.
+
+\pnum
+Once a service reference is obtained from an \tcode{execution_context} object by calling \tcode{use_service<>}, that reference remains usable until a call to \tcode{destroy()}.
+
+
+\rSec2[async.exec.ctx.cons]{\tcode{execution_context} constructor}
+
+\begin{itemdecl}
+execution_context();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Creates an object of class \tcode{execution_context} which contains no services. \enternote An implementation might preload services of internal service types for its own use. \exitnote
+\end{itemdescr}
+
+
+
+\rSec2[async.exec.ctx.dtor]{\tcode{execution_context} destructor}
+
+\begin{itemdecl}
+~execution_context();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Destroys an object of class \tcode{execution_context}. Performs \tcode{shutdown()} followed by \tcode{destroy()}.
+\end{itemdescr}
+
+
+
+\rSec2[async.exec.ctx.ops]{\tcode{execution_context} operations}
+
+\begin{itemdecl}
+void notify_fork(fork_event e);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects For each service object \tcode{svc} in the set:
+\begin{itemize}
+\item
+ If\tcode{e == fork_event::prepare}, performs \tcode{svc->notify_fork(e)}in reverse order of addition to the set.
+\item
+ Otherwise, performs\tcode{svc->notify_fork(e)} in order of addition to the set.
+\end{itemize}
+\end{itemdescr}
+
+
+
+\rSec2[async.exec.ctx.protected]{\tcode{execution_context} protected operations}
+
+\begin{itemdecl}
+void shutdown() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects For each service object \tcode{svc} in the \tcode{execution_context} set, in reverse order of addition to the set, performs \tcode{svc->shutdown()}. For each service in the set, \tcode{svc->shutdown()} is called only once irrespective of the number of calls to \tcode{shutdown} on the \tcode{execution_context}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void destroy() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Destroys each service object in the \tcode{execution_context} set, and removes it from the set, in reverse order of addition to the set.
+\end{itemdescr}
+
+
+
+\rSec2[async.exec.ctx.globals]{\tcode{execution_context} globals}
+
+\pnum
+The functions \tcode{use_service}, \tcode{make_service}, and \tcode{has_service} do not introduce data races as a result of concurrent calls to those functions from different threads.
+
+\begin{itemdecl}
+template<class Service> typename Service::key_type&
+  use_service(execution_context& ctx);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If an object of type \tcode{Service::key_type} does not already exist in the \tcode{execution_context} set identified by \tcode{ctx}, creates an object of type \tcode{Service}, initialized as \tcode{Service(ctx)}, and adds it to the set.
+
+\pnum
+\returns A reference to the corresponding service of \tcode{ctx}.
+
+\pnum
+Notes: The reference returned remains valid until a call to \tcode{destroy}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Service, class... Args> Service&
+  make_service(execution_context& ctx, Args&&... args);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: A service object of type \tcode{Service::key_type} does not already exist in the \tcode{execution_context} set identified by \tcode{ctx}.
+
+\pnum
+\effects Creates an object of type \tcode{Service}, initialized as \tcode{Service(ctx, forward<Args>(args)...)}, and adds it to the \tcode{execution_context} set identified by \tcode{ctx}.
+
+\pnum
+\remarks \tcode{service_already_exists} if a corresponding service object of type \tcode{Key} is already present in the set.
+
+\pnum
+Notes: The reference returned remains valid until a call to \tcode{destroy}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Service> bool has_service(const execution_context& ctx) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if an object of type \tcode{Service::key_type} is present in \tcode{ctx}, otherwise \tcode{false}.
+\end{itemdescr}
+
+
+
+
+\rSec1[async.exec.ctx.svc]{Class \tcode{execution_context::service}}
+
+\begin{itemdecl}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class execution_context::service
+  {
+  protected:
+    // construct / copy / destroy:
+
+    explicit service(execution_context& owner);
+    service(const service&) = delete;
+    service& operator=(const service&) = delete;
+    virtual ~service();
+
+    // service observers:
+
+    execution_context& context() noexcept;
+
+  private:
+    // service operations:
+
+    virtual void shutdown() noexcept = 0;
+    virtual void notify_fork(fork_event e) {}
+
+    execution_context& context_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+
+explicit service(execution_context& owner);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{std::addressof(context_) == std::addressof(owner)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+execution_context& context() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{context_}.
+\end{itemdescr}
+
+
+
+\rSec1[async.is.exec]{Class template \tcode{is_executor}}
+
+\pnum
+The class template \tcode{is_executor} can be used to detect executor types satisfying the \tcode{Executor}~(\ref{async.reqmts.executor}) type requirements.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class T> struct is_executor;
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{T} shall be a complete type.
+
+\pnum
+Class template \tcode{is_executor} is a UnaryTypeTrait (C++Std [meta.rqmts]) with a BaseCharacteristic of \tcode{true_type} if the type \tcode{T} meets the syntactic requirements for \tcode{Executor}~(\ref{async.reqmts.executor}), otherwise \tcode{false_type}.
+
+
+
+\rSec1[async.executor.arg]{Executor argument tag}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  struct executor_arg_t { };
+  constexpr executor_arg_t executor_arg = executor_arg_t();
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The \tcode{executor_arg_t} struct is an empty structure type used as a unique type to disambiguate constructor and function overloading. Specifically, types may have constructors with \tcode{executor_arg_t} as the first argument, immediately followed by an argument of a type that satisfies the Executor requirements~(\ref{async.reqmts.executor}).
+
+
+
+\rSec1[async.uses.executor]{\tcode{uses_executor}}
+
+
+\rSec2[async.uses.executor.trait]{\tcode{uses_executor} trait}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class T, class Executor> struct uses_executor;
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Remark: Detects whether \tcode{T} has a nested \tcode{executor_type} that is convertible from \tcode{Executor}. Meets the \tcode{BinaryTypeTrait} requirements (C++Std [meta.rqmts]). The implementation provides a definition that is derived from \tcode{true_type} if a type \tcode{T::executor_type} exists and \tcode{is_convertible<Executor, T::executor_type>::value != false}, otherwise it is derived from \tcode{false_type}. A program may specialize this template to derive from \tcode{true_type} for a user-defined type \tcode{T} that does not have a nested \tcode{executor_type} but nonetheless can be constructed with an executor if the first argument of a constructor has type \tcode{executor_arg_t} and the second argument has type \tcode{Executor}.
+
+
+
+\rSec2[async.uses.executor.cons]{uses-executor construction}
+
+\pnum
+Uses-executor construction with executor \tcode{Executor} refers to the construction of an object \tcode{obj} of type \tcode{T}, using constructor arguments \tcode{v1, v2, ..., vN} of types \tcode{V1, V2, ..., VN}, respectively, and an executor \tcode{ex} of type \tcode{Executor}, according to the following rules:
+
+\begin{itemize}
+\item
+if \tcode{uses_executor<T, Executor>::value} is \tcode{true} and \tcode{is_constructible<T, executor_arg_t, Executor, V1, V2, ..., VN>::value} is \tcode{true}, then \tcode{obj} is initialized as \tcode{obj(executor_arg, ex, v1, v2, ..., vN)};
+
+\item
+otherwise, \tcode{obj} is initialized as \tcode{obj(v1, v2, ..., vN)}.
+\end{itemize}
+
+
+
+
+\rSec1[async.assoc.exec]{Class template \tcode{associated_executor}}
+
+\pnum
+Class template \tcode{associated_allocator} is an associator~(\ref{async.reqmts.associator}) for the \tcode{Executor}~(\ref{async.reqmts.executor}) type requirements, with default candidate type \tcode{system_executor} and default candidate object \tcode{system_executor()}.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class T, class Executor = system_executor>
+  struct associated_executor
+  {
+    typedef @\textit{see below}@ type;
+
+    static type get(const T& t, const Executor& e = Executor()) noexcept;
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Specializations of \tcode{associated_executor} shall satisfy the requirements in the table below. In this table, \tcode{X} is a specialization of \tcode{associated_executor} for the template parameters \tcode{T} and \tcode{Executor}; \tcode{t} is a value of (possibly const) \tcode{T}; and \tcode{e} is an object of type \tcode{Executor}.
+
+\begin{libreqtab3}
+{associated_executor specialization requirements}
+{async.assoc.exec.requirements}
+\\ \topline
+\lhdr{Expression}  &
+\chdr{Return type}  &
+\rhdr{Note} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{Expression}  &
+\chdr{Return type}  &
+\rhdr{Note} \\ \capsep
+\endhead
+
+\tcode{typename X::type}  &
+A type meeting Executor requirements~(\ref{async.reqmts.executor}).  &
+  \\ \rowsep
+
+\tcode{X::get(t)}  &
+\tcode{X::type}  &
+Shall not exit via an exception.Equivalent to \tcode{X::get(t, Executor())}.  \\ \rowsep
+
+\tcode{X::get(t, e)}  &
+\tcode{X::type}  &
+ Shall not exit via an exception.  \\
+
+\end{libreqtab3}
+
+
+\rSec2[async.assoc.exec.members]{\tcode{associated_executor} members}
+
+\begin{itemdecl}
+typedef @\textit{see below}@ type;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Type: If \tcode{T} has a nested type \tcode{executor_type}, \tcode{typename T::executor_type}. Otherwise \tcode{Executor}.
+\end{itemdescr}
+
+\begin{itemdecl}
+type get(const T& t, const Executor& e = Executor()) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{T} has a nested type \tcode{executor_type}, \tcode{t.get_executor()}. Otherwise \tcode{e}.
+\end{itemdescr}
+
+
+
+
+\rSec1[async.assoc.exec.get]{Function \tcode{get_associated_executor}}
+
+\begin{itemdecl}
+template<class T>
+  associated_executor_t<T> get_associated_executor(const T& t) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{associated_executor<T>::get(t)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class T, class Executor>
+  associated_executor_t<T, Executor>
+    get_associated_executor(const T& t, const Executor& ex) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{associated_executor<T, Executor>::get(t, ex)}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class T, class ExecutionContext>
+  associated_executor_t<T, typename ExecutionContext::executor_type>
+    get_associated_executor(const T& t, ExecutionContext& ctx) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{get_associated_executor(t, ctx.get_executor())}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\end{itemdescr}
+
+
+
+\rSec1[async.exec.binder]{Class template \tcode{executor_binder}}
+
+\pnum
+\tcode{executor_binder<T, Executor>} binds an executor of type \tcode{Executor} satisfying Executor requirements~(\ref{async.reqmts.executor}) to an object or function of type \tcode{T}.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class T, class Executor>
+  class executor_binder
+  {
+  public:
+    // types:
+
+    typedef T target_type;
+    typedef Executor executor_type;
+
+    // construct / copy / destroy:
+
+    executor_binder(T t, const Executor& ex);
+    executor_binder(const executor_binder& other) = default;
+    executor_binder(executor_binder&& other) = default;
+    template<class U, class OtherExecutor>
+      executor_binder(const executor_binder<U, OtherExecutor>& other);
+    template<class U, class OtherExecutor>
+      executor_binder(executor_binder<U, OtherExecutor>&& other);
+    template<class U, class OtherExecutor>
+      executor_binder(executor_arg_t, const Executor& ex,
+        const executor_binder<U, OtherExecutor>& other);
+    template<class U, class OtherExecutor>
+      executor_binder(executor_arg_t, const Executor& ex,
+        executor_binder<U, OtherExecutor>&& other);
+
+    ~executor_binder();
+
+    // executor binder access:
+
+    T& get() noexcept;
+    const T& get() const noexcept;
+    executor_type get_executor() const noexcept;
+
+    // executor binder invocation:
+
+    template<class... Args>
+      result_of_t<T&(Args&&...)> operator()(Args&&... args);
+    template<class... Args>
+      result_of_t<const T&(Args&&...)> operator()(Args&&... args) const;
+
+  private:
+    Executor ex_; // \expos
+    T target_; // \expos
+  };
+
+  template<class T, class Executor, class Signature>
+    class async_result<executor_binder<T, Executor>, Signature>;
+
+  template<class T, class Executor, class ProtoAllocator>
+    struct associated_allocator<executor_binder<T, Executor>, ProtoAllocator>;
+
+  template<class T, class Executor, class Executor1>
+    struct associated_executor<executor_binder<T, Executor>, Executor1>;
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+
+\rSec2[async.exec.binder.cons]{\tcode{executor_binder} constructors}
+
+\begin{itemdecl}
+executor_binder(T t, const Executor& ex);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{ex_} with \tcode{ex}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{std::move(t)} and the executor \tcode{ex_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class U, class OtherExecutor>
+  executor_binder(const executor_binder<U, OtherExecutor>& other);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
+
+\pnum
+\effects Initializes \tcode{ex_} with \tcode{other.get_executor()}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{other.get()} and the executor \tcode{ex_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class U, class OtherExecutor>
+  executor_binder(executor_binder<U, OtherExecutor>&& other);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
+
+\pnum
+\effects Initializes \tcode{ex_} with \tcode{other.get_executor()}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{std::move(other.get())} and the executor \tcode{ex_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class U, class OtherExecutor>
+  executor_binder(executor_arg_t, const Executor& ex,
+    const executor_binder<U, OtherExecutor>& other);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: If \tcode{U} is not convertible to \tcode{T} the program is ill-formed.
+
+\pnum
+\effects Initializes \tcode{ex_} with \tcode{ex}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{other.get()} and the executor \tcode{ex_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class U, class OtherExecutor>
+  executor_binder(executor_arg_t, const Executor& ex,
+    executor_binder<U, OtherExecutor>&& other);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{U} is \tcode{T} or convertible to \tcode{T}.
+
+\pnum
+\effects Initializes \tcode{ex_} with \tcode{ex}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{std::move(other.get())} and the executor \tcode{ex_}.
+\end{itemdescr}
+
+
+
+\rSec2[async.exec.binder.access]{\tcode{executor_binder} access}
+
+\begin{itemdecl}
+T& get() noexcept;
+const T& get() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{target_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor_type get_executor() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{executor_}.
+\end{itemdescr}
+
+
+
+\rSec2[async.exec.binder.invocation]{\tcode{executor_binder} invocation}
+
+\begin{itemdecl}
+template<class... Args>
+  result_of_t<T&(Args&&...)> operator()(Args&&... args);
+template<class... Args>
+  result_of_t<const T&(Args&&...)> operator()(Args&&... args) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns INVOKE\tcode{(get(), forward<Args>(args)...)} (C++Std [func.require]).
+\end{itemdescr}
+
+
+
+\rSec2[async.exec.binder.async.result]{Class template partial specialization \tcode{async_result}}
+
+\begin{itemdecl}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class T, class Executor, class Signature>
+  class async_result<executor_binder<T, Executor>, Signature>
+  {
+  public:
+    typedef executor_binder<
+      typename async_result<T, Signature>::completion_handler_type,
+        Executor> completion_handler_type;
+    typedef typename async_result<T, Signature>::return_type return_type;
+
+    explicit async_result(completion_handler_type& h);
+    async_result(const async_result&) = delete;
+    async_result& operator=(const async_result&) = delete;
+
+    return_type get();
+
+  private:
+    async_result<T, Signature> target_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+
+explicit async_result(completion_handler_type& h);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{target_} as \tcode{target_(h.get())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+return_type get();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{target_.get()}.
+\end{itemdescr}
+
+
+
+\rSec2[async.exec.binder.assoc.alloc]{Class template partial specialization \tcode{associated_allocator}}
+
+\begin{itemdecl}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class T, class Executor, class ProtoAllocator>
+    struct associated_allocator<executor_binder<T, Executor>, ProtoAllocator>
+  {
+    typedef associated_allocator_t<T, ProtoAllocator> type;
+
+    static type get(const executor_binder<T, Executor>& b,
+                    const ProtoAllocator& a = ProtoAllocator()) noexcept;
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+
+static type get(const executor_binder<T, Executor>& b,
+                const ProtoAllocator& a = ProtoAllocator()) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{associated_allocator<T, ProtoAllocator>::get(b.get(), a)}.
+\end{itemdescr}
+
+
+
+\rSec2[async.exec.binder.assoc.exec]{Class template partial specialization \tcode{associated_executor}}
+
+\begin{itemdecl}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class T, class Executor, class Executor1>
+    struct associated_executor<executor_binder<T, Executor>, Executor1>
+  {
+    typedef Executor type;
+
+    static type get(const executor_binder<T, Executor>& b,
+                    const Executor1& e = Executor1()) noexcept;
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+
+static type get(const executor_binder<T, Executor>& b,
+                const Executor1& e = Executor1()) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{b.get_executor()}.
+\end{itemdescr}
+
+
+
+
+\rSec1[async.bind.executor]{Function \tcode{bind_executor}}
+
+\begin{itemdecl}
+template<class Executor, class T>
+  executor_binder<decay_t<T>, Executor>
+    bind_executor(const Executor& ex, T&& t);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{executor_binder<decay_t<T>, Executor>(forward<T>(t), ex)}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext, class CompletionToken>
+  executor_binder<decay_t<T>, typename ExecutionContext::executor_type>
+    bind_executor(ExecutionContext& ctx, T&& t);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{bind_executor(ctx.get_executor(), forward<T>(t))}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\end{itemdescr}
+
+
+
+\rSec1[async.exec.work.guard]{Class template \tcode{executor_work_guard}}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class Executor>
+  class executor_work_guard
+  {
+  public:
+    // types:
+
+    typedef Executor executor_type;
+
+    // construct / copy / destroy:
+
+    explicit executor_work_guard(const executor_type& ex) noexcept;
+    executor_work_guard(const executor_work_guard& other) noexcept;
+    executor_work_guard(executor_work_guard&& other) noexcept;
+
+    executor_work_guard& operator=(const executor_work_guard&) = delete;
+
+    ~executor_work_guard();
+
+    // executor work guard observers:
+
+    executor_type get_executor() const noexcept;
+    bool owns_work() const noexcept;
+
+    // executor work guard modifiers:
+
+    void reset() noexcept;
+
+  private:
+    Executor ex_; // \expos
+    bool owns_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+
+\rSec2[async.exec.work.guard.members]{\tcode{executor_work_guard} members}
+
+\begin{itemdecl}
+explicit executor_work_guard(const executor_type& ex) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{ex_} with \tcode{ex}, and then performs \tcode{ex_.on_work_started()}.
+
+\pnum
+\postconditions \tcode{ex == ex_} and \tcode{owns_ == true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor_work_guard(const executor_work_guard& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{ex_} with \tcode{other.ex_}. If \tcode{other.owns_ == true}, performs \tcode{ex_.on_work_started()}.
+
+\pnum
+\postconditions \tcode{ex_ == other.ex_} and \tcode{owns_ == other.owns_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor_work_guard(executor_work_guard&& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{ex_} with \tcode{std::move(other.ex_)} and \tcode{owns_} with \tcode{other.owns_}, and sets \tcode{other.owns_} to \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+~executor_work_guard();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{owns_} is \tcode{true}, performs \tcode{ex_.on_work_finished()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor_type get_executor() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{ex_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool owns_work() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{owns_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void reset() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{owns_} is \tcode{true}, performs \tcode{ex_.on_work_finished()}.
+
+\pnum
+\postconditions \tcode{owns_ == false}.
+\end{itemdescr}
+
+
+
+
+\rSec1[async.make.work.guard]{Function \tcode{make_work_guard}}
+
+\begin{itemdecl}
+template<class Executor>
+  executor_work_guard<Executor>
+    make_work_guard(const Executor& ex);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{executor_work_guard<Executor>(ex)}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext>
+  executor_work_guard<typename ExecutionContext::executor_type>
+    make_work_guard(ExecutionContext& ctx);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{make_work_guard(ctx.get_executor())}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class T>
+  executor_work_guard<associated_executor_t<T>>
+    make_work_guard(const T& t);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{make_work_guard(get_associated_executor(t))}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_executor<T>::value} is \tcode{false} and \tcode{is_convertible<T\&, execution_context\&>::value} is \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class T, class U>
+  auto make_work_guard(const T& t, U&& u)
+    -> decltype(make_work_guard(get_associated_executor(t, forward<U>(u))));
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{make_work_guard(get_associated_executor(t, forward<U>(u)))}.
+\end{itemdescr}
+
+
+
+\rSec1[async.system.exec]{Class \tcode{system_executor}}
+
+\pnum
+Class \tcode{system_executor} represents a set of rules where function objects are permitted to execute on any thread.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class system_executor
+  {
+  public:
+    // constructors:
+
+    system_executor() {}
+
+    // executor operations:
+
+    system_context& context() noexcept;
+
+    void on_work_started() noexcept {}
+    void on_work_finished() noexcept {}
+
+    template<class Func, class ProtoAllocator>
+      void dispatch(Func&& f, const ProtoAllocator& a);
+    template<class Func, class ProtoAllocator>
+      void post(Func&& f, const ProtoAllocator& a);
+    template<class Func, class ProtoAllocator>
+      void defer(Func&& f, const ProtoAllocator& a);
+  };
+
+  bool operator==(const system_executor&, const system_executor&) noexcept;
+  bool operator!=(const system_executor&, const system_executor&) noexcept;
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Class \tcode{system_executor} satisfies the \tcode{Destructible} (C++Std [destructible]), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), and \tcode{Executor}~(\ref{async.reqmts.executor}) type requirements.
+
+\pnum
+To satisfy the \tcode{Executor} requirements for the \tcode{post} and \tcode{defer} member functions, the system executor may create \tcode{thread} objects to run the submitted function objects. These \tcode{thread} objects are collectively referred to as system threads.
+
+
+\rSec2[async.system.exec.ops]{\tcode{system_executor} operations}
+
+\begin{itemdecl}
+system_context& context() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A reference to an object with static storage duration. All calls to this function return references to the same object.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Func, class ProtoAllocator>
+  void dispatch(Func&& f, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to DECAY_COPY\tcode{(forward<Func>(f))()} (C++Std [thread.decaycopy]).
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Func, class ProtoAllocator>
+  void post(Func&& f, const ProtoAllocator& a);
+template<class Func, class ProtoAllocator>
+  void defer(Func&& f, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{context().stopped() == false}, creates an object \tcode{f1} initialized with DECAY_COPY\tcode{(forward<Func>(f))}, and calls \tcode{f1} as if in a thread of execution represented by a \tcode{thread} object. Any exception propagated from the execution of DECAY_COPY\tcode{(forward<Func>(f))()} results in a call to \tcode{std::terminate}.
+\end{itemdescr}
+
+
+
+\rSec2[async.system.exec.comparisons]{\tcode{system_executor} comparisons}
+
+\begin{itemdecl}
+bool operator==(const system_executor&, const system_executor&) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool operator!=(const system_executor&, const system_executor&) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{false}.
+\end{itemdescr}
+
+
+
+
+\rSec1[async.system.context]{Class \tcode{system_context}}
+
+\pnum
+Class \tcode{system_context} implements the execution context associated with \tcode{system_executor} objects.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class system_context : public execution_context
+  {
+  public:
+    // types:
+
+    typedef system_executor executor_type;
+
+    // construct / copy / destroy:
+
+    system_context() = delete;
+    system_context(const system_context&) = delete;
+    system_context& operator=(const system_context&) = delete;
+    ~system_context();
+
+    // system_context operations:
+
+    executor_type get_executor() noexcept;
+
+    void stop();
+    bool stopped() const noexcept;
+    void join();
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The class \tcode{system_context} satisfies the \tcode{ExecutionContext}~(\ref{async.reqmts.executioncontext}) type requirements.
+
+\pnum
+The \tcode{system_context} member functions \tcode{get_executor}, \tcode{stop}, and \tcode{stopped}, and the \tcode{system_executor} copy constructors, member functions and comparison operators, do not introduce data races as a result of concurrent calls to those functions from different threads of execution.
+
+\begin{itemdecl}
+~system_context();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Performs \tcode{stop()} followed by \tcode{join()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor_type get_executor() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{system_executor()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void stop();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Signals all system threads to exit as soon as possible. If a system thread is currently executing a function object, the thread will exit only after completion of that function object. Returns without waiting for the system threads to complete.
+
+\pnum
+\postconditions \tcode{stopped() == true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool stopped() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if the \tcode{system_context} has been stopped by a prior call to \tcode{stop}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void join();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Blocks the calling thread (C++Std [defns.block]) until all system threads have completed.
+
+\pnum
+Synchronization: The completion of each system thread synchronizes with (C++Std [intro.multithread]) the corresponding successful \tcode{join()} return.
+\end{itemdescr}
+
+
+
+\rSec1[async.bad.exec]{Class \tcode{bad_executor}}
+
+\pnum
+An exception of type \tcode{bad_executor} is thrown by \tcode{executor} member functions \tcode{dispatch}, \tcode{post}, and \tcode{defer} when the executor object has no target.
+
+\begin{itemdecl}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class bad_executor : public exception
+  {
+  public:
+    // constructor:
+    bad_executor() noexcept;
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+
+bad_executor() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects constructs a \tcode{bad_executor} object.
+
+\pnum
+\postconditions \tcode{what()} returns an implementation-defined NTBS.
+\end{itemdescr}
+
+
+
+\rSec1[async.executor]{Class \tcode{executor}}
+
+\pnum
+The \tcode{executor} class provides a polymorphic wrapper for types that satisfy the Executor requirements~(\ref{async.reqmts.executor}).
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class executor
+  {
+  public:
+    // construct / copy / destroy:
+
+    executor() noexcept;
+    executor(nullptr_t) noexcept;
+    executor(const executor& e) noexcept;
+    executor(executor&& e) noexcept;
+    template<class Executor> executor(Executor e);
+    template<class Executor, class ProtoAllocator>
+      executor(allocator_arg_t, const ProtoAllocator& a, Executor e);
+
+    executor& operator=(const executor& e) noexcept;
+    executor& operator=(executor&& e) noexcept;
+    executor& operator=(nullptr_t) noexcept;
+    template<class Executor> executor& operator=(Executor e);
+
+    ~executor();
+
+    // executor modifiers:
+
+    void swap(executor& other) noexcept;
+    template<class Executor, class ProtoAllocator>
+      void assign(Executor e, const ProtoAllocator& a);
+
+    // executor operations:
+
+    execution_context& context() noexcept;
+
+    void on_work_started() noexcept;
+    void on_work_finished() noexcept;
+
+    template<class Func, class ProtoAllocator>
+      void dispatch(Func&& f, const ProtoAllocator& a);
+    template<class Func, class ProtoAllocator>
+      void post(Func&& f, const ProtoAllocator& a);
+    template<class Func, class ProtoAllocator>
+      void defer(Func&& f, const ProtoAllocator& a);
+
+    // executor capacity:
+
+    explicit operator bool() const noexcept;
+
+    // executor target access:
+
+    const type_info& target_type() const noexcept;
+    template<class Executor> Executor* target() noexcept;
+    template<class Executor> const Executor* target() const noexcept;
+  };
+
+  template<> struct is_executor<executor> : true_type {};
+
+  // executor comparisons:
+
+  bool operator==(const executor& a, const executor& b) noexcept;
+  bool operator==(const executor& e, nullptr_t) noexcept;
+  bool operator==(nullptr_t, const executor& e) noexcept;
+  bool operator!=(const executor& a, const executor& b) noexcept;
+  bool operator!=(const executor& e, nullptr_t) noexcept;
+  bool operator!=(nullptr_t, const executor& e) noexcept;
+
+  // executor specialized algorithms:
+
+  void swap(executor& a, executor& b) noexcept;
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+
+  template<class Allocator>
+    struct uses_allocator<experimental::net::v1::executor, Allocator>
+      : true_type {};
+
+} // namespace std
+\end{codeblock}
+
+\pnum
+Class \tcode{executor} meets the requirements of \tcode{Executor}~(\ref{async.reqmts.executor}), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+
+\pnum
+\enternote To meet the \tcode{noexcept} requirements for executor copy constructors and move constructors, implementations may share a target between two or more \tcode{executor} objects. \exitnote
+
+\pnum
+The target is the executor object that is held by the wrapper.
+
+
+\rSec2[async.executor.cons]{\tcode{executor} constructors}
+
+\begin{itemdecl}
+executor() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{!*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor(nullptr_t) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{!*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor(const executor& e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{!*this} if \tcode{!e}; otherwise, \tcode{*this} targets \tcode{e.target()} or a copy of \tcode{e.target()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor(executor&& e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{!e}, \tcode{*this} has no target; otherwise, moves \tcode{e.target()} or move-constructs the target of \tcode{e} into the target of \tcode{*this}, leaving \tcode{e} in a valid state with an unspecified value.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Executor> executor(Executor e);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects \tcode{*this} targets a copy of \tcode{e} initialized with \tcode{std::move(e)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Executor, class ProtoAllocator>
+  executor(allocator_arg_t, const ProtoAllocator& a, Executor e);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects \tcode{*this} targets a copy of \tcode{e} initialized with \tcode{std::move(e)}.
+
+\pnum
+A copy of the allocator argument is used to allocate memory, if necessary, for the internal data structures of the constructed \tcode{executor} object.
+\end{itemdescr}
+
+
+
+\rSec2[async.executor.assign]{\tcode{executor} assignment}
+
+\begin{itemdecl}
+executor& operator=(const executor& e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects \tcode{executor(e).swap(*this)}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor& operator=(executor&& e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Replaces the target of \tcode{*this} with the target of \tcode{e}, leaving \tcode{e} in a valid state with an unspecified value.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor& operator=(nullptr_t) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects \tcode{executor(nullptr).swap(*this)}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Executor> executor& operator=(Executor e);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects \tcode{executor(std::move(e)).swap(*this)}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec2[async.executor.dtor]{\tcode{executor} destructor}
+
+\begin{itemdecl}
+~executor();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{*this != nullptr}, releases shared ownership of, or destroys, the target of \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec2[async.executor.modifiers]{\tcode{executor} modifiers}
+
+\begin{itemdecl}
+void swap(executor& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Interchanges the targets of \tcode{*this} and \tcode{other}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Executor, class ProtoAllocator>
+  void assign(Executor e, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects \tcode{executor(allocator_arg, a, std::move(e)).swap(*this)}.
+\end{itemdescr}
+
+
+
+\rSec2[async.executor.ops]{\tcode{executor} operations}
+
+\begin{itemdecl}
+execution_context& context() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{*this != nullptr}.
+
+\pnum
+\returns \tcode{e.context()}, where \tcode{e} is the target object of \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void on_work_started() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{*this != nullptr}.
+
+\pnum
+\effects \tcode{e.on_work_started()}, where \tcode{e} is the target object of \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void on_work_finished() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{*this != nullptr}.
+
+\pnum
+\effects \tcode{e.on_work_finished()}, where \tcode{e} is the target object of \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Func, class ProtoAllocator>
+  void dispatch(Func&& f, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Let \tcode{e} be the target object of \tcode{*this}. Let \tcode{a1} be the allocator that was specified when the target was set. Let \tcode{fd} be the result of \tcode{DECAY_COPY(f)} (C++Std [thread.decaycopy]).
+
+\pnum
+\effects \tcode{e.dispatch(g, a1)}, where \tcode{g} is a function object of unspecified type that, when called as \tcode{g()}, performs \tcode{fd()}. The allocator \tcode{a} is used to allocate any memory required to implement \tcode{g}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Func, class ProtoAllocator>
+  void post(Func&& f, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Let \tcode{e} be the target object of \tcode{*this}. Let \tcode{a1} be the allocator that was specified when the target was set. Let \tcode{fd} be the result of \tcode{DECAY_COPY(f)}.
+
+\pnum
+\effects \tcode{e.post(g, a1)}, where \tcode{g} is a function object of unspecified type that, when called as \tcode{g()}, performs \tcode{fd()}. The allocator \tcode{a} is used to allocate any memory required to implement \tcode{g}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Func, class ProtoAllocator>
+  void defer(Func&& f, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Let \tcode{e} be the target object of \tcode{*this}. Let \tcode{a1} be the allocator that was specified when the target was set. Let \tcode{fd} be the result of \tcode{DECAY_COPY(f)}.
+
+\pnum
+\effects \tcode{e.defer(g, a1)}, where \tcode{g} is a function object of unspecified type that, when called as \tcode{g()}, performs \tcode{fd()}. The allocator \tcode{a} is used to allocate any memory required to implement \tcode{g}.
+\end{itemdescr}
+
+
+
+\rSec2[async.executor.capacity]{\tcode{executor} capacity}
+
+\begin{itemdecl}
+explicit operator bool() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if \tcode{*this} has a target, otherwise \tcode{false}.
+\end{itemdescr}
+
+
+
+\rSec2[async.executor.target]{\tcode{executor} target access}
+
+\begin{itemdecl}
+const type_info& target_type() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{*this} has a target of type \tcode{T}, \tcode{typeid(T)}; otherwise, \tcode{typeid(void)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Executor> Executor* target() noexcept;
+template<class Executor> const Executor* target() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{target_type() == typeid(Executor)} a pointer to the stored executor target; otherwise a null pointer value.
+\end{itemdescr}
+
+
+
+\rSec2[async.executor.comparisons]{\tcode{executor} comparisons}
+
+\begin{itemdecl}
+bool operator==(const executor& a, const executor& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns 
+\begin{itemize}
+\item
+\tcode{true}if \tcode{!a} and \tcode{!b};
+\item
+\tcode{true}if \tcode{a} and \tcode{b}share a target;
+\item
+\tcode{true}if \tcode{e} and \tcode{f}are the same type and \tcode{e == f}, where \tcode{e} is the target of \tcode{a} and \tcode{f} is the target of \tcode{b};
+\item
+ otherwise\tcode{false}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+bool operator==(const executor& e, nullptr_t) noexcept;
+bool operator==(nullptr_t, const executor& e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!e}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool operator!=(const executor& a, const executor& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool operator!=(const executor& e, nullptr_t) noexcept;
+bool operator!=(nullptr_t, const executor& e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{(bool) e}.
+\end{itemdescr}
+
+
+
+\rSec2[async.executor.algo]{\tcode{executor} specialized algorithms}
+
+\begin{itemdecl}
+void swap(executor& a, executor& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects \tcode{a.swap(b)}.
+\end{itemdescr}
+
+
+
+
+\rSec1[async.dispatch]{Function \tcode{dispatch}}
+
+\pnum
+\enternote The function \tcode{dispatch} satisfies the requirements for an asynchronous operation~(\ref{async.reqmts.async}), except for the requirement that the operation uses \tcode{post} if it completes immediately. \exitnote
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ dispatch(CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void()}.
+
+\pnum
+\effects 
+\begin{itemize}
+\item
+ Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
+\item
+ Performs \tcode{ex.dispatch(std::move(completion.completion_handler), alloc)}, where \tcode{ex} is the result of \tcode{get_associated_executor(completion.completion_handler)}, and \tcode{alloc} is the result of \tcode{get_associated_allocator(completion.completion_handler)}.
+\end{itemize}
+
+\pnum
+\returns \tcode{completion.result.get()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Executor, class CompletionToken>
+  @\textit{DEDUCED}@ dispatch(const Executor& ex, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void()}.
+
+\pnum
+\effects 
+\begin{itemize}
+\item
+ Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
+\item
+ Constructs a function object \tcode{f} containing as members:
+\begin{itemize}
+\item
+a copy of the completion handler \tcode{h}, initialized with \tcode{std::move(completion.completion_handler)},
+\item
+an \tcode{executor_work_guard} object \tcode{w} for the completion handler's associated executor, initialized with \tcode{make_work_guard(h)},
+\end{itemize}
+and where the effect of \tcode{f()} is:
+\begin{itemize}
+\item
+\tcode{w.get_executor().dispatch(std::move(h), alloc)}, where \tcode{alloc} is the result of \tcode{get_associated_allocator(h)}, followed by
+\item
+\tcode{w.reset()}.
+\end{itemize}
+\item
+ Performs \tcode{ex.dispatch(std::move(f), alloc)}, where \tcode{alloc} is the result of \tcode{get_associated_allocator(completion.completion_handler)} prior to the construction of \tcode{f}.
+\end{itemize}
+
+\pnum
+\returns \tcode{completion.result.get()}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext, class CompletionToken>
+  @\textit{DEDUCED}@ dispatch(ExecutionContext& ctx, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void()}.
+
+\pnum
+\returns \tcode{std::experimental::net::dispatch(ctx.get_executor(), forward<CompletionToken>(token))}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\end{itemdescr}
+
+
+
+\rSec1[async.post]{Function \tcode{post}}
+
+\pnum
+\enternote The function \tcode{post} satisfies the requirements for an asynchronous operation~(\ref{async.reqmts.async}). \exitnote
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ post(CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void()}.
+
+\pnum
+\effects 
+\begin{itemize}
+\item
+ Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
+\item
+ Performs \tcode{ex.post(std::move(completion.completion_handler), alloc)}, where \tcode{ex} is the result of \tcode{get_associated_executor(completion.completion_handler)}, and \tcode{alloc} is the result of \tcode{get_associated_allocator(completion.completion_handler)}.
+\end{itemize}
+
+\pnum
+\returns \tcode{completion.result.get()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Executor, class CompletionToken>
+  @\textit{DEDUCED}@ post(const Executor& ex, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void()}.
+
+\pnum
+\effects 
+\begin{itemize}
+\item
+ Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
+\item
+ Constructs a function object \tcode{f} containing as members:
+\begin{itemize}
+\item
+a copy of the completion handler \tcode{h}, initialized with \tcode{std::move(completion.completion_handler)},
+\item
+an \tcode{executor_work_guard} object \tcode{w} for the completion handler's associated executor, initialized with \tcode{make_work_guard(h)},
+\end{itemize}
+and where the effect of \tcode{f()} is:
+\begin{itemize}
+\item
+\tcode{w.get_executor().dispatch(std::move(h), alloc)}, where \tcode{alloc} is the result of \tcode{get_associated_allocator(h)}, followed by
+\item
+\tcode{w.reset()}.
+\end{itemize}
+\item
+ Performs \tcode{ex.post(std::move(f), alloc)}, where \tcode{alloc} is the result of \tcode{get_associated_allocator(completion.completion_handler)} prior to the construction of \tcode{f}.
+\end{itemize}
+
+\pnum
+\returns \tcode{completion.result.get()}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext, class CompletionToken>
+  @\textit{DEDUCED}@ post(ExecutionContext& ctx, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void()}.
+
+\pnum
+\returns \tcode{std::experimental::net::post(ctx.get_executor(), forward<CompletionToken>(token))}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\end{itemdescr}
+
+
+
+\rSec1[async.defer]{Function \tcode{defer}}
+
+\pnum
+\enternote The function \tcode{defer} satisfies the requirements for an asynchronous operation~(\ref{async.reqmts.async}), except for the requirement that the operation uses \tcode{post} if it completes immediately. \exitnote
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ defer(CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void()}.
+
+\pnum
+\effects 
+\begin{itemize}
+\item
+ Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
+\item
+ Performs \tcode{ex.defer(std::move(completion.completion_handler), alloc)}, where \tcode{ex} is the result of \tcode{get_associated_executor(completion.completion_handler)}, and \tcode{alloc} is the result of \tcode{get_associated_allocator(completion.completion_handler)}.
+\end{itemize}
+
+\pnum
+\returns \tcode{completion.result.get()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Executor, class CompletionToken>
+  @\textit{DEDUCED}@ defer(const Executor& ex, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void()}.
+
+\pnum
+\effects 
+\begin{itemize}
+\item
+ Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
+\item
+Constructs a function object \tcode{f} containing as members:
+\begin{itemize}
+\item
+a copy of the completion handler \tcode{h}, initialized with \tcode{std::move(completion.completion_handler)},
+\item
+an \tcode{executor_work_guard}object \tcode{w} for the completion handler's associated executor, initialized with \tcode{make_work_guard(h)},
+\end{itemize}
+and where the effect of \tcode{f()} is:
+\begin{itemize}
+\item
+\tcode{w.get_executor().dispatch(std::move(h), alloc)}, where \tcode{alloc} is the result of \tcode{get_associated_allocator(h)}, followed by
+\item
+\tcode{w.reset()}.
+\end{itemize}
+\item
+ Performs \tcode{ex.defer(std::move(f), alloc)}, where \tcode{alloc} is the result of \tcode{get_associated_allocator(completion.completion_handler)} prior to the construction of \tcode{f}.
+\end{itemize}
+
+\pnum
+\returns \tcode{completion.result.get()}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext, class CompletionToken>
+  @\textit{DEDUCED}@ defer(ExecutionContext& ctx, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void()}.
+
+\pnum
+\returns \tcode{std::experimental::net::defer(ctx.get_executor(), forward<CompletionToken>(token))}.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\end{itemdescr}
+
+
+
+\rSec1[async.strand]{Class template \tcode{strand}}
+
+\pnum
+The class template \tcode{strand} is a wrapper around an object of type \tcode{Executor} satisfying the Executor requirements~(\ref{async.reqmts.executor}).
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class Executor>
+  class strand
+  {
+  public:
+    // types:
+
+    typedef Executor inner_executor_type;
+
+    // construct / copy / destroy:
+
+    strand();
+    explicit strand(Executor ex);
+    template<class ProtoAllocator>
+      strand(allocator_arg_t, const ProtoAllocator& alloc, Executor ex);
+    strand(const strand& other) noexcept;
+    strand(strand&& other) noexcept;
+    template<class OtherExecutor> strand(const strand<OtherExecutor>& other) noexcept;
+    template<class OtherExecutor> strand(strand<OtherExecutor>&& other) noexcept;
+
+    strand& operator=(const strand& other) noexcept;
+    strand& operator=(strand&& other) noexcept;
+    template<class OtherExecutor> strand& operator=(const strand<OtherExecutor>& other) noexcept;
+    template<class OtherExecutor> strand& operator=(strand<OtherExecutor>&& other) noexcept;
+
+    ~strand();
+
+    // strand operations:
+
+    inner_executor_type get_inner_executor() const noexcept;
+
+    bool running_in_this_thread() const noexcept;
+
+    execution_context& context() noexcept;
+
+    void on_work_started() noexcept;
+    void on_work_finished() noexcept;
+
+    template<class Func, class ProtoAllocator>
+      void dispatch(Func&& f, const ProtoAllocator& a);
+    template<class Func, class ProtoAllocator>
+      void post(Func&& f, const ProtoAllocator& a);
+    template<class Func, class ProtoAllocator>
+      void defer(Func&& f, const ProtoAllocator& a);
+
+  private:
+    Executor inner_ex_; // \expos
+  };
+
+  bool operator==(const strand<Executor>& a, const strand<Executor>& b);
+  bool operator!=(const strand<Executor>& a, const strand<Executor>& b);
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{strand<Executor>} satisfies the \tcode{Executor}~(\ref{async.reqmts.executor}) requirements.
+
+\pnum
+ A strand provides guarantees of ordering and non-concurrency. Given:
+
+\begin{itemize}
+\item
+strand objects \tcode{s1} and \tcode{s2} such that \tcode{s1 == s2}
+
+\item
+a function object \tcode{f1} added to the strand \tcode{s1} using \tcode{post} or \tcode{defer}, or using \tcode{dispatch} when \tcode{s1.running_in_this_thread() == false}
+
+\item
+a function object \tcode{f2} added to the strand \tcode{s2} using \tcode{post} or \tcode{defer}, or using \tcode{dispatch} when \tcode{s2.running_in_this_thread() == false}
+\end{itemize}
+
+\pnum
+then the implementation invokes \tcode{f1} and \tcode{f2} such that:
+
+\begin{itemize}
+\item
+the invocation of \tcode{f1} is not concurrent with the invocation of \tcode{f2}
+
+\item
+the invocation of \tcode{f1} synchronizes with the invocation of \tcode{f2}.
+\end{itemize}
+
+\pnum
+Furthermore, if the addition of \tcode{f1} happens before the addition of \tcode{f2}, then the invocation of \tcode{f1} happens before the invocation of \tcode{f2}.
+
+\pnum
+All member functions, except for the assignment operators and the destructor, do not introduce data races on \tcode{*this}, including its ordered, non-concurrent state. Additionally, constructors and assignment operators do not introduce data races on lvalue arguments.
+
+\pnum
+If any function \tcode{f} executed by the strand throws an exception, the subsequent strand state is as if \tcode{f} had exited without throwing an exception.
+
+
+\rSec2[async.strand.cons]{\tcode{strand} constructors}
+
+\begin{itemdecl}
+strand();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Constructs an object of class \tcode{strand<Executor>} that represents a unique ordered, non-concurrent state. Initializes \tcode{inner_ex_} as \tcode{inner_ex_()}.
+
+\pnum
+\remarks This overload shall not participate in overload resolution unless \tcode{Executor} satisfies the \tcode{DefaultConstructible} requirements (C++Std [defaultconstructible]).
+\end{itemdescr}
+
+\begin{itemdecl}
+explicit strand(Executor ex);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Constructs an object of class \tcode{strand<Executor>} that represents a unique ordered, non-concurrent state. Initializes \tcode{inner_ex_} as \tcode{inner_ex_(ex)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ProtoAllocator>
+  strand(allocator_arg_t, const ProtoAllocator& a, Executor ex);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Constructs an object of class \tcode{strand<Executor>} that represents a unique ordered, non-concurrent state. Initializes \tcode{inner_ex_} as \tcode{inner_ex_(ex)}. A copy of the allocator argument \tcode{a} is used to allocate memory, if necessary, for the internal data structures of the constructed strand object.
+\end{itemdescr}
+
+\begin{itemdecl}
+strand(const strand& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{inner_ex_} as \tcode{inner_ex_(other.inner_ex_)}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{*this == other}
+\item
+\tcode{get_inner_executor() == other.get_inner_executor()}
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+strand(strand&& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{inner_ex_} as \tcode{inner_ex_(std::move(other.inner_ex_))}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{*this} is equal to the prior value of \tcode{other}
+\item
+\tcode{get_inner_executor() == other.get_inner_executor()}
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherExecutor> strand(const strand<OtherExecutor>& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}.
+
+\pnum
+\effects Initializes \tcode{inner_ex_} as \tcode{inner_ex_(other.inner_ex_)}.
+
+\pnum
+\postconditions \tcode{*this == other}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherExecutor> strand(strand<OtherExecutor>&& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}.
+
+\pnum
+\effects Initializes \tcode{inner_ex_} as \tcode{inner_ex_(std::move(other.inner_ex_))}.
+
+\pnum
+\postconditions \tcode{*this} is equal to the prior value of \tcode{other}.
+\end{itemdescr}
+
+
+
+\rSec2[async.strand.assign]{\tcode{strand} assignment}
+
+\begin{itemdecl}
+strand& operator=(const strand& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{Executor} is \tcode{CopyAssignable} (C++Std [copyassignable]).
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{*this == other}
+\item
+\tcode{get_inner_executor() == other.get_inner_executor()}
+\end{itemize}
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+strand& operator=(strand&& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{Executor} is \tcode{MoveAssignable} (C++Std [moveassignable]).
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{*this} is equal to the prior value of \tcode{other}
+\item
+\tcode{get_inner_executor() == other.get_inner_executor()}
+\end{itemize}
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherExecutor> strand& operator=(const strand<OtherExecutor>& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{CopyAssignable} (C++Std [copyassignable]).
+
+\pnum
+\effects Assigns \tcode{other.inner_ex_} to \tcode{inner_ex_}.
+
+\pnum
+\postconditions \tcode{*this == other}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherExecutor> strand& operator=(strand<OtherExecutor>&& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{MoveAssignable} (C++Std [moveassignable]).
+
+\pnum
+\effects Assigns \tcode{std::move(other.inner_ex_)} to \tcode{inner_ex_}.
+
+\pnum
+\postconditions \tcode{*this} is equal to the prior value of \tcode{other}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec2[async.strand.dtor]{\tcode{strand} destructor}
+
+\begin{itemdecl}
+~strand();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Destroys an object of class \tcode{strand<Executor>}. After this destructor completes, objects that were added to the strand but have not yet been executed will be executed in a way that meets the guarantees of ordering and non-concurrency.
+\end{itemdescr}
+
+
+
+\rSec2[async.strand.ops]{\tcode{strand} operations}
+
+\begin{itemdecl}
+inner_executor_type get_inner_executor() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{inner_ex_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool running_in_this_thread() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if the current thread of execution is running a function that was submitted to the strand, or to any other strand object \tcode{s} such that \tcode{s == *this}, using \tcode{dispatch}, \tcode{post} or \tcode{defer}; otherwise \tcode{false}. \enternote That is, the current thread of execution's call chain includes a function that was submitted to the strand. \exitnote
+\end{itemdescr}
+
+\begin{itemdecl}
+execution_context& context() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{inner_ex_.context()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void on_work_started() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Calls \tcode{inner_ex_.on_work_started()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void on_work_finished() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Calls \tcode{inner_ex_.on_work_finished()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Func, class ProtoAllocator>
+  void dispatch(Func&& f, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{running_in_this_thread() == true}, calls DECAY_COPY\tcode{(forward<Func>(f))()} (C++Std [thread.decaycopy]). \enternote If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \exitnote Otherwise, requests invocation of \tcode{f}, as if by forwarding the function object \tcode{f} and allocator \tcode{a} to the executor \tcode{inner_ex_}, such that the guarantees of ordering and non-concurrency are met.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Func, class ProtoAllocator>
+  void post(Func&& f, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Requests invocation of \tcode{f}, as if by forwarding the function object \tcode{f} and allocator \tcode{a} to the executor \tcode{inner_ex_}, such that the guarantees of ordering and non-concurrency are met.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Func, class ProtoAllocator>
+  void defer(Func&& f, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Requests invocation of \tcode{f}, as if by forwarding the function object \tcode{f} and allocator \tcode{a} to the executor \tcode{inner_ex_}, such that the guarantees of ordering and non-concurrency are met.
+\end{itemdescr}
+
+
+
+\rSec2[async.strand.comparisons]{\tcode{strand} comparisons}
+
+\begin{itemdecl}
+bool operator==(const strand<Executor>& a, const strand<Executor>& b);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true}, if the strand objects share the same ordered, non-concurrent state; otherwise \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool operator!=(const strand<Executor>& a, const strand<Executor>& b);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+
+
+
+\rSec1[async.use.future]{Class template \tcode{use_future_t}}
+
+\pnum
+The class template \tcode{use_future_t} defines a set of types that, when passed as a completion token~(\ref{async.reqmts.async.token}) to an asynchronous operation's initiating function, cause the result of the asynchronous operation to be delivered via a future (C++Std [futures.unique_future]).
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class ProtoAllocator = allocator<void>>
+  class use_future_t
+  {
+  public:
+    // use_future_t types:
+    typedef ProtoAllocator allocator_type;
+
+    // use_future_t members:
+    constexpr use_future_t() noexcept(noexcept(allocator_type()));
+    explicit use_future_t(const allocator_type& a) noexcept;
+    template<class OtherProtoAllocator> use_future_t<OtherProtoAllocator>
+      rebind(const OtherProtoAllocator& a) const noexcept;
+    allocator_type get_allocator() const noexcept;
+    template <class F> @\textit{unspecified}@ operator()(F&& f) const;
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+
+\rSec2[async.use.future.cons]{\tcode{use_future_t} constructors}
+
+\begin{itemdecl}
+constexpr use_future_t() noexcept(noexcept(allocator_type()));
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Constructs a \tcode{use_future_t} with a default-constructed allocator.
+\end{itemdescr}
+
+\begin{itemdecl}
+explicit use_future_t(const allocator_type& a) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{get_allocator() == a}.
+\end{itemdescr}
+
+
+
+\rSec2[async.use.future.members]{\tcode{use_future_t} members}
+
+\begin{itemdecl}
+template<class OtherProtoAllocator> use_future_t<OtherProtoAllocator>
+  rebind(const OtherProtoAllocator& a) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A \tcode{use_future_t} object where \tcode{get_allocator() == a}.
+\end{itemdescr}
+
+\begin{itemdecl}
+allocator_type get_allocator() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The associated allocator object.
+\end{itemdescr}
+
+\begin{itemdecl}
+template <class F> @\textit{unspecified}@ operator()(F&& f) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Let T be a completion token type. Let H be a completion handler type and let h be an object of type H. Let FD be the type \tcode{decay_t<F>} and let fd be an lvalue of type FD constructed with \tcode{forward<F>(f)}. Let R(Args...) be the completion signature of an asynchronous operation using H and let N be sizeof...(Args). Let i be in the range [\tcode{0},\tcode{N}) and let Ai be the ith type in \tcode{Args}. Let ai be the argument associated with Ai.
+
+\pnum
+\returns A completion token \tcode{t} of type \tcode{T}.
+
+\pnum
+\remarks The return type \tcode{T} satisfies the \tcode{Destructible} (C++Std [destructible]) and \tcode{MoveConstructible} (C++Std [moveconstructible]) requirements.
+
+\pnum
+The object \tcode{h} of type \tcode{H} is an asynchronous provider with an associated shared state (C++Std [futures.state]). The effect of h(a0, ..., aN-1) is to atomically store the result of INVOKE(fd, forward<A0>(a0), ..., forward<AN-1>(aN-1)) (C++Std [func.require]) in the shared state and make the shared state ready. If \tcode{fd} exits via an exception then that exception is atomically stored in the shared state and the shared state is made ready.
+
+\pnum
+The implementation provides a partial specialization template <class Result, class... Args> async_result<T, Result(Args...)> such that:
+\begin{itemize}
+\item
+ the nested typedef \tcode{completion_handler_type} is a type \tcode{H};
+\item
+ the nested typedef \tcode{return_type} is \tcode{future<result_of_t<FD(decay_t<Args>...)>>}; and
+\item
+ when an object \tcode{r1} of type \tcode{async_result<T, Result(Args...)>} is constructed from \tcode{h}, the expression \tcode{r1.get()} returns a future with the same shared state as \tcode{h}.
+\end{itemize}
+
+\pnum
+For any executor type \tcode{E}, the associated object for the associator \tcode{associated_executor<H, E>} is an executor where, for function objects executed using the executor's \tcode{dispatch()}, \tcode{post()} or \tcode{defer()} functions, any exception thrown is caught by a function object and stored in the associated shared state.
+\end{itemdescr}
+
+
+
+\rSec2[async.use.future.result]{Partial class template specialization \tcode{async_result}
+        for \tcode{use_future_t}}
+
+\begin{codeblock}
+template<class ProtoAllocator, class Result, class... Args>
+class async_result<use_future_t<ProtoAllocator>, Result(Args...)>
+{
+  typedef @\textit{see below}@ completion_handler_type;
+  typedef @\textit{see below}@ return_type;
+
+  explicit async_result(completion_handler_type& h);
+  async_result(const async_result&) = delete;
+  async_result& operator=(const async_result&) = delete;
+
+  return_type get();
+};
+\end{codeblock}
+
+\pnum
+Let \tcode{R} be the type \tcode{async_result<use_future_t<ProtoAllocator>, Result(Args...)>}. Let \tcode{F} be the nested function object type \tcode{R::completion_handler_type}.
+
+\pnum
+An object \tcode{t1} of type \tcode{F} is an asynchronous provider with an associated shared state (C++Std [futures.state]). The type \tcode{F} provides \tcode{F::operator()} such that the expression \tcode{t1(declval<Args>()...)} is well formed.
+
+\pnum
+The implementation specializes \tcode{associated_executor} for \tcode{F}. For function objects executed using the associated executor's \tcode{dispatch()}, \tcode{post()} or \tcode{defer()} functions, any exception thrown is caught by the executor and stored in the associated shared state.
+
+\pnum
+For any executor type \tcode{E}, the associated object for the associator \tcode{associated_executor<F, E>} is an executor where, for function objects executed using the executor's \tcode{dispatch()}, \tcode{post()} or \tcode{defer()} functions, any exception thrown by a function object is caught by the executor and stored in the associated shared state.
+
+\pnum
+When an object \tcode{r1} of type \tcode{R} is constructed from \tcode{t1}, the expression \tcode{r1.get()} returns a future with the same shared state as \tcode{t1}.
+
+\pnum
+The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are defined in the table below. After establishing these effects, \tcode{F::operator()} makes the shared state ready. In this table, N is the value of \tcode{sizeof...(Args)}; let i be in the range [\tcode{0},\tcode{N}) and let Ti be the ith type in \tcode{Args}; let Ui be \tcode{decay_t<}Ti\tcode{>} for each type Ti in \tcode{Args}; let Ai be the deduced type of the ith argument to \tcode{F::operator()}; and let ai be the ith argument to \tcode{F::operator()}.
+
+\begin{libreqtab4}
+{async_result<use_future_t<ProtoAllocator>, Result(Args...)> semantics}
+{async.use.future.result.requirements}
+\\ \topline
+\lhdr{N}  &
+\chdr{U0}  &
+\chdr{R::return_type}  &
+\rhdr{F::operator() effects} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{N}  &
+\chdr{U0}  &
+\chdr{R::return_type}  &
+\rhdr{F::operator() effects} \\ \capsep
+\endhead
+
+ 0  &
+  &
+future<void>  &
+ None.  \\ \rowsep
+
+ 1  &
+\tcode{error_code}  &
+future<void>  &
+If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by make_exception_ptr(system_error(a0)) in the shared state.  \\ \rowsep
+
+ 1  &
+\tcode{exception_ptr}  &
+future<void>  &
+If a0 is non-null, atomically stores the exception pointer a0 in the shared state.  \\ \rowsep
+
+ 1  &
+ all other types  &
+future<U0>  &
+Atomically stores forward<A0>(a0) in the shared state.  \\ \rowsep
+
+ 2  &
+\tcode{error_code}  &
+future<U1>  &
+If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by make_exception_ptr(system_error(a0)) in the shared state; otherwise, atomically stores forward<A1>(a1) in the shared state.  \\ \rowsep
+
+ 2  &
+\tcode{exception_ptr}  &
+future<U1>  &
+If a0 is non-null, atomically stores the exception pointer in the shared state; otherwise, atomically stores forward<A1>(a1) in the shared state.  \\ \rowsep
+
+ 2  &
+ all other types  &
+future<tuple<U0,U1>>  &
+Atomically stores forward_as_tuple(forward<A0>(a0),forward<A1>(a1)) in the shared state.  \\ \rowsep
+
+ >2  &
+\tcode{error_code}  &
+future<tuple<U1,...,UN-1>>  &
+If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by make_exception_ptr(system_error(a0)) in the shared state; otherwise, atomically stores forward_as_tuple(forward<A1>(a1),...,forward<AN-1>(aN-1)) in the shared state.  \\ \rowsep
+
+ >2  &
+\tcode{exception_ptr}  &
+future<tuple<U1,...,UN-1>>  &
+If a0 is non-null, atomically stores the exception pointer in the shared state; otherwise, atomically stores forward_as_tuple(forward<A1>(a1),...,forward<AN-1>(aN-1)) in the shared state.  \\ \rowsep
+
+ >2  &
+ all other types  &
+future<tuple<U0,...,UN-1>>  &
+Atomically stores forward_as_tuple(forward<A0>(a0),...,forward<AN-1>(aN-1)) in the shared state.  \\
+
+\end{libreqtab4}
+
+
+
+
+\rSec1[async.packaged.task.specializations]{Partial class template specialization \tcode{async_result}
+      for \tcode{packaged_task}}
+
+\begin{itemdecl}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class Result, class... Args, class Signature>
+  class async_result<packaged_task<Result(Args...)>, Signature>
+  {
+  public:
+    typedef packaged_task<Result(Args...)> completion_handler_type;
+    typedef future<Result> return_type;
+
+    explicit async_result(completion_handler_type& h);
+    async_result(const async_result&) = delete;
+    async_result& operator=(const async_result&) = delete;
+
+    return_type get();
+
+  private:
+    return_type future_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+
+explicit async_result(completion_handler_type& h);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{future_} with \tcode{h.get_future()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+return_type get();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::move(future_)}.
+\end{itemdescr}
+
+
+

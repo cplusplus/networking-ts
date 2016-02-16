@@ -1,0 +1,143 @@
+%!TEX root = ts.tex
+
+\rSec0[summary]{Library summary}
+
+\begin{libreqtab2}
+{Networking library summary}
+{summary.requirements}
+\\ \topline
+\lhdr{Clause}  &
+\rhdr{Header(s)} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{Clause}  &
+\rhdr{Header(s)} \\ \capsep
+\endhead
+
+Convenience header~(\ref{convenience.hdr})  &
+\tcode{<experimental/net>}  \\ \rowsep
+
+Forward declarations~(\ref{fwd.decl})  &
+\tcode{<experimental/netfwd>}  \\ \rowsep
+
+Asynchronous model~(\ref{async})  &
+\tcode{<experimental/executor>}  \\ \rowsep
+
+Basic I/O services~(\ref{io_context})  &
+\tcode{<experimental/io_context>}  \\ \rowsep
+
+Timers~(\ref{timer})  &
+\tcode{<experimental/timer>}  \\ \rowsep
+
+Buffers~(\ref{buffer})  &
+\tcode{<experimental/buffer>}  \\
+Buffer-oriented streams~(\ref{buffer.stream})  &
+ \\ \rowsep
+
+Sockets~(\ref{socket})  &
+\tcode{<experimental/socket>}  \\
+Socket iostreams~(\ref{socket.iostreams})  &
+ \\
+Socket algorithms~(\ref{socket.algo})  &
+ \\ \rowsep
+
+Internet protocol~(\ref{internet})  &
+\tcode{<experimental/internet>}  \\
+
+\end{libreqtab2}
+
+\pnum
+Throughout this Technical Specification, the names of the template parameters are used to express type requirements, as listed in the table below.
+
+\begin{libreqtab2}
+{Template parameters and type requirements}
+{summary.requirements}
+\\ \topline
+\lhdr{template parameter name}  &
+\rhdr{type requirements} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{template parameter name}  &
+\rhdr{type requirements} \\ \capsep
+\endhead
+
+\tcode{AcceptableProtocol}  &
+acceptable protocol~(\ref{socket.reqmts.acceptableprotocol})  \\ \rowsep
+
+\tcode{Allocator}  &
+ C++Std [allocator.requirements]  \\ \rowsep
+
+\tcode{AsyncReadStream}  &
+buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream})  \\ \rowsep
+
+\tcode{AsyncWriteStream}  &
+buffer-oriented asynchronous write stream~(\ref{buffer.stream.reqmts.asyncwritestream})  \\ \rowsep
+
+\tcode{Clock}  &
+ C++Std [time.clock.req]  \\ \rowsep
+
+\tcode{CompletionCondition}  &
+completion condition~(\ref{buffer.stream.reqmts.completioncondition})  \\ \rowsep
+
+\tcode{CompletionToken}  &
+completion token~(\ref{async.reqmts.async.token})  \\ \rowsep
+
+\tcode{ConnectCondition}  &
+connect condition~(\ref{socket.reqmts.connectcondition})  \\ \rowsep
+
+\tcode{ConstBufferSequence}  &
+constant buffer sequence~(\ref{buffer.reqmts.constbuffersequence})  \\ \rowsep
+
+\tcode{DynamicBuffer}  &
+dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer})  \\ \rowsep
+
+\tcode{EndpointSequence}  &
+endpoint sequence~(\ref{socket.reqmts.endpointsequence})  \\ \rowsep
+
+\tcode{ExecutionContext}  &
+execution context~(\ref{async.reqmts.executioncontext})  \\ \rowsep
+
+\tcode{Executor}  &
+executor~(\ref{async.reqmts.executor})  \\ \rowsep
+
+\tcode{GettableSocketOption}  &
+gettable socket option~(\ref{socket.reqmts.gettablesocketoption})  \\ \rowsep
+
+\tcode{InternetProtocol}  &
+Internet protocol~(\ref{internet.reqmts.protocol})  \\ \rowsep
+
+\tcode{IoControlCommand}  &
+I/O control command~(\ref{socket.reqmts.iocontrolcommand})  \\ \rowsep
+
+\tcode{MutableBufferSequence}  &
+mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence})  \\ \rowsep
+
+\tcode{ProtoAllocator}  &
+proto-allocator~(\ref{async.reqmts.proto.allocator})  \\ \rowsep
+
+\tcode{Protocol}  &
+protocol~(\ref{socket.reqmts.protocol})  \\ \rowsep
+
+\tcode{Service}  &
+service~(\ref{async.reqmts.service})  \\ \rowsep
+
+\tcode{SettableSocketOption}  &
+settable socket option~(\ref{socket.reqmts.settablesocketoption})  \\ \rowsep
+
+\tcode{Signature}  &
+signature~(\ref{async.reqmts.signature})  \\ \rowsep
+
+\tcode{SyncReadStream}  &
+buffer-oriented synchronous read stream~(\ref{buffer.stream.reqmts.syncreadstream})  \\ \rowsep
+
+\tcode{SyncWriteStream}  &
+buffer-oriented synchronous write stream~(\ref{buffer.stream.reqmts.syncwritestream})  \\ \rowsep
+
+\tcode{WaitTraits}  &
+wait traits~(\ref{timer.reqmts.waittraits})  \\
+
+\end{libreqtab2}
+
+

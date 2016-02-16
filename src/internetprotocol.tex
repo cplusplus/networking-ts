@@ -1,0 +1,4198 @@
+%!TEX root = ts.tex
+
+\rSec0[internet]{Internet protocol}
+
+
+\rSec1[internet.synop]{Header \tcode{<experimental/internet>} synopsis}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  enum class resolver_errc {
+    host_not_found = @\textit{an implementation defined non-zero value}@, // @\textit{EAI_NONAME}@
+    host_not_found_try_again = @\textit{an implementation defined non-zero value}@, // @\textit{EAI_AGAIN}@
+    service_not_found = @\textit{an implementation defined non-zero value}@ // @\textit{EAI_SERVICE}@
+  };
+
+  const error_category& resolver_category() noexcept;
+
+  error_code make_error_code(resolver_errc e) noexcept;
+  error_condition make_error_condition(resolver_errc e) noexcept;
+
+  typedef uint_least16_t port_type;
+  typedef uint_least32_t scope_id_type;
+
+  struct v4_mapped_t {};
+  constexpr v4_mapped_t v4_mapped;
+
+  class address;
+  class address_v4;
+  class address_v6;
+
+  class bad_address_cast;
+
+  // address comparisons:
+  constexpr bool operator==(const address&, const address&) noexcept;
+  constexpr bool operator!=(const address&, const address&) noexcept;
+  constexpr bool operator< (const address&, const address&) noexcept;
+  constexpr bool operator> (const address&, const address&) noexcept;
+  constexpr bool operator<=(const address&, const address&) noexcept;
+  constexpr bool operator>=(const address&, const address&) noexcept;
+
+  // address_v4 comparisons:
+  constexpr bool operator==(const address_v4&, const address_v4&) noexcept;
+  constexpr bool operator!=(const address_v4&, const address_v4&) noexcept;
+  constexpr bool operator< (const address_v4&, const address_v4&) noexcept;
+  constexpr bool operator> (const address_v4&, const address_v4&) noexcept;
+  constexpr bool operator<=(const address_v4&, const address_v4&) noexcept;
+  constexpr bool operator>=(const address_v4&, const address_v4&) noexcept;
+
+  // address_v6 comparisons:
+  constexpr bool operator==(const address_v6&, const address_v6&) noexcept;
+  constexpr bool operator!=(const address_v6&, const address_v6&) noexcept;
+  constexpr bool operator< (const address_v6&, const address_v6&) noexcept;
+  constexpr bool operator> (const address_v6&, const address_v6&) noexcept;
+  constexpr bool operator<=(const address_v6&, const address_v6&) noexcept;
+  constexpr bool operator>=(const address_v6&, const address_v6&) noexcept;
+
+  // address creation:
+  address make_address(const char*);
+  address make_address(const char*, error_code&) noexcept;
+  address make_address(const string&);
+  address make_address(const string&, error_code&) noexcept;
+  address make_address(string_view);
+  address make_address(string_view, error_code&) noexcept;
+
+  // address_v4 creation:
+  constexpr address_v4 make_address_v4(const address_v4::bytes_type&);
+  constexpr address_v4 make_address_v4(address_v4::uint_type);
+  constexpr address_v4 make_address_v4(v4_mapped_t, const address_v6&);
+  address_v4 make_address_v4(const char*);
+  address_v4 make_address_v4(const char*, error_code&) noexcept;
+  address_v4 make_address_v4(const string&);
+  address_v4 make_address_v4(const string&, error_code&) noexcept;
+  address_v4 make_address_v4(string_view);
+  address_v4 make_address_v4(string_view, error_code&) noexcept;
+
+  // address_v6 creation:
+  constexpr address_v6 make_address_v6(const address_v6::bytes_type&,
+                                       scope_id_type = 0);
+  constexpr address_v6 make_address_v6(v4_mapped_t, const address_v4&) noexcept;
+  address_v6 make_address_v6(const char*);
+  address_v6 make_address_v6(const char*, error_code&) noexcept;
+  address_v6 make_address_v6(const string&);
+  address_v6 make_address_v6(const string&, error_code&) noexcept;
+  address_v6 make_address_v6(string_view);
+  address_v6 make_address_v6(string_view, error_code&) noexcept;
+
+  // address I/O:
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>&, const address&);
+
+  // address_v4 I/O:
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>&, const address_v4&);
+
+  // address_v6 I/O:
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>&, const address_v6&);
+
+  template<class> class basic_address_iterator; @\textit{// not defined}@
+  template<> class basic_address_iterator<address_v4>;
+  typedef basic_address_iterator<address_v4> address_v4_iterator;
+  template<> class basic_address_iterator<address_v6>;
+  typedef basic_address_iterator<address_v6> address_v6_iterator;
+
+  template<class> class basic_address_range; @\textit{// not defined}@
+  template<> class basic_address_range<address_v4>;
+  typedef basic_address_range<address_v4> address_v4_range;
+  template<> class basic_address_range<address_v6>;
+  typedef basic_address_range<address_v6> address_v6_range;
+
+  class network_v4;
+  class network_v6;
+
+  // network_v4 comparisons:
+  bool operator==(const network_v4&, const network_v4&) noexcept;
+  bool operator!=(const network_v4&, const network_v4&) noexcept;
+
+  // network_v6 comparisons:
+  bool operator==(const network_v6&, const network_v6&) noexcept;
+  bool operator!=(const network_v6&, const network_v6&) noexcept;
+
+  // network_v4 creation:
+  network_v4 make_network_v4(const address_v4&, int);
+  network_v4 make_network_v4(const address_v4&, const address_v4&);
+  network_v4 make_network_v4(const char*);
+  network_v4 make_network_v4(const char*, error_code&) noexcept;
+  network_v4 make_network_v4(const string&);
+  network_v4 make_network_v4(const string&, error_code&) noexcept;
+  network_v4 make_network_v4(string_view);
+  network_v4 make_network_v4(string_view, error_code&) noexcept;
+
+  // network_v6 creation:
+  network_v6 make_network_v6(const address_v6&, int);
+  network_v6 make_network_v6(const char*);
+  network_v6 make_network_v6(const char*, error_code&) noexcept;
+  network_v6 make_network_v6(const string&);
+  network_v6 make_network_v6(const string&, error_code&) noexcept;
+  network_v6 make_network_v6(string_view);
+  network_v6 make_network_v6(string_view, error_code&) noexcept;
+
+  // network_v4 I/O:
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>&, const network_v4&);
+
+  // network_v6 I/O:
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>&, const network_v6&);
+
+  template<class InternetProtocol>
+    class basic_endpoint;
+
+  // basic_endpoint comparisons:
+  template<class InternetProtocol>
+    bool operator==(const basic_endpoint<InternetProtocol>&,
+                    const basic_endpoint<InternetProtocol>&);
+  template<class InternetProtocol>
+    bool operator!=(const basic_endpoint<InternetProtocol>&,
+                    const basic_endpoint<InternetProtocol>&);
+  template<class InternetProtocol>
+    bool operator< (const basic_endpoint<InternetProtocol>&,
+                    const basic_endpoint<InternetProtocol>&);
+  template<class InternetProtocol>
+    bool operator> (const basic_endpoint<InternetProtocol>&,
+                    const basic_endpoint<InternetProtocol>&);
+  template<class InternetProtocol>
+    bool operator<=(const basic_endpoint<InternetProtocol>&,
+                    const basic_endpoint<InternetProtocol>&);
+  template<class InternetProtocol>
+    bool operator>=(const basic_endpoint<InternetProtocol>&,
+                    const basic_endpoint<InternetProtocol>&);
+
+  // basic_endpoint I/O:
+  template<class CharT, class Traits, class InternetProtocol>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>&,
+      const basic_endpoint<InternetProtocol>&);
+
+  template<class InternetProtocol>
+    class basic_resolver_entry;
+
+  template<class InternetProtocol>
+    bool operator==(const basic_resolver_entry<InternetProtocol>&,
+                    const basic_resolver_entry<InternetProtocol>&);
+  template<class InternetProtocol>
+    bool operator!=(const basic_resolver_entry<InternetProtocol>&,
+                    const basic_resolver_entry<InternetProtocol>&);
+
+  template<class InternetProtocol>
+    class basic_resolver_results;
+
+  template<class InternetProtocol>
+    bool operator==(const basic_resolver_results<InternetProtocol>&,
+                    const basic_resolver_results<InternetProtocol>&);
+  template<class InternetProtocol>
+    bool operator!=(const basic_resolver_results<InternetProtocol>&,
+                    const basic_resolver_results<InternetProtocol>&);
+
+  class resolver_base;
+
+  template<class InternetProtocol>
+    class basic_resolver;
+
+  string host_name();
+  string host_name(error_code&);
+  template<class Allocator>
+    basic_string<char, char_traits<char>, Allocator>
+      host_name(const Allocator&);
+  template<class Allocator>
+    basic_string<char, char_traits<char>, Allocator>
+      host_name(const Allocator&, error_code&);
+
+  class tcp;
+
+  // tcp comparisons:
+  bool operator==(const tcp& a, const tcp& b);
+  bool operator!=(const tcp& a, const tcp& b);
+
+  class udp;
+
+  // udp comparisons:
+  bool operator==(const udp& a, const udp& b);
+  bool operator!=(const udp& a, const udp& b);
+
+  class v6_only;
+
+  namespace unicast {
+
+    class hops;
+
+  } // namespace unicast
+
+  namespace multicast {
+
+    class join_group;
+
+    class leave_group;
+
+    class outbound_interface;
+
+    class hops;
+
+    class enable_loopback;
+
+  } // namespace multicast
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+
+  template<> struct is_error_condition_enum<
+    experimental::net::v1::ip::resolver_errc>
+      : public true_type {};
+
+  // hash support
+  template<class T> struct hash;
+  template<> struct hash<experimental::net::v1::ip::address>;
+  template<> struct hash<experimental::net::v1::ip::address_v4>;
+  template<> struct hash<experimental::net::v1::ip::address_v6>;
+
+} // namespace std
+\end{codeblock}
+
+
+
+\rSec1[internet.reqmts]{Requirements}
+
+
+\rSec2[internet.reqmts.protocol]{Internet protocol requirements}
+
+\pnum
+A type \tcode{X} meets the \tcode{InternetProtocol} requirements if it satisfies the requirements of \tcode{AcceptableProtocol}~(\ref{socket.reqmts.acceptableprotocol}), as well as the additional requirements listed below.
+
+\pnum
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, and \tcode{b} denotes a (possibly const) value of type \tcode{X}.
+
+\begin{libreqtab3}
+{InternetProtocol requirements}
+{internet.reqmts.protocol.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endhead
+
+\tcode{X::resolver}  &
+\tcode{ip::basic_resolver<X>}  &
+ The type of a resolver for the protocol.  \\ \rowsep
+
+\tcode{X::v4()}  &
+\tcode{X}  &
+ Returns an object representing the IP version 4 protocol.  \\ \rowsep
+
+\tcode{X::v6()}  &
+\tcode{X}  &
+ Returns an object representing the IP version 6 protocol.  \\ \rowsep
+
+\tcode{a == b}  &
+convertible to \tcode{bool}  &
+Returns \tcode{true} if \tcode{a} and \tcode{b} represent the same IP protocol version, otherwise \tcode{false}.  \\ \rowsep
+
+\tcode{a != b}  &
+convertible to \tcode{bool}  &
+Returns \tcode{!(a == b)}.  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[internet.reqmts.opt.mcast]{Multicast group socket options}
+
+\pnum
+A type \tcode{X} meets the \tcode{MulticastGroupSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{CopyAssignable} (C++Std [copyassignable]), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
+
+\pnum
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{b} denotes a (possibly const) value of type \tcode{address}, \tcode{c} and \tcode{d} denote (possibly const) values of type \tcode{address_v4}, \tcode{e} denotes a (possibly const) value of type \tcode{address_v6}, \tcode{f} denotes a (possibly const) value of type \tcode{unsigned int}, and \tcode{u} denotes an identifier.
+
+\begin{libreqtab3}
+{MulticastGroupSocketOption requirements}
+{internet.reqmts.opt.mcast.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endhead
+
+\tcode{X u(b);}  &
+  &
+ Constructs a multicast group socket option to join the group with the specified version-independent address.  \\ \rowsep
+
+\tcode{X u(c, d);}  &
+  &
+ Constructs a multicast group socket option to join the specified IPv4 address on a specified network interface.  \\ \rowsep
+
+\tcode{X u(e, f);}  &
+  &
+ Constructs a multicast group socket option to join the specified IPv6 address on a specified network interface.  \\
+
+\end{libreqtab3}
+
+\pnum
+In this Technical Specification, types that satisfy the \tcode{MulticastGroupSocketOption} requirements are defined as follows.
+
+\begin{codeblock}
+class @\textit{C}@
+{
+public:
+  // constructors:
+  explicit @\textit{C}@(const address& multicast_group) noexcept;
+  explicit @\textit{C}@(const address_v4& multicast_group,
+             const address_v4& network_interface = address_v4::any()) noexcept;
+  explicit @\textit{C}@(const address_v6& multicast_group,
+             unsigned int network_interface = 0) noexcept;
+};
+\end{codeblock}
+
+\pnum
+ Extensible implementations provide the following member functions:
+
+\begin{codeblock}
+class @\textit{C}@
+{
+public:
+  template<class Protocol> int level(const Protocol& p) const noexcept;
+  template<class Protocol> int name(const Protocol& p) const noexcept;
+  template<class Protocol> const void* data(const Protocol& p) const noexcept;
+  template<class Protocol> size_t size(const Protocol& p) const noexcept;
+  // \textit{remainder unchanged}
+private:
+  ip_mreq v4_value_; // \expos
+  ipv6_mreq v6_value_; // \expos
+};
+\end{codeblock}
+
+\pnum
+Let L and N identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
+
+\begin{itemdecl}
+explicit @\textit{C}@(const address& multicast_group) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{multicast_group.is_v6()} is \tcode{true}, calls C\tcode{(multicast_group.to_v6())}; otherwise, calls C\tcode{(multicast_group.to_v4())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+explicit @\textit{C}@(const address_v4& multicast_group,
+           const address_v4& network_interface = address_v4::any()) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects For extensible implementations, \tcode{v4_value_.imr_multiaddr} is initialized to correspond to the address \tcode{multicast_group}, \tcode{v4_value_.imr_interface} is initialized to correspond to address \tcode{network_interface}, and \tcode{v6_value_} is zero-initialized.
+\end{itemdescr}
+
+\begin{itemdecl}
+explicit @\textit{C}@(const address_v6& multicast_group,
+           unsigned int network_interface = 0) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects For extensible implementations, \tcode{v6_value_.ipv6mr_multiaddr} is initialized to correspond to the address \tcode{multicast_group}, \tcode{v6_value_.ipv6mr_interface} is initialized to \tcode{network_interface}, and \tcode{v4_value_} is zero-initialized.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> int level(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{L}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> int name(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{N}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> const void* data(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(v6_value_)} if \tcode{p.family() == AF_INET6}, otherwise \tcode{std::addressof(v4_value_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> size_t size(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{sizeof(v6_value_)} if \tcode{p.family() == AF_INET6}, otherwise \tcode{sizeof(v4_value_)}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.resolver.err]{Error codes}
+
+\begin{itemdecl}
+const error_category& resolver_category() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A reference to an object of a type derived from class \tcode{error_category}. All calls to this function return references to the same object.
+
+\pnum
+The object’s \tcode{default_error_condition} and \tcode{equivalent} virtual functions behave as specified for the class \tcode{error_category}. The object’s \tcode{name} virtual function returns a pointer to the string \tcode{"resolver"}.
+\end{itemdescr}
+
+\begin{itemdecl}
+error_code make_error_code(resolver_errc e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{error_code(static_cast<int>(e), resolver_category())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+error_condition make_error_condition(resolver_errc e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{error_condition(static_cast<int>(e), resolver_category())}.
+\end{itemdescr}
+
+
+
+\rSec1[internet.address]{Class \tcode{ip::address}}
+
+\pnum
+The class \tcode{address} is a version-independent representation for an IP address. An object of class \tcode{address} holds either an IPv4 address, an IPv6 address, or no valid address.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  class address
+  {
+  public:
+    // constructors:
+    constexpr address() noexcept;
+    constexpr address(const address& a) noexcept;
+    constexpr address(const address_v4& a) noexcept;
+    constexpr address(const address_v6& a) noexcept;
+
+    // assignment:
+    address& operator=(const address& a) noexcept;
+    address& operator=(const address_v4& a) noexcept;
+    address& operator=(const address_v6& a) noexcept;
+
+    // members:
+    constexpr bool is_v4() const noexcept;
+    constexpr bool is_v6() const noexcept;
+    constexpr address_v4 to_v4() const;
+    constexpr address_v6 to_v6() const;
+    constexpr bool is_unspecified() const noexcept;
+    constexpr bool is_loopback() const noexcept;
+    constexpr bool is_multicast() const noexcept;
+    template<class Allocator = allocator<char>>
+      basic_string<char, char_traits<char>, Allocator>
+        to_string(const Allocator& a = Allocator()) const;
+
+  private:
+    address_v4 v4_; // \expos
+    address_v6 v6_; // \expos
+  };
+
+  // address comparisons:
+  constexpr bool operator==(const address& a, const address& b) noexcept;
+  constexpr bool operator!=(const address& a, const address& b) noexcept;
+  constexpr bool operator< (const address& a, const address& b) noexcept;
+  constexpr bool operator> (const address& a, const address& b) noexcept;
+  constexpr bool operator<=(const address& a, const address& b) noexcept;
+  constexpr bool operator>=(const address& a, const address& b) noexcept;
+
+  // address creation:
+  address make_address(const char* str);
+  address make_address(const char* str, error_code& ec) noexcept;
+  address make_address(const string& str);
+  address make_address(const string& str, error_code& ec) noexcept;
+  address make_address(string_view str);
+  address make_address(string_view str, error_code& ec) noexcept;
+
+  // address I/O:
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>& os, const address& addr);
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{address} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+
+
+\rSec2[internet.address.cons]{\tcode{ip::address} constructors}
+
+\begin{itemdecl}
+constexpr address() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{is_v4() == true}, \tcode{is_v6() == false}, and \tcode{is_unspecified() == true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address(const address_v4& a) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{v4_} with \tcode{a}.
+
+\pnum
+\postconditions \tcode{is_v4() == true} and \tcode{is_v6() == false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address(const address_v6& a) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{v6_} with \tcode{a}.
+
+\pnum
+\postconditions \tcode{is_v4() == false} and \tcode{is_v6() == true}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.assign]{\tcode{ip::address} assignment}
+
+\begin{itemdecl}
+constexpr address(const address_v4& a) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{is_v4() == true} and \tcode{is_v6() == false} and \tcode{to_v4() == a}.
+
+\pnum
+\returns \tcode{*this}
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address(const address_v6& a) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{is_v4() == false} and \tcode{is_v6() == true} and \tcode{to_v6() == a}.
+
+\pnum
+\returns \tcode{*this}
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.members]{\tcode{ip::address} members}
+
+\begin{itemdecl}
+constexpr bool is_v4() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if the object contains an IP version 4 address, otherwise \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_v6() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if the object contains an IP version 6 address, otherwise \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v4 to_v4() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{v4_}.
+
+\pnum
+\remarks \tcode{bad_address_cast} if \tcode{is_v4() == false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v6 to_v6() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{v6_}.
+
+\pnum
+\remarks \tcode{bad_address_cast} if \tcode{is_v6() == false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_unspecified() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{is_v4()}, returns \tcode{v4_.is_unspecified()}. Otherwise returns \tcode{v6_.is_unspecified()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_loopback() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{is_v4()}, returns \tcode{v4_.is_loopback()}. Otherwise returns \tcode{v6_.is_loopback()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_multicast() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{is_v4()}, returns \tcode{v4_.is_multicast()}. Otherwise returns \tcode{v6_.is_multicast()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Allocator = allocator<char>>
+  basic_string<char, char_traits<char>, Allocator>
+    to_string(const Allocator& a = Allocator()) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{is_v4()}, returns \tcode{v4_.to_string(a)}. Otherwise returns \tcode{v6_.to_string(a)}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.comparisons]{\tcode{ip::address} comparisons}
+
+\begin{itemdecl}
+constexpr bool operator==(const address& a, const address& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns 
+\begin{itemize}
+\item
+ if \tcode{a.is_v4() != b.is_v4()}, \tcode{false};
+\item
+ if \tcode{a.is_v4()}, the result of \tcode{a.v4_ == b.v4_};
+\item
+ otherwise, the result of\tcode{a.v6_ == b.v6_}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator!=(const address& a, const address& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator< (const address& a, const address& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns 
+\begin{itemize}
+\item
+ if \tcode{a.is_v4() \&\& !b.is_v4()}, \tcode{true};
+\item
+ if \tcode{!a.is_v4() \&\& b.is_v4()}, \tcode{false};
+\item
+ if \tcode{a.is_v4()}, the result of \tcode{a.v4_ < b.v4_};
+\item
+ otherwise, the result of\tcode{a.v6_ < b.v6_}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator> (const address& a, const address& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{b < a}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator<=(const address& a, const address& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(b < a)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator>=(const address& a, const address& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a < b)}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.creation]{\tcode{ip::address} creation}
+
+\begin{itemdecl}
+address make_address(const char* str);
+address make_address(const char* str, error_code& ec) noexcept;
+address make_address(const string& str);
+address make_address(const string& str, error_code& ec) noexcept;
+address make_address(string_view str);
+address make_address(string_view str, error_code& ec) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Converts a textual representation of an address into an object of class \tcode{address}, as if by calling: 
+\begin{codeblock}
+address a;
+address_v6 v6a = make_address_v6(str, ec);
+if (!ec)
+  a = v6a;
+else
+{
+  address_v4 v4a = make_address_v4(str, ec);
+  if (!ec)
+    a = v4a;
+}
+\end{codeblock}
+
+
+\pnum
+\returns \tcode{a}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.io]{\tcode{ip::address} I/O}
+
+\begin{itemdecl}
+template<class CharT, class Traits>
+  basic_ostream<CharT, Traits>& operator<<(
+    basic_ostream<CharT, Traits>& os, const address& addr);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{os << addr.to_string().c_str()}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.address.v4]{Class \tcode{ip::address_v4}}
+
+\pnum
+The class \tcode{address_v4} is a representation of an IPv4 address.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  class address_v4
+  {
+  public:
+    // types:
+    typedef uint_least32_t uint_type;
+    struct bytes_type;
+
+    // constructors:
+    constexpr address_v4() noexcept;
+    constexpr address_v4(const address_v4& a) noexcept;
+    constexpr address_v4(const bytes_type& bytes);
+    explicit constexpr address_v4(uint_type val);
+
+    // assignment:
+    address_v4& operator=(const address_v4& a) noexcept;
+
+    // members:
+    constexpr bool is_unspecified() const noexcept;
+    constexpr bool is_loopback() const noexcept;
+    constexpr bool is_multicast() const noexcept;
+    constexpr bytes_type to_bytes() const noexcept;
+    constexpr uint_type to_uint() const noexcept;
+    template<class Allocator = allocator<char>>
+      basic_string<char, char_traits<char>, Allocator>
+        to_string(const Allocator& a = Allocator()) const;
+
+    // static members:
+    static constexpr address_v4 any() noexcept;
+    static constexpr address_v4 loopback() noexcept;
+    static constexpr address_v4 broadcast() noexcept;
+  };
+
+  // address_v4 comparisons:
+  constexpr bool operator==(const address_v4& a, const address_v4& b) noexcept;
+  constexpr bool operator!=(const address_v4& a, const address_v4& b) noexcept;
+  constexpr bool operator< (const address_v4& a, const address_v4& b) noexcept;
+  constexpr bool operator> (const address_v4& a, const address_v4& b) noexcept;
+  constexpr bool operator<=(const address_v4& a, const address_v4& b) noexcept;
+  constexpr bool operator>=(const address_v4& a, const address_v4& b) noexcept;
+
+  // address_v4 creation:
+  constexpr address_v4 make_address_v4(const address_v4::bytes_type& bytes);
+  constexpr address_v4 make_address_v4(address_v4::uint_type val);
+  constexpr address_v4 make_address_v4(v4_mapped_t, const address_v6& a);
+  address_v4 make_address_v4(const char* str);
+  address_v4 make_address_v4(const char* str, error_code& ec) noexcept;
+  address_v4 make_address_v4(const string& str);
+  address_v4 make_address_v4(const string& str, error_code& ec) noexcept;
+  address_v4 make_address_v4(string_view str);
+  address_v4 make_address_v4(string_view str, error_code& ec) noexcept;
+
+  // address_v4 I/O:
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>& os, const address_v4& addr);
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{address_v4} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+
+
+\rSec2[internet.address.v4.bytes]{Struct \tcode{ip::address_v4::bytes_type}}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  struct address_v4::bytes_type : array<unsigned char, 4>
+  {
+    template<class... T> explicit constexpr bytes_type(T... t)
+      : array<unsigned char, 4>{{static_cast<unsigned char>(t)...}} {}
+  };
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The ip::address_v4::bytes_type type is a standard-layout struct that provides a byte-level representation of an IPv4 address in network byte order.
+
+
+
+\rSec2[internet.address.v4.cons]{\tcode{ip::address_v4} constructors}
+
+\begin{itemdecl}
+constexpr address_v4() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{to_bytes()} yields \tcode{{0, 0, 0, 0}} and \tcode{to_uint() == 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v4(const bytes_type& bytes);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\remarks \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \tcode{[0, 0xFF]}. \enternote For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \exitnote
+
+\pnum
+\postconditions \tcode{to_bytes() == bytes} and \tcode{to_uint() == (bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3]}.
+\end{itemdescr}
+
+\begin{itemdecl}
+explicit constexpr address_v4(address_v4::uint_type val);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\remarks \tcode{out_of_range} if \tcode{val} is not in the range \tcode{[0, 0xFFFFFFFF]}. \enternote For implementations where \tcode{numeric_limits<address_v4::uint_type>::max() == 0xFFFFFFFF}, no out-of-range detection is needed. \exitnote
+
+\pnum
+\postconditions \tcode{to_uint() == val} and \tcode{to_bytes()} is \tcode{{ (val >> 24) \& 0xFF, (val >> 16) \& 0xFF, (val >> 8) \& 0xFF, val \& 0xFF }}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.v4.members]{\tcode{ip::address_v4} members}
+
+\begin{itemdecl}
+constexpr bool is_unspecified() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{to_uint() == 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_loopback() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{(to_uint() \& 0xFF000000) == 0x7F000000}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_multicast() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{(to_uint() \& 0xF0000000) == 0xE0000000}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bytes_type to_bytes() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A representation of the address in network byte order~(\ref{defs.net.byte.order}).
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v4::uint_type to_uint() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A representation of the address in host byte order~(\ref{defs.host.byte.order}).
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Allocator = allocator<char>>
+  basic_string<char, char_traits<char>, Allocator>
+    to_string(const Allocator& a = Allocator()) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If successful, the textual representation of the address, determined as if by POSIX inet_ntop when invoked with address family \tcode{AF_INET}. Otherwise \tcode{basic_string<char, char_traits<char>, Allocator>(a)}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.v4.static]{\tcode{ip::address_v4} static members}
+
+\begin{itemdecl}
+static constexpr address_v4 any() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{address_v4()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+static constexpr address_v4 loopback() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{address_v4(0x7F000001)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+static constexpr address_v4 broadcast() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{address_v4(0xFFFFFFFF)}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.v4.comparisons]{\tcode{ip::address_v4} comparisons}
+
+\begin{itemdecl}
+constexpr bool operator==(const address_v4& a, const address_v4& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{a.to_uint() == b.to_uint()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator!=(const address_v4& a, const address_v4& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator< (const address_v4& a, const address_v4& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{a.to_uint() < b.to_uint()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator> (const address_v4& a, const address_v4& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{b < a}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator<=(const address_v4& a, const address_v4& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(b < a)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator>=(const address_v4& a, const address_v4& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a < b)}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.v4.creation]{\tcode{ip::address_v4} creation}
+
+\begin{itemdecl}
+constexpr address_v4 make_address_v4(const address_v4::bytes_type& bytes);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{address_v4(bytes)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v4 make_address_v4(address_v4::uint_type val);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{address_v4(val)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v4 make_address_v4(v4_mapped_t, const address_v6& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An \tcode{address_v4} object corresponding to the IPv4-mapped IPv6 address, as if computed by the following method: 
+\begin{codeblock}
+address_v6::bytes_type v6b = a.to_bytes();
+address_v4::bytes_type v4b(v6b[12], v6b[13], v6b[14], v6b[15]);
+return address_v4(v4b);
+\end{codeblock}
+
+
+\pnum
+\remarks \tcode{bad_address_cast} if \tcode{a.is_v4_mapped()} is \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+address_v4 make_address_v4(const char* str);
+address_v4 make_address_v4(const char* str, error_code& ec) noexcept;
+address_v4 make_address_v4(const string& str);
+address_v4 make_address_v4(const string& str, error_code& ec) noexcept;
+address_v4 make_address_v4(string_view str);
+address_v4 make_address_v4(string_view str, error_code& ec) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Converts a textual representation of an address into a corresponding \tcode{address_v4} value, as if by POSIX inet_pton when invoked with address family \tcode{AF_INET}.
+
+\pnum
+\returns If successful, an \tcode{address_v4} value corresponding to the string \tcode{str}. Otherwise \tcode{address_v4()}.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::invalid_argument}
+\item
+ if \tcode{str} is not a valid textual representation of an IPv4 address.
+\end{itemize}
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.v4.io]{\tcode{ip::address_v4} I/O}
+
+\begin{itemdecl}
+template<class CharT, class Traits>
+  basic_ostream<CharT, Traits>& operator<<(
+    basic_ostream<CharT, Traits>& os, const address_v4& addr);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{os << addr.to_string().c_str()}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.address.v6]{Class \tcode{ip::address_v6}}
+
+\pnum
+The class \tcode{address_v6} is a representation of an IPv6 address.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  class address_v6
+  {
+  public:
+    // types:
+    struct bytes_type;
+
+    // constructors:
+    constexpr address_v6() noexcept;
+    constexpr address_v6(const address_v6& a) noexcept;
+    constexpr address_v6(const bytes_type& bytes,
+                         scope_id_type scope = 0);
+
+    // assignment:
+    address_v6& operator=(const address_v6& a) noexcept;
+
+    // members:
+    void scope_id(scope_id_type id) noexcept;
+    constexpr scope_id_type scope_id() const noexcept;
+    constexpr bool is_unspecified() const noexcept;
+    constexpr bool is_loopback() const noexcept;
+    constexpr bool is_multicast() const noexcept;
+    constexpr bool is_link_local() const noexcept;
+    constexpr bool is_site_local() const noexcept;
+    constexpr bool is_v4_mapped() const noexcept;
+    constexpr bool is_multicast_node_local() const noexcept;
+    constexpr bool is_multicast_link_local() const noexcept;
+    constexpr bool is_multicast_site_local() const noexcept;
+    constexpr bool is_multicast_org_local() const noexcept;
+    constexpr bool is_multicast_global() const noexcept;
+    constexpr bytes_type to_bytes() const noexcept;
+    template<class Allocator = allocator<char>>
+      basic_string<char, char_traits<char>, Allocator>
+        to_string(const Allocator& a = Allocator()) const;
+
+    // static members:
+    static constexpr address_v6 any() noexcept;
+    static constexpr address_v6 loopback() noexcept;
+  };
+
+  // address_v6 comparisons:
+  constexpr bool operator==(const address_v6& a, const address_v6& b) noexcept;
+  constexpr bool operator!=(const address_v6& a, const address_v6& b) noexcept;
+  constexpr bool operator< (const address_v6& a, const address_v6& b) noexcept;
+  constexpr bool operator> (const address_v6& a, const address_v6& b) noexcept;
+  constexpr bool operator<=(const address_v6& a, const address_v6& b) noexcept;
+  constexpr bool operator>=(const address_v6& a, const address_v6& b) noexcept;
+
+  // address_v6 creation:
+  constexpr address_v6 make_address_v6(const address_v6::bytes_type& bytes,
+                                       scope_id_type scope_id = 0);
+  constexpr address_v6 make_address_v6(v4_mapped_t, const address_v4& a) noexcept;
+  address_v6 make_address_v6(const char* str);
+  address_v6 make_address_v6(const char* str, error_code& ec) noexcept;
+  address_v6 make_address_v6(const string& str);
+  address_v6 make_address_v6(const string& str, error_code& ec) noexcept;
+  address_v6 make_address_v6(string_view str);
+  address_v6 make_address_v6(string_view str, error_code& ec) noexcept;
+
+  // address_v6 I/O:
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>& os, const address_v6& addr);
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{address_v6} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+
+\pnum
+\enternote The implementations of the functions \tcode{is_unspecified}, \tcode{is_loopback}, \tcode{is_multicast}, \tcode{is_link_local}, \tcode{is_site_local}, \tcode{is_v4_mapped}, \tcode{is_multicast_node_local}, \tcode{is_multicast_link_local}, \tcode{is_multicast_site_local}, \tcode{is_multicast_org_local} and \tcode{is_multicast_global} are determined by [RFC4291]. \exitnote
+
+
+\rSec2[internet.address.v6.bytes]{Struct \tcode{ip::address_v6::bytes_type}}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  struct address_v6::bytes_type : array<unsigned char, 16>
+  {
+    template<class... T> explicit constexpr bytes_type(T... t)
+      : array<unsigned char, 16>{{static_cast<unsigned char>(t)...}} {}
+  };
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The ip::address_v6::bytes_type type is a standard-layout struct that provides a byte-level representation of an IPv6 address in network byte order.
+
+
+
+\rSec2[internet.address.v6.cons]{\tcode{ip::address_v6} constructors}
+
+\begin{itemdecl}
+constexpr address_v6() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{is_unspecified() == true} and \tcode{scope_id() == 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v6(const bytes_type& bytes,
+                     scope_id_type scope = 0);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\remarks \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \tcode{[0, 0xFF]}. \enternote For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \exitnote
+
+\pnum
+\postconditions \tcode{to_bytes() == bytes} and \tcode{scope_id() == scope}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.v6.members]{\tcode{ip::address_v6} members}
+
+\begin{itemdecl}
+void scope_id(scope_id_type id) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{scope_id() == id}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr scope_id_type scope_id() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The scope identifier associated with the address.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_unspecified() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{*this == make_address_v6("::")}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_loopback() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{*this == make_address_v6("::1")}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_multicast() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A boolean indicating whether the \tcode{address_v6} object represents a multicast address, as if computed by the following method: 
+\begin{codeblock}
+bytes_type b = to_bytes();
+return b[0] == 0xFF;
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_link_local() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A boolean indicating whether the \tcode{address_v6} object represents a unicast link-local address, as if computed by the following method: 
+\begin{codeblock}
+bytes_type b = to_bytes();
+return b[0] == 0xFE && (b[1] & 0xC0) == 0x80;
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_site_local() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A boolean indicating whether the \tcode{address_v6} object represents a unicast site-local address, as if computed by the following method: 
+\begin{codeblock}
+bytes_type b = to_bytes();
+return b[0] == 0xFE && (b[1] & 0xC0) == 0xC0;
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_v4_mapped() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A boolean indicating whether the \tcode{address_v6} object represents an IPv4-mapped IPv6 address, as if computed by the following method: 
+\begin{codeblock}
+bytes_type b = to_bytes();
+return b[ 0] == 0 && b[ 1] == 0 && b[ 2] == 0    && b[ 3] == 0
+    && b[ 4] == 0 && b[ 5] == 0 && b[ 6] == 0    && b[ 7] == 0
+    && b[ 8] == 0 && b[ 9] == 0 && b[10] == 0xFF && b[11] == 0xFF;
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_multicast_node_local() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{is_multicast() \&\& (to_bytes()[1] \& 0x0F) == 0x01}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_multicast_link_local() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{is_multicast() \&\& (to_bytes()[1] \& 0x0F) == 0x02}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_multicast_site_local() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{is_multicast() \&\& (to_bytes()[1] \& 0x0F) == 0x05}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_multicast_org_local() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{is_multicast() \&\& (to_bytes()[1] \& 0x0F) == 0x08}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_multicast_global() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{is_multicast() \&\& (to_bytes()[1] \& 0x0F) == 0x0E}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bytes_type to_bytes() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A representation of the address in network byte order~(\ref{defs.net.byte.order}).
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Allocator = allocator<char>>
+  basic_string<char, char_traits<char>, Allocator>
+    to_string(const Allocator& a = Allocator()) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Converts an address into a textual representation. If \tcode{scope_id() == 0}, converts as if by POSIX inet_ntop when invoked with address family \tcode{AF_INET6}. If \tcode{scope_id() != 0}, the format is \tcode{address}\tcode{\%}\tcode{scope-id}, where \tcode{address} is the textual representation of the equivalent address having \tcode{scope_id() == 0}, and \tcode{scope-id} is an implementation-defined textual representation of the scope identifier.
+
+\pnum
+\returns If successful, the textual representation of the address. Otherwise \tcode{basic_string<char, char_traits<char>, Allocator>(a)}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.v6.static]{\tcode{ip::address_v6} static members}
+
+\begin{itemdecl}
+static constexpr address_v6 any() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An address \tcode{a} such that the \tcode{a.is_unspecified() == true} and \tcode{a.scope_id() == 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+static constexpr address_v6 loopback() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An address \tcode{a} such that the \tcode{a.is_loopback() == true} and \tcode{a.scope_id() == 0}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.v6.comparisons]{\tcode{ip::address_v6} comparisons}
+
+\begin{itemdecl}
+constexpr bool operator==(const address_v6& a, const address_v6& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{a.to_bytes() == b.to_bytes() \&\& a.scope_id() == b.scope_id()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator!=(const address_v6& a, const address_v6& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator< (const address_v6& a, const address_v6& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{a.to_bytes() < b.to_bytes() || (!(b.to_bytes() < a.to_bytes()) \&\& a.scope_id() < b.scope_id())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator> (const address_v6& a, const address_v6& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{b < a}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator<=(const address_v6& a, const address_v6& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(b < a)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator>=(const address_v6& a, const address_v6& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a < b)}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.v6.creation]{\tcode{ip::address_v6} creation}
+
+\begin{itemdecl}
+constexpr address_v6 make_address_v6(const address_v6::bytes_type& bytes,
+                                     scope_id_type scope_id);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{address_v6(bytes, scope_id)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v6 make_address_v6(v4_mapped_t, const address_v4& a) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An \tcode{address_v6} object containing the IPv4-mapped IPv6 address corresponding to the specified IPv4 address, as if computed by the following method: 
+\begin{codeblock}
+address_v4::bytes_type v4b = a.to_bytes();
+address_v6::bytes_type v6b(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                           0xFF, 0xFF, v4b[0], v4b[1], v4b[2], v4b[3]);
+return address_v6(v6b);
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+address_v6 make_address_v6(const char* str);
+address_v6 make_address_v6(const char* str, error_code& ec) noexcept;
+address_v4 make_address_v6(const string& str);
+address_v4 make_address_v6(const string& str, error_code& ec) noexcept;
+address_v6 make_address_v6(string_view str);
+address_v6 make_address_v6(string_view str, error_code& ec) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Converts a textual representation of an address into a corresponding \tcode{address_v6} value. The format is either \tcode{address} or \tcode{address}\tcode{\%}\tcode{scope-id}, where \tcode{address} is in the format specified by POSIX inet_pton when invoked with address family \tcode{AF_INET6}, and \tcode{scope-id} is an optional string specifying the scope identifier. All implementations accept as \tcode{scope-id} a textual representation of an unsigned decimal integer. It is implementation-defined whether alternative scope identifier representations are permitted. If \tcode{scope-id} is not supplied, an \tcode{address_v6} object is returned such that \tcode{scope_id() == 0}.
+
+\pnum
+\returns If successful, an \tcode{address_v6} value corresponding to the string \tcode{str}. Otherwise returns \tcode{address_v6()}.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::invalid_argument}
+\item
+ if \tcode{str} is not a valid textual representation of an IPv6 address.
+\end{itemize}
+\end{itemdescr}
+
+
+
+\rSec2[internet.address.v6.io]{\tcode{ip::address_v6} I/O}
+
+\begin{itemdecl}
+template<class CharT, class Traits>
+  basic_ostream<CharT, Traits>& operator<<(
+    basic_ostream<CharT, Traits>& os, const address_v6& addr);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{os << addr.to_string().c_str()}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.bad.address.cast]{Class \tcode{ip::bad_address_cast}}
+
+\pnum
+An exception of type \tcode{bad_address_cast} is thrown by a failed \tcode{address_cast}.
+
+\begin{itemdecl}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  class bad_address_cast : public bad_cast
+  {
+  public:
+    // constructor:
+    bad_address_cast() noexcept;
+  };
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+
+bad_address_cast() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects constructs a \tcode{bad_address_cast} object.
+
+\pnum
+\postconditions \tcode{what()} returns an implementation-defined NTBS.
+\end{itemdescr}
+
+
+
+\rSec1[internet.hash]{Hash support}
+
+\begin{itemdecl}
+template<> struct hash<experimental::net::v1::ip::address>;
+template<> struct hash<experimental::net::v1::ip::address_v4>;
+template<> struct hash<experimental::net::v1::ip::address_v6>;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: the template specializations shall meet the requirements of class template \tcode{hash} (C++Std [unord.hash]).
+\end{itemdescr}
+
+
+
+\rSec1[internet.address.iter]{Class template \tcode{ip::basic_address_iterator} specializations}
+
+\pnum
+The class template \tcode{basic_address_iterator} enables iteration over IP addresses in network byte order. This clause defines two specializations of the class template \tcode{basic_address_iterator}: \tcode{basic_address_iterator<address_v4>} and \tcode{basic_address_iterator<address_v6>}. The members and operational semantics of these specializations are defined below.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  template<> class basic_address_iterator<@\textit{Address}@>
+  {
+  public:
+    // types:
+    typedef @\textit{Address}@ value_type;
+    typedef ptrdiff_t difference_type;
+    typedef const @\textit{Address}@* pointer;
+    typedef const @\textit{Address}@& reference;
+    typedef input_iterator_tag iterator_category;
+
+    // constructors:
+    basic_address_iterator(const @\textit{Address}@& a) noexcept;
+
+    // members:
+    reference operator*() const noexcept;
+    pointer operator->() const noexcept;
+    basic_address_iterator& operator++() noexcept;
+    basic_address_iterator operator++(int) noexcept;
+    basic_address_iterator& operator--() noexcept;
+    basic_address_iterator operator--(int) noexcept;
+
+    // other members as required by C++Std [input.iterators]
+
+  private:
+    @\textit{Address}@ address_; // \expos
+  };
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Specializations of \tcode{basic_address_iterator} satisfy the requirements for input iterators (C++Std [input.iterators]).
+
+\begin{itemdecl}
+basic_address_iterator(const @\textit{Address}@& a) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{address_} with \tcode{a}.
+\end{itemdescr}
+
+\begin{itemdecl}
+reference operator*() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{address_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+pointer operator->() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(address_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_address_iterator& operator++() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Sets \tcode{address_} to the next unique address in network byte order.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_address_iterator operator++(int) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Sets \tcode{address_} to the next unique address in network byte order.
+
+\pnum
+\returns The prior value of \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_address_iterator& operator--() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Sets \tcode{address_} to the prior unique address in network byte order.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_address_iterator operator--(int) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Sets \tcode{address_} to the prior unique address in network byte order.
+
+\pnum
+\returns The prior value of \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec1[internet.address.range]{Class template \tcode{ip::basic_address_range} specializations}
+
+\pnum
+The class template \tcode{basic_address_range} represents a range of IP addresses in network byte order. This clause defines two specializations of the class template \tcode{basic_address_range}: \tcode{basic_address_range<address_v4>} and \tcode{basic_address_range<address_v6>}. The members and operational semantics of these specializations are defined below.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  template<> class basic_address_range<@\textit{Address}@>
+  {
+  public:
+    // types:
+    typedef basic_address_iterator<@\textit{Address}@> iterator;
+
+    // constructors:
+    basic_address_range() noexcept;
+    basic_address_range(const @\textit{Address}@& first,
+                        const @\textit{Address}@& last) noexcept;
+
+    // members:
+    iterator begin() const noexcept;
+    iterator end() const noexcept;
+    bool empty() const noexcept;
+    size_t size() const noexcept; @\textit{// not always defined}@
+    iterator find(const @\textit{Address}@& addr) const noexcept;
+  };
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Specializations of \tcode{basic_address_range} satisfy the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+
+\begin{itemdecl}
+basic_address_range() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Constructs an object of type \tcode{basic_address_range<}Address\tcode{>} that represents an empty range.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_address_range(const @\textit{Address}@& first,
+                    const @\textit{Address}@& last) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Constructs an object of type \tcode{basic_address_range<}Address\tcode{>} that represents the half open range [\tcode{first},\tcode{last}).
+\end{itemdescr}
+
+\begin{itemdecl}
+iterator begin() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An iterator that points to the beginning of the range.
+\end{itemdescr}
+
+\begin{itemdecl}
+iterator end() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An iterator that points to the end of the range.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool empty() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if \tcode{*this} represents an empty range, otherwise \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t size() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The number of unique addresses in the range.
+
+\pnum
+\remarks This member function is not defined when Address is type \tcode{address_v6}.
+\end{itemdescr}
+
+\begin{itemdecl}
+iterator find(const @\textit{Address}@& addr) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{addr} is in the range, an iterator that points to \tcode{addr}; otherwise, \tcode{end()}.
+
+\pnum
+Complexity: Constant time.
+\end{itemdescr}
+
+
+
+\rSec1[internet.network.v4]{Class template \tcode{ip::network_v4}}
+
+\pnum
+The class \tcode{network_v4} provides the ability to use and manipulate IPv4 network addresses.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  class network_v4
+  {
+  public:
+    // constructors:
+    constexpr network_v4() noexcept;
+    constexpr network_v4(const address_v4& addr, int prefix_len);
+    constexpr network_v4(const address_v4& addr, const address_v4& mask);
+
+    // members:
+    constexpr address_v4 address() const noexcept;
+    constexpr int prefix_length() const noexcept;
+    constexpr address_v4 netmask() const noexcept;
+    constexpr address_v4 network() const noexcept;
+    constexpr address_v4 broadcast() const noexcept;
+    address_v4_range hosts() const noexcept;
+    constexpr network_v4 canonical() const noexcept;
+    constexpr bool is_host() const noexcept;
+    constexpr bool is_subnet_of(const network_v4& other) const noexcept;
+    template<class Allocator = allocator<char>>
+      basic_string<char, char_traits<char>, Allocator>
+        to_string(const Allocator& a = Allocator()) const;
+  };
+
+  // network_v4 comparisons:
+  constexpr bool operator==(const network_v4& a, const network_v4& b) noexcept;
+  constexpr bool operator!=(const network_v4& a, const network_v4& b) noexcept;
+
+  // network_v4 creation:
+  constexpr network_v4 make_network_v4(const address_v4& addr, int prefix_len);
+  constexpr network_v4 make_network_v4(const address_v4& addr, const address_v4& mask);
+  network_v4 make_network_v4(const char* str);
+  network_v4 make_network_v4(const char* str, error_code& ec) noexcept;
+  network_v4 make_network_v4(const string& str);
+  network_v4 make_network_v4(const string& str, error_code& ec) noexcept;
+  network_v4 make_network_v4(string_view str);
+  network_v4 make_network_v4(string_view str, error_code& ec) noexcept;
+
+  // network_v4 I/O:
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>& os, const network_v4& addr);
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{network_v4} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+
+
+\rSec2[internet.network.v4.cons]{\tcode{ip::network_v4} constructors}
+
+\begin{itemdecl}
+constexpr network_v4() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{this->address().is_unspecified() == true} and \tcode{prefix_length() == 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr network_v4(const address_v4& addr, int prefix_len);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{this->address() == addr} and \tcode{prefix_length() == prefix_len}.
+
+\pnum
+\remarks \tcode{out_of_range} if \tcode{prefix_len < 0} or \tcode{prefix_len > 32}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr network_v4(const address_v4& addr, const address_v4& mask);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{this->address() == addr} and \tcode{prefix_length()} is equal to the number of contiguous non-zero bits in \tcode{mask}.
+
+\pnum
+\remarks \tcode{invalid_argument} if \tcode{mask} contains non-contiguous non-zero bits, or if the most significant bit is zero and any other bits are non-zero.
+\end{itemdescr}
+
+
+
+\rSec2[internet.network.v4.members]{\tcode{ip::network_v4} members}
+
+\begin{itemdecl}
+constexpr address_v4 address() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The address specified when the \tcode{network_v4} object was constructed.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr int prefix_length() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The prefix length of the network.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v4 netmask() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An \tcode{address_v4} object with \tcode{prefix_length()} contiguous non-zero bits set, starting from the most significant bit in network byte order. All other bits are zero.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v4 network() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An \tcode{address_v4} object with the first \tcode{prefix_length()} bits, starting from the most significant bit in network byte order, set to the corresponding bit value of \tcode{this->address()}. All other bits are zero.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v4 broadcast() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An \tcode{address_v4} object with the first \tcode{prefix_length()} bits, starting from the most significant bit in network byte order, set to the corresponding bit value of \tcode{this->address()}. All other bits are non-zero.
+\end{itemdescr}
+
+\begin{itemdecl}
+address_v4_range hosts() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{is_host() == true}, an \tcode{address_v4_range} object representing the single address \tcode{this->address().} Otherwise, an \tcode{address_v4_range} object representing the range of unique host IP addresses in the network.
+
+\pnum
+\enternote For IPv4, the network address and the broadcast address are not included in the range of host IP addresses. For example, given a network \tcode{192.168.1.0/24}, the range returned by \tcode{hosts()} is from \tcode{192.168.1.1} to \tcode{192.168.1.254} inclusive, and neither \tcode{192.168.1.0} nor the broadcast address \tcode{192.168.1.255} are in the range. \exitnote
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr network_v4 canonical() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{network_v4(network(), prefix_length())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_host() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{prefix_length() == 32}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_subnet_of(const network_v4& other) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if \tcode{other.prefix_length() < prefix_length()} and \tcode{network_v4(this->address(), other.prefix_length()).canonical() == other.canonical()}, otherwise \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Allocator = allocator<char>>
+  basic_string<char, char_traits<char>, Allocator>
+    to_string(const Allocator& a = Allocator()) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{this->address().to_string(a) + "/" + std::to_string(prefix_length())}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.network.v4.comparisons]{\tcode{ip::network_v4} comparisons}
+
+\begin{itemdecl}
+constexpr bool operator==(const network_v4& a, const network_v4& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if \tcode{a.address() == b.address()} and \tcode{a.prefix_length() == b.prefix_length()}, otherwise \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator!=(const network_v4& a, const network_v4& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.network.v4.creation]{\tcode{ip::network_v4} creation}
+
+\begin{itemdecl}
+constexpr network_v4 make_network_v4(const address_v4& addr, int prefix_len);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{network_v4(addr, prefix_len)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr network_v4 make_network_v4(const address_v4& addr, const address_v4& mask);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{network_v4(addr, mask)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+network_v4 make_network_v4(const char* str);
+network_v4 make_network_v4(const char* str, error_code& ec) noexcept;
+network_v4 make_network_v4(const string& str);
+network_v4 make_network_v4(const string& str, error_code& ec) noexcept;
+network_v4 make_network_v4(string_view str);
+network_v4 make_network_v4(string_view str, error_code& ec) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{str} contains a value of the form address \tcode{'/'} prefix-length, a \tcode{network_v4} object constructed with the result of applying \tcode{make_address_v4()} to the address portion of the string, and the result of converting prefix-length to an integer of type \tcode{int}. Otherwise returns \tcode{network_v4()} and sets \tcode{ec} to reflect the error.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::invalid_argument}
+\item
+ if \tcode{str} is not a valid textual representation of an IPv4 address and prefix length.
+\end{itemize}
+\end{itemdescr}
+
+
+
+\rSec2[internet.network.v4.io]{\tcode{ip::network_v4} I/O}
+
+\begin{itemdecl}
+template<class CharT, class Traits>
+  basic_ostream<CharT, Traits>& operator<<(
+    basic_ostream<CharT, Traits>& os, const network_v4& net);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{os << net.to_string().c_str()}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.network.v6]{Class template \tcode{ip::network_v6}}
+
+\pnum
+The class \tcode{network_v6} provides the ability to use and manipulate IPv6 network addresses.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  class network_v6
+  {
+  public:
+    // constructors:
+    constexpr network_v6() noexcept;
+    constexpr network_v6(const address_v6& addr, int prefix_len);
+
+    // members:
+    constexpr address_v6 address() const noexcept;
+    constexpr int prefix_length() const noexcept;
+    constexpr address_v6 network() const noexcept;
+    address_v6_range hosts() const noexcept;
+    constexpr network_v6 canonical() const noexcept;
+    constexpr bool is_host() const noexcept;
+    constexpr bool is_subnet_of(const network_v6& other) const noexcept;
+    template<class Allocator = allocator<char>>
+      basic_string<char, char_traits<char>, Allocator>
+        to_string(const Allocator& a = Allocator()) const;
+  };
+
+  // network_v6 comparisons:
+  constexpr bool operator==(const network_v6& a, const network_v6& b) noexcept;
+  constexpr bool operator!=(const network_v6& a, const network_v6& b) noexcept;
+
+  // network_v6 creation:
+  constexpr network_v6 make_network_v6(const address_v6& addr, int prefix_len);
+  network_v6 make_network_v6(const char* str);
+  network_v6 make_network_v6(const char* str, error_code& ec) noexcept;
+  network_v6 make_network_v6(const string& str);
+  network_v6 make_network_v6(const string& str, error_code& ec) noexcept;
+  network_v6 make_network_v6(const string_v6& str);
+  network_v6 make_network_v6(const string_v6& str, error_code& ec) noexcept;
+
+  // network_v6 I/O:
+  template<class CharT, class Traits>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>& os, const network_v6& addr);
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{network_v6} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+
+
+\rSec2[internet.network.v6.cons]{\tcode{ip::network_v6} constructors}
+
+\begin{itemdecl}
+constexpr network_v6() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{this->address().is_unspecified() == true} and \tcode{prefix_length() == 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr network_v6(const address_v6& addr, int prefix_len);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{this->address() == addr} and \tcode{prefix_length() == prefix_len}.
+
+\pnum
+\remarks \tcode{out_of_range} if \tcode{prefix_len < 0} or \tcode{prefix_len > 128}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.network.v6.members]{\tcode{ip::network_v6} members}
+
+\begin{itemdecl}
+constexpr address_v6 address() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The address specified when the \tcode{network_v6} object was constructed.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr int prefix_length() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The prefix length of the network.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr address_v6 network() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An \tcode{address_v6} object with the first \tcode{prefix_length()} bits, starting from the most significant bit in network byte order, set to the corresponding bit value of \tcode{this->address()}. All other bits are zero.
+\end{itemdescr}
+
+\begin{itemdecl}
+address_v6_range hosts() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{is_host() == true}, an \tcode{address_v6_range} object representing the single address \tcode{this->address().} Otherwise, an \tcode{address_v6_range} object representing the range of unique host IP addresses in the network.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr network_v6 canonical() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{network_v6(network(), prefix_length())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_host() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{prefix_length() == 128}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool is_subnet_of(const network_v6& other) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if \tcode{other.prefix_length() < prefix_length()} and \tcode{network_v6(this->address(), other.prefix_length()).canonical() == other.canonical()}, otherwise \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Allocator = allocator<char>>
+  basic_string<char, char_traits<char>, Allocator>
+    to_string(const Allocator& a = Allocator()) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{this->address().to_string(a) + "/" + to_string(prefix_length()).c_str()}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.network.v6.comparisons]{\tcode{ip::network_v6} comparisons}
+
+\begin{itemdecl}
+constexpr bool operator==(const network_v6& a, const network_v6& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if \tcode{a.address() == b.address()} and \tcode{a.prefix_length() == b.prefix_length()}, otherwise \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator!=(const network_v6& a, const network_v6& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.network.v6.creation]{\tcode{ip::network_v6} creation}
+
+\begin{itemdecl}
+constexpr network_v6 make_network_v6(const address_v6& addr, int prefix_len);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{network_v6(addr, prefix_len)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+network_v6 make_network_v6(const char* str);
+network_v6 make_network_v6(const char* str, error_code& ec) noexcept;
+network_v6 make_network_v6(const string& str);
+network_v6 make_network_v6(const string& str, error_code& ec) noexcept;
+network_v6 make_network_v6(const string_v6& str);
+network_v6 make_network_v6(const string_v6& str, error_code& ec) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns If \tcode{str} contains a value of the form address \tcode{'/'} prefix-length, a \tcode{network_v6} object constructed with the result of applying \tcode{make_address_v6()} to the address portion of the string, and the result of converting prefix-length to an integer of type \tcode{int}. Otherwise returns \tcode{network_v6()} and sets \tcode{ec} to reflect the error.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::invalid_argument}
+\item
+ if \tcode{str} is not a valid textual representation of an IPv6 address and prefix length.
+\end{itemize}
+\end{itemdescr}
+
+
+
+\rSec2[internet.network.v6.io]{\tcode{ip::network_v6} I/O}
+
+\begin{itemdecl}
+template<class CharT, class Traits>
+  basic_ostream<CharT, Traits>& operator<<(
+    basic_ostream<CharT, Traits>& os, const network_v6& net);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{os << net.to_string().c_str()}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.endpoint]{Class template \tcode{ip::basic_endpoint}}
+
+\pnum
+An object of type \tcode{basic_endpoint<InternetProtocol>} represents a protocol-specific endpoint, where an endpoint consists of an IP address and port number. Endpoints may be used to identify sources and destinations for socket connections and datagrams.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  template<class InternetProtocol>
+  class basic_endpoint
+  {
+  public:
+    // types:
+    typedef InternetProtocol protocol_type;
+
+    // constructors:
+    constexpr basic_endpoint() noexcept;
+    constexpr basic_endpoint(const protocol_type& proto,
+                             port_type port_num) noexcept;
+    constexpr basic_endpoint(const ip::address& addr,
+                             port_type port_num) noexcept;
+
+    // members:
+    constexpr protocol_type protocol() const noexcept;
+    constexpr ip::address address() const noexcept;
+    void address(const ip::address& addr) noexcept;
+    constexpr port_type port() const noexcept;
+    void port(port_type port_num) noexcept;
+  };
+
+  // basic_endpoint comparisons:
+  template<class InternetProtocol>
+    constexpr bool operator==(const basic_endpoint<InternetProtocol>& a,
+                              const basic_endpoint<InternetProtocol>& b) noexcept;
+  template<class InternetProtocol>
+    constexpr bool operator!=(const basic_endpoint<InternetProtocol>& a,
+                              const basic_endpoint<InternetProtocol>& b) noexcept;
+  template<class InternetProtocol>
+    constexpr bool operator< (const basic_endpoint<InternetProtocol>& a,
+                              const basic_endpoint<InternetProtocol>& b) noexcept;
+  template<class InternetProtocol>
+    constexpr bool operator> (const basic_endpoint<InternetProtocol>& a,
+                              const basic_endpoint<InternetProtocol>& b) noexcept;
+  template<class InternetProtocol>
+    constexpr bool operator<=(const basic_endpoint<InternetProtocol>& a,
+                              const basic_endpoint<InternetProtocol>& b) noexcept;
+  template<class InternetProtocol>
+    constexpr bool operator>=(const basic_endpoint<InternetProtocol>& a,
+                              const basic_endpoint<InternetProtocol>& b) noexcept;
+
+  // basic_endpoint I/O:
+  template<class CharT, class Traits, class InternetProtocol>
+    basic_ostream<CharT, Traits>& operator<<(
+      basic_ostream<CharT, Traits>& os,
+      const basic_endpoint<InternetProtocol>& ep);
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Instances of the \tcode{basic_endpoint} class template meet the requirements for an \tcode{Endpoint}~(\ref{socket.reqmts.endpoint}).
+
+\pnum
+ Extensible implementations provide the following member functions:
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  template<class InternetProtocol>
+  class basic_endpoint
+  {
+  public:
+    void* data() noexcept;
+    const void* data() const noexcept;
+    constexpr size_t size() const noexcept;
+    void resize(size_t s);
+    constexpr size_t capacity() const noexcept;
+    @\textit{// remainder unchanged}@
+  private:
+    union
+    {
+      sockaddr_in v4_;
+      sockaddr_in6 v6_;
+    } data_; // \expos
+  };
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+
+\rSec2[internet.endpoint.cons]{\tcode{ip::basic_endpoint} constructors}
+
+\begin{itemdecl}
+constexpr basic_endpoint() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{this->address() == ip::address()} and \tcode{port() == 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr basic_endpoint(const protocol_type& proto,
+                         port_type port_num) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{proto == protocol_type::v4() || proto == protocol_type::v6()}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+ If\tcode{proto == protocol_type::v6()}, \tcode{this->address() == ip::address_v6()}; otherwise, \tcode{this->address() == ip::address_v4()}.
+\item
+\tcode{port() == port_num}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr basic_endpoint(const ip::address& addr,
+                         port_type port_num) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{this->address() == addr} and \tcode{port() == port_num}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.endpoint.members]{\tcode{ip::basic_endpoint} members}
+
+\begin{itemdecl}
+constexpr protocol_type protocol() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{protocol_type::v6()} if the expression \tcode{this->address().is_v6()} is \tcode{true}, otherwise \tcode{protocol_type::v4()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr ip::address address() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The address associated with the endpoint.
+\end{itemdescr}
+
+\begin{itemdecl}
+void address(const ip::address& addr) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{this->address() == addr}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr port_type port() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The port number associated with the endpoint.
+\end{itemdescr}
+
+\begin{itemdecl}
+void port(port_type port_num) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{port() == port_num}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.endpoint.comparisons]{\tcode{ip::basic_endpoint} comparisons}
+
+\begin{itemdecl}
+template<class InternetProtocol>
+  constexpr bool operator==(const basic_endpoint<InternetProtocol>& a,
+                            const basic_endpoint<InternetProtocol>& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{a.address() == b.address() \&\& a.port() == b.port())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class InternetProtocol>
+  constexpr bool operator!=(const basic_endpoint<InternetProtocol>& a,
+                            const basic_endpoint<InternetProtocol>& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class InternetProtocol>
+  constexpr bool operator< (const basic_endpoint<InternetProtocol>& a,
+                            const basic_endpoint<InternetProtocol>& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{a.address() < b.address() || (!(b.address() < a.address()) \&\& a.port() < b.port())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class InternetProtocol>
+  constexpr bool operator> (const basic_endpoint<InternetProtocol>& a,
+                            const basic_endpoint<InternetProtocol>& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{b < a}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class InternetProtocol>
+  constexpr bool operator<=(const basic_endpoint<InternetProtocol>& a,
+                            const basic_endpoint<InternetProtocol>& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(b < a)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class InternetProtocol>
+  constexpr bool operator>=(const basic_endpoint<InternetProtocol>& a,
+                            const basic_endpoint<InternetProtocol>& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a < b)}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.endpoint.io]{\tcode{ip::basic_endpoint} I/O}
+
+\begin{itemdecl}
+template<class CharT, class Traits, class InternetProtocol>
+  basic_ostream<CharT, Traits>& operator<<(
+    basic_ostream<CharT, Traits>& os,
+    const basic_endpoint<InternetProtocol>& ep);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Outputs a representation of the endpoint to the stream, as if it were implemented as follows: 
+\begin{codeblock}
+basic_ostringstream<CharT, Traits> ss;
+if (ep.protocol() == basic_endpoint<InternetProtocol>::protocol_type::v6())
+  ss << "[" << ep.address() << "]";
+else
+  ss << ep.address();
+ss << ":" << ep.port();
+os << ss.str();
+\end{codeblock}
+
+
+\pnum
+\returns \tcode{os}.
+\end{itemdescr}
+
+\pnum
+\enternote The representation of the endpoint when it contains an IP version 6 address is based on [RFC2732~(\ref{})]. \exitnote
+
+
+
+\rSec2[internet.endpoint.extensible]{\tcode{ip::basic_endpoint} members (extensible implementations)}
+
+\begin{itemdecl}
+void* data() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(data_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+const void* data() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(data_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr size_t size() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{sizeof(sockaddr_in6)} if \tcode{protocol().family() == AF_INET6}, otherwise \tcode{sizeof(sockaddr_in)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void resize(size_t s);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\remarks \tcode{length_error} if the condition \tcode{protocol().family() == AF_INET6 \&\& s != sizeof(sockaddr_in6)} \tcode{||} \tcode{protocol().family() == AF_INET4 \&\& s != sizeof(sockaddr_in)} is \tcode{true}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr size_t capacity() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{sizeof(data_)}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.resolver.entry]{Class template \tcode{ip::basic_resolver_entry}}
+
+\pnum
+An object of type \tcode{basic_resolver_entry<InternetProtocol>} represents a single element in the results returned by a name resolution operation.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  template<class InternetProtocol>
+  class basic_resolver_entry
+  {
+  public:
+    // types:
+    typedef InternetProtocol protocol_type;
+    typedef typename InternetProtocol::endpoint endpoint_type;
+
+    // constructors:
+    basic_resolver_entry();
+    basic_resolver_entry(const endpoint_type& ep,
+                         string_view h,
+                         string_view s);
+
+    // members:
+    endpoint_type endpoint() const;
+    operator endpoint_type() const;
+    template<class Allocator = allocator<char>>
+      basic_string<char, char_traits<char>, Allocator>
+        host_name(const Allocator& a = Allocator()) const;
+    template<class Allocator = allocator<char>>
+      basic_string<char, char_traits<char>, Allocator>
+        service_name(const Allocator& a = Allocator()) const;
+  };
+
+  // basic_resolver_entry comparisons:
+  template<class InternetProtocol>
+    bool operator==(const basic_resolver_entry<InternetProtocol>& a,
+                    const basic_resolver_entry<InternetProtocol>& b);
+  template<class InternetProtocol>
+    bool operator!=(const basic_resolver_entry<InternetProtocol>& a,
+                    const basic_resolver_entry<InternetProtocol>& b);
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+
+\rSec2[internet.resolver.entry.cons]{\tcode{ip::basic_resolver_entry} constructors}
+
+\begin{itemdecl}
+basic_resolver_entry();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to \tcode{basic_resolver_entry<InternetProtocol>(endpoint_type(), "", "")}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_resolver_entry(const endpoint_type& ep,
+                     string_view h,
+                     string_view s);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{endpoint() == ep}.
+\item
+\tcode{host_name() == h}.
+\item
+\tcode{service_name() == s}.
+\end{itemize}
+\end{itemdescr}
+
+
+
+\rSec2[internet.resolver.entry.members]{\tcode{ip::basic_resolver_entry} members}
+
+\begin{itemdecl}
+endpoint_type endpoint() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The endpoint associated with the resolver entry.
+\end{itemdescr}
+
+\begin{itemdecl}
+operator endpoint_type() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{endpoint()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Allocator = allocator<char>>
+  basic_string<char, char_traits<char>, Allocator>
+    host_name(const Allocator& a = Allocator()) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The host name associated with the resolver entry.
+
+\pnum
+\remarks Ill-formed unless \tcode{allocator_traits<Allocator>::value_type} is \tcode{char}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Allocator = allocator<char>>
+  basic_string<char, char_traits<char>, Allocator>
+    service_name(const Allocator& a = Allocator()) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The service name associated with the resolver entry.
+
+\pnum
+\remarks Ill-formed unless \tcode{allocator_traits<Allocator>::value_type} is \tcode{char}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.resolver.entry.comparisons]{\tcode{op::basic_resolver_entry} comparisons}
+
+\begin{itemdecl}
+template<class InternetProtocol>
+  bool operator==(const basic_resolver_entry<InternetProtocol>& a,
+                  const basic_resolver_entry<InternetProtocol>& b);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{a.endpoint() == b.endpoint() \&\& a.host_name() == b.host_name() \&\& a.service_name() == b.service_name()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class InternetProtocol>
+  bool operator!=(const basic_resolver_entry<InternetProtocol>& a,
+                  const basic_resolver_entry<InternetProtocol>& b);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.resolver.results]{Class template \tcode{ip::basic_resolver_results}}
+
+\pnum
+An object of type \tcode{basic_resolver_results<InternetProtocol>} represents a sequence of \tcode{basic_resolver_entry<InternetProtocol>} elements resulting from a single name resolution operation.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  template<class InternetProtocol>
+  class basic_resolver_results
+  {
+  public:
+    // types:
+    typedef InternetProtocol protocol_type;
+    typedef typename protocol_type::endpoint endpoint_type;
+    typedef basic_resolver_entry<protocol_type> value_type;
+    typedef const value_type& const_reference;
+    typedef value_type& reference;
+    typedef @\textit{implementation-defined}@ const_iterator;
+    typedef const_iterator iterator;
+    typedef ptrdiff_t difference_type;
+    typedef size_t size_type;
+
+    // construct / copy / destroy:
+    basic_resolver_results();
+    basic_resolver_results(const basic_resolver_results& rhs);
+    basic_resolver_results(basic_resolver_results&& rhs) noexcept;
+    basic_resolver_results& operator=(const basic_resolver_results& rhs);
+    basic_resolver_results& operator=(basic_resolver_results&& rhs);
+    ~basic_resolver_results();
+
+    // size:
+    size_type size() const noexcept;
+    size_type max_size() const noexcept;
+    bool empty() const noexcept;
+
+    // element access:
+    const_iterator begin() const;
+    const_iterator end() const;
+    const_iterator cbegin() const;
+    const_iterator cend() const;
+
+    // swap:
+    void swap(basic_resolver_results& that) noexcept;
+  };
+
+  // basic_resolver_results comparisons:
+  template<class InternetProtocol>
+    bool operator==(const basic_resolver_results<InternetProtocol>& a,
+                    const basic_resolver_results<InternetProtocol>& b);
+  template<class InternetProtocol>
+    bool operator!=(const basic_resolver_results<InternetProtocol>& a,
+                    const basic_resolver_results<InternetProtocol>& b);
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The class template \tcode{basic_resolver_results} satisfies the requirements of a sequence container (C++Std [sequence.reqmts]), except that only the operations defined for const-qualified sequence containers are supported. The class template \tcode{basic_resolver_results} supports forward iterators.
+
+\pnum
+A default-constructed \tcode{basic_resolver_results} object is empty. A non-empty results object is obtained only by calling a \tcode{basic_resolver} object's \tcode{wait} or \tcode{async_wait} operations, or otherwise by copy construction, move construction, assignment, or swap from another non-empty results object.
+
+
+\rSec2[internet.resolver.results.cons]{\tcode{ip::basic_resolver_results} constructors}
+
+\begin{itemdecl}
+basic_resolver_results();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{size() == 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_resolver_results(const basic_resolver_results& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{*this == rhs}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_resolver_results(basic_resolver_results&& rhs) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{*this} is equal to the prior value of \tcode{rhs}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.resolver.results.assign]{\tcode{ip::basic_resolver_results} assignment}
+
+\begin{itemdecl}
+basic_resolver_results& operator=(const basic_resolver_results& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{*this == rhs}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_resolver_results& operator=(basic_resolver_results& rhs) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{*this} is equal to the prior value of \tcode{rhs}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.resolver.results.size]{\tcode{ip::basic_resolver_results} size}
+
+\begin{itemdecl}
+size_type size() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The number of \tcode{basic_resolver_entry} elements in \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_type max_size() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The maximum number of \tcode{basic_resolver_entry} elements that can be stored in \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool empty() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{size() == 0}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.resolver.results.access]{\tcode{ip::basic_resolver_results} element access}
+
+\begin{itemdecl}
+const_iterator begin() const;
+const_iterator cbegin() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A starting iterator that enumerates over all the \tcode{basic_resolver_entry} elements stored in \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+const_iterator end() const;
+const_iterator cend() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A terminating iterator that enumerates over all the \tcode{basic_resolver_entry} elements stored in \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.resolver.results.swap]{\tcode{ip::basic_resolver_results} swap}
+
+\begin{itemdecl}
+void swap(basic_resolver_results& that) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{*this} is equal to the prior value of \tcode{that}, and \tcode{that} is equal to the prior value of \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.resolver.results.comparisons]{\tcode{ip::basic_resolver_results} comparisons}
+
+\begin{itemdecl}
+template<class InternetProtocol>
+  bool operator==(const basic_resolver_results<InternetProtocol>& a,
+                  const basic_resolver_results<InternetProtocol>& b);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{a.size() == b.size() \&\& equal(a.cbegin(), a.cend(), b.cbegin())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class InternetProtocol>
+  bool operator!=(const basic_resolver_results<InternetProtocol>& a,
+                  const basic_resolver_results<InternetProtocol>& b);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.resolver.base]{Class \tcode{ip::resolver_base}}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  class resolver_base
+  {
+  public:
+    typedef @\textit{T1}@ flags;
+    static const flags passive;
+    static const flags canonical_name;
+    static const flags numeric_host;
+    static const flags numeric_service;
+    static const flags v4_mapped;
+    static const flags all_matching;
+    static const flags address_configured;
+
+  protected:
+    resolver_base();
+    ~resolver_base();
+  };
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{resolver_base} defines a bitmask type, \tcode{flags}, with the bitmask elements shown above.
+
+\begin{libreqtab3}
+{resolver flags}
+{internet.resolver.base.requirements}
+\\ \topline
+\lhdr{Constant name}  &
+\chdr{POSIX macro}  &
+\rhdr{Definition or notes}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{Constant name}  &
+\chdr{POSIX macro}  &
+\rhdr{Definition or notes}  \\ \capsep
+\endhead
+
+\tcode{passive}  &
+\tcode{AI_PASSIVE}  &
+ Returned endpoints are intended for use as locally bound socket endpoints.  \\ \rowsep
+
+\tcode{canonical_name}  &
+\tcode{AI_CANONNAME}  &
+ Determine the canonical name of the host specified in the query.  \\ \rowsep
+
+\tcode{numeric_host}  &
+\tcode{AI_NUMERICHOST}  &
+ Host name should be treated as a numeric string defining an IPv4 or IPv6 address and no host name resolution should be attempted.  \\ \rowsep
+
+\tcode{numeric_service}  &
+\tcode{AI_NUMERICSERV}  &
+ Service name should be treated as a numeric string defining a port number and no service name resolution should be attempted.  \\ \rowsep
+
+\tcode{v4_mapped}  &
+\tcode{AI_V4MAPPED}  &
+ If the protocol is specified as an IPv6 protocol, return IPv4-mapped IPv6 addresses on finding no IPv6 addresses.  \\ \rowsep
+
+\tcode{all_matching}  &
+\tcode{AI_ALL}  &
+If used with \tcode{v4_mapped}, return all matching IPv6 and IPv4 addresses.  \\ \rowsep
+
+\tcode{address_configured}  &
+\tcode{AI_ADDRCONFIG}  &
+ Only return IPv4 addresses if a non-loopback IPv4 address is configured for the system. Only return IPv6 addresses if a non-loopback IPv6 address is configured for the system.  \\
+
+\end{libreqtab3}
+
+
+
+\rSec1[internet.resolver]{Class template \tcode{ip::basic_resolver}}
+
+\pnum
+Objects of type \tcode{basic_resolver<InternetProtocol>} are used to perform name resolution. Name resolution is the translation of a host name and service name into a sequence of endpoints, or the translation of an endpoint into its corresponding host name and service name.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  template<class InternetProtocol>
+  class basic_resolver : public resolver_base
+  {
+  public:
+    // types:
+
+    typedef io_context::executor_type executor_type;
+    typedef InternetProtocol protocol_type;
+    typedef typename InternetProtocol::endpoint endpoint_type;
+    typedef basic_resolver_results<InternetProtocol> results_type;
+
+    // construct / copy / destroy:
+
+    explicit basic_resolver(io_context& ctx);
+    basic_resolver(const basic_resolver&) = delete;
+    basic_resolver(basic_resolver&& rhs) noexcept;
+
+    ~basic_resolver();
+
+    basic_resolver& operator=(const basic_resolver&) = delete;
+    basic_resolver& operator=(basic_resolver&& rhs);
+
+    // basic_resolver operations:
+
+    executor_type get_executor() noexcept;
+
+    void cancel();
+
+    results_type resolve(string_view host_name, string_view service_name);
+    results_type resolve(string_view host_name, string_view service_name,
+                         error_code& ec);
+    results_type resolve(string_view host_name, string_view service_name,
+                         flags f);
+    results_type resolve(string_view host_name, string_view service_name,
+                         flags f, error_code& ec);
+
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_resolve(string_view host_name, string_view service_name,
+                            CompletionToken&& token);
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_resolve(string_view host_name, string_view service_name,
+                            flags f, CompletionToken&& token);
+
+    results_type resolve(const protocol_type& protocol,
+                         string_view host_name, string_view service_name);
+    results_type resolve(const protocol_type& protocol,
+                         string_view host_name, string_view service_name,
+                         error_code& ec);
+    results_type resolve(const protocol_type& protocol,
+                         string_view host_name, string_view service_name,
+                         flags f);
+    results_type resolve(const protocol_type& protocol,
+                         string_view host_name, string_view service_name,
+                         flags f, error_code& ec);
+
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_resolve(const protocol_type& protocol,
+                            string_view host_name, string_view service_name,
+                            CompletionToken&& token);
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_resolve(const protocol_type& protocol,
+                            string_view host_name, string_view service_name,
+                            flags f, CompletionToken&& token);
+
+    results_type resolve(const endpoint_type& e);
+    results_type resolve(const endpoint_type& e, error_code& ec);
+
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_resolve(const endpoint_type& e,
+                            CompletionToken&& token);
+  };
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+
+\rSec2[internet.resolver.cons]{\tcode{ip::basic_resolver} constructors}
+
+\begin{itemdecl}
+explicit basic_resolver(io_context& ctx);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{get_executor() == ctx.get_executor()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_resolver(basic_resolver&& rhs) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Move constructs an object of class \tcode{basic_resolver<InternetProtocol>} that refers to the state originally represented by \tcode{rhs}.
+
+\pnum
+\postconditions \tcode{get_executor() == rhs.get_executor()}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.resolver.dtor]{\tcode{ip::basic_resolver} destructor}
+
+\begin{itemdecl}
+~basic_resolver();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Destroys the resolver, canceling all asynchronous operations associated with this resolver as if by calling \tcode{cancel()}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.resolver.assign]{\tcode{ip::basic_resolver} assignment}
+
+\begin{itemdecl}
+basic_resolver& operator=(basic_resolver&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Cancels all outstanding asynchronous operations associated with \tcode{*this} as if by calling \tcode{cancel()}, then moves into \tcode{*this} the state originally represented by \tcode{rhs}.
+
+\pnum
+\postconditions \tcode{get_executor() == ctx.get_executor()}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec2[internet.resolver.ops]{\tcode{ip::basic_resolver} operations}
+
+\begin{itemdecl}
+executor_type& get_executor() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The associated executor.
+\end{itemdescr}
+
+\begin{itemdecl}
+void cancel();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Cancels all outstanding asynchronous resolve operations associated with \tcode{*this}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+
+\pnum
+\remarks Does not block (C++Std [defns.block]) the calling thread pending completion of the canceled operations.
+\end{itemdescr}
+
+\begin{itemdecl}
+results_type resolve(string_view host_name, string_view service_name);
+results_type resolve(string_view host_name, string_view service_name,
+                     error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{resolve(host_name, service_name, resolver_base::flags(), ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+results_type resolve(string_view host_name, string_view service_name,
+                     flags f);
+results_type resolve(string_view host_name, string_view service_name,
+                     flags f, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{host_name.data() != nullptr}, let H be an NTBS constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an NTBS constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Resolves a host name and service name, as if by POSIX: 
+\begin{codeblock}
+addrinfo hints;
+hints.ai_flags = static_cast<int>(f);
+hints.ai_family = AF_UNSPEC;
+hints.ai_socktype = endpoint_type().protocol().type();
+hints.ai_protocol = endpoint_type().protocol().protocol();
+hints.ai_addr = nullptr;
+hints.ai_addrlen = 0;
+hints.ai_canonname = nullptr;
+hints.ai_next = nullptr;
+addrinfo* result = nullptr;
+getaddrinfo(H, S, &hints, &result);
+\end{codeblock}
+
+
+\pnum
+\returns On success, a non-empty results object containing the results of the resolve operation. Otherwise \tcode{results_type()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_resolve(string_view host_name, string_view service_name,
+                        CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{async_resolve(host_name, service_name, resolver_base::flags(), forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_resolve(string_view host_name, string_view service_name,
+                        flags f, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void(error_code ec, results_type r)}.
+
+\pnum
+\effects If \tcode{host_name.data() != nullptr}, let H be an NTBS constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an NTBS constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Initiates an asynchronous operation to resolve a host name and service name, as if by POSIX: 
+\begin{codeblock}
+addrinfo hints;
+hints.ai_flags = static_cast<int>(f);
+hints.ai_family = AF_UNSPEC;
+hints.ai_socktype = endpoint_type().protocol().type();
+hints.ai_protocol = endpoint_type().protocol().protocol();
+hints.ai_addr = nullptr;
+hints.ai_addrlen = 0;
+hints.ai_canonname = nullptr;
+hints.ai_next = nullptr;
+addrinfo* result = nullptr;
+getaddrinfo(H, S, &hints, &result);
+\end{codeblock}
+ On success, \tcode{r} is a non-empty results object containing the results of the resolve operation. Otherwise, \tcode{r} is \tcode{results_type()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+results_type resolve(const protocol_type& protocol,
+                     string_view host_name, string_view service_name);
+results_type resolve(const protocol_type& protocol,
+                     string_view host_name, string_view service_name,
+                     error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{resolve(protocol, host_name, service_name, resolver_base::flags(), ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+results_type resolve(const protocol_type& protocol,
+                     string_view host_name, string_view service_name,
+                     flags f);
+results_type resolve(const protocol_type& protocol,
+                     string_view host_name, string_view service_name,
+                     flags f, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{host_name.data() != nullptr}, let H be an NTBS constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an NTBS constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Resolves a host name and service name, as if by POSIX: 
+\begin{codeblock}
+addrinfo hints;
+hints.ai_flags = static_cast<int>(f);
+hints.ai_family = protocol.family();
+hints.ai_socktype = protocol.type();
+hints.ai_protocol = protocol.protocol();
+hints.ai_addr = nullptr;
+hints.ai_addrlen = 0;
+hints.ai_canonname = nullptr;
+hints.ai_next = nullptr;
+addrinfo* result = nullptr;
+getaddrinfo(H, S, &hints, &result);
+\end{codeblock}
+
+
+\pnum
+\returns On success, a non-empty results object containing the results of the resolve operation. Otherwise \tcode{results_type()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_resolve(const protocol_type& protocol,
+                        string_view host_name, string_view service_name,
+                        CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{async_resolve(protocol, host_name, service_name, resolver_base::flags(), forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_resolve(const protocol& protocol,
+                        string_view host_name, string_view service_name,
+                        flags f, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void(error_code ec, results_type r)}.
+
+\pnum
+\effects If \tcode{host_name.data() != nullptr}, let H be an NTBS constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an NTBS constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Initiates an asynchronous operation to resolve a host name and service name, as if by POSIX: 
+\begin{codeblock}
+addrinfo hints;
+hints.ai_flags = static_cast<int>(f);
+hints.ai_family = protocol.family();
+hints.ai_socktype = protocol.type();
+hints.ai_protocol = protocol.protocol();
+hints.ai_addr = nullptr;
+hints.ai_addrlen = 0;
+hints.ai_canonname = nullptr;
+hints.ai_next = nullptr;
+addrinfo* result = nullptr;
+getaddrinfo(H, S, &hints, &result);
+\end{codeblock}
+ On success, \tcode{r} is a non-empty results object containing the results of the resolve operation. Otherwise, \tcode{r} is \tcode{results_type()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+results_type resolve(const endpoint_type& e);
+results_type resolve(const endpoint_type& e, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Let \tcode{S1} and \tcode{S2} be implementation-defined values that are sufficiently large to hold the host name and service name respectively. Resolves an endpoint as if by POSIX: 
+\begin{codeblock}
+char host_name[S1];
+char service_name[S2];
+int flags = 0;
+if (endpoint_type().protocol().type() == SOCK_DGRAM)
+  flags |= NI_DGRAM;
+int result = getnameinfo((const sockaddr*)e.data(), e.size(),
+                         host_name, S1,
+                         service_name, S2,
+                         flags);
+if (result != 0)
+{
+  flags |= NI_NUMERICSERV;
+  result = getnameinfo((const sockaddr*)e.data(), e.size(),
+                       host_name, S1,
+                       service_name, S2,
+                       flags);
+}
+\end{codeblock}
+
+
+\pnum
+\returns On success, a results object with \tcode{size() == 1} containing the results of the resolve operation. Otherwise \tcode{results_type()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_resolve(const endpoint_type& e,
+                        CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void(error_code ec, results_type r)}.
+
+\pnum
+\effects Let \tcode{S1} and \tcode{S2} be implementation-defined values that are sufficiently large to hold the host name and service name respectively. Initiates an asynchronous operation to resolve an endpoint as if by POSIX: 
+\begin{codeblock}
+char host_name[S1];
+char service_name[S2];
+int flags = 0;
+if (endpoint_type().protocol().type() == SOCK_DGRAM)
+  flags |= NI_DGRAM;
+int result = getnameinfo((const sockaddr*)e.data(), e.size(),
+                         host_name, S1,
+                         service_name, S2,
+                         flags);
+if (result != 0)
+{
+  flags |= NI_NUMERICSERV;
+  result = getnameinfo((const sockaddr*)e.data(), e.size(),
+                       host_name, S1,
+                       service_name, S2,
+                       flags);
+}
+\end{codeblock}
+ On success, \tcode{r} is a results object with \tcode{size() == 1} containing the results of the resolve operation; otherwise, \tcode{r} is \tcode{results_type()}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.host.name]{Host name functions}
+
+\begin{itemdecl}
+string host_name();
+string host_name(error_code& ec);
+template<class Allocator>
+  basic_string<char, char_traits<char>, Allocator>
+    host_name(const Allocator& a);
+template<class Allocator>
+  basic_string<char, char_traits<char>, Allocator>
+    host_name(const Allocator& a, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The standard host name for the current machine, determined as if by POSIX gethostname.
+
+\pnum
+\remarks In the last two overloads, ill-formed unless \tcode{allocator_traits<Allocator>::value_type} is \tcode{char}.
+\end{itemdescr}
+
+
+
+\rSec1[internet.tcp]{Class \tcode{ip::tcp}}
+
+\pnum
+The class \tcode{tcp} encapsulates the types and flags necessary for TCP sockets.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  class tcp
+  {
+  public:
+    // types:
+    typedef basic_endpoint<tcp> endpoint;
+    typedef basic_resolver<tcp> resolver;
+    typedef basic_stream_socket<tcp> socket;
+    typedef basic_socket_acceptor<tcp> acceptor;
+    typedef basic_socket_iostream<tcp> iostream;
+    class no_delay;
+
+    // static members:
+    static constexpr tcp v4() noexcept;
+    static constexpr tcp v6() noexcept;
+
+    tcp() = delete;
+  };
+
+  // tcp comparisons:
+  constexpr bool operator==(const tcp& a, const tcp& b) noexcept;
+  constexpr bool operator!=(const tcp& a, const tcp& b) noexcept;
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The \tcode{tcp} class meets the requirements for an \tcode{InternetProtocol}~(\ref{internet.reqmts.protocol}).
+
+\pnum
+ Extensible implementations provide the following member functions:
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  class tcp
+  {
+  public:
+    constexpr int family() const noexcept;
+    constexpr int type() const noexcept;
+    constexpr int protocol() const noexcept;
+    @\textit{// remainder unchanged}@
+  };
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+ The return values for these member functions are listed in the table below.
+
+\begin{libreqtab4}
+{Behavior of extensible implementations}
+{internet.tcp.requirements}
+\\ \topline
+\lhdr{value}  &
+\chdr{family()}  &
+\chdr{type()}  &
+\rhdr{protocol()}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{value}  &
+\chdr{family()}  &
+\chdr{type()}  &
+\rhdr{protocol()}  \\ \capsep
+\endhead
+
+\tcode{tcp::v4()}  &
+\tcode{AF_INET}  &
+\tcode{SOCK_STREAM}  &
+\tcode{IPPROTO_TCP}  \\ \rowsep
+
+\tcode{tcp::v6()}  &
+\tcode{AF_INET6}  &
+\tcode{SOCK_STREAM}  &
+\tcode{IPPROTO_TCP}  \\
+
+\end{libreqtab4}
+
+\pnum
+\enternote The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_STREAM} are defined in the POSIX header file \tcode{sys/socket.h}. The constant \tcode{IPPROTO_TCP} is defined in the POSIX header file \tcode{netinet/in.h}. \exitnote
+
+
+\rSec2[internet.tcp.comparisons]{\tcode{ip::tcp} comparisons}
+
+\begin{itemdecl}
+constexpr bool operator==(const tcp& a, const tcp& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A boolean indicating whether two objects of class \tcode{tcp} are equal, such that the expression \tcode{tcp::v4() == tcp::v4()} is \tcode{true}, the expression \tcode{tcp::v6() == tcp::v6()} is \tcode{true}, and the expression \tcode{tcp::v4() == tcp::v6()} is \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator!=(const tcp& a, const tcp& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.udp]{Class \tcode{ip::udp}}
+
+\pnum
+The class \tcode{udp} encapsulates the types and flags necessary for UDP sockets.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  class udp
+  {
+  public:
+    // types:
+    typedef basic_endpoint<udp> endpoint;
+    typedef basic_resolver<udp> resolver;
+    typedef basic_datagram_socket<udp> socket;
+
+    // static members:
+    static constexpr udp v4() noexcept;
+    static constexpr udp v6() noexcept;
+
+    udp() = delete;
+  };
+
+  // udp comparisons:
+  constexpr bool operator==(const udp& a, const udp& b) noexcept;
+  constexpr bool operator!=(const udp& a, const udp& b) noexcept;
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The \tcode{udp} class meets the requirements for an \tcode{InternetProtocol}~(\ref{internet.reqmts.protocol}).
+
+\pnum
+ Extensible implementations provide the following member functions:
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+
+  class udp
+  {
+  public:
+    constexpr int family() const noexcept;
+    constexpr int type() const noexcept;
+    constexpr int protocol() const noexcept;
+    @\textit{// remainder unchanged}@
+  };
+
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+ The return values for these member functions are listed in the table below.
+
+\begin{libreqtab4}
+{Behavior of extensible implementations}
+{internet.udp.requirements}
+\\ \topline
+\lhdr{value}  &
+\chdr{family()}  &
+\chdr{type()}  &
+\rhdr{protocol()}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{value}  &
+\chdr{family()}  &
+\chdr{type()}  &
+\rhdr{protocol()}  \\ \capsep
+\endhead
+
+\tcode{udp::v4()}  &
+\tcode{AF_INET}  &
+\tcode{SOCK_DGRAM}  &
+\tcode{IPPROTO_UDP}  \\ \rowsep
+
+\tcode{udp::v6()}  &
+\tcode{AF_INET6}  &
+\tcode{SOCK_DGRAM}  &
+\tcode{IPPROTO_UDP}  \\
+
+\end{libreqtab4}
+
+\pnum
+\enternote The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_DGRAM} are defined in the POSIX header file \tcode{sys/socket.h}. The constant \tcode{IPPROTO_UDP} is defined in the POSIX header file \tcode{netinet/in.h}. \exitnote
+
+
+\rSec2[internet.udp.comparisons]{\tcode{ip::udp} comparisons}
+
+\begin{itemdecl}
+constexpr bool operator==(const udp& a, const udp& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A boolean indicating whether two objects of class \tcode{udp} are equal, such that the expression \tcode{udp::v4() == udp::v4()} is \tcode{true}, the expression \tcode{udp::v6() == udp::v6()} is \tcode{true}, and the expression \tcode{udp::v4() == udp::v6()} is \tcode{false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+constexpr bool operator!=(const udp& a, const udp& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+
+
+
+\rSec1[internet.socket.opt]{Internet socket options}
+
+\pnum
+In the table below, let C denote a socket option class; let L identify the POSIX macro to be passed as the level argument to POSIX setsockopt and getsockopt; let N identify the POSIX macro to be passed as the option_name argument to POSIX setsockopt and getsockopt; let T identify the type of the value whose address will be passed as the option_value argument to POSIX setsockopt and getsockopt; let \tcode{p} denote a (possibly const) value of a type meeting the protocol~(\ref{socket.reqmts.protocol}) requirements, as passed to the socket option's \tcode{level} and \tcode{name} member functions; and let F be the value of \tcode{p.family()}.
+
+\begin{libreqtab5}
+{Internet socket options}
+{internet.socket.opt.requirements}
+\\ \topline
+\lhdr{C}  &
+\chdr{L}  &
+\chdr{N}  &
+\chdr{T}  &
+\rhdr{Requirements, definition or notes}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{C}  &
+\chdr{L}  &
+\chdr{N}  &
+\chdr{T}  &
+\rhdr{Requirements, definition or notes}  \\ \capsep
+\endhead
+
+ip::tcp::no_delay  &
+\tcode{IPPROTO_TCP}  &
+\tcode{TCP_NODELAY}  &
+\tcode{int}  &
+Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a TCP socket will avoid coalescing of small segments. \enternote That is, setting this option disables the Nagle algorithm. \exitnote  \\ \rowsep
+
+ip::v6_only  &
+\tcode{IPPROTO_IPV6}  &
+\tcode{IPV6_V6ONLY}  &
+\tcode{int}  &
+Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements.Determines whether a socket created for an IPv6 protocol is restricted to IPv6 communications only.Implementations are not required to support setting the \tcode{v6_only}option to \tcode{false}, and the initial value of the \tcode{v6_only}option for a socket is implementation-defined. \enternote As not all operating systems support dual stack IP networking. Some operating systems that do provide dual stack support offer a configuration option to disable it or to set the initial value of the \tcode{v6_only} socket option. \exitnote  \\ \rowsep
+
+ip::unicast::hops  &
+\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_UNICAST_HOPS} if F == AF_INET6, otherwise \tcode{IP_TTL}  &
+\tcode{int}  &
+Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements.Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams.The constructor and assignment operator for the \tcode{ip::unicast::hops}class throw \tcode{out_of_range}if the \tcode{int}argument is not in the range \tcode{[0, 255]}.  \\ \rowsep
+
+ip::multicast::join_group  &
+\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_JOIN_GROUP} if F == AF_INET6, otherwise \tcode{IP_ADD_MEMBERSHIP}  &
+\tcode{ipv6_mreq} if F == AF_INET6, otherwise \tcode{ip_mreq}  &
+Satisfies the \tcode{MulticastGroupSocketOption}~(\ref{internet.reqmts.opt.mcast}) type requirements. Requests that the socket join the specified multicast group.  \\ \rowsep
+
+ip::multicast::leave_group  &
+\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_LEAVE_GROUP} if F == AF_INET6, otherwise \tcode{IP_DROP_MEMBERSHIP}  &
+\tcode{ipv6_mreq} if F == AF_INET6, otherwise \tcode{ip_mreq}  &
+Satisfies the \tcode{MulticastGroupSocketOption}~(\ref{internet.reqmts.opt.mcast}) type requirements. Requests that the socket leave the specified multicast group.  \\ \rowsep
+
+ip::multicast::outbound_interface~(\ref{internet.multicast.outbound})  &
+\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_MULTICAST_IF} if F == AF_INET6, otherwise \tcode{IP_MULTICAST_IF}  &
+\tcode{unsigned int} if F == AF_INET6, otherwise \tcode{in_addr}  &
+ Specifies the network interface to use for outgoing multicast datagrams.  \\ \rowsep
+
+ip::multicast::hops  &
+\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_MULTICAST_HOPS} if F == AF_INET6, otherwise \tcode{IP_MULTICAST_TTL}  &
+\tcode{int}  &
+Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements.Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams.The constructor and assignment operator for the \tcode{ip::multicast::hops}class throw \tcode{out_of_range}if the \tcode{int}argument is not in the range \tcode{[0, 255]}.  \\ \rowsep
+
+ip::multicast::enable_loopback  &
+\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_MULTICAST_LOOP} if F == AF_INET6, otherwise \tcode{IP_MULTICAST_LOOP}  &
+\tcode{int}  &
+Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether multicast datagrams are delivered back to the local application.  \\
+
+\end{libreqtab5}
+
+
+\rSec2[internet.multicast.outbound]{Class \tcode{ip::multicast::outbound_interface}}
+
+\pnum
+The \tcode{outbound_interface} class represents a socket option that specifies the network interface to use for outgoing multicast datagrams.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+namespace multicast {
+
+  class outbound_interface
+  {
+  public:
+    // constructors:
+    explicit outbound_interface(const address_v4& network_interface) noexcept;
+    explicit outbound_interface(unsigned int network_interface) noexcept;
+  };
+
+} // namespace multicast
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{outbound_interface} satisfies the requirements for \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{CopyAssignable} (C++Std [copyassignable]), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
+
+\pnum
+ Extensible implementations provide the following member functions:
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+namespace ip {
+namespace multicast {
+
+  class outbound_interface
+  {
+  public:
+    template<class Protocol> int level(const Protocol& p) const noexcept;
+    template<class Protocol> int name(const Protocol& p) const noexcept;
+    template<class Protocol> const void* data(const Protocol& p) const noexcept;
+    template<class Protocol> size_t size(const Protocol& p) const noexcept;
+    // \textit{remainder unchanged}
+  private:
+      in_addr v4_value_; // \expos
+      unsigned int v6_value_; // \expos
+  };
+
+} // namespace multicast
+} // namespace ip
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\begin{itemdecl}
+explicit outbound_interface(const address_v4& network_interface) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects For extensible implementations, \tcode{v4_value_} is initialized to correspond to the IPv4 address \tcode{network_interface}, and \tcode{v6_value_} is zero-initialized.
+\end{itemdescr}
+
+\begin{itemdecl}
+explicit outbound_interface(unsigned int network_interface) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects For extensible implementations, \tcode{v6_value_} is initialized to \tcode{network_interface}, and \tcode{v4_value_} is zero-initialized.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> int level(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{IPPROTO_IPV6} if \tcode{p.family() == AF_INET6}, otherwise \tcode{IPPROTO_IP}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> int name(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{IPV6_MULTICAST_HOPS} if \tcode{p.family() == AF_INET6}, otherwise \tcode{IP_MULTICAST_HOPS}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> const void* data(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(v6_value_)} if \tcode{p.family() == AF_INET6}, otherwise \tcode{std::addressof(v4_value_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> size_t size(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{sizeof(v6_value_)} if \tcode{p.family() == AF_INET6}, otherwise \tcode{sizeof(v4_value_)}.
+\end{itemdescr}
+
+
+
+

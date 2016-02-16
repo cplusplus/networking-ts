@@ -1,0 +1,512 @@
+%!TEX root = ts.tex
+
+\rSec0[io_context]{Basic I/O services}
+
+
+\rSec1[io_context.synop]{Header \tcode{<experimental/io_context>} synopsis}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class io_context;
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+
+
+\rSec1[io_context.io_context]{Class \tcode{io_context}}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class io_context : public execution_context
+  {
+  public:
+    // types:
+
+    class executor_type;
+    typedef @\textit{implementation defined}@ count_type;
+
+    // construct / copy / destroy:
+
+    io_context();
+    explicit io_context(int concurrency_hint);
+    io_context(const io_context&) = delete;
+    io_context& operator=(const io_context&) = delete;
+
+    // io_context operations:
+
+    executor_type get_executor() noexcept;
+
+    count_type run();
+    template<class Rep, class Period>
+      count_type run_for(const chrono::duration<Rep, Period>& rel_time);
+    template<class Clock, class Duration>
+      count_type run_until(const chrono::time_point<Clock, Duration>& abs_time);
+
+    count_type run_one();
+    template<class Rep, class Period>
+      count_type run_one_for(const chrono::duration<Rep, Period>& rel_time);
+    template<class Clock, class Duration>
+      count_type run_one_until(const chrono::time_point<Clock, Duration>& abs_time);
+
+    count_type poll();
+
+    count_type poll_one();
+
+    void stop();
+
+    bool stopped() const noexcept;
+
+    void restart();
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The class \tcode{io_context} satisfies the ExecutionContext type requirements~(\ref{async.reqmts.executioncontext}).
+
+\pnum
+\tcode{count_type} is an implementation-defined unsigned integral type of at least 32 bits.
+
+\pnum
+The \tcode{io_context} member functions \tcode{run}, \tcode{run_for}, \tcode{run_until}, \tcode{run_one}, \tcode{run_one_for}, \tcode{run_one_until}, \tcode{poll}, and \tcode{poll_one} are collectively referred to as the run functions. The run functions must be called for the \tcode{io_context} to perform asynchronous operations~(\ref{defs.async.op}) on behalf of a \Cpp program. Notification that an asynchronous operation has completed is delivered by execution of the associated completion handler function object, as determined by the requirements for asynchronous operations~(\ref{async.reqmts.async}).
+
+\pnum
+For an object of type \tcode{io_context}, outstanding work is defined as the sum of:
+
+\pnum
+--- the total number of calls to the \tcode{on_work_started} function, less the total number of calls to the \tcode{on_work_finished} function, to any executor of the \tcode{io_context}.
+
+\pnum
+--- the number of function objects that have been added to the \tcode{io_context} via any executor of the \tcode{io_context}, but not yet executed; and
+
+\pnum
+--- the number of function objects that are currently being executed by the \tcode{io_context}.
+
+\pnum
+If at any time the outstanding work falls to \tcode{0}, the \tcode{io_context} is stopped as if by \tcode{stop()}.
+
+\pnum
+The \tcode{io_context} member functions \tcode{get_executor}, \tcode{stop}, and \tcode{stopped}, the run functions, and the \tcode{io_context::executor_type} copy constructors, member functions and comparison operators, do not introduce data races as a result of concurrent calls to those functions from different threads of execution. \enternote The \tcode{restart} member function is excluded from these thread safety requirements. \exitnote
+
+
+\rSec2[io_context.io_context.members]{\tcode{io_context} members}
+
+\begin{itemdecl}
+io_context();
+explicit io_context(int concurrency_hint);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Creates an object of class \tcode{io_context}.
+
+\pnum
+\remarks The \tcode{concurrency_hint} parameter is a suggestion to the implementation on the number of threads that should process asynchronous operations and execute function objects.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor_type get_executor() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An executor that may be used for submitting function objects to the \tcode{io_context}.
+\end{itemdescr}
+
+\begin{itemdecl}
+count_type run();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: Must not be called from a thread that is currently calling a run function.
+
+\pnum
+\effects Equivalent to: 
+\begin{codeblock}
+count_type n = 0;
+while (run_one())
+  if (n != numeric_limits<count_type>::max())
+    ++n;
+\end{codeblock}
+
+
+\pnum
+\returns \tcode{n}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Rep, class Period>
+  count_type run_for(const chrono::duration<Rep, Period>& rel_time);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to: 
+\begin{codeblock}
+return run_until(chrono::steady_clock::now() + rel_time);
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Clock, class Duration>
+  count_type run_until(const chrono::time_point<Clock, Duration>& abs_time);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to: 
+\begin{codeblock}
+count_type n = 0;
+while (run_one_until(abs_time))
+  if (n != numeric_limits<count_type>::max())
+    ++n;
+\end{codeblock}
+
+
+\pnum
+\returns \tcode{n}.
+\end{itemdescr}
+
+\begin{itemdecl}
+count_type run_one();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: Must not be called from a thread that is currently calling a run function.
+
+\pnum
+\effects If the \tcode{io_context} object has no outstanding work, performs \tcode{stop()}. Otherwise, blocks while the io_context has outstanding work, or until the \tcode{io_context} is stopped, or until one function object has been executed.
+
+\pnum
+If an executed function object throws an exception, the exception propagates to the caller of \tcode{run_one()}. The \tcode{io_context} state is as if the function object had returned normally.
+
+\pnum
+\returns \tcode{1} if a function object was executed, otherwise \tcode{0}.
+
+\pnum
+Notes: This function may invoke additional function objects through nested calls to the \tcode{io_context} executor's \tcode{dispatch} member function. These do not count towards the return value.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Rep, class Period>
+  count_type run_one_for(const chrono::duration<Rep, Period>& rel_time);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to: 
+\begin{codeblock}
+return run_one_until(chrono::steady_clock::now() + rel_time);
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Clock, class Duration>
+  count_type run_one_until(const chrono::time_point<Clock, Duration>& abs_time);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If the \tcode{io_context} object has no outstanding work, performs \tcode{stop()}. Otherwise, blocks while the io_context has outstanding work, or until the expiration of the absolute timeout (C++Std [thread.req.timing]) specified by \tcode{abs_time}, or until the \tcode{io_context} is stopped, or until one function object has been executed.
+
+\pnum
+If an executed function object throws an exception, the exception propagates to the caller of \tcode{run_one()}. The \tcode{io_context} state is as if the function object had returned normally.
+
+\pnum
+\returns \tcode{1} if a function object was executed, otherwise \tcode{0}.
+
+\pnum
+Notes: This function may invoke additional function objects through nested calls to the \tcode{io_context} executor's \tcode{dispatch} member function. These do not count towards the return value.
+\end{itemdescr}
+
+\begin{itemdecl}
+count_type poll();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to: 
+\begin{codeblock}
+count_type n = 0;
+while (poll_one())
+  if (n != numeric_limits<count_type>::max())
+    ++n;
+\end{codeblock}
+
+
+\pnum
+\returns \tcode{n}.
+\end{itemdescr}
+
+\begin{itemdecl}
+count_type poll_one();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If the \tcode{io_context} object has no outstanding work, performs \tcode{stop()}. Otherwise, if there is a function object ready for immediate execution, executes it.
+
+\pnum
+If an executed function object throws an exception, the exception propagates to the caller of \tcode{poll_one()}. The \tcode{io_context} state is as if the function object had returned normally.
+
+\pnum
+\returns \tcode{1} if a function object was invoked, otherwise \tcode{0}.
+
+\pnum
+Notes: This function may invoke additional function objects through nested calls to the \tcode{io_context} executor's \tcode{dispatch} member function. These do not count towards the return value.
+\end{itemdescr}
+
+\begin{itemdecl}
+void stop();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Stops the \tcode{io_context}. Concurrent calls to any run function will end as soon as possible. If a call to a run function is currently executing a function object, the call will end only after completion of that function object. The call to \tcode{stop()} returns without waiting for concurrent calls to run functions to complete.
+
+\pnum
+\postconditions \tcode{stopped() == true}.
+
+\pnum
+\enternote When \tcode{stopped() == true}, subsequent calls to a run function will exit immediately with a return value of \tcode{0}, without executing any function objects. An \tcode{io_context} remains in the stopped state until a call to \tcode{restart()}. \exitnote
+\end{itemdescr}
+
+\begin{itemdecl}
+bool stopped() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if the \tcode{io_context} is stopped.
+\end{itemdescr}
+
+\begin{itemdecl}
+void restart();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{stopped() == false}.
+\end{itemdescr}
+
+
+
+
+\rSec1[io_context.exec]{Class \tcode{io_context::executor_type}}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class io_context::executor_type
+  {
+  public:
+    // construct / copy / destroy:
+
+    executor_type(const executor_type& other) noexcept;
+    executor_type(executor_type&& other) noexcept;
+
+    executor_type& operator=(const executor_type& other) noexcept;
+    executor_type& operator=(executor_type&& other) noexcept;
+
+    // executor operations:
+
+    bool running_in_this_thread() const noexcept;
+
+    io_context& context() noexcept;
+
+    void on_work_started() noexcept;
+    void on_work_finished() noexcept;
+
+    template<class Func, class ProtoAllocator>
+      void dispatch(Func&& f, const ProtoAllocator& a);
+    template<class Func, class ProtoAllocator>
+      void post(Func&& f, const ProtoAllocator& a);
+    template<class Func, class ProtoAllocator>
+      void defer(Func&& f, const ProtoAllocator& a);
+  };
+
+  bool operator==(const io_context::executor_type& a,
+                  const io_context::executor_type& b) noexcept;
+  bool operator!=(const io_context::executor_type& a,
+                  const io_context::executor_type& b) noexcept;
+
+  template<> struct is_executor<io_context::executor_type> : true_type {};
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{io_context::executor_type} is a type satisfying Executor requirements~(\ref{async.reqmts.executor}). Objects of type \tcode{io_context::executor_type} are associated with an \tcode{io_context}, and function objects submitted using the \tcode{dispatch}, \tcode{post}, or \tcode{defer} member functions will be executed by the \tcode{io_context} from within a run function.]
+
+
+\rSec2[io_context.exec.cons]{\tcode{io_context::executor_type} constructors}
+
+\begin{itemdecl}
+executor_type(const executor_type& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{*this == other}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor_type(executor_type&& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{*this} is equal to the prior value of \tcode{other}.
+\end{itemdescr}
+
+
+
+\rSec2[io_context.exec.assign]{\tcode{io_context::executor_type} assignment}
+
+\begin{itemdecl}
+executor_type& operator=(const executor_type& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{*this == other}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+executor_type& operator=(executor_type&& other) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{*this} is equal to the prior value of \tcode{other}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec2[io_context.exec.ops]{\tcode{io_context::executor_type} operations}
+
+\begin{itemdecl}
+bool running_in_this_thread() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{true} if the current thread of execution is calling a run function of the associated \tcode{io_context} object. \enternote That is, the current thread of execution's call chain includes a run function. \exitnote
+\end{itemdescr}
+
+\begin{itemdecl}
+io_context& context() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A reference to the associated \tcode{io_context} object.
+\end{itemdescr}
+
+\begin{itemdecl}
+void on_work_started() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Increment the count of outstanding work associated with the \tcode{io_context}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void on_work_finished() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Decrement the count of outstanding work associated with the \tcode{io_context}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Func, class ProtoAllocator>
+  void dispatch(Func&& f, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{running_in_this_thread()} is \tcode{true}, calls DECAY_COPY\tcode{(forward<Func>(f))()} (C++Std [thread.decaycopy]). \enternote If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \exitnote Otherwise, calls \tcode{post(forward<Func>(f), a)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Func, class ProtoAllocator>
+  void post(Func&& f, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Adds \tcode{f} to the \tcode{io_context}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Func, class ProtoAllocator>
+  void defer(Func&& f, const ProtoAllocator& a);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Adds \tcode{f} to the \tcode{io_context}.
+\end{itemdescr}
+
+
+
+\rSec2[io_context.exec.comparisons]{\tcode{io_context::executor_type} comparisons}
+
+\begin{itemdecl}
+bool operator==(const io_context::executor_type& a,
+                const io_context::executor_type& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{addressof(a.context()) == addressof(b.context())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool operator!=(const io_context::executor_type& a,
+                const io_context::executor_type& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!(a == b)}.
+\end{itemdescr}
+
+
+
+

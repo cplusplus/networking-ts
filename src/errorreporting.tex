@@ -1,0 +1,129 @@
+%!TEX root = ts.tex
+
+\rSec0[err.report]{Error reporting}
+
+
+\rSec1[err.report.sync]{Synchronous operations}
+
+\pnum
+Most synchronous network library functions provide two overloads, one that throws an exception to report system errors, and another that sets an \tcode{error_code} (C++Std [syserr]).
+
+\enternote This supports two common use cases:
+\begin{itemize}
+\item
+ Uses where system errors are truly exceptional and indicate a serious failure. Throwing an exception is the most appropriate response.
+\item
+ Uses where system errors are routine and do not necessarily represent failure. Returning an error code is the most appropriate response. This allows application specific error handling, including simply ignoring the error.
+\exitnote
+\end{itemize}
+\pnum
+Functions not having an argument of type \tcode{error_code\&} report errors as follows, unless otherwise specified:
+
+\begin{itemize}
+\item
+When a call by the implementation to an operating system or other underlying API results in an error that prevents the function from meeting its specifications, the function exits via an exception of a type that would match a handler of type \tcode{system_error}.
+
+\item
+Destructors throw nothing.
+\end{itemize}
+
+\pnum
+Functions having an argument of type \tcode{error_code\&} report errors as follows, unless otherwise specified:
+
+\begin{itemize}
+\item
+If a call by the implementation to an operating system or other underlying API results in an error that prevents the function from meeting its specifications, the \tcode{error_code\&} argument \tcode{ec} is set as appropriate for the specific error. Otherwise, the \tcode{ec} argument is set such that \tcode{!ec} is \tcode{true}.
+\end{itemize}
+
+\pnum
+Where a function is specified as two overloads, with and without an argument of type \tcode{error_code\&}:
+
+\begin{codeblock}
+@\textit{R f}@(@\textit{A1}@ a1, @\textit{A2}@ a2, ..., @\textit{AN}@ aN);
+@\textit{R f}@(@\textit{A1}@ a1, @\textit{A2}@ a2, ..., @\textit{AN}@ aN, error_code& ec);
+\end{codeblock}
+
+\pnum
+then, when R is non-\tcode{void}, the effects of the first overload are as if:
+
+\begin{codeblock}
+error_code ec;
+@\textit{R}@ r(@\textit{f}@(a1, a2, ..., aN, ec));
+if (ec) throw system_error(ec, S);
+return r;
+\end{codeblock}
+
+\pnum
+otherwise, when R is \tcode{void}, the effects of the first overload are as if:
+
+\begin{codeblock}
+error_code ec;
+@\textit{f}@(a1, a2, ..., aN, ec);
+if (ec) throw system_error(ec, S);
+\end{codeblock}
+
+\pnum
+except that the type thrown may differ as specified above. \tcode{S} is an NTBS indicating where the exception was thrown. \enternote A possible value for \tcode{S} is \tcode{__func__}. \exitnote
+
+\pnum
+ For both overloads, failure to allocate storage is reported by throwing an exception as described in the \Cpp standard (C++Std [res.on.exception.handling]).
+
+\pnum
+In this Technical Specification, when a type requirement is specified using two function call expressions f, with and without an argument \tcode{ec} of type \tcode{error_code}:
+
+\begin{codeblock}
+@\textit{f}@(a1, a2, ..., aN)
+@\textit{f}@(a1, a2, ..., aN, ec)
+\end{codeblock}
+
+\pnum
+then the effects of the first call expression of f shall be as described for the first overload above.
+
+
+
+\rSec1[err.report.async]{Asynchronous operations}
+
+\pnum
+Asynchronous network library functions in this Technical Specification are identified by having the prefix \tcode{async_} and take a completion handler \ref{async.reqmts.async.token}. These asynchronous operations report errors as follows:
+
+\begin{itemize}
+\item
+If a call by the implementation to an operating system or other underlying API results in an error that prevents the asynchronous operation from meeting its specifications, the completion handler is invoked with an \tcode{error_code} value \tcode{ec} that is set as appropriate for the specific error. Otherwise, the \tcode{error_code} value \tcode{ec} is set such that \tcode{!ec} is \tcode{true}.
+
+\item
+Asynchronous operations shall not fail with an error condition that indicates interruption of an operating system or underlying API by a signal \enternote Such as POSIX error number \tcode{EINTR} \exitnote . Asynchronous operations shall not fail with any error condition associated with non-blocking operations \enternote Such as POSIX error numbers \tcode{EWOULDBLOCK}, \tcode{EAGAIN}, or \tcode{EINPROGRESS}; Windows error numbers \tcode{WSAEWOULDBLOCK} or \tcode{WSAEINPROGRESS} \exitnote .
+\end{itemize}
+
+\pnum
+In this Technical Specification, when a type requirement is specified as a call to a function or member function having the prefix \tcode{async_}, then the function shall satisfy the error reporting requirements described above.
+
+
+
+\rSec1[err.report.conditions]{Error conditions}
+
+\pnum
+Unless otherwise specified, when the behavior of a synchronous or asynchronous operation is defined "as if" implemented by a POSIX function, the \tcode{error_code} produced by the function shall meet the following requirements:
+
+\begin{itemize}
+\item
+If the failure condition is one that is listed by POSIX for that function, the \tcode{error_code} shall compare equal to the error's corresponding \tcode{enum class errc} (C++Std [syserr]) or \tcode{enum class resolver_errc}~(\ref{internet.resolver.err}) constant.
+
+\item
+Otherwise, the \tcode{error_code} shall be set to an implementation-defined value that reflects the underlying operating system error.
+\end{itemize}
+
+\pnum
+\enterexample The POSIX specification for shutdown lists \tcode{EBADF} as one of its possible errors. If a function that is specified "as if" implemented by shutdown fails with \tcode{EBADF} then the following condition holds for the \tcode{error_code} value \tcode{ec}: \tcode{ec == errc::bad_file_descriptor} \exitexample
+
+\pnum
+When the description of a function contains the element Error conditions, this lists conditions where the operation may fail. The conditions are listed, together with a suitable explanation, as \tcode{enum class} constants. Unless otherwise specified, this list is a subset of the failure conditions associated with the function.
+
+
+
+\rSec1[err.report.signal]{Suppression of signals}
+
+\pnum
+Some POSIX functions referred to in this Technical Specification may report errors by raising a \tcode{SIGPIPE} signal. Where a synchronous or asynchronous operation is specified in terms of these POSIX functions, the generation of \tcode{SIGPIPE} is suppressed and an error condition corresponding to POSIX \tcode{EPIPE} is produced instead.
+
+
+

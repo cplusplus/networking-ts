@@ -1,0 +1,420 @@
+%!TEX root = ts.tex
+
+\rSec0[timer]{Timers}
+
+ This clause defines components for performing timer operations.\pnum
+\enterexample Performing a synchronous wait operation on a timer: 
+\begin{codeblock}
+io_context c;
+steady_timer t(c);
+t.expires_after(seconds(5));
+t.wait();
+\end{codeblock}
+ \exitexample
+
+\pnum
+\enterexample Performing an asynchronous wait operation on a timer: 
+\begin{codeblock}
+void handler(error_code ec) { ... }
+...
+io_context c;
+steady_timer t(c);
+t.expires_after(seconds(5));
+t.async_wait(handler);
+c.run();
+\end{codeblock}
+ \exitexample
+
+
+\rSec1[timer.synop]{Header \tcode{<experimental/timer>} synopsis}
+
+\begin{codeblock}
+#include <chrono>
+
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class Clock> struct wait_traits;
+
+  template<class Clock, class WaitTraits = wait_traits<Clock>>
+    class basic_waitable_timer;
+
+  typedef basic_waitable_timer<chrono::system_clock> system_timer;
+  typedef basic_waitable_timer<chrono::steady_clock> steady_timer;
+  typedef basic_waitable_timer<chrono::high_resolution_clock> high_resolution_timer;
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+
+
+\rSec1[timer.reqmts]{Requirements}
+
+
+\rSec2[timer.reqmts.waittraits]{Wait traits requirements}
+
+The \tcode{basic_waitable_timer} template uses wait traits to allow programs to customize \tcode{wait} and \tcode{async_wait} behavior. \enternote Possible uses of wait traits include:
+\begin{itemize}
+\item
+ To enable timers based on non-realtime clocks.
+\item
+ Determining how quickly wallclock-based timers respond to system time changes.
+\item
+ Correcting for errors or rounding timeouts to boundaries.
+\item
+ Preventing duration overflow. That is, a program may set a timer's expiry\tcode{e}to be \tcode{Clock::max()}(meaning never reached) or \tcode{Clock::min()}(meaning always in the past). As a result, computing the duration until timer expiry as \tcode{e - Clock::now()} may cause overflow. \exitnote
+\end{itemize}\pnum
+For a type \tcode{Clock} meeting the \tcode{Clock} requirements (C++Std [time.clock.req]), a type \tcode{X} meets the \tcode{WaitTraits} requirements if it satisfies the requirements listed below.
+
+\pnum
+In the table below, \tcode{t} denotes a (possibly const) value of type \tcode{Clock::time_point}; and \tcode{d} denotes a (possibly const) value of type \tcode{Clock::duration}.
+
+\begin{libreqtab3}
+{WaitTraits requirements}
+{timer.reqmts.waittraits.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition} \\ \capsep
+\endhead
+
+\tcode{X::to_wait_duration(d)}  &
+\tcode{Clock::duration}  &
+Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{async_wait} operation. \enternote The return value is typically representative of the duration \tcode{d}. \exitnote  \\ \rowsep
+
+\tcode{X::to_wait_duration(t)}  &
+\tcode{Clock::duration}  &
+Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{async_wait} operation. \enternote The return value is typically representative of the duration from \tcode{Clock::now()} until the time point \tcode{t}. \exitnote  \\
+
+\end{libreqtab3}
+
+
+
+
+\rSec1[]{Class template \tcode{wait_traits}}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class Clock>
+  struct wait_traits
+  {
+    static typename Clock::duration to_wait_duration(
+      const typename Clock::duration& d);
+
+    static typename Clock::duration to_wait_duration(
+      const typename Clock::time_point& t);
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Class template \tcode{wait_traits} satisfies the \tcode{WaitTraits}~(\ref{timer.reqmts.waittraits}) type requirements. Template argument \tcode{Clock} is a type meeting the \tcode{Clock} requirements (C++Std [time.clock.req]).
+
+\begin{itemdecl}
+static typename Clock::duration to_wait_duration(
+  const typename Clock::duration& d);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{d}.
+\end{itemdescr}
+
+\begin{itemdecl}
+static typename Clock::duration to_wait_duration(
+  const typename Clock::time_point& t);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns Let \tcode{now} be \tcode{Clock::now()}. If \tcode{now + Clock::duration::max()} is before \tcode{t}, \tcode{Clock::duration::max()}; if \tcode{now + Clock::duration::min()} is after \tcode{t}, \tcode{Clock::duration::min()}; otherwise, \tcode{t - now}.
+\end{itemdescr}
+
+
+
+\rSec1[timer.waitable]{Class template \tcode{basic_waitable_timer}}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class Clock, class WaitTraits = wait_traits<Clock>>
+  class basic_waitable_timer
+  {
+  public:
+    // types:
+
+    typedef io_context::executor_type executor_type;
+    typedef Clock clock_type;
+    typedef typename clock_type::duration duration;
+    typedef typename clock_type::time_point time_point;
+    typedef WaitTraits traits_type;
+
+    // construct / copy / destroy:
+
+    explicit basic_waitable_timer(io_context& ctx);
+    basic_waitable_timer(io_context& ctx, const time_point& t);
+    basic_waitable_timer(io_context& ctx, const duration& d);
+    basic_waitable_timer(const basic_waitable_timer&) = delete;
+    basic_waitable_timer(basic_waitable_timer&& rhs);
+
+    ~basic_waitable_timer();
+
+    basic_waitable_timer& operator=(const basic_waitable_timer&) = delete;
+    basic_waitable_timer& operator=(basic_waitable_timer&& rhs);
+
+    // basic_waitable_timer operations:
+
+    executor_type get_executor() noexcept;
+
+    size_t cancel();
+    size_t cancel_one();
+
+    time_point expiry() const;
+    size_t expires_at(const time_point& t);
+    size_t expires_after(const duration& d);
+
+    void wait();
+    void wait(error_code& ec);
+
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_wait(CompletionToken&& token);
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Instances of class template \tcode{basic_waitable_timer} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), and \tcode{MoveAssignable} (C++Std [moveassignable]).
+
+
+\rSec2[timer.waitable.cons]{\tcode{basic_waitable_timer} constructors}
+
+\begin{itemdecl}
+explicit basic_waitable_timer(io_context& ctx);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to \tcode{basic_waitable_timer(ctx, time_point())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_waitable_timer(io_context& ctx, const time_point& t);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == ctx.get_executor()}.
+\item
+\tcode{expiry() == t}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_waitable_timer(io_context& ctx, const duration& d);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Sets the expiry time as if by calling \tcode{expires_after(d)}.
+
+\pnum
+\postconditions \tcode{get_executor() == ctx.get_executor()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_waitable_timer(basic_waitable_timer&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Move constructs an object of class \tcode{basic_waitable_timer<Clock, WaitTraits>} that refers to the state originally represented by \tcode{rhs}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == rhs.get_executor()}.
+\item
+\tcode{expiry()}returns the same value as \tcode{rhs.expiry()}prior to the constructor invocation.
+\item
+\tcode{rhs.expiry() == time_point()}.
+\end{itemize}
+\end{itemdescr}
+
+
+
+\rSec2[timer.waitable.dtor]{\tcode{basic_waitable_timer} destructor}
+
+\begin{itemdecl}
+~basic_waitable_timer();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Destroys the timer, cancelling any asynchronous wait operations associated with the timer as if by calling \tcode{cancel()}.
+\end{itemdescr}
+
+
+
+\rSec2[timer.waitable.assign]{\tcode{basic_waitable_timer} assignment}
+
+\begin{itemdecl}
+basic_waitable_timer& operator=(basic_waitable_timer&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Cancels any outstanding asynchronous operations associated with \tcode{*this} as if by calling \tcode{cancel()}, then moves into \tcode{*this} the state originally represented by \tcode{rhs}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == rhs.get_executor()}.
+\item
+\tcode{expiry()}returns the same value as \tcode{rhs.expiry()}prior to the assignment.
+\item
+\tcode{rhs.expiry() == time_point()}.
+\end{itemize}
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec2[timer.waitable.ops]{\tcode{basic_waitable_timer} operations}
+
+\begin{itemdecl}
+executor_type get_executor() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The associated executor.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t cancel();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Causes any outstanding asynchronous wait operations to complete. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+
+\pnum
+\returns The number of operations that were canceled.
+
+\pnum
+\remarks Does not block (C++Std [defns.block]) the calling thread pending completion of the canceled operations.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t cancel_one();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Causes the outstanding asynchronous wait operation that was initiated first, if any, to complete as soon as possible. The completion handler for the canceled operation is passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+
+\pnum
+\returns \tcode{1} if an operation was cancelled, otherwise \tcode{0}.
+
+\pnum
+\remarks Does not block (C++Std [defns.block]) the calling thread pending completion of the canceled operation.
+\end{itemdescr}
+
+\begin{itemdecl}
+time_point expiry() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The expiry time associated with the timer, as previously set using \tcode{expires_at()} or \tcode{expires_after()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t expires_at(const time_point& t);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Cancels outstanding asynchronous wait operations, as if by calling \tcode{cancel()}. Sets the expiry time associated with the timer.
+
+\pnum
+\returns The number of operations that were canceled.
+
+\pnum
+\postconditions \tcode{expiry() == t}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t expires_after(const duration& d);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{expires_at(clock_type::now() + d)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void wait();
+void wait(error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Establishes the postcondition as if by repeatedly blocking the calling thread (C++Std [defns.block]) for the relative time produced by \tcode{WaitTraits::to_wait_duration(expiry())}.
+
+\pnum
+\postconditions \tcode{ec || expiry() <= clock_type::now()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_wait(CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void(error_code ec)}.
+
+\pnum
+\effects Initiates an asynchronous wait operation to repeatedly wait for the relative time produced by \tcode{WaitTraits::to_wait_duration(e)}, where \tcode{e} is a value of type \tcode{time_point} such that \tcode{e <= expiry()}. The completion handler is submitted for execution only when the condition \tcode{ec || expiry() <= clock_type::now()} yields \tcode{true}.
+
+\pnum
+\enternote To implement \tcode{async_wait}, an \tcode{io_context} object \tcode{ctx} may maintain a priority queue for each specialization of \tcode{basic_waitable_timer<Clock, WaitTraits>} for which a timer object was initialized with \tcode{ctx}. Only the time point \tcode{e} of the earliest outstanding expiry need be passed to \tcode{WaitTraits::to_wait_duration(e)}. \exitnote
+\end{itemdescr}
+
+
+
+

@@ -1,0 +1,536 @@
+%!TEX root = ts.tex
+
+\rSec0[socket.iostreams]{Socket iostreams}
+
+
+\rSec1[socket.streambuf]{Class template \tcode{basic_socket_streambuf}}
+
+\pnum
+The class \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} associates both the input sequence and the output sequence with a socket. The input and output sequences do not support seeking. \enternote The input and output sequences are independent as a stream socket provides full duplex I/O. \exitnote
+
+\pnum
+ \enternote This class is intended for sending and receiving bytes, not characters. The conversion from characters to bytes, and vice versa, must occur elsewhere. \exitnote
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class Protocol, class Clock, class WaitTraits>
+  class basic_socket_streambuf : public basic_streambuf<char>
+  {
+  public:
+    // types:
+
+    typedef Protocol protocol_type;
+    typedef typename protocol_type::endpoint endpoint_type;
+    typedef Clock clock_type;
+    typedef typename clock_type::time_point time_point;
+    typedef typename clock_type::duration duration;
+    typedef WaitTraits traits_type;
+
+    // construct / copy / destroy:
+
+    basic_socket_streambuf();
+    explicit basic_socket_streambuf(basic_stream_socket<protocol_type> s);
+    basic_socket_streambuf(const basic_socket_streambuf&) = delete;
+    basic_socket_streambuf(basic_socket_streambuf&& rhs);
+
+    virtual ~basic_socket_streambuf();
+
+    basic_socket_streambuf& operator=(const basic_socket_streambuf&) = delete;
+    basic_socket_streambuf& operator=(basic_socket_streambuf&& rhs);
+
+    // members:
+
+    basic_socket_streambuf* connect(const endpoint_type& e);
+    template<class... Args> basic_socket_streambuf* connect(Args&&... );
+
+    basic_socket_streambuf<protocol_type>* close();
+
+    basic_socket<protocol_type>& socket();
+    error_code error() const;
+
+    time_point expiry() const;
+    void expires_at(const time_point& t);
+    void expires_after(const duration& d);
+
+  protected:
+    // overridden virtual functions:
+    virtual int_type underflow() override;
+    virtual int_type pbackfail(int_type c = traits_type::eof()) override;
+    virtual int_type overflow(int_type c = traits_type::eof()) override;
+    virtual int sync() override;
+    virtual streambuf* setbuf(char_type* s, streamsize n) override;
+
+  private:
+    basic_stream_socket<protocol_type> socket_; // \expos
+    error_code ec_; // \expos
+    time_point expiry_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Instances of class template \tcode{basic_socket_streambuf} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), and \tcode{MoveAssignable} (C++Std [moveassignable]).
+
+
+\rSec2[socket.streambuf.cons]{\tcode{basic_socket_streambuf} constructors}
+
+\begin{itemdecl}
+basic_socket_streambuf();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{socket_} with \tcode{ctx}, where \tcode{ctx} is an unspecified object of class \tcode{io_context}.
+
+\pnum
+\postconditions \tcode{expiry() == clock_type::max()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+explicit basic_socket_streambuf(basic_stream_socket<protocol_type> s);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{socket_} with \tcode{std::move(s)}.
+
+\pnum
+\postconditions \tcode{expiry() == clock_type::max()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_streambuf(basic_socket_streambuf&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Move constructs from the rvalue \tcode{rhs}. It is implementation-defined whether the sequence pointers in \tcode{*this} (\tcode{eback()}, \tcode{gptr()}, \tcode{egptr()}, \tcode{pbase()}, \tcode{pptr()}, \tcode{epptr()}) obtain the values which \tcode{rhs} had. Whether they do or not, \tcode{*this} and \tcode{rhs} reference separate buffers (if any at all) after the construction. Additionally \tcode{*this} references the socket which \tcode{rhs} did before the construction, and \tcode{rhs} references no open socket after the construction.
+
+\pnum
+\postconditions Let \tcode{rhs_p} refer to the state of \tcode{rhs} just prior to this construction and let \tcode{rhs_a} refer to the state of \tcode{rhs} just after this construction.
+\begin{itemize}
+\item
+\tcode{is_open() == rhs_p.is_open()}
+\item
+\tcode{rhs_a.is_open() == false}
+\item
+\tcode{expiry() == rhs_p.expiry()}
+\item
+\tcode{rhs_a.expiry() == clock_type::max()}
+\item
+\tcode{gptr() - eback() == rhs_p.gptr() - rhs_p.eback()}
+\item
+\tcode{egptr() - eback() == rhs_p.egptr() - rhs_p.eback()}
+\item
+\tcode{ptr() - pbase() == rhs_p.pptr() - rhs_p.pbase()}
+\item
+\tcode{pptr() - pbase() == rhs_p.epptr() - rhs_p.pbase()}
+\item
+\tcode{if (eback()) eback() != rhs_a.eback()}
+\item
+\tcode{if (gptr()) gptr() != rhs_a.gptr()}
+\item
+\tcode{if (egptr()) egptr() != rhs_a.egptr()}
+\item
+\tcode{if (pbase()) pbase() != rhs_a.pbase()}
+\item
+\tcode{if (pptr()) pptr() != rhs_a.pptr()}
+\item
+\tcode{if (epptr()) epptr() != rhs_a.epptr()}
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+virtual ~basic_socket_streambuf();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If a put area exists, calls \tcode{overflow(traits_type::eof())} to flush characters. \enternote The socket is closed by the \tcode{basic_stream_socket<protocol_type>} destructor. \exitnote
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_streambuf& operator=(basic_socket_streambuf&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Calls \tcode{this->close()} then move assigns from \tcode{rhs}. After the move assignment \tcode{*this} has the observable state it would have had if it had been move constructed from \tcode{rhs}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.streambuf.members]{\tcode{basic_socket_streambuf} members}
+
+\begin{itemdecl}
+basic_socket_streambuf<protocol_type>* connect(const endpoint_type& e);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the \tcode{basic_socket_streambuf} as required, closes and re-opens the socket by performing \tcode{socket_.close(ec_)} and \tcode{socket_.open(e.protocol(), ec_)}, then attempts to establish a connection as if by POSIX \tcode{connect(socket_.native_handle(), static_cast<sockaddr*>(e.data()), e.size())}. \tcode{ec_} is set to reflect the error code produced by the operation. If the operation does not complete before the absolute timeout specified by \tcode{expiry_}, the socket is closed and \tcode{ec_} is set to \tcode{errc::timed_out}.
+
+\pnum
+\returns if \tcode{!ec_}, \tcode{this}; otherwise, a null pointer.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class... Args>
+  basic_socket_streambuf* connect(Args&&... args);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the \tcode{basic_socket_streambuf} as required and closes the socket as if by calling \tcode{socket_.close(ec_)}. Obtains an endpoint sequence \tcode{endpoints} by performing \tcode{protocol_type::resolver(ctx).resolve(forward<Args>(args)...)}, where \tcode{ctx} is an unspecified object of class \tcode{io_context}. For each endpoint \tcode{e} in the sequence, closes and re-opens the socket by performing \tcode{socket_.close(ec_)} and \tcode{socket_.open(e.protocol(), ec_)}, then attempts to establish a connection as if by POSIX \tcode{connect(socket_.native_handle(), static_cast<sockaddr*>(e.data()), e.size())}. \tcode{ec_} is set to reflect the error code produced by the operation. If the operation does not complete before the absolute timeout specified by \tcode{expiry_}, the socket is closed and \tcode{ec_} is set to \tcode{errc::timed_out}.
+
+\pnum
+\returns if \tcode{!ec_}, \tcode{this}; otherwise, a null pointer.
+
+\pnum
+\remarks This function shall not participate in overload resolution unless \tcode{Protocol} meets the requirements for an internet protocol~(\ref{internet.reqmts.protocol}).
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_streambuf* close();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If a put area exists, calls \tcode{overflow(traits_type::eof())} to flush characters. Regardless of whether the preceding call fails or throws an exception, the function closes the socket as if by \tcode{basic_socket<protocol_type>::close(ec_)}. If any of the calls made by the function fail, \tcode{close} fails by returning a null pointer. If one of these calls throws an exception, the exception is caught and rethrown after closing the socket.
+
+\pnum
+\returns \tcode{this} on success, a null pointer otherwise.
+
+\pnum
+\postconditions \tcode{is_open() == false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket<protocol_type>& socket();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{socket_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+error_code error() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{ec_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+time_point expiry() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{expiry_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void expires_at(const time_point& t);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{expiry_ == t}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void expires_after(const duration& d);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to \tcode{expires_at(clock_type::now() + d)}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.streambuf.virtual]{\tcode{basic_socket_streambuf} overridden virtual functions}
+
+\begin{itemdecl}
+virtual int_type underflow() override;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Behaves according to the description of \tcode{basic_streambuf<char>::underflow()}, with the specialization that a sequence of characters is read from the input sequence as if by POSIX recvmsg, and \tcode{ec_} is set to reflect the error code produced by the operation. If the operation does not complete before the absolute timeout specified by \tcode{expiry_}, the socket is closed and \tcode{ec_} is set to \tcode{errc::timed_out}.
+
+\pnum
+\effects Returns \tcode{traits_type::eof()} to indicate failure. Otherwise returns \tcode{traits_type::to_int_type(*gptr())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+virtual int_type pbackfail(int_type c = traits_type::eof()) override;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Puts back the character designated by \tcode{c} to the input sequence, if possible, in one of three ways:
+
+\begin{itemize}
+\item
+If\tcode{traits_type::eq_int_type(c,traits_type::eof())}returns \tcode{false}, and if the function makes a putback position available, and if \tcode{traits_type::eq(traits_type::to_char_type(c),gptr()[-1])}returns \tcode{true}, decrements the next pointer for the input sequence, \tcode{gptr()}.Returns: \tcode{c}.
+
+\item
+If\tcode{traits_type::eq_int_type(c,traits_type::eof())}returns \tcode{false}, and if the function makes a putback position available, and if the function is permitted to assign to the putback position, decrements the next pointer for the input sequence, and stores \tcode{c}there.Returns: \tcode{c}.
+
+\item
+If\tcode{traits_type::eq_int_type(c,traits_type::eof())}returns \tcode{true}, and if either the input sequence has a putback position available or the function makes a putback position available, decrements the next pointer for the input sequence, \tcode{gptr()}.Returns: \tcode{traits_type::not_eof(c)}.
+\end{itemize}
+
+\pnum
+\returns \tcode{traits_type::eof()} to indicate failure.
+
+\pnum
+Notes: The function does not put back a character directly to the input sequence. If the function can succeed in more than one of these ways, it is unspecified which way is chosen. The function can alter the number of putback positions available as a result of any call.
+\end{itemdescr}
+
+\begin{itemdecl}
+virtual int_type overflow(int_type c = traits_type::eof()) override;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Behaves according to the description of \tcode{basic_streambuf<char>::overflow(c)}, except that the behavior of "consuming characters" is performed by output of the characters to the socket as if by one or more calls to POSIX sendmsg, and \tcode{ec_} is set to reflect the error code produced by the operation. If the operation does not complete before the absolute timeout specified by \tcode{expiry_}, the socket is closed and \tcode{ec_} is set to \tcode{errc::timed_out}.
+
+\pnum
+\returns \tcode{traits_type::not_eof(c)} to indicate success, and \tcode{traits_type::eof()} to indicate failure.
+\end{itemdescr}
+
+\begin{itemdecl}
+virtual int sync() override;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If a put area exists, calls \tcode{overflow(traits_type::eof())} to flush characters.
+\end{itemdescr}
+
+\begin{itemdecl}
+virtual streambuf* setbuf(char_type* s, streamsize n) override;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{setbuf(nullptr, 0)} is called on a stream before any I/O has occurred on that stream, the stream becomes unbuffered. Otherwise the results are unspecified. "Unbuffered" means that \tcode{pbase()} and \tcode{pptr()} always return null and output to the socket should appear as soon as possible.
+\end{itemdescr}
+
+
+
+
+\rSec1[socket.iostream]{Class template \tcode{basic_socket_iostream}}
+
+\pnum
+The class template \tcode{basic_socket_iostream<Protocol, Clock, WaitTraits>} supports reading and writing on sockets. It uses a \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} object to control the associated sequences.
+
+\pnum
+ \enternote This class is intended for sending and receiving bytes, not characters. The conversion from characters to bytes, and vice versa, must occur elsewhere. \exitnote
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class Protocol, class Clock, class WaitTraits>
+  class basic_socket_iostream : public basic_iostream<char>
+  {
+  public:
+    // types:
+
+    typedef Protocol protocol_type;
+    typedef typename protocol_type::endpoint endpoint_type;
+    typedef Clock clock_type;
+    typedef typename clock_type::time_point time_point;
+    typedef typename clock_type::duration duration;
+    typedef WaitTraits traits_type;
+
+    // construct / copy / destroy:
+
+    basic_socket_iostream();
+    explicit basic_socket_iostream(basic_stream_socket<protocol_type> s);
+    basic_socket_iostream(const basic_socket_iostream&) = delete;
+    basic_socket_iostream(basic_socket_iostream&& rhs);
+    template<class... Args>
+      explicit basic_socket_iostream(Args&&... args);
+
+    basic_socket_iostream& operator=(const basic_socket_iostream&) = delete;
+    basic_socket_iostream& operator=(basic_socket_iostream&& rhs);
+
+    // members:
+
+    template<class... Args> void connect(Args&&... args);
+
+    void close();
+
+    basic_socket_streambuf<protocol_type, clock_type, traits_type>* rdbuf() const;
+
+    basic_socket<protocol_type>& socket();
+    error_code error() const;
+
+    time_point expiry() const;
+    void expires_at(const time_point& t);
+    void expires_after(const duration& d);
+
+  private:
+    basic_socket_streambuf<protocol_type, clock_type, traits_type> sb_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Instances of class template \tcode{basic_socket_iostream} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), and \tcode{MoveAssignable} (C++Std [moveassignable]).
+
+
+\rSec2[socket.iostream.cons]{\tcode{basic_socket_iostream} constructors}
+
+\begin{itemdecl}
+basic_socket_iostream();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class as \tcode{basic_iostream<char>(\&sb_)}, \tcode{sb_} as \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>()}, and performs \tcode{setf(std::ios_base::unitbuf)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+explicit basic_socket_iostream(basic_stream_socket<protocol_type> s);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class as \tcode{basic_iostream<char>(\&sb_)}, \tcode{sb_} as \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>(std::move(s))}, and performs \tcode{setf(std::ios_base::unitbuf)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_iostream(basic_socket_iostream&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Move constructs from the rvalue \tcode{rhs}. This is accomplished by move constructing the base class, and the contained \tcode{basic_socket_streambuf}. Next \tcode{basic_iostream<char>::set_rdbuf(\&sb_)} is called to install the contained \tcode{basic_socket_streambuf}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class... Args>
+  explicit basic_socket_iostream(Args&&... args);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class as \tcode{basic_iostream<char>(\&sb_)}, initializes \tcode{sb_} as \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>()}, and performs \tcode{setf(std::ios_base::unitbuf)}. Then calls \tcode{rdbuf()->connect(forward<Args>(args)...)}. If that function returns a null pointer, calls \tcode{setstate(failbit)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_iostream& operator=(basic_socket_iostream&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Move assigns the base and members of \tcode{*this} from the base and corresponding members of \tcode{rhs}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.iostream.members]{\tcode{basic_socket_iostream} members}
+
+\begin{itemdecl}
+template<class... Args>
+  void connect(Args&&... args);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Calls \tcode{rdbuf()->connect(forward<Args>(args)...)}. If that function returns a null pointer, calls \tcode{setstate(failbit)} (which may throw \tcode{ios_base::failure}).
+\end{itemdescr}
+
+\begin{itemdecl}
+void close();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Calls \tcode{rdbuf()->close()}. If that function returns a null pointer, calls \tcode{setstate(failbit)} (which may throw \tcode{ios_base::failure}).
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_streambuf<protocol_type, clock_type, traits_type>* rdbuf() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{const_cast<basic_socket_streambuf<protocol_type, clock_type, traits_type>*>(std::addressof(sb_))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket<protocol_type>& socket();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{rdbuf()->socket()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+error_code error() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{rdbuf()->error()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+time_point expiry() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{rdbuf()->expiry()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void expires_at(const time_point& t);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to \tcode{rdbuf()->expires_at(t)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void expires_after(const duration& d);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to \tcode{rdbuf()->expires_after(d)}.
+\end{itemdescr}
+
+
+

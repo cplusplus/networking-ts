@@ -1,0 +1,3 @@
+*.aux
+ts.*
+!ts.tex

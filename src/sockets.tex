@@ -1,0 +1,4179 @@
+%!TEX root = ts.tex
+
+\rSec0[socket]{Sockets}
+
+
+\rSec1[socket.synop]{Header \tcode{<experimental/socket>} synopsis}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  enum class socket_errc {
+    already_open = @\textit{an implementation defined non-zero value}@,
+    not_found = @\textit{an implementation defined non-zero value}@
+  };
+
+  const error_category& socket_category() noexcept;
+
+  error_code make_error_code(socket_errc e) noexcept;
+  error_condition make_error_condition(socket_errc e) noexcept;
+
+  // Sockets:
+
+  class socket_base;
+
+  template<class Protocol>
+    class basic_socket;
+
+  template<class Protocol>
+    class basic_datagram_socket;
+
+  template<class Protocol>
+    class basic_stream_socket;
+
+  template<class Protocol>
+    class basic_socket_acceptor;
+
+  // Socket streams:
+
+  template<class Protocol, class Clock = chrono::steady_clock,
+    class WaitTraits = wait_traits<Clock>>
+      class basic_socket_streambuf;
+
+  template<class Protocol, class Clock = chrono::steady_clock,
+    class WaitTraits = wait_traits<Clock>>
+      class basic_socket_iostream;
+
+  // synchronous connect operations:
+
+  template<class Protocol, class EndpointSequence>
+    typename Protocol::endpoint connect(basic_socket<Protocol>& s,
+                                        const EndpointSequence& endpoints);
+  template<class Protocol, class EndpointSequence>
+    typename Protocol::endpoint connect(basic_socket<Protocol>& s,
+                                        const EndpointSequence& endpoints,
+                                        error_code& ec);
+  template<class Protocol, class EndpointSequence, class ConnectCondition>
+    typename Protocol::endpoint connect(basic_socket<Protocol>& s,
+                                        const EndpointSequence& endpoints,
+                                        ConnectCondition c);
+  template<class Protocol, class EndpointSequence, class ConnectCondition>
+    typename Protocol::endpoint connect(basic_socket<Protocol>& s,
+                                        const EndpointSequence& endpoints,
+                                        ConnectCondition c,
+                                        error_code& ec);
+
+  template<class Protocol, class InputIterator>
+    InputIterator connect(basic_socket<Protocol>& s,
+                          InputIterator first, InputIterator last);
+  template<class Protocol, class InputIterator>
+    InputIterator connect(basic_socket<Protocol>& s,
+                          InputIterator first, InputIterator last,
+                          error_code& ec);
+  template<class Protocol, class InputIterator, class ConnectCondition>
+    InputIterator connect(basic_socket<Protocol>& s,
+                          InputIterator first, InputIterator last,
+                          ConnectCondition c);
+  template<class Protocol, class InputIterator, class ConnectCondition>
+    InputIterator connect(basic_socket<Protocol>& s,
+                          InputIterator first, InputIterator last,
+                          ConnectCondition c,
+                          error_code& ec);
+
+  // asynchronous connect operations:
+
+  template<class Protocol, class EndpointSequence, class CompletionToken>
+    @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
+                          const EndpointSequence& endpoints,
+                          CompletionToken&& token);
+  template<class Protocol, class EndpointSequence,
+    class ConnectCondition, class CompletionToken>
+      @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
+                            const EndpointSequence& endpoints,
+                            ConnectCondition c,
+                            CompletionToken&& token);
+
+  template<class Protocol, class InputIterator, class CompletionToken>
+    @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
+                          InputIterator first, InputIterator last,
+                          CompletionToken&& token);
+  template<class Protocol, class InputIterator,
+    class ConnectCondition, class CompletionToken>
+      @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
+                            InputIterator first, InputIterator last,
+                            ConnectCondition c,
+                            CompletionToken&& token);
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+
+  template<> struct is_error_code_enum<
+    experimental::net::v1::socket_errc>
+      : public true_type {};
+
+} // namespace std
+\end{codeblock}
+
+\pnum
+The figure below illustrates relationships between various types described in this Technical Specification. A solid line from A to B that is terminated by an open arrow indicates that A is derived from B. A solid line from A to B that starts with a diamond and is terminated by a solid arrow indicates that A contains an object of type B. A dotted line from A to B indicates that A is a typedef for the class template B with the specified template argument.
+
+\pnum
+sockets
+
+
+
+\rSec1[socket.reqmts]{Requirements}
+
+
+\rSec2[socket.reqmts.sync]{Requirements on synchronous socket operations}
+
+\pnum
+In this section, synchronous socket operations are those member functions specified as two overloads, with and without an argument of type \tcode{error_code\&}:
+
+\begin{codeblock}
+@\textit{R f}@(@\textit{A1}@ a1, @\textit{A2}@ a2, ..., @\textit{AN}@ aN);
+@\textit{R f}@(@\textit{A1}@ a1, @\textit{A2}@ a2, ..., @\textit{AN}@ aN, error_code& ec);
+\end{codeblock}
+
+\pnum
+For an object \tcode{s}, the conditions under which its synchronous socket operations may block the calling thread (C++Std [defns.block]) are determined as follows.
+
+\pnum
+ If:
+
+\pnum
+--- \tcode{s.non_blocking() == true},
+
+\pnum
+--- the synchronous socket operation is specified in terms of a POSIX function other than \tcode{poll},
+
+\pnum
+--- that POSIX function lists \tcode{EWOULDBLOCK} or \tcode{EAGAIN} in its failure conditions, and
+
+\pnum
+ --- the effects of the operation cannot be established immediately
+
+\pnum
+ then the synchronous socket operation shall not block the calling thread. \enternote And the effects of the operation are not established. \exitnote
+
+\pnum
+ Otherwise, the synchronous socket operation shall block the calling thread until the effects are established.
+
+
+
+\rSec2[socket.reqmts.async]{Requirements on asynchronous socket operations}
+
+\pnum
+In this section, asynchronous socket operations are those member functions having prefix \tcode{async_}.
+
+\pnum
+For an object \tcode{s}, a program may initiate asynchronous socket operations such that there are multiple simultaneously outstanding asynchronous operations.
+
+\pnum
+When there are multiple outstanding asynchronous read operations~(\ref{buffer.reqmts.read.write}) on \tcode{s}:
+
+\pnum
+--- having no argument \tcode{flags} of type \tcode{socket_base::message_flags}, or
+
+\pnum
+--- having an argument \tcode{flags} of type \tcode{socket_base::message_flags} but where \tcode{(flags \& socket_base::message_out_of_band) == 0}
+
+\pnum
+then the \tcode{buffers} are filled in the order in which these operations were issued. The order of invocation of the completion handlers for these operations is unspecified.
+
+\pnum
+When there are multiple outstanding asynchronous read operations~(\ref{buffer.reqmts.read.write}) on \tcode{s} having an argument \tcode{flags} of type \tcode{socket_base::message_flags} where \tcode{(flags \& socket_base::message_out_of_band) != 0} then the \tcode{buffers} are filled in the order in which these operations were issued.
+
+\pnum
+When there are multiple outstanding asynchronous write operations~(\ref{buffer.reqmts.read.write}) on \tcode{s}, the \tcode{buffers} are transmitted in the order in which these operations were issued. The order of invocation of the completion handlers for these operations is unspecified.
+
+
+
+\rSec2[socket.reqmts.native]{Native handles}
+
+\pnum
+Several classes described in this Technical Specification have a member type \tcode{native_handle_type}, a member function \tcode{native_handle}, and member functions that accept arguments of type \tcode{native_handle_type}. The presence of these members and their semantics is implementation-defined.
+
+\pnum
+\enternote These members allow implementations to provide access to their implementation details. Their names are specified to facilitate portable compile-time detection. Actual use of these members is inherently non-portable. For operating systems that are based on POSIX, implementations are encouraged to define the \tcode{native_handle_type} for sockets as \tcode{int}, representing the native file descriptor associated with the socket. \exitnote
+
+
+
+\rSec2[socket.reqmts.endpoint]{Endpoint requirements}
+
+\pnum
+A type \tcode{X} meets the \tcode{Endpoint} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]), as well as the additional requirements listed below.
+
+\pnum
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
+
+\begin{libreqtab3}
+{Endpoint requirements}
+{socket.reqmts.endpoint.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions} \\ \capsep
+\endhead
+
+\tcode{X::protocol_type}  &
+type meeting \tcode{Protocol}~(\ref{socket.reqmts.protocol}) requirements  &
+  \\ \rowsep
+
+\tcode{a.protocol()}  &
+\tcode{protocol_type}  &
+  \\
+
+\end{libreqtab3}
+
+\pnum
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{b} denotes a value of type \tcode{X}, and \tcode{s} denotes a (possibly const) value of a type that is convertible to \tcode{size_t} and denotes a size in bytes.
+
+\begin{libreqtab3}
+{Endpoint requirements for extensible implementations}
+{socket.reqmts.endpoint.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endhead
+
+\tcode{a.data()}  &
+\tcode{const void*}  &
+Returns a pointer suitable for passing as the address argument to functions such as POSIX connect, or as the dest_addr argument to functions such as POSIX sendto. The implementation shall perform a \tcode{static_cast} on the pointer to convert it to \tcode{const sockaddr*}.  \\ \rowsep
+
+\tcode{b.data()}  &
+\tcode{void*}  &
+Returns a pointer suitable for passing as the address argument to functions such as POSIX accept, getpeername, getsockname and recvfrom. The implementation shall perform a \tcode{static_cast} on the pointer to convert it to \tcode{sockaddr*}.  \\ \rowsep
+
+\tcode{a.size()}  &
+\tcode{size_t}  &
+Returns a value suitable for passing as the address_len argument to functions such as POSIX connect, or as the dest_len argument to functions such as POSIX sendto, after appropriate integer conversion has been performed.  \\ \rowsep
+
+\tcode{b.resize(s)}  &
+  &
+pre: \tcode{s >= 0}post: \tcode{a.size() == s}Passed the value contained in the address_lenargument to functions such as POSIX accept, getpeername, getsocknameand recvfrom, after successful completion of the function. Permitted to throw an exception if the protocol associated with the endpoint object \tcode{a} does not support the specified size.  \\ \rowsep
+
+\tcode{a.capacity()}  &
+\tcode{size_t}  &
+Returns a value suitable for passing as the address_len argument to functions such as POSIX accept, getpeername, getsockname and recvfrom, after appropriate integer conversion has been performed.  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[socket.reqmts.endpointsequence]{Endpoint sequence requirements}
+
+\pnum
+A type \tcode{X} meets the \tcode{EndpointSequence} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{CopyConstructible} (C++Std [copyconstructible]), as well as the additional requirements listed below.
+
+\pnum
+In the table below, \tcode{x} denotes a (possibly const) value of type \tcode{X}.
+
+\begin{libreqtab3}
+{EndpointSequence requirements}
+{socket.reqmts.endpointsequence.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition}  \\ \capsep
+\endhead
+
+\tcode{x.begin()}\tcode{x.end()}  &
+A type meeting the requirements for forward iterators (C++Std [forward.iterators]) whose value type is convertible to a type satisfying the \tcode{Endpoint}~(\ref{socket.reqmts.endpoint}) requirements.  &
+[\tcode{x.begin()},\tcode{x.end()}) is a valid range.  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[socket.reqmts.protocol]{Protocol requirements}
+
+\pnum
+A type \tcode{X} meets the \tcode{Protocol} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]), as well as the additional requirements listed below.
+
+\begin{libreqtab3}
+{Protocol requirements}
+{socket.reqmts.protocol.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endhead
+
+\tcode{X::endpoint}  &
+type meeting endpoint~(\ref{socket.reqmts.endpoint}) requirements  &
+  \\
+
+\end{libreqtab3}
+
+\pnum
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}.
+
+\begin{libreqtab3}
+{Protocol requirements for extensible implementations}
+{socket.reqmts.protocol.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endhead
+
+\tcode{a.family()}  &
+\tcode{int}  &
+Returns a value suitable for passing as the domain argument to POSIX socket (or equivalent).  \\ \rowsep
+
+\tcode{a.type()}  &
+\tcode{int}  &
+Returns a value suitable for passing as the type argument to POSIX socket (or equivalent).  \\ \rowsep
+
+\tcode{a.protocol()}  &
+\tcode{int}  &
+Returns a value suitable for passing as the protocol argument to POSIX socket (or equivalent).  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[socket.reqmts.acceptableprotocol]{Acceptable protocol requirements}
+
+\pnum
+A type \tcode{X} meets the \tcode{AcceptableProtocol} requirements if it satisfies the requirements of \tcode{Protocol}~(\ref{socket.reqmts.protocol}) as well as the additional requirements listed below.
+
+\begin{libreqtab3}
+{AcceptableProtocol requirements}
+{socket.reqmts.acceptableprotocol.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endhead
+
+\tcode{X::socket}  &
+A type that satisfies the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{MoveConstructible} (C++Std [moveconstructible]), and that is publicly and unambiguously derived from \tcode{basic_socket<X>}.  &
+  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[socket.reqmts.gettablesocketoption]{Gettable socket option requirements}
+
+\pnum
+A type \tcode{X} meets the \tcode{GettableSocketOption} requirements if it satisfies the requirements listed below.
+
+\pnum
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{b} denotes a value of type \tcode{X}, \tcode{p} denotes a (possibly const) value that meets the \tcode{Protocol}~(\ref{socket.reqmts.protocol}) requirements, and \tcode{s} denotes a (possibly const) value of a type that is convertible to \tcode{size_t} and denotes a size in bytes.
+
+\begin{libreqtab3}
+{GettableSocketOption requirements for extensible implementations}
+{socket.reqmts.gettablesocketoption.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endhead
+
+\tcode{a.level(p)}  &
+\tcode{int}  &
+Returns a value suitable for passing as the level argument to POSIX getsockopt (or equivalent).  \\ \rowsep
+
+\tcode{a.name(p)}  &
+\tcode{int}  &
+Returns a value suitable for passing as the option_name argument to POSIX getsockopt (or equivalent).  \\ \rowsep
+
+\tcode{b.data(p)}  &
+\tcode{void*}  &
+Returns a pointer suitable for passing as the option_value argument to POSIX getsockopt (or equivalent).  \\ \rowsep
+
+\tcode{a.size(p)}  &
+\tcode{size_t}  &
+Returns a value suitable for passing as the option_len argument to POSIX getsockopt (or equivalent), after appropriate integer conversion has been performed.  \\ \rowsep
+
+\tcode{b.resize(p,s)}  &
+  &
+post: \tcode{b.size(p) == s}.Passed the value contained in the option_lenargument to POSIX getsockopt(or equivalent) after successful completion of the function. Permitted to throw an exception if the socket option object \tcode{b} does not support the specified size.  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[socket.reqmts.settablesocketoption]{Settable socket option requirements}
+
+\pnum
+A type \tcode{X} meets the \tcode{SettableSocketOption} requirements if it satisfies the requirements listed below.
+
+\pnum
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{p} denotes a (possibly const) value that meets the \tcode{Protocol}~(\ref{socket.reqmts.protocol}) requirements, and \tcode{u} denotes an identifier.
+
+\begin{libreqtab3}
+{SettableSocketOption requirements for extensible implementations}
+{socket.reqmts.settablesocketoption.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endhead
+
+\tcode{a.level(p)}  &
+\tcode{int}  &
+Returns a value suitable for passing as the level argument to POSIX setsockopt (or equivalent).  \\ \rowsep
+
+\tcode{a.name(p)}  &
+\tcode{int}  &
+Returns a value suitable for passing as the option_name argument to POSIX setsockopt (or equivalent).  \\ \rowsep
+
+\tcode{a.data(p)}  &
+\tcode{const void*}  &
+Returns a pointer suitable for passing as the option_value argument to POSIX setsockopt (or equivalent).  \\ \rowsep
+
+\tcode{a.size(p)}  &
+\tcode{size_t}  &
+Returns a value suitable for passing as the option_len argument to POSIX setsockopt (or equivalent), after appropriate integer conversion has been performed.  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[socket.reqmts.opt.bool]{Boolean socket options}
+
+\pnum
+A type \tcode{X} meets the \tcode{BooleanSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{CopyAssignable} (C++Std [copyassignable]), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), \tcode{X} is contextually convertible to bool, and \tcode{X} satisfies the additional requirements listed below.
+
+\pnum
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{b} denotes a (possibly const) value of type \tcode{bool}, and \tcode{u} denotes an identifier.
+
+\begin{libreqtab3}
+{BooleanSocketOption requirements}
+{socket.reqmts.opt.bool.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endhead
+
+\tcode{X u;}  &
+  &
+post: \tcode{!u.value()}.  \\ \rowsep
+
+\tcode{X u(b);}  &
+  &
+post: \tcode{u.value() == b}.  \\ \rowsep
+
+\tcode{a.value()}  &
+\tcode{bool}  &
+ Returns the current boolean value of the socket option object.  \\ \rowsep
+
+\tcode{static_cast<bool>(a)}  &
+\tcode{bool}  &
+Returns \tcode{a.value()}.  \\ \rowsep
+
+\tcode{!a}  &
+\tcode{bool}  &
+Returns \tcode{!a.value()}.  \\
+
+\end{libreqtab3}
+
+\pnum
+In this Technical Specification, types that satisfy the \tcode{BooleanSocketOption} requirements are defined as follows.
+
+\begin{codeblock}
+class @\textit{C}@
+{
+public:
+  // constructors:
+  @\textit{C}@() noexcept;
+  explicit @\textit{C}@(bool v) noexcept;
+
+  // members:
+  @\textit{C}@& operator=(bool v) noexcept;
+
+  bool value() const noexcept;
+
+  explicit operator bool() const noexcept;
+  bool operator!() const noexcept;
+};
+\end{codeblock}
+
+\pnum
+ Extensible implementations provide the following member functions:
+
+\begin{codeblock}
+class @\textit{C}@
+{
+public:
+  template<class Protocol> int level(const Protocol& p) const noexcept;
+  template<class Protocol> int name(const Protocol& p) const noexcept;
+  template<class Protocol> void* data(const Protocol& p) noexcept;
+  template<class Protocol> const void* data(const Protocol& p) const noexcept;
+  template<class Protocol> size_t size(const Protocol& p) const noexcept;
+  template<class Protocol> void resize(const Protocol& p, size_t s);
+  // \textit{remainder unchanged}
+private:
+  int value_; // \expos
+};
+\end{codeblock}
+
+\pnum
+Let L and N identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
+
+\begin{itemdecl}
+@\textit{C}@() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{!value()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+explicit @\textit{C}@(bool v) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{value() == v}.
+\end{itemdescr}
+
+\begin{itemdecl}
+@\textit{C}@& operator=(bool v) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{*this}.
+
+\pnum
+\postconditions \tcode{value() == v}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool value() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The stored socket option value. For extensible implementations, returns \tcode{value_ != 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+explicit operator bool() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{value()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool operator!() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{!value()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> int level(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{L}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> int name(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{N}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> void* data(const Protocol& p) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(value_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> const void* data(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(value_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> size_t size(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{sizeof(value_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> void resize(const Protocol& p, size_t s);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\remarks \tcode{length_error} if \tcode{s} is not a valid data size for the protocol specified by \tcode{p}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.reqmts.opt.int]{Integer socket options}
+
+\pnum
+A type \tcode{X} meets the \tcode{IntegerSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{CopyAssignable} (C++Std [copyassignable]), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
+
+\pnum
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{b} denotes a (possibly const) value of type \tcode{int}, and \tcode{u} denotes an identifier.
+
+\begin{libreqtab3}
+{IntegerSocketOption requirements}
+{socket.reqmts.opt.int.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endhead
+
+\tcode{X u;}  &
+  &
+post: \tcode{u.value() == 0}.  \\ \rowsep
+
+\tcode{X u(b);}  &
+  &
+post: \tcode{u.value() == b}.  \\ \rowsep
+
+\tcode{a.value()}  &
+\tcode{int}  &
+ Returns the current integer value of the socket option object.  \\
+
+\end{libreqtab3}
+
+\pnum
+In this Technical Specification, types that satisfy the \tcode{IntegerSocketOption} requirements are defined as follows.
+
+\begin{codeblock}
+class @\textit{C}@
+{
+public:
+  // constructors:
+  @\textit{C}@() noexcept;
+  explicit @\textit{C}@(int v) noexcept;
+
+  // members:
+  @\textit{C}@& operator=(int v) noexcept;
+
+  int value() const noexcept;
+};
+\end{codeblock}
+
+\pnum
+ Extensible implementations provide the following member functions:
+
+\begin{codeblock}
+class @\textit{C}@
+{
+public:
+  template<class Protocol> int level(const Protocol& p) const noexcept;
+  template<class Protocol> int name(const Protocol& p) const noexcept;
+  template<class Protocol> void* data(const Protocol& p) noexcept;
+  template<class Protocol> const void* data(const Protocol& p) const noexcept;
+  template<class Protocol> size_t size(const Protocol& p) const noexcept;
+  template<class Protocol> void resize(const Protocol& p, size_t s);
+  // \textit{remainder unchanged}
+private:
+  int value_; // \expos
+};
+\end{codeblock}
+
+\pnum
+Let L and N identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
+
+\begin{itemdecl}
+@\textit{C}@() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{!value()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+explicit @\textit{C}@(int v) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{value() == v}.
+\end{itemdescr}
+
+\begin{itemdecl}
+@\textit{C}@& operator=(int v) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{*this}.
+
+\pnum
+\postconditions \tcode{value() == v}.
+\end{itemdescr}
+
+\begin{itemdecl}
+int value() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The stored socket option value. For extensible implementations, returns \tcode{value_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> int level(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{L}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> int name(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{N}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> void* data(const Protocol& p) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(value_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> const void* data(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(value_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> size_t size(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{sizeof(value_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> void resize(const Protocol& p, size_t s);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\remarks \tcode{length_error} if \tcode{s} is not a valid data size for the protocol specified by \tcode{p}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.reqmts.iocontrolcommand]{I/O control command requirements}
+
+\pnum
+A type \tcode{X} meets the \tcode{IoControlCommand} requirements if it satisfies the requirements listed below.
+
+\pnum
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, and \tcode{b} denotes a value of type \tcode{X}.
+
+\begin{libreqtab3}
+{IoControlCommand requirements for extensible implementations}
+{socket.reqmts.iocontrolcommand.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions}  \\ \capsep
+\endhead
+
+\tcode{a.name()}  &
+\tcode{int}  &
+Returns a value suitable for passing as the request argument to POSIX \tcode{ioctl} (or equivalent).  \\ \rowsep
+
+\tcode{b.data()}  &
+\tcode{void*}  &
+  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[socket.reqmts.connectcondition]{Connect condition requirements}
+
+\pnum
+A type \tcode{X} meets the \tcode{ConnectCondition} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{CopyConstructible} (C++Std [copyconstructible]), as well as the additional requirements listed below.
+
+\pnum
+In the table below, \tcode{x} denotes a value of type \tcode{X}, \tcode{ec} denotes a (possibly const) value of type \tcode{error_code}, and \tcode{ep} denotes a (possibly const) value of some type satisfying the endpoint~(\ref{socket.reqmts.endpoint}) requirements.
+
+\begin{libreqtab3}
+{ConnectCondition requirements}
+{socket.reqmts.connectcondition.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition}  \\ \capsep
+\endhead
+
+\tcode{x(ec, ep)}  &
+\tcode{bool}  &
+Returns \tcode{true} to indicate that the \tcode{connect} or \tcode{async_connect} algorithm should attempt a connection to the endpoint \tcode{ep}. Otherwise, returns \tcode{false} to indicate that the algorithm should not attempt connection to the endpoint \tcode{ep}, and should instead skip to the next endpoint in the sequence.  \\
+
+\end{libreqtab3}
+
+
+
+
+\rSec1[socket.err]{Error codes}
+
+\begin{itemdecl}
+const error_category& socket_category() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A reference to an object of a type derived from class \tcode{error_category}. All calls to this function return references to the same object.
+
+\pnum
+The object's \tcode{default_error_condition} and \tcode{equivalent} virtual functions behave as specified for the class \tcode{error_category}. The object's \tcode{name} virtual function returns a pointer to the string \tcode{"socket"}.
+\end{itemdescr}
+
+\begin{itemdecl}
+error_code make_error_code(socket_errc e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{error_code(static_cast<int>(e), socket_category())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+error_condition make_error_condition(socket_errc e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{error_condition(static_cast<int>(e), socket_category())}.
+\end{itemdescr}
+
+
+
+\rSec1[socket.base]{Class \tcode{socket_base}}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class socket_base
+  {
+  public:
+    class broadcast;
+    class debug;
+    class do_not_route;
+    class keep_alive;
+    class linger;
+    class out_of_band_inline;
+    class receive_buffer_size;
+    class receive_low_watermark;
+    class reuse_address;
+    class send_buffer_size;
+    class send_low_watermark;
+
+    typedef @\textit{T1}@ shutdown_type;
+    static constexpr shutdown_type shutdown_receive;
+    static constexpr shutdown_type shutdown_send;
+    static constexpr shutdown_type shutdown_both;
+
+    typedef @\textit{T2}@ wait_type;
+    static constexpr wait_type wait_read;
+    static constexpr wait_type wait_write;
+    static constexpr wait_type wait_error;
+
+    typedef @\textit{T3}@ message_flags;
+    static constexpr message_flags message_peek;
+    static constexpr message_flags message_out_of_band;
+    static constexpr message_flags message_do_not_route;
+
+    static const int max_listen_connections;
+
+  protected:
+    socket_base();
+    ~socket_base();
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{socket_base} defines several member types:
+
+\pnum
+--- socket option classes \tcode{broadcast}, \tcode{debug}, \tcode{do_not_route}, \tcode{keep_alive}, \tcode{linger}, \tcode{out_of_band_inline}, \tcode{receive_buffer_size}, \tcode{receive_low_watermark}, \tcode{reuse_address}, \tcode{send_buffer_size}, and \tcode{send_low_watermark};
+
+\pnum
+--- an enumerated type, \tcode{shutdown_type}, for use with the \tcode{basic_socket<Protocol>} class's \tcode{shutdown} member function.
+
+\pnum
+--- an enumerated type, \tcode{wait_type}, for use with the \tcode{basic_socket<Protocol>} and \tcode{basic_socket_acceptor<Protocol>} classes' \tcode{wait} and \tcode{async_wait} member functions,
+
+\pnum
+--- a bitmask type, \tcode{message_flags}, for use with the \tcode{basic_stream_socket<Protocol>} class's \tcode{send}, \tcode{async_send},\tcode{receive}, and \tcode{async_receive} member functions, and the \tcode{basic_datagram_socket<Protocol>} class's \tcode{send}, \tcode{async_send}, \tcode{send_to}, \tcode{async_send_to}, \tcode{receive}, \tcode{async_receive}, \tcode{receive_from}, and \tcode{async_receive_from} member functions.
+
+\pnum
+--- a constant, \tcode{max_listen_connections}, for use with the \tcode{basic_socket_acceptor<Protocol>} class's \tcode{listen} member function.
+
+\begin{libreqtab3}
+{socket_base constants}
+{socket.base.requirements}
+\\ \topline
+\lhdr{Constant Name}  &
+\chdr{POSIX macro}  &
+\rhdr{Definition or notes}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{Constant Name}  &
+\chdr{POSIX macro}  &
+\rhdr{Definition or notes}  \\ \capsep
+\endhead
+
+\tcode{shutdown_receive}  &
+\tcode{SHUT_RD}  &
+ Disables further receive operations.  \\ \rowsep
+
+\tcode{shutdown_send}  &
+\tcode{SHUT_WR}  &
+ Disables further send operations.  \\ \rowsep
+
+\tcode{shutdown_both}  &
+\tcode{SHUT_RDWR}  &
+ Disables further send and receive operations.  \\ \rowsep
+
+\tcode{wait_read}  &
+  &
+Wait until the socket is ready-to-read.For a given socket, when a \tcode{wait}or \tcode{async_wait}operation using \tcode{wait_read}completes successfuly, a subsequent call to the socket's \tcode{receive}or \tcode{receive_from}functions may complete without blocking. Similarly, for a given acceptor, when a \tcode{wait}or \tcode{async_wait}operation using \tcode{wait_read}completes successfully, a subsequent call to the acceptor's \tcode{accept} function may complete without blocking.  \\ \rowsep
+
+\tcode{wait_write}  &
+  &
+Wait until the socket is ready-to-write.For a given socket, when a \tcode{wait}or \tcode{async_wait}operation using \tcode{wait_write}completes successfuly, a subsequent call to the socket's \tcode{send}or \tcode{send_to} functions may complete without blocking.  \\ \rowsep
+
+\tcode{wait_error}  &
+  &
+Wait until the socket has a pending error condition.For a given socket, when a \tcode{wait}or \tcode{async_wait}operation using \tcode{wait_error} completes successfuly, a subsequent call to one of the socket's synchronous operations may complete without blocking. The nature of the pending error condition determines which.  \\ \rowsep
+
+\tcode{message_peek}  &
+\tcode{MSG_PEEK}  &
+ Leave received data in queue.  \\ \rowsep
+
+\tcode{message_out_of_band}  &
+\tcode{MSG_OOB}  &
+ Out-of-band data.  \\ \rowsep
+
+\tcode{message_do_not_route}  &
+\tcode{MSG_DONTROUTE}  &
+ Send without using routing tables.  \\ \rowsep
+
+\tcode{max_listen_connections}  &
+\tcode{SOMAXCONN}  &
+ The implementation-defined limit on the length of the queue of pending incoming connections.  \\
+
+\end{libreqtab3}
+
+
+\rSec1[socket.opt]{Socket options}
+
+\pnum
+In the table below, let C denote a socket option class; let L identify the POSIX macro to be passed as the level argument to POSIX setsockopt and getsockopt; let N identify the POSIX macro to be passed as the option_name argument to POSIX setsockopt and getsockopt; and let T identify the type of the value whose address will be passed as the option_value argument to POSIX setsockopt and getsockopt.
+
+\begin{libreqtab5}
+{socket options}
+{socket.opt.requirements}
+\\ \topline
+\lhdr{C}  &
+\chdr{L}  &
+\chdr{N}  &
+\chdr{T}  &
+\rhdr{Requirements, definition or notes}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{C}  &
+\chdr{L}  &
+\chdr{N}  &
+\chdr{T}  &
+\rhdr{Requirements, definition or notes}  \\ \capsep
+\endhead
+
+socket_base::broadcast  &
+SOL_SOCKET  &
+SO_BROADCAST  &
+int  &
+Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket permits sending of broadcast messages, if supported by the protocol.  \\ \rowsep
+
+socket_base::debug  &
+SOL_SOCKET  &
+SO_DEBUG  &
+int  &
+Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether debugging information is recorded by the underlying protocol.  \\ \rowsep
+
+socket_base::do_not_route  &
+SOL_SOCKET  &
+SO_DONTROUTE  &
+int  &
+Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether outgoing messages bypass standard routing facilities.  \\ \rowsep
+
+socket_base::keep_alive  &
+SOL_SOCKET  &
+SO_KEEPALIVE  &
+int  &
+Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket permits sending of keep_alive messages, if supported by the protocol.  \\ \rowsep
+
+socket_base::linger~(\ref{socket.opt.linger})  &
+SOL_SOCKET  &
+SO_LINGER  &
+linger  &
+ Controls the behavior when a socket is closed and unsent data is present.  \\ \rowsep
+
+socket_base::out_of_band_inline  &
+SOL_SOCKET  &
+SO_OOBINLINE  &
+int  &
+Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether out-of-band data (also known as urgent data) is received inline.  \\ \rowsep
+
+socket_base::receive_buffer_size  &
+SOL_SOCKET  &
+SO_RCVBUF  &
+int  &
+Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the size of the receive buffer associated with a socket.  \\ \rowsep
+
+socket_base::receive_low_watermark  &
+SOL_SOCKET  &
+SO_RCVLOWAT  &
+int  &
+Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the minimum number of bytes to process for socket input operations.  \\ \rowsep
+
+socket_base::reuse_address  &
+SOL_SOCKET  &
+SO_REUSEADDR  &
+int  &
+Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether the validation of endpoints used for binding a socket should allow the reuse of local endpoints, if supported by the protocol.  \\ \rowsep
+
+socket_base::send_buffer_size  &
+SOL_SOCKET  &
+SO_SNDBUF  &
+int  &
+Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the size of the send buffer associated with a socket.  \\ \rowsep
+
+socket_base::send_low_watermark  &
+SOL_SOCKET  &
+SO_SNDLOWAT  &
+int  &
+Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the minimum number of bytes to process for socket output operations.  \\
+
+\end{libreqtab5}
+
+
+\rSec2[socket.opt.linger]{Class \tcode{socket_base::linger}}
+
+\pnum
+The \tcode{linger} class represents a socket option for controlling the behavior when a socket is closed and unsent data is present.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class socket_base::linger
+  {
+  public:
+    // constructors:
+    linger() noexcept;
+    linger(bool e, chrono::seconds t) noexcept;
+
+    // members:
+    bool enabled() const noexcept;
+    void enabled(bool e) noexcept;
+
+    chrono::seconds timeout() const noexcept;
+    void timeout(chrono::seconds t) noexcept;
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+\tcode{linger} satisfies the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), \tcode{CopyConstructible} (C++Std [copyconstructible]), \tcode{CopyAssignable} (C++Std [copyassignable]), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
+
+\pnum
+ Extensible implementations provide the following member functions:
+
+\begin{itemdecl}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class socket_base::linger
+  {
+  public:
+    template<class Protocol> int level(const Protocol& p) const noexcept;
+    template<class Protocol> int name(const Protocol& p) const noexcept;
+    template<class Protocol> void data(const Protocol& p) noexcept;
+    template<class Protocol> const void* data(const Protocol& p) const noexcept;
+    template<class Protocol> size_t size(const Protocol& p) const noexcept;
+    template<class Protocol> void resize(const Protocol& p, size_t s);
+    // \textit{remainder unchanged}
+  private:
+    ::linger value_;  // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+
+linger() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{!enabled() \&\& timeout() == chrono::seconds(0)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+linger(bool e, chrono::seconds t) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{enabled() == e \&\& timeout() == t}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool enabled() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{value_.l_onoff != 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void enabled(bool e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{enabled() == e}.
+\end{itemdescr}
+
+\begin{itemdecl}
+chrono::seconds timeout() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{chrono::seconds(value_.l_linger)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void timeout(chrono::seconds t) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{timeout() == t}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> int level(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{SOL_SOCKET}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> int name(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{SO_LINGER}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> void* data(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(value_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> const void* data(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(value_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> size_t size(const Protocol& p) const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{sizeof(value_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class Protocol> void resize(const Protocol& p, size_t s);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\remarks \tcode{length_error} if \tcode{s != sizeof(value_)}.
+\end{itemdescr}
+
+
+
+
+\rSec1[socket.basic]{Class template \tcode{basic_socket}}
+
+\pnum
+Class template \tcode{basic_socket<Protocol>} is used as the base class for the \tcode{basic_datagram_socket<Protocol>} and \tcode{basic_stream_socket<Protocol>} class templates. It provides functionality that is common to both types of socket.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class Protocol>
+  class basic_socket : public socket_base
+  {
+  public:
+    // types:
+
+    typedef io_context::executor_type executor_type;
+    typedef @\textit{implementation defined}@ native_handle_type; // See native handles
+    typedef Protocol protocol_type;
+    typedef typename protocol_type::endpoint endpoint_type;
+
+    // basic_socket operations:
+
+    executor_type get_executor() noexcept;
+
+    native_handle_type native_handle(); // See native handles
+
+    void open(const protocol_type& protocol = protocol_type());
+    void open(const protocol_type& protocol, error_code& ec);
+
+    void assign(const protocol_type& protocol,
+                const native_handle_type& native_socket); // See native handles
+    void assign(const protocol_type& protocol,
+                const native_handle_type& native_socket,
+                error_code& ec); // See native handles
+
+    bool is_open() const noexcept;
+
+    void close();
+    void close(error_code& ec);
+
+    void cancel();
+    void cancel(error_code& ec);
+
+    template<class SettableSocketOption>
+      void set_option(const SettableSocketOption& option);
+    template<class SettableSocketOption>
+      void set_option(const SettableSocketOption& option, error_code& ec);
+
+    template<class GettableSocketOption>
+      void get_option(GettableSocketOption& option) const;
+    template<class GettableSocketOption>
+      void get_option(GettableSocketOption& option, error_code& ec) const;
+
+    template<class IoControlCommand>
+      void io_control(IoControlCommand& command);
+    template<class IoControlCommand>
+      void io_control(IoControlCommand& command, error_code& ec);
+
+    void non_blocking(bool mode);
+    void non_blocking(bool mode, error_code& ec);
+    bool non_blocking() const;
+
+    void native_non_blocking(bool mode);
+    void native_non_blocking(bool mode, error_code& ec);
+    bool native_non_blocking() const;
+
+    bool at_mark() const;
+    bool at_mark(error_code& ec) const;
+
+    size_t available() const;
+    size_t available(error_code& ec) const;
+
+    void bind(const endpoint_type& endpoint);
+    void bind(const endpoint_type& endpoint, error_code& ec);
+
+    void shutdown(shutdown_type what);
+    void shutdown(shutdown_type what, error_code& ec);
+
+    endpoint_type local_endpoint() const;
+    endpoint_type local_endpoint(error_code& ec) const;
+
+    endpoint_type remote_endpoint() const;
+    endpoint_type remote_endpoint(error_code& ec) const;
+
+    void connect(const endpoint_type& endpoint);
+    void connect(const endpoint_type& endpoint, error_code& ec);
+
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_connect(const endpoint_type& endpoint,
+                            CompletionToken&& token);
+
+    void wait(wait_type w);
+    void wait(wait_type w, error_code& ec);
+
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_wait(wait_type w, CompletionToken&& token);
+
+  protected:
+    // construct / copy / destroy:
+
+    explicit basic_socket(io_context& ctx);
+    basic_socket(io_context& ctx, const protocol_type& protocol);
+    basic_socket(io_context& ctx, const endpoint_type& endpoint);
+    basic_socket(io_context& ctx, const protocol_type& protocol,
+                 const native_handle_type& native_socket); // See native handles
+    basic_socket(const basic_socket&) = delete;
+    basic_socket(basic_socket&& rhs);
+    template<class OtherProtocol>
+      basic_socket(basic_socket<OtherProtocol>&& rhs);
+
+    ~basic_socket();
+
+    basic_socket& operator=(const basic_socket&) = delete;
+    basic_socket& operator=(basic_socket&& rhs);
+    template<class OtherProtocol>
+      basic_socket& operator=(basic_socket<OtherProtocol>&& rhs);
+
+  private:
+    protocol_type protocol_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Instances of class template \tcode{basic_socket} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), and \tcode{MoveAssignable} (C++Std [moveassignable]).
+
+\pnum
+When an operation has its effects specified as if by passing the result of \tcode{native_handle()} to a POSIX function, then the operation fails with error condition \tcode{errc::bad_file_descriptor} if \tcode{is_open() == false} at the point in the effects when the POSIX function is called.
+
+
+\rSec2[socket.basic.cons]{\tcode{basic_socket} constructors}
+
+\begin{itemdecl}
+explicit basic_socket(io_context& ctx);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == ctx.get_executor()}.
+\item
+\tcode{is_open() == false}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket(io_context& ctx, const protocol_type& protocol);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Opens this socket as if by calling \tcode{open(protocol)}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == ctx.get_executor()}.
+\item
+\tcode{is_open() == true}.
+\item
+\tcode{non_blocking() == false}.
+\item
+\tcode{protocol_ == protocol}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket(io_context& ctx, const endpoint_type& endpoint);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Opens and binds this socket as if by calling: 
+\begin{codeblock}
+open(endpoint.protocol());
+bind(endpoint);
+\end{codeblock}
+
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == ctx.get_executor()}.
+\item
+\tcode{is_open() == true}.
+\item
+\tcode{non_blocking() == false}.
+\item
+\tcode{protocol_ == endpoint.protocol()}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket(io_context& ctx, const protocol_type& protocol,
+             const native_handle_type& native_socket);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{native_socket} is a native handle to an open socket.
+
+\pnum
+\effects Assigns the existing native socket into this socket as if by calling \tcode{assign(protocol, native_socket)}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == ctx.get_executor()}.
+\item
+\tcode{is_open() == true}.
+\item
+\tcode{non_blocking() == false}.
+\item
+\tcode{protocol_ == protocol}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket(basic_socket&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Move constructs an object of class \tcode{basic_socket<Protocol>} that refers to the state originally represented by \tcode{rhs}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == rhs.get_executor()}.
+\item
+\tcode{is_open()} returns the same value as \tcode{rhs.is_open()} prior to the constructor invocation.
+\item
+\tcode{non_blocking()} returns the same value as \tcode{rhs.non_blocking()} prior to the constructor invocation.
+\item
+\tcode{native_handle()} returns the prior value of \tcode{rhs.native_handle()}.
+\item
+\tcode{protocol_} is the prior value of \tcode{rhs.protocol_}.
+\item
+\tcode{rhs.is_open() == false}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherProtocol>
+  basic_socket(basic_socket<OtherProtocol>&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+
+\pnum
+\effects Move constructs an object of class \tcode{basic_socket<Protocol>} that refers to the state originally represented by \tcode{rhs}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == rhs.get_executor()}.
+\item
+\tcode{is_open()} returns the same value as \tcode{rhs.is_open()} prior to the constructor invocation.
+\item
+\tcode{non_blocking()} returns the same value as \tcode{rhs.non_blocking()} prior to the constructor invocation.
+\item
+\tcode{native_handle()} returns the prior value of \tcode{rhs.native_handle()}.
+\item
+\tcode{protocol_} is the result of converting the prior value of \tcode{rhs.protocol_}.
+\item
+\tcode{rhs.is_open() == false}.
+\end{itemize}
+
+\pnum
+\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.basic.dtor]{\tcode{basic_socket} destructor}
+
+\begin{itemdecl}
+~basic_socket();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this socket, disables the linger socket option to prevent the destructor from blocking, and releases socket resources as if by POSIX \tcode{close(native_handle())}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.basic.assign]{\tcode{basic_socket} assignment}
+
+\begin{itemdecl}
+basic_socket& operator=(basic_socket&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this socket. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}. Disables the linger socket option to prevent the assignment from blocking, and releases socket resources as if by POSIX \tcode{close(native_handle())}. Moves into \tcode{*this} the state originally represented by \tcode{rhs}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == rhs.get_executor()}.
+\item
+\tcode{is_open()} returns the same value as \tcode{rhs.is_open()} prior to the assignment.
+\item
+\tcode{non_blocking()} returns the same value as \tcode{rhs.non_blocking()} prior to the assignment.
+\item
+\tcode{protocol_} is the prior value of \tcode{rhs.protocol_}.
+\item
+\tcode{rhs.is_open() == false}.
+\end{itemize}
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherProtocol>
+  basic_socket& operator=(basic_socket<OtherProtocol>&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+
+\pnum
+\effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this socket. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}. Disables the linger socket option to prevent the assignment from blocking, and releases socket resources as if by POSIX \tcode{close(native_handle())}. Moves into \tcode{*this} the state originally represented by \tcode{rhs}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == rhs.get_executor()}.
+\item
+\tcode{is_open()} returns the same value as \tcode{rhs.is_open()} prior to the assignment.
+\item
+\tcode{non_blocking()} returns the same value as \tcode{rhs.non_blocking()} prior to the assignment.
+\item
+\tcode{protocol_} is the result of converting the prior value of \tcode{rhs.protocol_}.
+\item
+\tcode{rhs.is_open() == false}.
+\end{itemize}
+
+\pnum
+\returns \tcode{*this}.
+
+\pnum
+\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.basic.ops]{\tcode{basic_socket} operations}
+
+\begin{itemdecl}
+executor_type get_executor() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The associated executor.
+\end{itemdescr}
+
+\begin{itemdecl}
+native_handle_type native_handle();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The native representation of this socket.
+\end{itemdescr}
+
+\begin{itemdecl}
+void open(const protocol_type& protocol);
+void open(const protocol_type& protocol, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Establishes the postcondition, as if by POSIX \tcode{socket(protocol.family(), protocol.type(), protocol.protocol())}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{is_open() == true}.
+\item
+\tcode{non_blocking() == false}.
+\item
+\tcode{protocol_ == protocol}.
+\end{itemize}
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{socket_errc::already_open}
+\item
+ if \tcode{is_open() == true}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+void assign(const protocol_type& protocol,
+            const native_handle_type& native_socket);
+void assign(const protocol_type& protocol,
+            const native_handle_type& native_socket, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{native_socket} is a native handle to an open socket.
+
+\pnum
+\effects Assigns the native socket handle to this socket object.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{is_open() == true}.
+\item
+\tcode{non_blocking() == false}.
+\item
+\tcode{protocol_ == protocol}.
+\end{itemize}
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{socket_errc::already_open}
+\item
+ if \tcode{is_open() == true}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+bool is_open() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A \tcode{bool} indicating whether this socket was opened by a previous call to \tcode{open} or \tcode{assign}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void close();
+void close(error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this socket, and establishes the postcondition as if by POSIX \tcode{close(native_handle())}. Completion handlers for canceled asynchronous operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+
+\pnum
+\postconditions \tcode{is_open() == false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void cancel();
+void cancel(error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Cancels all outstanding asynchronous operations associated with this socket. Completion handlers for canceled asynchronous operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::bad_file_descriptor}
+\item
+ if \tcode{is_open()} is \tcode{false}.
+\end{itemize}
+
+\pnum
+\remarks Does not block (C++Std [defns.block]) the calling thread pending completion of the canceled operations.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class SettableSocketOption>
+  void set_option(const SettableSocketOption& option);
+template<class SettableSocketOption>
+  void set_option(const SettableSocketOption& option, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Sets an option on this socket, as if by POSIX \tcode{setsockopt(native_handle(), option.level(protocol_), option.name(protocol_), option.data(protocol_), option.size(protocol_))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class GettableSocketOption>
+  void get_option(GettableSocketOption& option);
+template<class GettableSocketOption>
+  void get_option(GettableSocketOption& option, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Gets an option from this socket, as if by POSIX: 
+\begin{codeblock}
+socklen_t option_len = option.size(protocol_);
+int result = getsockopt(native_handle(), option.level(protocol_),
+                        option.name(protocol_), option.data(protocol_),
+                        &option_len);
+if (result == 0)
+  option.resize(option_len);
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class IoControlCommand>
+  void io_control(IoControlCommand& command);
+template<class IoControlCommand>
+  void io_control(IoControlCommand& command, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Executes an I/O control command on this socket, as if by POSIX \tcode{ioctl(native_handle(), command.name(), command.data())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void non_blocking(bool mode);
+void non_blocking(bool mode, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Sets the non-blocking mode of this socket. The non-blocking mode determines whether subsequent synchronous socket operations~(\ref{socket.reqmts.sync}) on \tcode{*this} block the calling thread.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::bad_file_descriptor}
+\item
+ if \tcode{is_open()} is \tcode{false}.
+\end{itemize}
+
+\pnum
+\postconditions \tcode{non_blocking() == mode}.
+
+\pnum
+ \enternote The non-blocking mode has no effect on the behavior of asynchronous operations. \exitnote
+\end{itemdescr}
+
+\begin{itemdecl}
+bool non_blocking() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The non-blocking mode of this socket.
+\end{itemdescr}
+
+\begin{itemdecl}
+void native_non_blocking(bool mode);
+void native_non_blocking(bool mode, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Sets the non-blocking mode of the underlying native socket, as if by POSIX: 
+\begin{codeblock}
+int flags = fcntl(native_handle(), F_GETFL, 0);
+if (flags >= 0)
+{
+  if (mode)
+    flags |= O_NONBLOCK;
+  else
+    flags &= ~O_NONBLOCK;
+  fcntl(native_handle(), F_SETFL, flags);
+}
+\end{codeblock}
+
+
+\pnum
+ The native non-blocking mode has no effect on the behavior of the synchronous or asynchronous operations specified in this clause.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::bad_file_descriptor}
+\item
+ if \tcode{is_open()} is \tcode{false}.
+\item
+\tcode{errc::invalid_argument}
+\item
+ if \tcode{mode == false} and \tcode{non_blocking() == true}. \enternote As the combination does not make sense. \exitnote
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+bool native_non_blocking() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The non-blocking mode of the underlying native socket.
+
+\pnum
+\remarks Implementations are permitted and encouraged to cache the native non-blocking mode that was applied through a prior call to \tcode{native_non_blocking}. Implementations may return an incorrect value if a program sets the non-blocking mode directly on the socket, by calling an operating system-specific function on the result of \tcode{native_handle()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+bool at_mark() const;
+bool at_mark(error_code& ec) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Determines if this socket is at the out-of-band data mark, as if by POSIX \tcode{sockatmark(native_handle())}. \enternote The \tcode{at_mark()} function must be used in conjunction with the \tcode{socket_base::out_of_band_inline} socket option. \exitnote
+
+\pnum
+\returns A \tcode{bool} indicating whether this socket is at the out-of-band data mark. \tcode{false} if an error occurs.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t available() const;
+size_t available(error_code& ec) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns An indication of the number of bytes that may be read without blocking, or \tcode{0} if an error occurs.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::bad_file_descriptor}
+\item
+ if \tcode{is_open()} is \tcode{false}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+void bind(const endpoint_type& endpoint);
+void bind(const endpoint_type& endpoint, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Binds this socket to the specified local endpoint, as if by POSIX \tcode{bind(native_handle(), endpoint.data(), endpoint.size())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void shutdown(shutdown_type what);
+void shutdown(shutdown_type what, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Shuts down all or part of a full-duplex connection for the socket, as if by POSIX \tcode{shutdown(native_handle(), static_cast<int>(what))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+endpoint_type local_endpoint() const;
+endpoint_type local_endpoint(error_code& ec) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Determines the locally-bound endpoint associated with the socket, as if by POSIX: 
+\begin{codeblock}
+endpoint_type endpoint;
+socklen_t endpoint_len = endpoint.capacity();
+int result == getsockname(native_handle(), endpoint.data(), &endpoint_len);
+if (result == 0)
+  endpoint.resize(endpoint_len);
+\end{codeblock}
+
+
+\pnum
+\returns On success, \tcode{endpoint}. Otherwise \tcode{endpoint_type()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+endpoint_type remote_endpoint() const;
+endpoint_type remote_endpoint(error_code& ec) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Determines the remote endpoint associated with this socket, as if by POSIX: 
+\begin{codeblock}
+endpoint_type endpoint;
+socklen_t endpoint_len = endpoint.capacity();
+int result == getpeername(native_handle(), endpoint.data(), &endpoint_len);
+if (result == 0)
+  endpoint.resize(endpoint_len);
+\end{codeblock}
+
+
+\pnum
+\returns On success, \tcode{endpoint}. Otherwise \tcode{endpoint_type()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void connect(const endpoint_type& endpoint);
+void connect(const endpoint_type& endpoint, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{is_open()} is \tcode{false}, opens this socket by performing \tcode{open(endpoint.protocol(), ec)}. If \tcode{ec}, returns with no further action. Connects this socket to the specified remote endpoint, as if by POSIX \tcode{connect(native_handle(), endpoint.data(), endpoint.size())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_connect(const endpoint_type& endpoint, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void(error_code ec)}.
+
+\pnum
+\effects If \tcode{is_open()} is \tcode{false}, opens this socket by performing \tcode{open(endpoint.protocol(), ec)}. If \tcode{ec}, the operation completes immediately with no further action. Initiates an asynchronous operation to connect this socket to the specified remote endpoint, as if by POSIX \tcode{connect(native_handle(), endpoint.data(), endpoint.size())}.
+
+\pnum
+ When an asynchronous connect operation on this socket is simultaneously outstanding with another asynchronous connect, read, or write operation on this socket, the behavior is undefined.
+
+\pnum
+If a program performs a synchronous operation on this socket, other than \tcode{close} or \tcode{cancel}, while there is an outstanding asynchronous connect operation, the behavior is undefined.
+\end{itemdescr}
+
+\begin{itemdecl}
+void wait(wait_type w);
+void wait(wait_type w, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Waits for this socket to be ready to read, ready to write, or to have error conditions pending, as if by POSIX poll.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::bad_file_descriptor}
+\item
+ if \tcode{is_open()} is \tcode{false}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_wait(wait_type w, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void(error_code ec)}.
+
+\pnum
+\effects Initiates an asynchronous operation to wait for this socket to be ready to read, ready to write, or to have error conditions pending, as if by POSIX poll.
+
+\pnum
+When there are multiple outstanding asynchronous wait operations on this socket with the same \tcode{wait_type} value, all of these operations complete when this socket enters the corresponding ready state. The order of invocation of the completion handlers for these operations is unspecified.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::bad_file_descriptor}
+\item
+ if \tcode{is_open()} is \tcode{false}.
+\end{itemize}
+\end{itemdescr}
+
+
+
+
+\rSec1[socket.dgram]{Class template \tcode{basic_datagram_socket}}
+
+\pnum
+The class template \tcode{basic_datagram_socket<Protocol>} is used to send and receive discrete messages of fixed maximum length.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class Protocol>
+  class basic_datagram_socket : public basic_socket<Protocol>
+  {
+  public:
+    // types:
+
+    typedef @\textit{implementation defined}@ native_handle_type; // See native handles
+    typedef Protocol protocol_type;
+    typedef typename protocol_type::endpoint endpoint_type;
+
+    // construct / copy / destroy:
+
+    explicit basic_datagram_socket(io_context& ctx);
+    basic_datagram_socket(io_context& ctx, const protocol_type& protocol);
+    basic_datagram_socket(io_context& ctx, const endpoint_type& endpoint);
+    basic_datagram_socket(io_context& ctx, const protocol_type& protocol,
+                          const native_handle_type& native_socket);
+    basic_datagram_socket(const basic_datagram_socket&) = delete;
+    basic_datagram_socket(basic_datagram_socket&& rhs);
+    template<class OtherProtocol>
+      basic_datagram_socket(basic_datagram_socket<OtherProtocol>&& rhs);
+
+    ~basic_datagram_socket();
+
+    basic_datagram_socket& operator=(const basic_datagram_socket&) = delete;
+    basic_datagram_socket& operator=(basic_datagram_socket&& rhs);
+    template<class OtherProtocol>
+      basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol>&& rhs);
+
+    // basic_datagram_socket operations:
+
+    template<class MutableBufferSequence>
+      size_t receive(const MutableBufferSequence& buffers);
+    template<class MutableBufferSequence>
+      size_t receive(const MutableBufferSequence& buffers,
+                     error_code& ec);
+
+    template<class MutableBufferSequence>
+      size_t receive(const MutableBufferSequence& buffers,
+                     socket_base::message_flags flags);
+    template<class MutableBufferSequence>
+      size_t receive(const MutableBufferSequence& buffers,
+                     socket_base::message_flags flags, error_code& ec);
+
+    template<class MutableBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+                            CompletionToken&& token);
+
+    template<class MutableBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+                            socket_base::message_flags flags,
+                            CompletionToken&& token);
+
+    template<class MutableBufferSequence>
+      size_t receive_from(const MutableBufferSequence& buffers,
+                          endpoint_type& sender);
+    template<class MutableBufferSequence>
+      size_t receive_from(const MutableBufferSequence& buffers,
+                          endpoint_type& sender, error_code& ec);
+
+    template<class MutableBufferSequence>
+      size_t receive_from(const MutableBufferSequence& buffers,
+                          endpoint_type& sender,
+                          socket_base::message_flags flags);
+    template<class MutableBufferSequence>
+      size_t receive_from(const MutableBufferSequence& buffers,
+                          endpoint_type& sender,
+                          socket_base::message_flags flags,
+                          error_code& ec);
+
+    template<class MutableBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_receive_from(const MutableBufferSequence& buffers,
+                                 endpoint_type& sender,
+                                 CompletionToken&& token);
+
+    template<class MutableBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_receive_from(const MutableBufferSequence& buffers,
+                                 endpoint_type& sender,
+                                 socket_base::message_flags flags,
+                                 CompletionToken&& token);
+
+    template<class ConstBufferSequence>
+      size_t send(const ConstBufferSequence& buffers);
+    template<class ConstBufferSequence>
+      size_t send(const ConstBufferSequence& buffers, error_code& ec);
+
+    template<class ConstBufferSequence>
+      size_t send(const ConstBufferSequence& buffers,
+                  socket_base::message_flags flags);
+    template<class ConstBufferSequence>
+      size_t send(const ConstBufferSequence& buffers,
+                  socket_base::message_flags flags, error_code& ec);
+
+    template<class ConstBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+                         CompletionToken&& token);
+
+    template<class ConstBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+                         socket_base::message_flags flags,
+                         CompletionToken&& token);
+
+    template<class ConstBufferSequence>
+      size_t send_to(const ConstBufferSequence& buffers,
+                     const endpoint_type& recipient);
+    template<class ConstBufferSequence>
+      size_t send_to(const ConstBufferSequence& buffers,
+                     const endpoint_type& recipient, error_code& ec);
+
+    template<class ConstBufferSequence>
+      size_t send_to(const ConstBufferSequence& buffers,
+                     const endpoint_type& recipient,
+                     socket_base::message_flags flags);
+    template<class ConstBufferSequence>
+      size_t send_to(const ConstBufferSequence& buffers,
+                     const endpoint_type& recipient,
+                     socket_base::message_flags flags, error_code& ec);
+
+    template<class ConstBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_send_to(const ConstBufferSequence& buffers,
+                            const endpoint_type& recipient,
+                            CompletionToken&& token);
+
+    template<class ConstBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_send_to(const ConstBufferSequence& buffers,
+                            const endpoint_type& recipient,
+                            socket_base::message_flags flags,
+                            CompletionToken&& token);
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Instances of class template \tcode{basic_datagram_socket} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), and \tcode{MoveAssignable} (C++Std [moveassignable]).
+
+\pnum
+If a program performs a synchronous operation on this socket, other than \tcode{close}, \tcode{cancel}, \tcode{shutdown}, \tcode{send}, or \tcode{send_to}, while there is an outstanding asynchronous read operation, the behavior is undefined.
+
+\pnum
+If a program performs a synchronous operation on this socket, other than \tcode{close}, \tcode{cancel}, \tcode{shutdown}, \tcode{receive}, or \tcode{receive_from}, while there is an outstanding asynchronous write operation, the behavior is undefined.
+
+\pnum
+When an operation has its effects specified as if by passing the result of \tcode{native_handle()} to a POSIX function, then the operation fails with error condition \tcode{errc::bad_file_descriptor} if \tcode{is_open() == false} at the point in the effects when the POSIX function is called.
+
+
+\rSec2[socket.dgram.cons]{\tcode{basic_datagram_socket} constructors}
+
+\begin{itemdecl}
+explicit basic_datagram_socket(io_context& ctx);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_datagram_socket(io_context& ctx, const protocol_type& protocol);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, protocol)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_datagram_socket(io_context& ctx, const endpoint_type& endpoint);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, endpoint)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_datagram_socket(io_context& ctx, const protocol_type& protocol,
+                      const native_handle_type& native_socket);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, protocol, native_socket)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_datagram_socket(basic_datagram_socket&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherProtocol>
+  basic_datagram_socket(basic_datagram_socket<OtherProtocol>&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+
+\pnum
+\effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
+
+\pnum
+\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.dgram.assign]{\tcode{basic_datagram_socket} assignment}
+
+\begin{itemdecl}
+basic_datagram_socket& operator=(basic_datagram_socket&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherProtocol>
+  basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol>&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+
+\pnum
+\effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
+
+\pnum
+\returns \tcode{*this}.
+
+\pnum
+\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.dgram.op]{\tcode{basic_datagram_socket} operations}
+
+\begin{itemdecl}
+template<class MutableBufferSequence>
+  size_t receive(const MutableBufferSequence& buffers);
+template<class MutableBufferSequence>
+  size_t receive(const MutableBufferSequence& buffers,
+                 error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{receive(buffers, socket_base::message_flags(), ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence>
+  size_t receive(const MutableBufferSequence& buffers,
+                 socket_base::message_flags flags);
+template<class MutableBufferSequence>
+  size_t receive(const MutableBufferSequence& buffers,
+                 socket_base::message_flags flags, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+A read operation~(\ref{buffer.reqmts.read.write}).
+
+\pnum
+\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and reads data from this socket as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = nullptr;
+message.msg_namelen = 0;
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+recvmsg(native_handle(), &message, static_cast<int>(flags));
+\end{codeblock}
+
+
+\pnum
+\returns On success, the number of bytes received. Otherwise \tcode{0}.
+
+\pnum
+ \enternote This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \exitnote
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+                        CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{async_receive(buffers, socket_base::message_flags(), forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+                        socket_base::message_flags flags,
+                        CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void(error_code ec, size_t n)}.
+
+\pnum
+\effects Initiates an asynchronous operation to read data from this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = nullptr;
+message.msg_namelen = 0;
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+recvmsg(native_handle(), &message, static_cast<int>(flags));
+\end{codeblock}
+
+
+\pnum
+If the operation completes successfully, \tcode{n} is the number of bytes received. Otherwise \tcode{n} is \tcode{0}.
+
+\pnum
+ \enternote This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \exitnote
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::invalid_argument}
+\item
+ if \tcode{socket_base::message_peek} is set in flags.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence>
+  size_t receive_from(const MutableBufferSequence& buffers,
+                      endpoint_type& sender);
+template<class MutableBufferSequence>
+  size_t receive_from(const MutableBufferSequence& buffers,
+                      endpoint_type& sender, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{receive_from(buffers, sender, socket_base::message_flags(), ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence>
+  size_t receive_from(const MutableBufferSequence& buffers,
+                      endpoint_type& sender,
+                      socket_base::message_flags flags);
+template<class MutableBufferSequence>
+  size_t receive_from(const MutableBufferSequence& buffers,
+                      endpoint_type& sender,
+                      socket_base::message_flags flags,
+                      error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+A read operation~(\ref{buffer.reqmts.read.write}).
+
+\pnum
+\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and reads data from this socket as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = sender.data();
+message.msg_namelen = sender.capacity();
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+ssize_t result = recvmsg(native_handle(), &message, static_cast<int>(flags));
+if (result >= 0)
+  sender.resize(message.msg_namelen);
+\end{codeblock}
+
+
+\pnum
+\returns On success, the number of bytes received. Otherwise \tcode{0}.
+
+\pnum
+ \enternote This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \exitnote
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_receive_from(const MutableBufferSequence& buffers,
+                             endpoint_type& sender,
+                             CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Returns \tcode{async_receive_from(buffers, sender, socket_base::message_flags(), forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_receive_from(const MutableBufferSequence& buffers,
+                             endpoint_type& sender,
+                             socket_base::message_flags flags,
+                             CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+A read operation~(\ref{buffer.reqmts.read.write}).
+
+\pnum
+Completion signature: \tcode{void(error_code ec, size_t n)}.
+
+\pnum
+\effects Initiates an asynchronous operation to read data from this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = sender.data();
+message.msg_namelen = sender.capacity();
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+ssize_t result = recvmsg(native_handle(), &message, static_cast<int>(flags));
+if (result >= 0)
+  sender.resize(message.msg_namelen);
+\end{codeblock}
+
+
+\pnum
+If the operation completes successfully, \tcode{n} is the number of bytes received. Otherwise \tcode{n} is \tcode{0}.
+
+\pnum
+ \enternote This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \exitnote
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::invalid_argument}
+\item
+ if \tcode{socket_base::message_peek} is set in flags.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence>
+  size_t send(const ConstBufferSequence& buffers);
+template<class ConstBufferSequence>
+  size_t send(const ConstBufferSequence& buffers, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{send(buffers, socket_base::message_flags(), ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence>
+  size_t send(const ConstBufferSequence& buffers,
+              socket_base::message_flags flags);
+template<class ConstBufferSequence>
+  size_t send(const ConstBufferSequence& buffers,
+              socket_base::message_flags flags, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+A write operation~(\ref{buffer.reqmts.read.write}).
+
+\pnum
+\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and writes data to this socket as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = nullptr;
+message.msg_namelen = 0;
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+sendmsg(native_handle(), &message, static_cast<int>(flags));
+\end{codeblock}
+
+
+\pnum
+\returns On success, the number of bytes sent. Otherwise \tcode{0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{async_send(buffers, socket_base::message_flags(), forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+                     socket_base::message_flags flags,
+                     CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+A write operation~(\ref{buffer.reqmts.read.write}).
+
+\pnum
+Completion signature: \tcode{void(error_code ec, size_t n)}.
+
+\pnum
+\effects Initiates an asynchronous operation to write data to this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = nullptr;
+message.msg_namelen = 0;
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+sendmsg(native_handle(), &message, static_cast<int>(flags));
+\end{codeblock}
+
+
+\pnum
+If the operation completes successfully, \tcode{n} is the number of bytes sent. Otherwise \tcode{n} is \tcode{0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence>
+  size_t send_to(const ConstBufferSequence& buffers,
+                 const endpoint_type& recipient);
+template<class ConstBufferSequence>
+  size_t send_to(const ConstBufferSequence& buffers,
+                 const endpoint_type& recipient, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{send_to(buffers, recipient, socket_base::message_flags(), ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence>
+  size_t send_to(const ConstBufferSequence& buffers,
+                 const endpoint_type& recipient,
+                 socket_base::message_flags flags);
+template<class ConstBufferSequence>
+  size_t send_to(const ConstBufferSequence& buffers,
+                 const endpoint_type& recipient,
+                 socket_base::message_flags flags, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+A write operation~(\ref{buffer.reqmts.read.write}).
+
+\pnum
+\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and writes data to this socket as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = recipient.data();
+message.msg_namelen = recipient.size();
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+sendmsg(native_handle(), &message, static_cast<int>(flags));
+\end{codeblock}
+
+
+\pnum
+\returns On success, the number of bytes sent. Otherwise \tcode{0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_send_to(const ConstBufferSequence& buffers,
+                        const endpoint_type& recipient,
+                        CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{async_send_to(buffers, recipient, socket_base::message_flags(), forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_send_to(const ConstBufferSequence& buffers,
+                        const endpoint_type& recipient,
+                        socket_base::message_flags flags,
+                        CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+A write operation~(\ref{buffer.reqmts.read.write}).
+
+\pnum
+Completion signature: \tcode{void(error_code ec, size_t n)}.
+
+\pnum
+\effects Initiates an asynchronous operation to write data to this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = recipient.data();
+message.msg_namelen = recipient.size();
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+sendmsg(native_handle(), &message, static_cast<int>(flags));
+\end{codeblock}
+
+
+\pnum
+If the operation completes successfully, \tcode{n} is the number of bytes sent. Otherwise \tcode{n} is \tcode{0}.
+\end{itemdescr}
+
+
+
+
+\rSec1[socket.stream]{Class template \tcode{basic_stream_socket}}
+
+\pnum
+The class template \tcode{basic_stream_socket<Protocol>} is used to exchange data with a peer over a sequenced, reliable, bidirectional, connection-mode byte stream.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class Protocol>
+  class basic_stream_socket : public basic_socket<Protocol>
+  {
+  public:
+    // types:
+
+    typedef @\textit{implementation defined}@ native_handle_type; // See native handles
+    typedef Protocol protocol_type;
+    typedef typename protocol_type::endpoint endpoint_type;
+
+    // construct / copy / destroy:
+
+    explicit basic_stream_socket(io_context& ctx);
+    basic_stream_socket(io_context& ctx, const protocol_type& protocol);
+    basic_stream_socket(io_context& ctx, const endpoint_type& endpoint);
+    basic_stream_socket(io_context& ctx, const protocol_type& protocol,
+                        const native_handle_type& native_socket);
+    basic_stream_socket(const basic_stream_socket&) = delete;
+    basic_stream_socket(basic_stream_socket&& rhs);
+    template<class OtherProtocol>
+      basic_stream_socket(basic_stream_socket<OtherProtocol>&& rhs);
+
+    ~basic_stream_socket();
+
+    basic_stream_socket& operator=(const basic_stream_socket&) = delete;
+    basic_stream_socket& operator=(basic_stream_socket&& rhs);
+    template<class OtherProtocol>
+      basic_stream_socket& operator=(basic_stream_socket<OtherProtocol>&& rhs);
+
+    // basic_stream_socket operations:
+
+    template<class MutableBufferSequence>
+      size_t receive(const MutableBufferSequence& buffers);
+    template<class MutableBufferSequence>
+      size_t receive(const MutableBufferSequence& buffers,
+                     error_code& ec);
+
+    template<class MutableBufferSequence>
+      size_t receive(const MutableBufferSequence& buffers,
+                     socket_base::message_flags flags);
+    template<class MutableBufferSequence>
+      size_t receive(const MutableBufferSequence& buffers,
+                     socket_base::message_flags flags, error_code& ec);
+
+    template<class MutableBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+                            CompletionToken&& token);
+
+    template<class MutableBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+                            socket_base::message_flags flags,
+                            CompletionToken&& token);
+
+    template<class ConstBufferSequence>
+      size_t send(const ConstBufferSequence& buffers);
+    template<class ConstBufferSequence>
+      size_t send(const ConstBufferSequence& buffers, error_code& ec);
+
+    template<class ConstBufferSequence>
+      size_t send(const ConstBufferSequence& buffers,
+                  socket_base::message_flags flags);
+    template<class ConstBufferSequence>
+      size_t send(const ConstBufferSequence& buffers,
+                  socket_base::message_flags flags, error_code& ec);
+
+    template<class ConstBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+                         CompletionToken&& token);
+
+    template<class ConstBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+                         socket_base::message_flags flags,
+                         CompletionToken&& token);
+
+    template<class MutableBufferSequence>
+      size_t read_some(const MutableBufferSequence& buffers);
+    template<class MutableBufferSequence>
+      size_t read_some(const MutableBufferSequence& buffers,
+                       error_code& ec);
+
+    template<class MutableBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_read_some(const MutableBufferSequence& buffers,
+                              CompletionToken&& token);
+
+    template<class ConstBufferSequence>
+      size_t write_some(const ConstBufferSequence& buffers);
+    template<class ConstBufferSequence>
+      size_t write_some(const ConstBufferSequence& buffers,
+                        error_code& ec);
+
+    template<class ConstBufferSequence, class CompletionToken>
+      @\textit{DEDUCED}@ async_write_some(const ConstBufferSequence& buffers,
+                               CompletionToken&& token);
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Instances of class template \tcode{basic_stream_socket} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), \tcode{MoveAssignable} (C++Std [moveassignable]), \tcode{SyncReadStream}~(\ref{buffer.stream.reqmts.syncreadstream}), \tcode{SyncWriteStream}~(\ref{buffer.stream.reqmts.syncwritestream}), \tcode{AsyncReadStream}~(\ref{buffer.stream.reqmts.asyncreadstream}), and \tcode{AsyncWriteStream}~(\ref{buffer.stream.reqmts.asyncwritestream}).
+
+\pnum
+If a program performs a synchronous operation on this socket, other than \tcode{close}, \tcode{cancel}, \tcode{shutdown}, or \tcode{send}, while there is an outstanding asynchronous read operation, the behavior is undefined.
+
+\pnum
+If a program performs a synchronous operation on this socket, other than \tcode{close}, \tcode{cancel}, \tcode{shutdown}, or \tcode{receive}, while there is an outstanding asynchronous write operation, the behavior is undefined.
+
+\pnum
+When an operation has its effects specified as if by passing the result of \tcode{native_handle()} to a POSIX function, then the operation fails with error condition \tcode{errc::bad_file_descriptor} if \tcode{is_open() == false} at the point in the effects when the POSIX function is called.
+
+
+\rSec2[socket.stream.cons]{\tcode{basic_stream_socket} constructors}
+
+\begin{itemdecl}
+explicit basic_stream_socket(io_context& ctx);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_stream_socket(io_context& ctx, const protocol_type& protocol);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, protocol)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_stream_socket(io_context& ctx, const endpoint_type& endpoint);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, endpoint)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_stream_socket(io_context& ctx, const protocol_type& protocol,
+                      const native_handle_type& native_socket);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, protocol, native_socket)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_stream_socket(basic_stream_socket&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Move constructs an object of class \tcode{basic_stream_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherProtocol>
+  basic_stream_socket(basic_stream_socket<OtherProtocol>&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+
+\pnum
+\effects Move constructs an object of class \tcode{basic_stream_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
+
+\pnum
+\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.stream.assign]{\tcode{basic_stream_socket} assignment}
+
+\begin{itemdecl}
+basic_stream_socket& operator=(basic_stream_socket&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherProtocol>
+  basic_stream_socket& operator=(basic_stream_socket<OtherProtocol>&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+
+\pnum
+\effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
+
+\pnum
+\returns \tcode{*this}.
+
+\pnum
+\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.stream.ops]{\tcode{basic_stream_socket} operations}
+
+\begin{itemdecl}
+template<class MutableBufferSequence>
+  size_t receive(const MutableBufferSequence& buffers);
+template<class MutableBufferSequence>
+  size_t receive(const MutableBufferSequence& buffers,
+                 error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{receive(buffers, socket_base::message_flags(), ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence>
+  size_t receive(const MutableBufferSequence& buffers,
+                 socket_base::message_flags flags);
+template<class MutableBufferSequence>
+  size_t receive(const MutableBufferSequence& buffers,
+                 socket_base::message_flags flags, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+A read operation~(\ref{buffer.reqmts.read.write}).
+
+\pnum
+\effects If \tcode{buffer_size(buffers) == 0}, returns immediately with no error. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and reads data from this socket as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = nullptr;
+message.msg_namelen = 0;
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+recvmsg(native_handle(), &message, static_cast<int>(flags));
+\end{codeblock}
+
+
+\pnum
+\returns On success, the number of bytes received. Otherwise \tcode{0}.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{stream_errc::eof}
+\item
+ if there is no data to be received and the peer performed an orderly shutdown.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+                        CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{async_receive(buffers, socket_base::message_flags(), forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+                        socket_base::message_flags flags,
+                        CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+A read operation~(\ref{buffer.reqmts.read.write}).
+
+\pnum
+Completion signature: \tcode{void(error_code ec, size_t n)}.
+
+\pnum
+\effects Initiates an asynchronous operation to read data from this socket. If \tcode{buffer_size(buffers) == 0}, the asynchronous operation completes immediately with no error and \tcode{n == 0}. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = nullptr;
+message.msg_namelen = 0;
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+recvmsg(native_handle(), &message, static_cast<int>(flags));
+\end{codeblock}
+
+
+\pnum
+If the operation completes successfully, \tcode{n} is the number of bytes received. Otherwise \tcode{n} is \tcode{0}.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::invalid_argument}
+\item
+ if \tcode{socket_base::message_peek} is set in flags. --- \tcode{stream_errc::eof}
+\item
+ if there is no data to be received and the peer performed an orderly shutdown.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence>
+  size_t send(const ConstBufferSequence& buffers);
+template<class ConstBufferSequence>
+  size_t send(const ConstBufferSequence& buffers, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{send(buffers, socket_base::message_flags(), ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence>
+  size_t send(const ConstBufferSequence& buffers,
+              socket_base::message_flags flags);
+template<class ConstBufferSequence>
+  size_t send(const ConstBufferSequence& buffers,
+              socket_base::message_flags flags, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+A write operation~(\ref{buffer.reqmts.read.write}).
+
+\pnum
+\effects If \tcode{buffer_size(buffers) == 0}, returns immediately with no error. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and writes data to this socket as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = nullptr;
+message.msg_namelen = 0;
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+sendmsg(native_handle(), &message, static_cast<int>(flags));
+\end{codeblock}
+
+
+\pnum
+\returns On success, the number of bytes sent. Otherwise \tcode{0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{async_send(buffers, socket_base::message_flags(), forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+                     socket_base::message_flags flags,
+                     CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+A write operation~(\ref{buffer.reqmts.read.write}).
+
+\pnum
+Completion signature: \tcode{void(error_code ec, size_t n)}.
+
+\pnum
+\effects Initiates an asynchronous operation to write data to this socket. If \tcode{buffer_size(buffers) == 0}, the asynchronous operation completes immediately with no error and \tcode{n == 0}. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX: 
+\begin{codeblock}
+msghdr message;
+message.msg_name = nullptr;
+message.msg_namelen = 0;
+message.msg_iov = iov;
+message.msg_iovlen = iovlen;
+message.msg_control = nullptr;
+message.msg_controllen = 0;
+message.msg_flags = 0;
+sendmsg(native_handle(), &message, static_cast<int>(flags));
+\end{codeblock}
+
+
+\pnum
+If the operation completes successfully, \tcode{n} is the number of bytes sent. Otherwise \tcode{n} is \tcode{0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence>
+  size_t read_some(const MutableBufferSequence& buffers);
+template<class MutableBufferSequence>
+  size_t read_some(const MutableBufferSequence& buffers,
+                   error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{receive(buffers, ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class MutableBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_read_some(const MutableBufferSequence& buffers,
+                          CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{async_receive(buffers, forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence>
+  size_t write_some(const ConstBufferSequence& buffers);
+template<class ConstBufferSequence>
+  size_t write_some(const ConstBufferSequence& buffers,
+                    error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{send(buffers, ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ConstBufferSequence, class CompletionToken>
+  @\textit{DEDUCED}@ async_write_some(const ConstBufferSequence& buffers,
+                           CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{async_send(buffers, forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+
+
+
+\rSec1[socket.acceptor]{Class template \tcode{basic_socket_acceptor}}
+
+\pnum
+An object of class template \tcode{basic_socket_acceptor<AcceptableProtocol>} is used to listen for, and queue, incoming socket connections. Socket objects that represent the incoming connections are dequeued by calling \tcode{accept} or \tcode{async_accept}.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class AcceptableProtocol>
+  class basic_socket_acceptor : public socket_base
+  {
+  public:
+    // types:
+
+    typedef io_context::executor_type executor_type;
+    typedef @\textit{implementation defined}@ native_handle_type; // See native handles
+    typedef AcceptableProtocol protocol_type;
+    typedef typename protocol_type::endpoint endpoint_type;
+    typedef typename protocol_type::socket socket_type;
+
+    // construct / copy / destroy:
+
+    explicit basic_socket_acceptor(io_context& ctx);
+    basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
+    basic_socket_acceptor(io_context& ctx, const endpoint_type& endpoint,
+                          bool reuse_addr = true);
+    basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
+                          const native_handle_type& native_acceptor);
+    basic_socket_acceptor(const basic_socket_acceptor&) = delete;
+    basic_socket_acceptor(basic_socket_acceptor&& rhs);
+    template<class OtherProtocol>
+      basic_socket_acceptor(basic_socket_acceptor<OtherProtocol>&& rhs);
+
+    ~basic_socket_acceptor();
+
+    basic_socket_acceptor& operator=(const basic_socket_acceptor&) = delete;
+    basic_socket_acceptor& operator=(basic_socket_acceptor&& rhs);
+    template<class OtherProtocol>
+      basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol>&& rhs);
+
+    // basic_socket_acceptor operations:
+
+    executor_type get_executor() noexcept;
+
+    native_handle_type native_handle(); // See native handles
+
+    void open(const protocol_type& protocol = protocol_type());
+    void open(const protocol_type& protocol, error_code& ec);
+
+    void assign(const protocol_type& protocol,
+                const native_handle_type& native_acceptor); // See native handles
+    void assign(const protocol_type& protocol,
+                const native_handle_type& native_acceptor,
+                error_code& ec); // See native handles
+
+    bool is_open() const;
+
+    void close();
+    void close(error_code& ec);
+
+    void cancel();
+    void cancel(error_code& ec);
+
+    template<class SettableSocketOption>
+      void set_option(const SettableSocketOption& option);
+    template<class SettableSocketOption>
+      void set_option(const SettableSocketOption& option, error_code& ec);
+
+    template<class GettableSocketOption>
+      void get_option(GettableSocketOption& option) const;
+    template<class GettableSocketOption>
+      void get_option(GettableSocketOption& option, error_code& ec) const;
+
+    template<class IoControlCommand>
+      void io_control(IoControlCommand& command);
+    template<class IoControlCommand>
+      void io_control(IoControlCommand& command, error_code& ec);
+
+    void non_blocking(bool mode);
+    void non_blocking(bool mode, error_code& ec);
+    bool non_blocking() const;
+
+    void native_non_blocking(bool mode);
+    void native_non_blocking(bool mode, error_code& ec);
+    bool native_non_blocking() const;
+
+    void bind(const endpoint_type& endpoint);
+    void bind(const endpoint_type& endpoint, error_code& ec);
+
+    void listen(int backlog = max_listen_connections);
+    void listen(int backlog, error_code& ec);
+
+    endpoint_type local_endpoint() const;
+    endpoint_type local_endpoint(error_code& ec) const;
+
+    void enable_connection_aborted(bool mode);
+    bool enable_connection_aborted() const;
+
+    socket_type accept();
+    socket_type accept(error_code& ec);
+    socket_type accept(io_context& ctx);
+    socket_type accept(io_context& ctx, error_code& ec);
+
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_accept(CompletionToken&& token);
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_accept(io_context& ctx, CompletionToken&& token);
+
+    socket_type accept(endpoint_type& endpoint);
+    socket_type accept(endpoint_type& endpoint, error_code& ec);
+    socket_type accept(io_context& ctx, endpoint_type& endpoint);
+    socket_type accept(io_context& ctx, endpoint_type& endpoint,
+                       error_code& ec);
+
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_accept(endpoint_type& endpoint,
+                           CompletionToken&& token);
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_accept(io_context& ctx, endpoint_type& endpoint,
+                           CompletionToken&& token);
+
+    void wait(wait_type w);
+    void wait(wait_type w, error_code& ec);
+
+    template<class CompletionToken>
+      @\textit{DEDUCED}@ async_wait(wait_type w, CompletionToken&& token);
+
+  private:
+    protocol_type protocol_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+Instances of class template \tcode{basic_socket_acceptor} meet the requirements of \tcode{Destructible} (C++Std [destructible]), \tcode{MoveConstructible} (C++Std [moveconstructible]), and \tcode{MoveAssignable} (C++Std [moveassignable]).
+
+\pnum
+ When there are multiple outstanding asynchronous accept operations the order in which the incoming connections are dequeued, and the order of invocation of the completion handlers for these operations, is unspecified.
+
+\pnum
+When an operation has its effects specified as if by passing the result of \tcode{native_handle()} to a POSIX function, then the operation fails with error condition \tcode{errc::bad_file_descriptor} if \tcode{is_open() == false} at the point in the effects when the POSIX function is called.
+
+
+\rSec2[socket.acceptor.cons]{\tcode{basic_socket_acceptor} constructors}
+
+\begin{itemdecl}
+explicit basic_socket_acceptor(io_context& ctx);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == ctx.get_executor()}.
+\item
+\tcode{is_open() == false}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Opens this acceptor as if by calling \tcode{open(protocol)}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == ctx.get_executor()}.
+\item
+\tcode{is_open() == true}.
+\item
+\tcode{non_blocking() == false}.
+\item
+\tcode{enable_connection_aborted() == false}.
+\item
+\tcode{protocol_ == protocol}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_acceptor(io_context& ctx, const endpoint_type& endpoint,
+                      bool reuse_addr = true);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Opens and binds this acceptor as if by calling: 
+\begin{codeblock}
+open(endpoint.protocol());
+if (reuse_addr)
+  set_option(reuse_address(true));
+bind(endpoint);
+listen();
+\end{codeblock}
+
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == ctx.get_executor()}.
+\item
+\tcode{is_open() == true}.
+\item
+\tcode{non_blocking() == false}.
+\item
+\tcode{enable_connection_aborted() == false}.
+\item
+\tcode{protocol_ == endpoint.protocol()}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
+                      const native_handle_type& native_acceptor);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{native_acceptor} is a native handle to an open acceptor.
+
+\pnum
+\effects Assigns the existing native acceptor into this acceptor as if by calling \tcode{assign(protocol, native_acceptor)}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == ctx.get_executor()}.
+\item
+\tcode{is_open() == true}.
+\item
+\tcode{non_blocking() == false}.
+\item
+\tcode{enable_connection_aborted() == false}.
+\item
+\tcode{protocol_ == protocol}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_acceptor(basic_socket_acceptor&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol>} that refers to the state originally represented by \tcode{rhs}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == rhs.get_executor()}.
+\item
+\tcode{is_open()} returns the same value as \tcode{rhs.is_open()} prior to the constructor invocation.
+\item
+\tcode{non_blocking()} returns the same value as \tcode{rhs.non_blocking()} prior to the constructor invocation.
+\item
+\tcode{enable_connection_aborted()} returns the same value as \tcode{rhs.enable_connection_aborted()} prior to the constructor invocation.
+\item
+\tcode{protocol_} is equal to the prior value of \tcode{rhs.protocol_}.
+\item
+\tcode{rhs.is_open() == false}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherProtocol>
+  basic_socket_acceptor(basic_socket_acceptor<OtherProtocol>&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+
+\pnum
+\effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol>} that refers to the state originally represented by \tcode{rhs}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == rhs.get_executor()}.
+\item
+\tcode{is_open()} returns the same value as \tcode{rhs.is_open()} prior to the constructor invocation.
+\item
+\tcode{non_blocking()} returns the same value as \tcode{rhs.non_blocking()} prior to the constructor invocation.
+\item
+\tcode{enable_connection_aborted()} returns the same value as \tcode{rhs.enable_connection_aborted()} prior to the constructor invocation.
+\item
+\tcode{native_handle()} returns the prior value of \tcode{rhs.native_handle()}.
+\item
+\tcode{protocol_} is the result of converting the prior value of \tcode{rhs.protocol_}.
+\item
+\tcode{rhs.is_open() == false}.
+\end{itemize}
+
+\pnum
+\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.acceptor.dtor]{\tcode{basic_socket_acceptor} destructor}
+
+\begin{itemdecl}
+~basic_socket_acceptor();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this acceptor, and releases acceptor resources as if by POSIX \tcode{close(native_handle())}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.acceptor.assign]{\tcode{basic_socket_acceptor} assignment}
+
+\begin{itemdecl}
+basic_socket_acceptor& operator=(basic_socket_acceptor&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this acceptor, and releases acceptor resources as if by POSIX \tcode{close(native_handle())}. Then moves into \tcode{*this} the state originally represented by \tcode{rhs}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == rhs.get_executor()}.
+\item
+\tcode{is_open()} returns the same value as \tcode{rhs.is_open()} prior to the assignment.
+\item
+\tcode{non_blocking()} returns the same value as \tcode{rhs.non_blocking()} prior to the assignment.
+\item
+\tcode{enable_connection_aborted()} returns the same value as \tcode{rhs.enable_connection_aborted()} prior to the assignment.
+\item
+\tcode{native_handle()} returns the same value as \tcode{rhs.native_handle()} prior to the assignment.
+\item
+\tcode{protocol_} is the same value as \tcode{rhs.protocol_} prior to the assignment.
+\item
+\tcode{rhs.is_open() == false}.
+\end{itemize}
+
+\pnum
+\returns \tcode{*this}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class OtherProtocol>
+  basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol>&& rhs);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+
+\pnum
+\effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this acceptor, and releases acceptor resources as if by POSIX \tcode{close(native_handle())}. Then moves into \tcode{*this} the state originally represented by \tcode{rhs}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{get_executor() == rhs.get_executor()}.
+\item
+\tcode{is_open()} returns the same value as \tcode{rhs.is_open()} prior to the assignment.
+\item
+\tcode{non_blocking()} returns the same value as \tcode{rhs.non_blocking()} prior to the assignment.
+\item
+\tcode{enable_connection_aborted()} returns the same value as \tcode{rhs.enable_connection_aborted()} prior to the assignment.
+\item
+\tcode{native_handle()} returns the same value as \tcode{rhs.native_handle()} prior to the assignment.
+\item
+\tcode{protocol_} is the result of converting the value of \tcode{rhs.protocol_} prior to the assignment.
+\item
+\tcode{rhs.is_open() == false}.
+\end{itemize}
+
+\pnum
+\returns \tcode{*this}.
+
+\pnum
+\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{itemdescr}
+
+
+
+\rSec2[socket.acceptor.ops]{\tcode{basic_socket_acceptor} operations}
+
+\begin{itemdecl}
+executor_type get_executor() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The associated executor.
+\end{itemdescr}
+
+\begin{itemdecl}
+native_handle_type native_handle();
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The native representation of this acceptor.
+\end{itemdescr}
+
+\begin{itemdecl}
+void open(const protocol_type& protocol);
+void open(const protocol_type& protocol, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Establishes the postcondition, as if by POSIX \tcode{socket(protocol.family(), protocol.type(), protocol.protocol())}.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{is_open() == true}.
+\item
+\tcode{non_blocking() == false}.
+\item
+\tcode{enable_connection_aborted() == false}.
+\item
+\tcode{protocol_ == protocol}.
+\end{itemize}
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{socket_errc::already_open}
+\item
+ if \tcode{is_open()} is \tcode{true}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+void assign(const protocol_type& protocol,
+            const native_handle_type& native_acceptor);
+void assign(const protocol_type& protocol,
+            const native_handle_type& native_acceptor, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{native_acceptor} is a native handle to an open acceptor.
+
+\pnum
+\effects Assigns the native acceptor handle to this acceptor object.
+
+\pnum
+\postconditions 
+\begin{itemize}
+\item
+\tcode{is_open() == true}.
+\item
+\tcode{non_blocking() == false}.
+\item
+\tcode{enable_connection_aborted() == false}.
+\item
+\tcode{protocol_ == protocol}.
+\end{itemize}
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{socket_errc::already_open}
+\item
+ if \tcode{is_open()} is \tcode{true}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+bool is_open() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A \tcode{bool} indicating whether this acceptor was opened by a previous call to \tcode{open} or \tcode{assign}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void close();
+void close(error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this acceptor, and establishes the postcondition as if by POSIX \tcode{close(native_handle())}. Completion handlers for canceled asynchronous operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+
+\pnum
+\postconditions \tcode{is_open() == false}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void cancel();
+void cancel(error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Cancels all outstanding asynchronous operations associated with this acceptor. Completion handlers for canceled asynchronous operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::bad_file_descriptor}
+\item
+ if \tcode{is_open()} is \tcode{false}.
+\item
+\tcode{errc::operation_not_supported}
+\item
+ Current conditions do not permit cancelation. The conditions under which cancelation of asynchronous operations is permitted are implementation-defined.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class SettableSocketOption>
+  void set_option(const SettableSocketOption& option);
+template<class SettableSocketOption>
+  void set_option(const SettableSocketOption& option, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Sets an option on this acceptor, as if by POSIX \tcode{setsockopt(native_handle(), option.level(protocol_), option.name(protocol_), option.data(protocol_), option.size(protocol_))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class GettableSocketOption>
+  void get_option(GettableSocketOption& option);
+template<class GettableSocketOption>
+  void get_option(GettableSocketOption& option, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Gets an option from this acceptor, as if by POSIX: 
+\begin{codeblock}
+socklen_t option_len = option.size(protocol_);
+int result = getsockopt(native_handle(), option.level(protocol_),
+                        option.name(protocol_), option.data(protocol_),
+                        &option_len);
+if (result == 0)
+  option.resize(option_len);
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class IoControlCommand>
+  void io_control(IoControlCommand& command);
+template<class IoControlCommand>
+  void io_control(IoControlCommand& command, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Executes an I/O control command on this acceptor, as if by POSIX \tcode{ioctl(native_handle(), command.name(), command.data())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void non_blocking(bool mode);
+void non_blocking(bool mode, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Sets the non-blocking mode of this acceptor. The non-blocking mode determines whether subsequent synchronous socket operations~(\ref{socket.reqmts.sync}) on \tcode{*this} block the calling thread.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::bad_file_descriptor}
+\item
+ if \tcode{is_open()} is \tcode{false}.
+\end{itemize}
+
+\pnum
+\postconditions \tcode{non_blocking() == mode}.
+
+\pnum
+ \enternote The non-blocking mode has no effect on the behavior of asynchronous operations. \exitnote
+\end{itemdescr}
+
+\begin{itemdecl}
+bool non_blocking() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The non-blocking mode of this acceptor.
+\end{itemdescr}
+
+\begin{itemdecl}
+void native_non_blocking(bool mode);
+void native_non_blocking(bool mode, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Sets the non-blocking mode of the underlying native acceptor, as if by POSIX: 
+\begin{codeblock}
+int flags = fcntl(native_handle(), F_GETFL, 0);
+if (flags >= 0)
+{
+  if (mode)
+    flags |= O_NONBLOCK;
+  else
+    flags &= ~O_NONBLOCK;
+  fcntl(native_handle(), F_SETFL, flags);
+}
+\end{codeblock}
+
+
+\pnum
+ The native non-blocking mode has no effect on the behavior of the synchronous or asynchronous operations specified in this clause.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::bad_file_descriptor}
+\item
+ if \tcode{is_open()} is \tcode{false}.
+\item
+\tcode{errc::invalid_argument}
+\item
+ if \tcode{mode == false} and \tcode{non_blocking() == true}. \enternote As the combination does not make sense. \exitnote
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+bool native_non_blocking() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The non-blocking mode of the underlying native acceptor.
+
+\pnum
+\remarks Implementations are permitted and encouraged to cache the native non-blocking mode that was applied through a prior call to \tcode{native_non_blocking}. Implementations may return an incorrect value if a program sets the non-blocking mode directly on the acceptor, by calling an operating system-specific function on the result of \tcode{native_handle()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void bind(const endpoint_type& endpoint);
+void bind(const endpoint_type& endpoint, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Binds this acceptor to the specified local endpoint, as if by POSIX \tcode{bind(native_handle(), endpoint.data(), endpoint.size())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void listen(int backlog = socket_base::max_connections);
+void listen(int backlog, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Marks this acceptor as ready to accept connections, as if by POSIX \tcode{listen(native_handle(), backlog)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+endpoint_type local_endpoint() const;
+endpoint_type local_endpoint(error_code& ec) const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Determines the locally-bound endpoint associated with this acceptor, as if by POSIX: 
+\begin{codeblock}
+endpoint_type endpoint;
+socklen_t endpoint_len = endpoint.capacity();
+int result == getsockname(native_handle(), endpoint.data(), &endpoint_len);
+if (result == 0)
+  endpoint.resize(endpoint_len);
+\end{codeblock}
+
+
+\pnum
+\returns On success, \tcode{endpoint}. Otherwise \tcode{endpoint_type()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void enable_connection_aborted(bool mode);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects If \tcode{mode} is true, subsequent synchronous or asynchronous accept operations on this acceptor are permitted to fail with error condition \tcode{errc::connection_aborted}. If \tcode{mode} is \tcode{false}, subsequent accept operations will not fail with \tcode{errc::connection_aborted}. \enternote If \tcode{mode} is \tcode{false}, the implementation will restart the call to POSIX accept if it fails with \tcode{ECONNABORTED}. \exitnote
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::bad_file_descriptor}
+\item
+ if \tcode{is_open()} is \tcode{false}.
+\end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+bool enable_connection_aborted() const;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns Whether accept operations on this acceptor are permitted to fail with \tcode{errc::connection_aborted}.
+\end{itemdescr}
+
+\begin{itemdecl}
+socket_type accept();
+socket_type accept(error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{accept(get_executor().context(), ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+socket_type accept(io_context& ctx);
+socket_type accept(io_context& ctx, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Extracts a socket from the queue of pending connections of the acceptor, as if by POSIX: 
+\begin{codeblock}
+native_handle_type h = accept(native_handle(), nullptr, 0);
+\end{codeblock}
+
+
+\pnum
+\returns On success, \tcode{socket_type(ctx, protocol_, h)}. Otherwise \tcode{socket_type(ctx)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_accept(CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{async_accept(get_executor().context(), forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_accept(io_context& ctx, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void(error_code ec, socket_type s)}.
+
+\pnum
+\effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX: 
+\begin{codeblock}
+native_handle_type h = accept(native_handle(), nullptr, 0);
+\end{codeblock}
+ On success, \tcode{s} is \tcode{socket_type(ctx, protocol_, h)}. Otherwise, \tcode{s} is \tcode{socket_type(ctx)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+socket_type accept(endpoint_type& endpoint);
+socket_type accept(endpoint_type& endpoint, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{accept(get_executor().context(), endpoint, ec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+socket_type accept(io_context& ctx, endpoint_type& endpoint);
+socket_type accept(io_context& ctx, endpoint_type& endpoint,
+                   error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Extracts a socket from the queue of pending connections of the acceptor, as if by POSIX: 
+\begin{codeblock}
+socklen_t endpoint_len = endpoint.capacity();
+native_handle_type h = accept(native_handle(),
+                              endpoint.data(),
+                              &endpoint_len);
+if (h >= 0)
+  endpoint.resize(endpoint_len);
+\end{codeblock}
+
+
+\pnum
+\returns On success, \tcode{socket_type(ctx, protocol_, h)}. Otherwise \tcode{socket_type(ctx)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_accept(endpoint_type& endpoint,
+                       CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{async_accept(get_executor().context(), endpoint, forward<CompletionToken>(token))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_accept(io_context& ctx, endpoint_type& endpoint,
+                       CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void(error_code ec, socket_type s)}.
+
+\pnum
+\effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX: 
+\begin{codeblock}
+socklen_t endpoint_len = endpoint.capacity();
+native_handle_type h = accept(native_handle(),
+                              endpoint.data(),
+                              &endpoint_len);
+if (h >= 0)
+  endpoint.resize(endpoint_len);
+\end{codeblock}
+ On success, \tcode{s} is \tcode{socket_type(ctx, protocol_, h). Otherwise, }s\tcode{ is }socket_type(ctx)`.
+\end{itemdescr}
+
+\begin{itemdecl}
+void wait(wait_type w);
+void wait(wait_type w, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Waits for the acceptor to have a queued incoming connection, or to have error conditions pending, as if by POSIX poll.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CompletionToken>
+  @\textit{DEDUCED}@ async_wait(wait_type w, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Completion signature: \tcode{void(error_code ec)}.
+
+\pnum
+\effects Initiates an asynchronous operation to wait for the acceptor to have a queued incoming connection, or to have error conditions pending, as if by POSIX poll.
+
+\pnum
+When multiple asynchronous wait operations are initiated with the same \tcode{wait_type} value, all outstanding operations complete when the acceptor enters the corresponding ready state. The order of invocation of the completions handlers for these operations is unspecified.
+
+\pnum
+Error conditions: 
+\begin{itemize}
+\item
+\tcode{errc::bad_file_descriptor}
+\item
+ if \tcode{is_open()} is \tcode{false}.
+\end{itemize}
+\end{itemdescr}
+
+
+
+

@@ -1,0 +1,1376 @@
+%!TEX root = ts.tex
+
+\rSec0[buffer]{Buffers}
+
+
+\rSec1[buffer.synop]{Header \tcode{<experimental/buffer>} synopsis}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  enum class stream_errc {
+    eof = @\textit{an implementation defined non-zero value}@,
+    not_found = @\textit{an implementation defined non-zero value}@
+  };
+
+  const error_category& stream_category() noexcept;
+
+  error_code make_error_code(stream_errc e) noexcept;
+  error_condition make_error_condition(stream_errc e) noexcept;
+
+  class mutable_buffer;
+  class const_buffer;
+
+  // buffer type traits:
+
+  template<class T> is_mutable_buffer_sequence;
+  template<class T> is_const_buffer_sequence;
+  template<class T> is_dynamic_buffer;
+
+  // buffer sequence access:
+
+  const mutable_buffer* buffer_sequence_begin(const mutable_buffer& b);
+  const const_buffer* buffer_sequence_begin(const const_buffer& b);
+  const mutable_buffer* buffer_sequence_end(const mutable_buffer& b);
+  const const_buffer* buffer_sequence_end(const const_buffer& b);
+  template <class C> auto buffer_sequence_begin(C& c) -> decltype(c.begin());
+  template <class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin());
+  template <class C> auto buffer_sequence_end(C& c) -> decltype(c.end());
+  template <class C> auto buffer_sequence_end(const C& c) -> decltype(c.end());
+
+  // buffer size:
+
+  template<class ConstBufferSequence>
+    size_t buffer_size(const ConstBufferSequence& buffers) noexcept;
+
+  // buffer copy:
+
+  template<class MutableBufferSequence, class ConstBufferSequence>
+    size_t buffer_copy(const MutableBufferSequence& dest,
+                       const ConstBufferSequence& source) noexcept;
+  template<class MutableBufferSequence, class ConstBufferSequence>
+    size_t buffer_copy(const MutableBufferSequence& dest,
+                       const ConstBufferSequence& source,
+                       size_t max_size) noexcept;
+
+  // buffer arithmetic:
+
+  mutable_buffer operator+(const mutable_buffer& b, size_t n) noexcept;
+  mutable_buffer operator+(size_t n, const mutable_buffer& b) noexcept;
+  const_buffer operator+(const const_buffer&, size_t n) noexcept;
+  const_buffer operator+(size_t, const const_buffer&) noexcept;
+
+  // buffer creation:
+
+  mutable_buffer buffer(void* p, size_t n) noexcept;
+  const_buffer buffer(const void* p, size_t n) noexcept;
+
+  mutable_buffer buffer(const mutable_buffer& b) noexcept;
+  mutable_buffer buffer(const mutable_buffer& b, size_t n) noexcept;
+  const_buffer buffer(const const_buffer& b) noexcept;
+  const_buffer buffer(const const_buffer& b, size_t n) noexcept;
+
+  template<class T, size_t N>
+    mutable_buffer buffer(T (&data)[N]) noexcept;
+  template<class T, size_t N>
+    const_buffer buffer(const T (&data)[N]) noexcept;
+  template<class T, size_t N>
+    mutable_buffer buffer(array<T, N>& data) noexcept;
+  template<class T, size_t N>
+    const_buffer buffer(array<const T, N>& data) noexcept;
+  template<class T, size_t N>
+    const_buffer buffer(const array<T, N>& data) noexcept;
+  template<class T, class Allocator>
+    mutable_buffer buffer(vector<T, Allocator>& data) noexcept;
+  template<class T, class Allocator>
+    const_buffer buffer(const vector<T, Allocator>& data) noexcept;
+  template<class CharT, class Traits, class Allocator>
+    mutable_buffer buffer(basic_string<CharT, Traits, Allocator>& data) noexcept;
+  template<class CharT, class Traits, class Allocator>
+    const_buffer buffer(const basic_string<CharT, Traits, Allocator>& data) noexcept;
+  template<class CharT, class Traits>
+    const_buffer buffer(basic_string_view<CharT, Traits> data) noexcept;
+
+  template<class T, size_t N>
+    mutable_buffer buffer(T (&data)[N], size_t n) noexcept;
+  template<class T, size_t N>
+    const_buffer buffer(const T (&data)[N], size_t n) noexcept;
+  template<class T, size_t N>
+    mutable_buffer buffer(array<T, N>& data, size_t n) noexcept;
+  template<class T, size_t N>
+    const_buffer buffer(array<const T, N>& data, size_t n) noexcept;
+  template<class T, size_t N>
+    const_buffer buffer(const array<T, N>& data, size_t n) noexcept;
+  template<class T, class Allocator>
+    mutable_buffer buffer(vector<T, Allocator>& data, size_t n) noexcept;
+  template<class T, class Allocator>
+    const_buffer buffer(const vector<T, Allocator>& data, size_t n) noexcept;
+  template<class CharT, class Traits, class Allocator>
+    mutable_buffer buffer(basic_string<CharT, Traits, Allocator>& data,
+                          size_t n) noexcept;
+  template<class CharT, class Traits, class Allocator>
+    const_buffer buffer(const basic_string<CharT, Traits, Allocator>& data,
+                        size_t n) noexcept;
+  template<class CharT, class Traits>
+    const_buffer buffer(basic_string_view<CharT, Traits> data,
+                        size_t n) noexcept;
+
+  template<class T, class Allocator>
+    class dynamic_vector_buffer;
+
+  template<class CharT, class Traits, class Allocator>
+    class dynamic_string_buffer;
+
+  // dynamic buffer creation:
+
+  template<class T, class Allocator>
+    dynamic_vector_buffer<T, Allocator>
+      dynamic_buffer(vector<T, Allocator>& vec) noexcept;
+  template<class T, class Allocator>
+    dynamic_vector_buffer<T, Allocator>
+      dynamic_buffer(vector<T, Allocator>& vec, size_t n) noexcept;
+
+  template<class CharT, class Traits, class Allocator>
+    dynamic_string_buffer<CharT, Traits, Allocator>
+      dynamic_buffer(basic_string<CharT, Traits, Allocator>& str) noexcept;
+  template<class CharT, class Traits, class Allocator>
+    dynamic_string_buffer<CharT, Traits, Allocator>
+      dynamic_buffer(basic_string<CharT, Traits, Allocator>& str, size_t n) noexcept;
+
+  class transfer_all;
+  class transfer_at_least;
+  class transfer_exactly;
+
+  // synchronous read operations:
+
+  template<class SyncReadStream, class MutableBufferSequence>
+    size_t read(SyncReadStream& stream,
+                const MutableBufferSequence& buffers);
+  template<class SyncReadStream, class MutableBufferSequence>
+    size_t read(SyncReadStream& stream,
+                const MutableBufferSequence& buffers, error_code& ec);
+  template<class SyncReadStream, class MutableBufferSequence,
+    class CompletionCondition>
+      size_t read(SyncReadStream& stream,
+                  const MutableBufferSequence& buffers,
+                  CompletionCondition completion_condition);
+  template<class SyncReadStream, class MutableBufferSequence,
+    class CompletionCondition>
+      size_t read(SyncReadStream& stream,
+                  const MutableBufferSequence& buffers,
+                  CompletionCondition completion_condition,
+                  error_code& ec);
+
+  template<class SyncReadStream, class DynamicBuffer>
+    size_t read(SyncReadStream& stream, DynamicBuffer&& b);
+  template<class SyncReadStream, class DynamicBuffer>
+    size_t read(SyncReadStream& stream, DynamicBuffer&& b, error_code& ec);
+  template<class SyncReadStream, class DynamicBuffer, class CompletionCondition>
+    size_t read(SyncReadStream& stream, DynamicBuffer&& b,
+                CompletionCondition completion_condition);
+  template<class SyncReadStream, class DynamicBuffer, class CompletionCondition>
+    size_t read(SyncReadStream& stream, DynamicBuffer&& b,
+                CompletionCondition completion_condition, error_code& ec);
+
+  // asynchronous read operations:
+
+  template<class AsyncReadStream, class MutableBufferSequence,
+    class CompletionToken>
+      @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
+                      const MutableBufferSequence& buffers,
+                      CompletionToken&& token);
+  template<class AsyncReadStream, class MutableBufferSequence,
+    class CompletionCondition, class CompletionToken>
+      @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
+                      const MutableBufferSequence& buffers,
+                      CompletionCondition completion_condition,
+                      CompletionToken&& token);
+
+  template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
+    @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
+                    DynamicBuffer&& b, CompletionToken&& token);
+  template<class AsyncReadStream, class DynamicBuffer,
+    class CompletionCondition, class CompletionToken>
+      @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
+                      DynamicBuffer&& b,
+                      CompletionCondition completion_condition,
+                      CompletionToken&& token);
+
+  // synchronous write operations:
+
+  template<class SyncWriteStream, class ConstBufferSequence>
+    size_t write(SyncWriteStream& stream,
+                 const ConstBufferSequence& buffers);
+  template<class SyncWriteStream, class ConstBufferSequence>
+    size_t write(SyncWriteStream& stream,
+                 const ConstBufferSequence& buffers, error_code& ec);
+  template<class SyncWriteStream, class ConstBufferSequence,
+    class CompletionCondition>
+      size_t write(SyncWriteStream& stream,
+                   const ConstBufferSequence& buffers,
+                   CompletionCondition completion_condition);
+  template<class SyncWriteStream, class ConstBufferSequence,
+    class CompletionCondition>
+      size_t write(SyncWriteStream& stream,
+                   const ConstBufferSequence& buffers,
+                   CompletionCondition completion_condition,
+                   error_code& ec);
+
+  template<class SyncWriteStream, class DynamicBuffer>
+    size_t write(SyncWriteStream& stream, DynamicBuffer&& b);
+  template<class SyncWriteStream, class DynamicBuffer>
+    size_t write(SyncWriteStream& stream, DynamicBuffer&& b, error_code& ec);
+  template<class SyncWriteStream, class DynamicBuffer, class CompletionCondition>
+    size_t write(SyncWriteStream& stream, DynamicBuffer&& b,
+                 CompletionCondition completion_condition);
+  template<class SyncWriteStream, class DynamicBuffer, class CompletionCondition>
+    size_t write(SyncWriteStream& stream, DynamicBuffer&& b,
+                 CompletionCondition completion_condition, error_code& ec);
+
+  // asynchronous write operations:
+
+  template<class AsyncWriteStream, class ConstBufferSequence,
+    class CompletionToken>
+      @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
+                       const ConstBufferSequence& buffers,
+                       CompletionToken&& token);
+  template<class AsyncWriteStream, class ConstBufferSequence,
+    class CompletionCondition, class CompletionToken>
+      @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
+                       const ConstBufferSequence& buffers,
+                       CompletionCondition completion_condition,
+                       CompletionToken&& token);
+
+  template<class AsyncWriteStream, class DynamicBuffer, class CompletionToken>
+    @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
+                     DynamicBuffer&& b, CompletionToken&& token);
+  template<class AsyncWriteStream, class DynamicBuffer,
+    class CompletionCondition, class CompletionToken>
+      @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
+                       DynamicBuffer&& b,
+                       CompletionCondition completion_condition,
+                       CompletionToken&& token);
+
+  // synchronous delimited read operations:
+
+  template<class SyncReadStream, class DynamicBuffer>
+    size_t read_until(SyncReadStream& s, DynamicBuffer&& b, char delim);
+  template<class SyncReadStream, class DynamicBuffer>
+    size_t read_until(SyncReadStream& s, DynamicBuffer&& b,
+                      char delim, error_code& ec);
+  template<class SyncReadStream, class DynamicBuffer>
+    size_t read_until(SyncReadStream& s, DynamicBuffer&& b, string_view delim);
+  template<class SyncReadStream, class DynamicBuffer>
+    size_t read_until(SyncReadStream& s, DynamicBuffer&& b,
+                      string_view delim, error_code& ec);
+
+  // asynchronous delimited read operations:
+
+  template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
+    @\textit{DEDUCED}@ async_read_until(AsyncReadStream& s,
+                          DynamicBuffer&& b, char delim,
+                          CompletionToken&& token);
+  template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
+    @\textit{DEDUCED}@ async_read_until(AsyncReadStream& s,
+                          DynamicBuffer&& b, string_view delim,
+                          CompletionToken&& token);
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+
+  template<> struct is_error_code_enum<
+    experimental::net::v1::stream_errc>
+      : public true_type {};
+
+} // namespace std
+\end{codeblock}
+
+
+
+\rSec1[buffer.reqmts]{Requirements}
+
+
+\rSec2[buffer.reqmts.mutablebuffersequence]{Mutable buffer sequence requirements}
+
+\pnum
+A mutable buffer sequence represents a set of memory regions that may be used to receive the output of an operation, such as the \tcode{receive} operation of a socket.
+
+\pnum
+A type \tcode{X} meets the \tcode{MutableBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{CopyConstructible} (C++Std [copyconstructible]), as well as the additional requirements listed below.
+
+\pnum
+In the table below, \tcode{x} denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
+
+\begin{libreqtab3}
+{MutableBufferSequence requirements}
+{buffer.reqmts.mutablebuffersequence.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition} \\ \capsep
+\endhead
+
+\tcode{std::experimental::net::buffer_sequence_begin(x)}\tcode{std::experimental::net::buffer_sequence_end(x)}  &
+An iterator type meeting the requirements for bidirectional iterators (C++Std [bidirectional.iterators]) whose value type is convertible to \tcode{mutable_buffer}.  &
+  \\ \rowsep
+
+
+\begin{codeblock}
+X u(x);
+\end{codeblock}
+  &
+  &
+post:
+\begin{codeblock}
+equal(
+  std::experimental::net::buffer_sequence_begin(x),
+  std::experimental::net::buffer_sequence_end(x),
+  std::experimental::net::buffer_sequence_begin(u),
+  std::experimental::net::buffer_sequence_end(u),
+  [](const typename X::value_type& v1,
+     const typename X::value_type& v2)
+   {
+     mutable_buffer b1(v1);
+     mutable_buffer b2(v2);
+     return b1.data() == b2.data()
+         && b1.size() == b2.size();
+   })
+\end{codeblock}
+  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[buffer.reqmts.constbuffersequence]{Constant buffer sequence requirements}
+
+\pnum
+A constant buffer sequence represents a set of memory regions that may be used as input to an operation, such as the \tcode{send} operation of a socket.
+
+\pnum
+A type \tcode{X} meets the \tcode{ConstBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{CopyConstructible} (C++Std [copyconstructible]), as well as the additional requirements listed below.
+
+\pnum
+In the table below, \tcode{x} denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
+
+\begin{libreqtab3}
+{ConstBufferSequence requirements}
+{buffer.reqmts.constbuffersequence.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{return type}  &
+\rhdr{assertion/note pre/post-condition} \\ \capsep
+\endhead
+
+\tcode{std::experimental::net::buffer_sequence_begin(x)}\tcode{std::experimental::net::buffer_sequence_end(x)}  &
+An iterator type meeting the requirements for bidirectional iterators (C++Std [bidirectional.iterators]) whose value type is convertible to \tcode{const_buffer}.  &
+  \\ \rowsep
+
+
+\begin{codeblock}
+X u(x);
+\end{codeblock}
+  &
+  &
+post:
+\begin{codeblock}
+equal(
+  std::experimental::net::buffer_sequence_begin(x),
+  std::experimental::net::buffer_sequence_end(x),
+  std::experimental::net::buffer_sequence_begin(u),
+  std::experimental::net::buffer_sequence_end(u),
+  [](const typename X::value_type& v1,
+     const typename X::value_type& v2)
+   {
+     const_buffer b1(v1);
+     const_buffer b2(v2);
+     return b1.data() == b2.data()
+         && b1.size() == b2.size();
+   })
+\end{codeblock}
+  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[buffer.reqmts.dynamicbuffer]{Dynamic buffer requirements}
+
+\pnum
+A dynamic buffer encapsulates memory storage that may be automatically resized as required, where the memory is divided into two regions: readable bytes followed by writable bytes. These memory regions are internal to the dynamic buffer, but direct access to the elements is provided to permit them to be efficiently used with I/O operations. \enternote Such as the \tcode{send} or \tcode{receive} operations of a socket. The readable bytes would be used as the constant buffer sequence for \tcode{send}, and the writable bytes used as the mutable buffer sequence for \tcode{receive}. \exitnote Data written to the writable bytes of a dynamic buffer object is appended to the readable bytes of the same object.
+
+\pnum
+A type \tcode{X} meets the \tcode{DynamicBuffer} requirements if it satisfies the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{MoveConstructible} (C++Std [moveconstructible]), as well as the additional requirements listed below.
+
+\pnum
+In the table below, \tcode{x} denotes a value of type \tcode{X}, \tcode{x1} denotes a (possibly const) value of type \tcode{X}, and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
+
+\begin{libreqtab3}
+{DynamicBuffer requirements}
+{buffer.reqmts.dynamicbuffer.requirements}
+\\ \topline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions} \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{expression}  &
+\chdr{type}  &
+\rhdr{assertion/note pre/post-conditions} \\ \capsep
+\endhead
+
+\tcode{X::const_buffers_type}  &
+type meeting ConstBufferSequence~(\ref{buffer.reqmts.constbuffersequence}) requirements.  &
+ This type represents the memory associated with the readable bytes.  \\ \rowsep
+
+\tcode{X::mutable_buffers_type}  &
+type meeting MutableBufferSequence~(\ref{buffer.reqmts.constbuffersequence}) requirements.  &
+ This type represents the memory associated with the writable bytes.  \\ \rowsep
+
+\tcode{x1.size()}  &
+\tcode{size_t}  &
+ Returns the number of readable bytes.  \\ \rowsep
+
+\tcode{x1.max_size()}  &
+\tcode{size_t}  &
+Returns the maximum number of bytes, both readable and writable, that can be held by \tcode{x1}.  \\ \rowsep
+
+\tcode{x1.capacity()}  &
+\tcode{size_t}  &
+Returns the maximum number of bytes, both readable and writeable, that can be held by \tcode{x1} without requiring reallocation.  \\ \rowsep
+
+\tcode{x1.data()}  &
+\tcode{X::const_buffers_type}  &
+Returns a constant buffer sequence \tcode{u} that represents the readable bytes, and where \tcode{buffer_size(u) == size()}.  \\ \rowsep
+
+\tcode{x.prepare(n)}  &
+\tcode{X::mutable_buffers_type}  &
+Returns a mutable buffer sequence \tcode{u} representing the writable bytes, and where \tcode{buffer_size(u) == n}. The dynamic buffer reallocates memory as required. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.Throws: \tcode{length_error}if \tcode{size() + n}exceeds \tcode{max_size()}.  \\ \rowsep
+
+\tcode{x.commit(n)}  &
+  &
+Appends \tcode{n} bytes from the start of the writable bytes to the end of the readable bytes. The remainder of the writable bytes are discarded. If \tcode{n} is greater than the number of writable bytes, all writable bytes are appended to the readable bytes. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.  \\ \rowsep
+
+\tcode{x.consume(n)}  &
+  &
+Removes \tcode{n} bytes from beginning of the readable bytes. If \tcode{n} is greater than the number of readable bytes, all readable bytes are removed. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.  \\
+
+\end{libreqtab3}
+
+
+
+\rSec2[buffer.reqmts.read.write]{Requirements on read and write operations}
+
+\pnum
+A read operation is an operation that reads data into a mutable buffer sequence argument of a type meeting \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements. The mutable buffer sequence specifies memory where the data should be placed. A read operation shall always fill a buffer in the sequence completely before proceeding to the next.
+
+\pnum
+A write operation is an operation that writes data from a constant buffer sequence argument of a type meeting \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements. The constant buffer sequence specifies memory where the data to be written is located. A write operation shall always write a buffer in the sequence completely before proceeding to the next.
+
+\pnum
+If a read or write operation is also an asynchronous operation~(\ref{async.reqmts.async}), the operation shall maintain one or more copies of the buffer sequence until such time as the operation no longer requires access to the memory specified by the buffers in the sequence. The program shall ensure the memory remains valid until:
+
+\pnum
+ --- the last copy of the buffer sequence is destroyed, or
+
+\pnum
+ --- the completion handler for the asynchronous operation is invoked,
+
+\pnum
+ whichever comes first.
+
+
+
+
+\rSec1[buffer.err]{Error codes}
+
+\begin{itemdecl}
+const error_category& stream_category() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A reference to an object of a type derived from class \tcode{error_category}. All calls to this function return references to the same object.
+
+\pnum
+The object's \tcode{default_error_condition} and \tcode{equivalent} virtual functions behave as specified for the class \tcode{error_category}. The object's \tcode{name} virtual function returns a pointer to the string \tcode{"stream"}.
+\end{itemdescr}
+
+\begin{itemdecl}
+error_code make_error_code(stream_errc e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{error_code(static_cast<int>(e), stream_category())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+error_condition make_error_condition(stream_errc e) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{error_condition(static_cast<int>(e), stream_category())}.
+\end{itemdescr}
+
+
+
+\rSec1[buffer.mutable]{Class \tcode{mutable_buffer}}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class mutable_buffer
+  {
+  public:
+    // constructors:
+    mutable_buffer() noexcept;
+    mutable_buffer(void* p, size_t n) noexcept;
+
+    // members:
+    void* data() const noexcept;
+    size_t size() const noexcept;
+
+  private:
+    void* data_; // \expos
+    size_t size_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The \tcode{mutable_buffer} class satisfies requirements of \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+
+\begin{itemdecl}
+mutable_buffer() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{data_ == nullptr} and \tcode{size_ == 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+mutable_buffer(void* p, size_t n) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{data_ == p} and \tcode{size_ == n}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void* data() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{data_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t size() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{size_}.
+\end{itemdescr}
+
+
+
+\rSec1[buffer.const]{Class \tcode{const_buffer}}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  class const_buffer
+  {
+  public:
+    // constructors:
+    const_buffer() noexcept;
+    const_buffer(const void* p, size_t n) noexcept;
+    const_buffer(const mutable_buffer& b) noexcept;
+
+    // members:
+    const void* data() const noexcept;
+    size_t size() const noexcept;
+
+  private:
+    const void* data_; // \expos
+    size_t size_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The \tcode{const_buffer} class satisfies requirements of \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}), \tcode{DefaultConstructible} (C++Std [defaultconstructible]), and \tcode{CopyAssignable} (C++Std [copyassignable]).
+
+\begin{itemdecl}
+const_buffer() noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{data_ == nullptr} and \tcode{size_ == 0}.
+\end{itemdescr}
+
+\begin{itemdecl}
+const_buffer(const void* p, size_t n) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{data_ == p} and \tcode{size_ == n}.
+\end{itemdescr}
+
+\begin{itemdecl}
+const_buffer(const mutable_buffer& b);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\postconditions \tcode{data_ == b.data()} and \tcode{size_ == b.size()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+const void* data() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{data_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t size() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{size_}.
+\end{itemdescr}
+
+
+
+\rSec1[buffer.traits]{Buffer type traits}
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class T> struct is_mutable_buffer_sequence;
+  template<class T> struct is_const_buffer_sequence;
+  template<class T> struct is_dynamic_buffer;
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+This sub-clause contains templates that may be used to query the properties of a type at compile time. Each of these templates is a UnaryTypeTrait (C++Std [meta.rqmts]) with a BaseCharacteristic of \tcode{true_type} if the corresponding condition is true, otherwise \tcode{false_type}.
+
+\begin{libreqtab3}
+{Buffer type traits}
+{buffer.traits.requirements}
+\\ \topline
+\lhdr{Template}  &
+\chdr{Condition}  &
+\rhdr{Preconditions}  \\ \capsep
+\endfirsthead
+\continuedcaption\\
+\hline
+\lhdr{Template}  &
+\chdr{Condition}  &
+\rhdr{Preconditions}  \\ \capsep
+\endhead
+
+\tcode{template<class T> is_mutable_buffer_sequence}  &
+\tcode{T} meets the syntactic requirements for mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}).  &
+\tcode{T} is a complete type.  \\ \rowsep
+
+\tcode{template<class T> is_const_buffer_sequence}  &
+\tcode{T} meets the syntactic requirements for constant buffer sequence~(\ref{buffer.reqmts.constbuffersequence}).  &
+\tcode{T} is a complete type.  \\ \rowsep
+
+\tcode{template<class T> is_dynamic_buffer}  &
+\tcode{T} meets the syntactic requirements for dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}).  &
+\tcode{T} is a complete type.  \\
+
+\end{libreqtab3}
+
+
+
+\rSec1[buffer.seq.access]{Buffer sequence access}
+
+\begin{itemdecl}
+const mutable_buffer* buffer_sequence_begin(const mutable_buffer& b);
+const const_buffer* buffer_sequence_begin(const const_buffer& b);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(b)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+const mutable_buffer* buffer_sequence_end(const mutable_buffer& b);
+const const_buffer* buffer_sequence_end(const const_buffer& b);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{std::addressof(b) + 1}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template <class C> auto buffer_sequence_begin(C& c) -> decltype(c.begin());
+template <class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin());
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{c.begin()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template <class C> auto buffer_sequence_end(C& c) -> decltype(c.end());
+template <class C> auto buffer_sequence_end(const C& c) -> decltype(c.end());
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{c.end()}.
+\end{itemdescr}
+
+
+
+\rSec1[buffer.size]{Function \tcode{buffer_size}}
+
+\begin{itemdecl}
+template<class ConstBufferSequence>
+  size_t buffer_size(const ConstBufferSequence& buffers) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns The total size of all buffers in the sequence, as if computed as follows:
+\begin{codeblock}
+size_t total_size = 0;
+auto i = std::experimental::net::buffer_sequence_begin(buffers);
+auto end = std::experimental::net::buffer_sequence_end(buffers);
+for (; i != end; ++i)
+{
+  const_buffer b(*i);
+  total_size += b.size();
+}
+return total_size;
+\end{codeblock}
+
+\end{itemdescr}
+
+
+
+\rSec1[buffer.copy]{Function \tcode{buffer_copy}}
+
+\begin{itemdecl}
+template<class MutableBufferSequence, class ConstBufferSequence>
+  size_t buffer_copy(const MutableBufferSequence& dest,
+                     const ConstBufferSequence& source) noexcept;
+template<class MutableBufferSequence, class ConstBufferSequence>
+  size_t buffer_copy(const MutableBufferSequence& dest,
+                     const ConstBufferSequence& source,
+                     size_t max_size) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Copies bytes from the buffer sequence \tcode{source} to the buffer sequence \tcode{dest}, as if by calls to \tcode{memcpy}.
+
+\pnum
+The number of bytes copied is the lesser of:
+\begin{itemize}
+\item
+\tcode{buffer_size(dest)};
+\item
+\tcode{buffer_size(source)}; and
+\item
+\tcode{max_size}, if specified.
+\end{itemize}
+
+\pnum
+The mutable buffer sequence \tcode{dest} specifies memory where the data should be placed. The operation always fills a buffer in the sequence completely before proceeding to the next.
+
+\pnum
+The constant buffer sequence \tcode{source} specifies memory where the data to be written is located. The operation always copies a buffer in the sequence completely before proceeding to the next.
+
+\pnum
+\returns The number of bytes copied from \tcode{source} to \tcode{dest}.
+\end{itemdescr}
+
+
+
+\rSec1[buffer.arithmetic]{Buffer arithmetic}
+
+\begin{itemdecl}
+mutable_buffer operator+(const mutable_buffer& b, size_t n) noexcept;
+mutable_buffer operator+(size_t n, const mutable_buffer& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A \tcode{mutable_buffer} equivalent to 
+\begin{codeblock}
+mutable_buffer(
+  static_cast<char*>(b.data()) + min(n, b.size()),
+  b.size() - min(n, b.size()));
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+const_buffer operator+(const const_buffer& b, size_t n) noexcept;
+const_buffer operator+(size_t n, const const_buffer& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns A \tcode{const_buffer} equivalent to 
+\begin{codeblock}
+const_buffer(
+  static_cast<const char*>(b.data()) + min(n, b.size()),
+  b.size() - min(n, b.size()));
+\end{codeblock}
+
+\end{itemdescr}
+
+
+
+\rSec1[buffer.creation]{Buffer creation functions}
+
+\pnum
+In the functions below, \tcode{T} must be a trivially copyable or standard-layout type (C++Std [basic.types]).
+
+\pnum
+For the function overloads below that accept an argument of type \tcode{vector<>}, the buffer objects returned are invalidated by any vector operation that also invalidates all references, pointers and iterators referring to the elements in the sequence (C++Std [vector]).
+
+\pnum
+For the function overloads below that accept an argument of type \tcode{basic_string<>}, the buffer objects returned are invalidated according to the rules defined for invalidation of references, pointers and iterators referring to elements of the sequence (C++Std [string.require]).
+
+\begin{itemdecl}
+mutable_buffer buffer(void* p, size_t n) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{mutable_buffer(p, n)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+const_buffer buffer(const void* p, size_t n) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{const_buffer(p, n)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+mutable_buffer buffer(const mutable_buffer& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{b}.
+\end{itemdescr}
+
+\begin{itemdecl}
+mutable_buffer buffer(const mutable_buffer& b, size_t n) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{mutable_buffer(b.data(), min(b.size(), n))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+const_buffer buffer(const const_buffer& b) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{b}.
+\end{itemdescr}
+
+\begin{itemdecl}
+const_buffer buffer(const const_buffer& b, size_t n) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{const_buffer(b.data(), min(b.size(), n))}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class T, size_t N>
+  mutable_buffer buffer(T (&data)[N]) noexcept;
+template<class T, size_t N>
+  const_buffer buffer(const T (&data)[N]) noexcept;
+template<class T, size_t N>
+  mutable_buffer buffer(array<T, N>& data) noexcept;
+template<class T, size_t N>
+  const_buffer buffer(array<const T, N>& data) noexcept;
+template<class T, size_t N>
+  const_buffer buffer(const array<T, N>& data) noexcept;
+template<class T, class Allocator>
+  mutable_buffer buffer(vector<T, Allocator>& data) noexcept;
+template<class T, class Allocator>
+  const_buffer buffer(const vector<T, Allocator>& data) noexcept;
+template<class CharT, class Traits, class Allocator>
+  mutable_buffer buffer(basic_string<CharT, Traits, Allocator>& data) noexcept;
+template<class CharT, class Traits, class Allocator>
+  const_buffer buffer(const basic_string<CharT, Traits, Allocator>& data) noexcept;
+template<class CharT, class Traits>
+  const_buffer buffer(basic_string_view<CharT, Traits> data) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns 
+\begin{codeblock}
+buffer(
+  begin(data) != end(data) ? std::addressof(*begin(data)) : nullptr,
+  (end(data) - begin(data)) * sizeof(*begin(data)));
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class T, size_t N>
+  mutable_buffer buffer(T (&data)[N], size_t n) noexcept;
+template<class T, size_t N>
+  const_buffer buffer(const T (&data)[N], size_t n) noexcept;
+template<class T, size_t N>
+  mutable_buffer buffer(array<T, N>& data, size_t n) noexcept;
+template<class T, size_t N>
+  const_buffer buffer(array<const T, N>& data, size_t n) noexcept;
+template<class T, size_t N>
+  const_buffer buffer(const array<T, N>& data, size_t n) noexcept;
+template<class T, class Allocator>
+  mutable_buffer buffer(vector<T, Allocator>& data, size_t n) noexcept;
+template<class T, class Allocator>
+  const_buffer buffer(const vector<T, Allocator>& data, size_t n) noexcept;
+template<class CharT, class Traits, class Allocator>
+  mutable_buffer buffer(basic_string<CharT, Traits, Allocator>& data,
+                        size_t n) noexcept;
+template<class CharT, class Traits, class Allocator>
+  const_buffer buffer(const basic_string<CharT, Traits, Allocator>& data,
+                      size_t n) noexcept;
+template<class CharT, class Traits>
+  const_buffer buffer(basic_string_view<CharT, Traits> data,
+                      size_t n) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{buffer(buffer(data), n)}.
+\end{itemdescr}
+
+
+
+\rSec1[buffer.dynamic.vector]{Class template \tcode{dynamic_vector_buffer}}
+
+\pnum
+Class template \tcode{dynamic_vector_buffer} is an adaptor used to automatically grow or shrink a \tcode{vector} object, to reflect the data successfully transferred in an I/O operation.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class T, class Allocator>
+  class dynamic_vector_buffer
+  {
+  public:
+    // types:
+    typedef const_buffer const_buffers_type;
+    typedef mutable_buffer mutable_buffers_type;
+
+    // constructors:
+    explicit dynamic_vector_buffer(vector<T, Allocator>& vec) noexcept;
+    dynamic_vector_buffer(vector<T, Allocator>& vec,
+                          size_t maximum_size) noexcept;
+    dynamic_vector_buffer(dynamic_vector_buffer&&) = default;
+
+    // members:
+    size_t size() const noexcept;
+    size_t max_size() const noexcept;
+    size_t capacity() const noexcept;
+    const_buffers_type data() const noexcept;
+    mutable_buffers_type prepare(size_t n);
+    void commit(size_t n);
+    void consume(size_t n);
+
+  private:
+    vector<T, Allocator>& vec_; // \expos
+    size_t size_; // \expos
+    const size_t max_size_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The \tcode{dynamic_vector_buffer} class template meets the requirements of \tcode{DynamicBuffer}~(\ref{buffer.reqmts.dynamicbuffer}).
+
+\pnum
+The \tcode{dynamic_vector_buffer} class template requires that \tcode{T} is a trivially copyable or standard-layout type (C++Std [basic.types]) and that \tcode{sizeof(T) == 1}.
+
+\begin{itemdecl}
+explicit dynamic_vector_buffer(vector<T, Allocator>& vec) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{vec_} with \tcode{vec}, \tcode{size_} with \tcode{vec.size()}, and \tcode{max_size_} with \tcode{vec.max_size()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+dynamic_vector_buffer(vector<T, Allocator>& vec,
+                      size_t maximum_size) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{vec.size() <= maximum_size}.
+
+\pnum
+\effects Initializes \tcode{vec_} with \tcode{vec}, \tcode{size_} with \tcode{vec.size()}, and \tcode{max_size_} with \tcode{maximum_size}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t size() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{size_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t max_size() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{max_size_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t capacity() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{vec_.capacity()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+const_buffers_type data() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{buffer(vec_, size_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+mutable_buffers_type prepare(size_t n);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Performs \tcode{vec_.resize(size_ + n)}.
+
+\pnum
+\returns \tcode{buffer(buffer(vec_) + size_, n)}.
+
+\pnum
+\remarks \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void commit(size_t n);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Performs:
+\begin{codeblock}
+size_ += min(n, vec_.size() - size_);
+vec_.resize(size_);
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+void consume(size_t n);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Performs:
+\begin{codeblock}
+size_t m = min(n, size_);
+vec_.erase(vec_.begin(), vec_.begin() + m);
+size_ -= m;
+\end{codeblock}
+
+\end{itemdescr}
+
+
+
+\rSec1[buffer.dynamic.string]{Class template \tcode{dynamic_string_buffer}}
+
+\pnum
+Class template \tcode{dynamic_string_buffer} is an adaptor used to automatically grow or shrink a \tcode{basic_string} object, to reflect the data successfully transferred in an I/O operation.
+
+\begin{codeblock}
+namespace std {
+namespace experimental {
+namespace net {
+inline namespace v1 {
+
+  template<class CharT, class Traits, class Allocator>
+  class dynamic_string_buffer
+  {
+  public:
+    // types:
+    typedef const_buffer const_buffers_type;
+    typedef mutable_buffer mutable_buffers_type;
+
+    // constructors:
+    explicit dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str) noexcept;
+    dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str,
+                          size_t maximum_size) noexcept;
+    dynamic_string_buffer(dynamic_string_buffer&&) = default;
+
+    // members:
+    size_t size() const noexcept;
+    size_t max_size() const noexcept;
+    size_t capacity() const noexcept;
+    const_buffers_type data() const noexcept;
+    mutable_buffers_type prepare(size_t n);
+    void commit(size_t n) noexcept;
+    void consume(size_t n);
+
+  private:
+    basic_string<CharT, Traits, Allocator>& str_; // \expos
+    size_t size_; // \expos
+    const size_t max_size_; // \expos
+  };
+
+} // inline namespace v1
+} // namespace net
+} // namespace experimental
+} // namespace std
+\end{codeblock}
+
+\pnum
+The \tcode{dynamic_string_buffer} class template meets the requirements of \tcode{DynamicBuffer}~(\ref{buffer.reqmts.dynamicbuffer}).
+
+\pnum
+The \tcode{dynamic_string_buffer} class template requires that \tcode{sizeof(CharT) == 1}.
+
+\begin{itemdecl}
+explicit dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes \tcode{str_} with \tcode{str}, \tcode{size_} with \tcode{str.size()}, and \tcode{max_size_} with \tcode{str.max_size()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str,
+                      size_t maximum_size) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+Requires: \tcode{str.size() <= maximum_size}.
+
+\pnum
+\effects Initializes \tcode{str_} with \tcode{str}, \tcode{size_} with \tcode{str.size()}, and \tcode{max_size_} with \tcode{maximum_size}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t size() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{size_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t max_size() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{max_size_}.
+\end{itemdescr}
+
+\begin{itemdecl}
+size_t capacity() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{str_.capacity()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+const_buffers_type data() const noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{buffer(str_, size_)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+mutable_buffers_type prepare(size_t n);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Performs \tcode{str_.resize(size_ + n)}.
+
+\pnum
+\returns \tcode{buffer(buffer(str_) + size_, n)}.
+
+\pnum
+\remarks \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
+\end{itemdescr}
+
+\begin{itemdecl}
+void commit(size_t n) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Performs:
+\begin{codeblock}
+size_ += min(n, str_.size() - size_);
+str_.resize(size_);
+\end{codeblock}
+
+\end{itemdescr}
+
+\begin{itemdecl}
+void consume(size_t n);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Performs:
+\begin{codeblock}
+size_t m = min(n, size_);
+str_.erase(m);
+size_ -= m;
+\end{codeblock}
+
+\end{itemdescr}
+
+
+
+\rSec1[buffer.dynamic.creation]{Dynamic buffer creation functions}
+
+\begin{itemdecl}
+template<class T, class Allocator>
+  dynamic_vector_buffer<T, Allocator>
+    dynamic_buffer(vector<T, Allocator>& vec) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{dynamic_vector_buffer<T, Allocator>(vec)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class T, class Allocator>
+  dynamic_vector_buffer<T, Allocator>
+    dynamic_buffer(vector<T, Allocator>& vec, size_t n) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{dynamic_vector_buffer<T, Allocator>(vec, n)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CharT, class Traits, class Allocator>
+  dynamic_string_buffer<CharT, Traits, Allocator>
+    dynamic_buffer(basic_string<CharT, Traits, Allocator>& str) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{dynamic_string_buffer<CharT, Traits, Allocator>(str)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class CharT, class Traits, class Allocator>
+  dynamic_string_buffer<CharT, Traits, Allocator>
+    dynamic_buffer(basic_string<CharT, Traits, Allocator>& str, size_t n) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{dynamic_string_buffer<CharT, Traits, Allocator>(str, n)}.
+\end{itemdescr}
+
+
+
