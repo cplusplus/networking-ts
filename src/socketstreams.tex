@@ -287,13 +287,13 @@ virtual int_type pbackfail(int_type c = traits_type::eof()) override;
 
 \begin{itemize}
 \item
-If\tcode{traits_type::eq_int_type(c,traits_type::eof())}returns \tcode{false}, and if the function makes a putback position available, and if \tcode{traits_type::eq(traits_type::to_char_type(c),gptr()[-1])}returns \tcode{true}, decrements the next pointer for the input sequence, \tcode{gptr()}.Returns: \tcode{c}.
+If\tcode{traits_type::eq_int_type(c,traits_type::eof())} returns \tcode{false}, and if the function makes a putback position available, and if \tcode{traits_type::eq(traits_type::to_char_type(c),gptr()[-1])} returns \tcode{true}, decrements the next pointer for the input sequence, \tcode{gptr()}.Returns: \tcode{c}.
 
 \item
-If\tcode{traits_type::eq_int_type(c,traits_type::eof())}returns \tcode{false}, and if the function makes a putback position available, and if the function is permitted to assign to the putback position, decrements the next pointer for the input sequence, and stores \tcode{c}there.Returns: \tcode{c}.
+If\tcode{traits_type::eq_int_type(c,traits_type::eof())} returns \tcode{false}, and if the function makes a putback position available, and if the function is permitted to assign to the putback position, decrements the next pointer for the input sequence, and stores \tcode{c} there.Returns: \tcode{c}.
 
 \item
-If\tcode{traits_type::eq_int_type(c,traits_type::eof())}returns \tcode{true}, and if either the input sequence has a putback position available or the function makes a putback position available, decrements the next pointer for the input sequence, \tcode{gptr()}.Returns: \tcode{traits_type::not_eof(c)}.
+If\tcode{traits_type::eq_int_type(c,traits_type::eof())} returns \tcode{true}, and if either the input sequence has a putback position available or the function makes a putback position available, decrements the next pointer for the input sequence, \tcode{gptr()}.Returns: \tcode{traits_type::not_eof(c)}.
 \end{itemize}
 
 \pnum

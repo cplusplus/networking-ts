@@ -236,7 +236,7 @@ Shall not exit via an exception.post: \tcode{u == cx1} and \tcode{std::addressof
 
 \tcode{X u(mx1);}  &
   &
-Shall not exit via an exception.post: \tcode{u}equals the prior value of \tcode{mx1} and \tcode{std::addressof(u.context())}equals the prior value of \tcode{std::addressof(mx1.context())}.  \\ \rowsep
+Shall not exit via an exception.post: \tcode{u} equals the prior value of \tcode{mx1} and \tcode{std::addressof(u.context())} equals the prior value of \tcode{std::addressof(mx1.context())}.  \\ \rowsep
 
 \tcode{cx1 == cx2}  &
 \tcode{bool}  &
@@ -256,14 +256,15 @@ Shall not exit via an exception. The comparison operators and member functions d
 
 \tcode{x1.on_work_finished()}  &
   &
-Shall not exit via an exception.Precondition: A preceding call \tcode{x2.on_work_started()}where \tcode{x1 == x2}.  \\ \rowsep
+Shall not exit via an exception.Precondition: A preceding call \tcode{x2.on_work_started()} where \tcode{x1 == x2}.  \\ \rowsep
 
 \tcode{x1.dispatch(std::move(f),a)}  &
   &
 \effects Creates an object \tcode{f1} initialized with DECAY_COPY\tcode{(forward<Func>(f))} (C++Std [thread.decaycopy]) in the current thread of execution . Calls \tcode{f1()} at most once. The executor may block forward progress of the caller until \tcode{f1()} finishes execution.Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote\br
 \sync The invocation of \tcode{dispatch} synchronizes with (C++Std [intro.multithread]) the invocation of \tcode{f1}.  \\ \rowsep
 
-\tcode{x1.post(std::move(f),a)}\tcode{x1.defer(std::move(f),a)}  &
+\tcode{x1.post(std::move(f),a)}\br
+\tcode{x1.defer(std::move(f),a)}  &
   &
 \effects Creates an object \tcode{f1} initialized with DECAY_COPY\tcode{(forward<Func>(f))} in the current thread of execution. Calls \tcode{f1()} at most once. The executor shall not block forward progress of the caller pending completion of \tcode{f1()}.Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote\br
 \sync The invocation of \tcode{post} or \tcode{defer} synchronizes with (C++Std [intro.multithread]) the invocation of \tcode{f1}.\enternote Although the requirements placed on \tcode{defer} are identical to \tcode{post}, the use of \tcode{post} conveys a preference that the caller does notblock the first step of f1's progress, whereas \tcode{defer} conveys a preference that the caller doesblock the first step of f1. One use of \tcode{defer} is to convey the intention of the caller that f1is a continuation of the current call context. The executor may use this information to optimize or otherwise adjust the way in which \tcode{f1} is invoked. \exitnote  \\
@@ -1022,7 +1023,7 @@ void notify_fork(fork_event e);
 \effects For each service object \tcode{svc} in the set:
 \begin{itemize}
 \item
- If\tcode{e == fork_event::prepare}, performs \tcode{svc->notify_fork(e)}in reverse order of addition to the set.
+ If\tcode{e == fork_event::prepare}, performs \tcode{svc->notify_fork(e)} in reverse order of addition to the set.
 \item
  Otherwise, performs\tcode{svc->notify_fork(e)} in order of addition to the set.
 \end{itemize}
@@ -2496,11 +2497,11 @@ bool operator==(const executor& a, const executor& b) noexcept;
 \returns 
 \begin{itemize}
 \item
-\tcode{true}if \tcode{!a} and \tcode{!b};
+\tcode{true} if \tcode{!a} and \tcode{!b};
 \item
-\tcode{true}if \tcode{a} and \tcode{b}share a target;
+\tcode{true} if \tcode{a} and \tcode{b} share a target;
 \item
-\tcode{true}if \tcode{e} and \tcode{f}are the same type and \tcode{e == f}, where \tcode{e} is the target of \tcode{a} and \tcode{f} is the target of \tcode{b};
+\tcode{true} if \tcode{e} and \tcode{f} are the same type and \tcode{e == f}, where \tcode{e} is the target of \tcode{a} and \tcode{f} is the target of \tcode{b};
 \item
  otherwise\tcode{false}.
 \end{itemize}
@@ -2768,7 +2769,7 @@ Constructs a function object \tcode{f} containing as members:
 \item
 a copy of the completion handler \tcode{h}, initialized with \tcode{std::move(completion.completion_handler)},
 \item
-an \tcode{executor_work_guard}object \tcode{w} for the completion handler's associated executor, initialized with \tcode{make_work_guard(h)},
+an \tcode{executor_work_guard} object \tcode{w} for the completion handler's associated executor, initialized with \tcode{make_work_guard(h)},
 \end{itemize}
 and where the effect of \tcode{f()} is:
 \begin{itemize}

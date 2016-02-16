@@ -1908,7 +1908,7 @@ basic_address_range() noexcept;
 
 \begin{itemdescr}
 \pnum
-\effects Constructs an object of type \tcode{basic_address_range<}Address\tcode{>} that represents an empty range.
+\effects Constructs an object of type \tcode{basic_address_range<} Address\tcode{>} that represents an empty range.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4034,13 +4034,13 @@ ip::v6_only  &
 \tcode{IPPROTO_IPV6}  &
 \tcode{IPV6_V6ONLY}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements.Determines whether a socket created for an IPv6 protocol is restricted to IPv6 communications only.Implementations are not required to support setting the \tcode{v6_only}option to \tcode{false}, and the initial value of the \tcode{v6_only}option for a socket is implementation-defined. \enternote As not all operating systems support dual stack IP networking. Some operating systems that do provide dual stack support offer a configuration option to disable it or to set the initial value of the \tcode{v6_only} socket option. \exitnote  \\ \rowsep
+Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements.Determines whether a socket created for an IPv6 protocol is restricted to IPv6 communications only.Implementations are not required to support setting the \tcode{v6_only} option to \tcode{false}, and the initial value of the \tcode{v6_only} option for a socket is implementation-defined. \enternote As not all operating systems support dual stack IP networking. Some operating systems that do provide dual stack support offer a configuration option to disable it or to set the initial value of the \tcode{v6_only} socket option. \exitnote  \\ \rowsep
 
 ip::unicast::hops  &
 \tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
 \tcode{IPV6_UNICAST_HOPS} if F == AF_INET6, otherwise \tcode{IP_TTL}  &
 \tcode{int}  &
-Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements.Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams.The constructor and assignment operator for the \tcode{ip::unicast::hops}class throw \tcode{out_of_range}if the \tcode{int}argument is not in the range \tcode{[0, 255]}.  \\ \rowsep
+Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements.Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams.The constructor and assignment operator for the \tcode{ip::unicast::hops} class throw \tcode{out_of_range} if the \tcode{int} argument is not in the range \tcode{[0, 255]}.  \\ \rowsep
 
 ip::multicast::join_group  &
 \tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
@@ -4064,7 +4064,7 @@ ip::multicast::hops  &
 \tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
 \tcode{IPV6_MULTICAST_HOPS} if F == AF_INET6, otherwise \tcode{IP_MULTICAST_TTL}  &
 \tcode{int}  &
-Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements.Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams.The constructor and assignment operator for the \tcode{ip::multicast::hops}class throw \tcode{out_of_range}if the \tcode{int}argument is not in the range \tcode{[0, 255]}.  \\ \rowsep
+Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements.Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams.The constructor and assignment operator for the \tcode{ip::multicast::hops} class throw \tcode{out_of_range} if the \tcode{int} argument is not in the range \tcode{[0, 255]}.  \\ \rowsep
 
 ip::multicast::enable_loopback  &
 \tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &

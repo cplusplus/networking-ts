@@ -268,11 +268,13 @@ Returns a value suitable for passing as the address_len argument to functions su
 
 \tcode{b.resize(s)}  &
   &
-pre: \tcode{s >= 0}post: \tcode{a.size() == s}Passed the value contained in the address_lenargument to functions such as POSIX accept, getpeername, getsocknameand recvfrom, after successful completion of the function. Permitted to throw an exception if the protocol associated with the endpoint object \tcode{a} does not support the specified size.  \\ \rowsep
+pre: \tcode{s >= 0}\br
+post: \tcode{a.size() == s}\br
+Passed the value contained in the \tcode{address_len} argument to functions such as POSIX accept, getpeername, getsockname, and recvfrom, after successful completion of the function. Permitted to throw an exception if the protocol associated with the endpoint object \tcode{a} does not support the specified size.  \\ \rowsep
 
 \tcode{a.capacity()}  &
 \tcode{size_t}  &
-Returns a value suitable for passing as the address_len argument to functions such as POSIX accept, getpeername, getsockname and recvfrom, after appropriate integer conversion has been performed.  \\
+Returns a value suitable for passing as the \tcode{address_len} argument to functions such as POSIX accept, getpeername, getsockname and recvfrom, after appropriate integer conversion has been performed.  \\
 
 \end{libreqtab3}
 
@@ -303,7 +305,7 @@ In the table below, \tcode{x} denotes a (possibly const) value of type \tcode{X}
 
 \tcode{x.begin()}\tcode{x.end()}  &
 A type meeting the requirements for forward iterators (C++Std [forward.iterators]) whose value type is convertible to a type satisfying the \tcode{Endpoint}~(\ref{socket.reqmts.endpoint}) requirements.  &
-[\tcode{x.begin()},\tcode{x.end()}) is a valid range.  \\
+\range{\tcode{x.begin()},\tcode{x.end()}}\ is a valid range.  \\
 
 \end{libreqtab3}
 
@@ -1059,15 +1061,15 @@ inline namespace v1 {
 
 \tcode{wait_read}  &
   &
-Wait until the socket is ready-to-read.For a given socket, when a \tcode{wait}or \tcode{async_wait}operation using \tcode{wait_read}completes successfuly, a subsequent call to the socket's \tcode{receive}or \tcode{receive_from}functions may complete without blocking. Similarly, for a given acceptor, when a \tcode{wait}or \tcode{async_wait}operation using \tcode{wait_read}completes successfully, a subsequent call to the acceptor's \tcode{accept} function may complete without blocking.  \\ \rowsep
+Wait until the socket is ready-to-read.For a given socket, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_read} completes successfuly, a subsequent call to the socket's \tcode{receive} or \tcode{receive_from} functions may complete without blocking. Similarly, for a given acceptor, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_read} completes successfully, a subsequent call to the acceptor's \tcode{accept} function may complete without blocking.  \\ \rowsep
 
 \tcode{wait_write}  &
   &
-Wait until the socket is ready-to-write.For a given socket, when a \tcode{wait}or \tcode{async_wait}operation using \tcode{wait_write}completes successfuly, a subsequent call to the socket's \tcode{send}or \tcode{send_to} functions may complete without blocking.  \\ \rowsep
+Wait until the socket is ready-to-write.For a given socket, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_write} completes successfuly, a subsequent call to the socket's \tcode{send} or \tcode{send_to} functions may complete without blocking.  \\ \rowsep
 
 \tcode{wait_error}  &
   &
-Wait until the socket has a pending error condition.For a given socket, when a \tcode{wait}or \tcode{async_wait}operation using \tcode{wait_error} completes successfuly, a subsequent call to one of the socket's synchronous operations may complete without blocking. The nature of the pending error condition determines which.  \\ \rowsep
+Wait until the socket has a pending error condition.For a given socket, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_error} completes successfuly, a subsequent call to one of the socket's synchronous operations may complete without blocking. The nature of the pending error condition determines which.  \\ \rowsep
 
 \tcode{message_peek}  &
 \tcode{MSG_PEEK}  &
@@ -4136,7 +4138,7 @@ native_handle_type h = accept(native_handle(),
 if (h >= 0)
   endpoint.resize(endpoint_len);
 \end{codeblock}
- On success, \tcode{s} is \tcode{socket_type(ctx, protocol_, h). Otherwise, }s\tcode{ is }socket_type(ctx)`.
+On success, \tcode{s} is \tcode{socket_type(ctx, protocol_, h)}. Otherwise,  \tcode{s} is  \tcode{socket_type(ctx)}.
 \end{itemdescr}
 
 \begin{itemdecl}

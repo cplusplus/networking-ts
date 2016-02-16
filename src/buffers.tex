@@ -462,7 +462,7 @@ Returns a constant buffer sequence \tcode{u} that represents the readable bytes,
 
 \tcode{x.prepare(n)}  &
 \tcode{X::mutable_buffers_type}  &
-Returns a mutable buffer sequence \tcode{u} representing the writable bytes, and where \tcode{buffer_size(u) == n}. The dynamic buffer reallocates memory as required. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.Throws: \tcode{length_error}if \tcode{size() + n}exceeds \tcode{max_size()}.  \\ \rowsep
+Returns a mutable buffer sequence \tcode{u} representing the writable bytes, and where \tcode{buffer_size(u) == n}. The dynamic buffer reallocates memory as required. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.Throws: \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.  \\ \rowsep
 
 \tcode{x.commit(n)}  &
   &
