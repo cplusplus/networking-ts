@@ -89,14 +89,14 @@ The \tcode{io_context} member functions \tcode{run}, \tcode{run_for}, \tcode{run
 \pnum
 For an object of type \tcode{io_context}, outstanding work is defined as the sum of:
 
-\pnum
---- the total number of calls to the \tcode{on_work_started} function, less the total number of calls to the \tcode{on_work_finished} function, to any executor of the \tcode{io_context}.
-
-\pnum
---- the number of function objects that have been added to the \tcode{io_context} via any executor of the \tcode{io_context}, but not yet executed; and
-
-\pnum
---- the number of function objects that are currently being executed by the \tcode{io_context}.
+\begin{itemize}
+\item
+the total number of calls to the \tcode{on_work_started} function, less the total number of calls to the \tcode{on_work_finished} function, to any executor of the \tcode{io_context}.
+\item
+the number of function objects that have been added to the \tcode{io_context} via any executor of the \tcode{io_context}, but not yet executed; and
+\item
+the number of function objects that are currently being executed by the \tcode{io_context}.
+\end{itemize}
 
 \pnum
 If at any time the outstanding work falls to \tcode{0}, the \tcode{io_context} is stopped as if by \tcode{stop()}.

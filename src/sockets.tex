@@ -143,25 +143,23 @@ In this section, synchronous socket operations are those member functions specif
 For an object \tcode{s}, the conditions under which its synchronous socket operations may block the calling thread (\CppXref{defns.block}) are determined as follows.
 
 \pnum
- If:
+If:
+
+\begin{itemize}
+\item
+\tcode{s.non_blocking() == true},
+\item
+the synchronous socket operation is specified in terms of a POSIX function other than \tcode{poll},
+\item
+that POSIX function lists \tcode{EWOULDBLOCK} or \tcode{EAGAIN} in its failure conditions, and
+\item
+the effects of the operation cannot be established immediately
+\end{itemize}
+
+then the synchronous socket operation shall not block the calling thread. \enternote And the effects of the operation are not established. \exitnote
 
 \pnum
---- \tcode{s.non_blocking() == true},
-
-\pnum
---- the synchronous socket operation is specified in terms of a POSIX function other than \tcode{poll},
-
-\pnum
---- that POSIX function lists \tcode{EWOULDBLOCK} or \tcode{EAGAIN} in its failure conditions, and
-
-\pnum
- --- the effects of the operation cannot be established immediately
-
-\pnum
- then the synchronous socket operation shall not block the calling thread. \enternote And the effects of the operation are not established. \exitnote
-
-\pnum
- Otherwise, the synchronous socket operation shall block the calling thread until the effects are established.
+Otherwise, the synchronous socket operation shall block the calling thread until the effects are established.
 
 
 
@@ -176,13 +174,13 @@ For an object \tcode{s}, a program may initiate asynchronous socket operations s
 \pnum
 When there are multiple outstanding asynchronous read operations~(\ref{buffer.reqmts.read.write}) on \tcode{s}:
 
-\pnum
---- having no argument \tcode{flags} of type \tcode{socket_base::message_flags}, or
+\begin{itemize}
+\item
+having no argument \tcode{flags} of type \tcode{socket_base::message_flags}, or
+\item
+having an argument \tcode{flags} of type \tcode{socket_base::message_flags} but where \tcode{(flags \& socket_base::message_out_of_band) == 0}
+\end{itemize}
 
-\pnum
---- having an argument \tcode{flags} of type \tcode{socket_base::message_flags} but where \tcode{(flags \& socket_base::message_out_of_band) == 0}
-
-\pnum
 then the \tcode{buffers} are filled in the order in which these operations were issued. The order of invocation of the completion handlers for these operations is unspecified.
 
 \pnum
@@ -1017,20 +1015,18 @@ inline namespace v1 {
 \pnum
 \tcode{socket_base} defines several member types:
 
-\pnum
---- socket option classes \tcode{broadcast}, \tcode{debug}, \tcode{do_not_route}, \tcode{keep_alive}, \tcode{linger}, \tcode{out_of_band_inline}, \tcode{receive_buffer_size}, \tcode{receive_low_watermark}, \tcode{reuse_address}, \tcode{send_buffer_size}, and \tcode{send_low_watermark};
-
-\pnum
---- an enumerated type, \tcode{shutdown_type}, for use with the \tcode{basic_socket<Protocol>} class's \tcode{shutdown} member function.
-
-\pnum
---- an enumerated type, \tcode{wait_type}, for use with the \tcode{basic_socket<Protocol>} and \tcode{basic_socket_acceptor<Protocol>} classes' \tcode{wait} and \tcode{async_wait} member functions,
-
-\pnum
---- a bitmask type, \tcode{message_flags}, for use with the \tcode{basic_stream_socket<Protocol>} class's \tcode{send}, \tcode{async_send},\tcode{receive}, and \tcode{async_receive} member functions, and the \tcode{basic_datagram_socket<Protocol>} class's \tcode{send}, \tcode{async_send}, \tcode{send_to}, \tcode{async_send_to}, \tcode{receive}, \tcode{async_receive}, \tcode{receive_from}, and \tcode{async_receive_from} member functions.
-
-\pnum
---- a constant, \tcode{max_listen_connections}, for use with the \tcode{basic_socket_acceptor<Protocol>} class's \tcode{listen} member function.
+\begin{itemize}
+\item
+socket option classes \tcode{broadcast}, \tcode{debug}, \tcode{do_not_route}, \tcode{keep_alive}, \tcode{linger}, \tcode{out_of_band_inline}, \tcode{receive_buffer_size}, \tcode{receive_low_watermark}, \tcode{reuse_address}, \tcode{send_buffer_size}, and \tcode{send_low_watermark};
+\item
+an enumerated type, \tcode{shutdown_type}, for use with the \tcode{basic_socket<Protocol>} class's \tcode{shutdown} member function.
+\item
+an enumerated type, \tcode{wait_type}, for use with the \tcode{basic_socket<Protocol>} and \tcode{basic_socket_acceptor<Protocol>} classes' \tcode{wait} and \tcode{async_wait} member functions,
+\item
+a bitmask type, \tcode{message_flags}, for use with the \tcode{basic_stream_socket<Protocol>} class's \tcode{send}, \tcode{async_send},\tcode{receive}, and \tcode{async_receive} member functions, and the \tcode{basic_datagram_socket<Protocol>} class's \tcode{send}, \tcode{async_send}, \tcode{send_to}, \tcode{async_send_to}, \tcode{receive}, \tcode{async_receive}, \tcode{receive_from}, and \tcode{async_receive_from} member functions.
+\item
+a constant, \tcode{max_listen_connections}, for use with the \tcode{basic_socket_acceptor<Protocol>} class's \tcode{listen} member function.
+\end{itemize}
 
 \begin{libreqtab3}
 {socket_base constants}

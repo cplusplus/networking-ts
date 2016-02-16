@@ -487,14 +487,12 @@ A write operation is an operation that writes data from a constant buffer sequen
 \pnum
 If a read or write operation is also an asynchronous operation~(\ref{async.reqmts.async}), the operation shall maintain one or more copies of the buffer sequence until such time as the operation no longer requires access to the memory specified by the buffers in the sequence. The program shall ensure the memory remains valid until:
 
-\pnum
- --- the last copy of the buffer sequence is destroyed, or
+\begin{itemize}
+\item the last copy of the buffer sequence is destroyed, or
+\item the completion handler for the asynchronous operation is invoked,
+\end{itemize}
 
-\pnum
- --- the completion handler for the asynchronous operation is invoked,
-
-\pnum
- whichever comes first.
+whichever comes first.
 
 
 
