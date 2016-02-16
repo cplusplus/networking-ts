@@ -613,7 +613,7 @@ constexpr address(const address_v6& a) noexcept;
 \rSec2[internet.address.assign]{\tcode{ip::address} assignment}
 
 \begin{itemdecl}
-constexpr address(const address_v4& a) noexcept;
+address& operator=(const address_v4& a) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -625,7 +625,7 @@ constexpr address(const address_v4& a) noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-constexpr address(const address_v6& a) noexcept;
+address& operator=(const address_v6& a) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
