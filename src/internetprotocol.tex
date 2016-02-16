@@ -3547,7 +3547,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec, results_type r)}.
+\completionsig \tcode{void(error_code ec, results_type r)}.
 
 \pnum
 \effects If \tcode{host_name.data() != nullptr}, let H be an NTBS constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an NTBS constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Initiates an asynchronous operation to resolve a host name and service name, as if by POSIX: 
@@ -3632,7 +3632,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec, results_type r)}.
+\completionsig \tcode{void(error_code ec, results_type r)}.
 
 \pnum
 \effects If \tcode{host_name.data() != nullptr}, let H be an NTBS constructed from \tcode{host_name}; otherwise, let H be \tcode{nullptr}. If \tcode{service_name.data() != nullptr}, let S be an NTBS constructed from \tcode{service_name}; otherwise, let S be \tcode{nullptr}. Initiates an asynchronous operation to resolve a host name and service name, as if by POSIX: 
@@ -3693,7 +3693,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec, results_type r)}.
+\completionsig \tcode{void(error_code ec, results_type r)}.
 
 \pnum
 \effects Let \tcode{S1} and \tcode{S2} be implementation-defined values that are sufficiently large to hold the host name and service name respectively. Initiates an asynchronous operation to resolve an endpoint as if by POSIX: 

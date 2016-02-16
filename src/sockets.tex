@@ -2090,7 +2090,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec)}.
+\completionsig \tcode{void(error_code ec)}.
 
 \pnum
 \effects If \tcode{is_open()} is \tcode{false}, opens this socket by performing \tcode{open(endpoint.protocol(), ec)}. If \tcode{ec}, the operation completes immediately with no further action. Initiates an asynchronous operation to connect this socket to the specified remote endpoint, as if by POSIX \tcode{connect(native_handle(), endpoint.data(), endpoint.size())}.
@@ -2128,7 +2128,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec)}.
+\completionsig \tcode{void(error_code ec)}.
 
 \pnum
 \effects Initiates an asynchronous operation to wait for this socket to be ready to read, ready to write, or to have error conditions pending, as if by POSIX poll.
@@ -2480,7 +2480,7 @@ template<class MutableBufferSequence, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec, size_t n)}.
+\completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
 \effects Initiates an asynchronous operation to read data from this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX: 
@@ -2592,7 +2592,7 @@ template<class MutableBufferSequence, class CompletionToken>
 A read operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-Completion signature: \tcode{void(error_code ec, size_t n)}.
+\completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
 \effects Initiates an asynchronous operation to read data from this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX: 
@@ -2693,7 +2693,7 @@ template<class ConstBufferSequence, class CompletionToken>
 A write operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-Completion signature: \tcode{void(error_code ec, size_t n)}.
+\completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
 \effects Initiates an asynchronous operation to write data to this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX: 
@@ -2787,7 +2787,7 @@ template<class ConstBufferSequence, class CompletionToken>
 A write operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-Completion signature: \tcode{void(error_code ec, size_t n)}.
+\completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
 \effects Initiates an asynchronous operation to write data to this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX: 
@@ -3116,7 +3116,7 @@ template<class MutableBufferSequence, class CompletionToken>
 A read operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-Completion signature: \tcode{void(error_code ec, size_t n)}.
+\completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
 \effects Initiates an asynchronous operation to read data from this socket. If \tcode{buffer_size(buffers) == 0}, the asynchronous operation completes immediately with no error and \tcode{n == 0}. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX: 
@@ -3214,7 +3214,7 @@ template<class ConstBufferSequence, class CompletionToken>
 A write operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-Completion signature: \tcode{void(error_code ec, size_t n)}.
+\completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
 \effects Initiates an asynchronous operation to write data to this socket. If \tcode{buffer_size(buffers) == 0}, the asynchronous operation completes immediately with no error and \tcode{n == 0}. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX: 
@@ -4062,7 +4062,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec, socket_type s)}.
+\completionsig \tcode{void(error_code ec, socket_type s)}.
 
 \pnum
 \effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX: 
@@ -4124,7 +4124,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec, socket_type s)}.
+\completionsig \tcode{void(error_code ec, socket_type s)}.
 
 \pnum
 \effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX: 
@@ -4156,7 +4156,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec)}.
+\completionsig \tcode{void(error_code ec)}.
 
 \pnum
 \effects Initiates an asynchronous operation to wait for the acceptor to have a queued incoming connection, or to have error conditions pending, as if by POSIX poll.

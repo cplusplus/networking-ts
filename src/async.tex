@@ -492,7 +492,11 @@ An initiating function determines the type \tcode{CompletionHandler} of its comp
 The type \tcode{CompletionHandler} must satisfy the requirements of \tcode{Destructible} (C++Std [destructible]) and \tcode{MoveConstructible} (C++Std [moveconstructible]), and be callable with the specified call signature.
 
 \pnum
-In this Technical Specification, all initiating functions specify a Completion signature element that defines the call signature \tcode{Signature}. The Completion signature elements in this Technical Specification have named parameters, and the results of an asynchronous operation are specified in terms of these names.
+In this Technical Specification, all initiating functions specify a
+\completionsig element that defines the call signature \tcode{Signature}.
+The \completionsig elements in this Technical Specification have named
+parameters, and the results of an asynchronous operation are specified in
+terms of these names.
 
 
 
@@ -2564,7 +2568,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void()}.
+\completionsig \tcode{void()}.
 
 \pnum
 \effects 
@@ -2586,7 +2590,7 @@ template<class Executor, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void()}.
+\completionsig \tcode{void()}.
 
 \pnum
 \effects 
@@ -2626,7 +2630,7 @@ template<class ExecutionContext, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void()}.
+\completionsig \tcode{void()}.
 
 \pnum
 \returns \tcode{std::experimental::net::dispatch(ctx.get_executor(), forward<CompletionToken>(token))}.
@@ -2649,7 +2653,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void()}.
+\completionsig \tcode{void()}.
 
 \pnum
 \effects 
@@ -2671,7 +2675,7 @@ template<class Executor, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void()}.
+\completionsig \tcode{void()}.
 
 \pnum
 \effects 
@@ -2711,7 +2715,7 @@ template<class ExecutionContext, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void()}.
+\completionsig \tcode{void()}.
 
 \pnum
 \returns \tcode{std::experimental::net::post(ctx.get_executor(), forward<CompletionToken>(token))}.
@@ -2734,7 +2738,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void()}.
+\completionsig \tcode{void()}.
 
 \pnum
 \effects 
@@ -2756,7 +2760,7 @@ template<class Executor, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void()}.
+\completionsig \tcode{void()}.
 
 \pnum
 \effects 
@@ -2796,7 +2800,7 @@ template<class ExecutionContext, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void()}.
+\completionsig \tcode{void()}.
 
 \pnum
 \returns \tcode{std::experimental::net::defer(ctx.get_executor(), forward<CompletionToken>(token))}.

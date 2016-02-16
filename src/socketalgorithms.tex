@@ -138,7 +138,7 @@ template<class Protocol, class InputIterator,
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec, typename Protocol::endpoint ep)}.
+\completionsig \tcode{void(error_code ec, typename Protocol::endpoint ep)}.
 
 \pnum
 \effects Performs \tcode{ec.clear()}, then finds the first element \tcode{ep} in the sequence \tcode{endpoints} for which:
@@ -190,7 +190,7 @@ template<class Protocol, class InputIterator,
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec, InputIterator i)}.
+\completionsig \tcode{void(error_code ec, InputIterator i)}.
 
 \pnum
 \effects Performs \tcode{ec.clear()}, then finds the first iterator \tcode{i} in the range [\tcode{first},\tcode{last}) for which:

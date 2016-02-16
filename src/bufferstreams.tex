@@ -427,7 +427,7 @@ template<class AsyncReadStream, class MutableBufferSequence,
 A read operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-Completion signature: \tcode{void(error_code ec, size_t n)}.
+\completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
 \effects Reads data from the buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream}) object \tcode{stream} by invoking the stream's \tcode{async_read_some} member function (henceforth referred to as asynchronous read_some operations) zero or more times.
@@ -469,7 +469,7 @@ template<class AsyncReadStream, class DynamicBuffer,
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec, size_t n)}.
+\completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
 \effects Initiates an asynchronous operation to read data from the buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream}) object \tcode{stream} by performing one or more asynchronous read_some operations on the stream.
@@ -618,7 +618,7 @@ template<class AsyncWriteStream, class ConstBufferSequence,
 A write operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-Completion signature: \tcode{void(error_code ec, size_t n)}.
+\completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
 \effects Initiates an asynchronous operation to write data to the buffer-oriented asynchronous write stream~(\ref{buffer.stream.reqmts.asyncwritestream}) object \tcode{stream} by performing zero or more asynchronous operations on the stream using the stream's \tcode{async_write_some} member function (henceforth referred to as asynchronous write_some operations).
@@ -659,7 +659,7 @@ template<class AsyncWriteStream, class DynamicBuffer,
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec, size_t n)}.
+\completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
 \effects Initiates an asynchronous operation to write data to the buffer-oriented asynchronous write stream~(\ref{buffer.stream.reqmts.asyncwritestream}) object \tcode{stream} by performing zero or more asynchronous write_some operations on the stream.
@@ -749,7 +749,7 @@ template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-Completion signature: \tcode{void(error_code ec, size_t n)}.
+\completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
 \effects Initiates an asynchronous operation to read data from the buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream}) object \tcode{stream} by performing zero or more asynchronous read_some operations on the stream, until the readable bytes of the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b} contain the specified delimiter \tcode{delim}.
