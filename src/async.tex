@@ -323,8 +323,6 @@ A service shall provide an explicit constructor with a single parameter of lvalu
 \pnum
 \enterexample 
 
-\pnum
-
 \begin{codeblock}
 class my_service : public execution_context::service
 {
@@ -338,9 +336,7 @@ private:
 };
 \end{codeblock}
 
-
-\pnum
- \exitexample
+\exitexample
 
 \pnum
 A service's \tcode{shutdown} member function shall destroy all copies of user-defined function objects that are held by the service.
@@ -367,10 +363,9 @@ a source object \tcode{s} of type \tcode{S},
 type requirements \tcode{R}, and
 
 \item
-a candidate object \tcode{c} of type \tcode{C} meeting the type requirements \tcode{R}
+a candidate object \tcode{c} of type \tcode{C} meeting the type requirements \tcode{R},
 \end{itemize}
 
-\pnum
 an associated type \tcode{A} meeting the type requirements \tcode{R} may be computed, and an associated object \tcode{a} of type \tcode{A} may be obtained.
 
 \pnum
@@ -428,7 +423,6 @@ typename X<S, C>::type get_@\textit{X}@(const S& s, const C& c = d)
 }
 \end{codeblock}
 
-\pnum
 where X is replaced with the name of the associator class template. \enternote This function template is provided as a convenience, to automatically deduce the source and candidate types. \exitnote
 
 
@@ -524,7 +518,7 @@ using \tcode{result.get()} as the operand of the return statement.
 \end{itemize}
 
 \pnum
-[Example: Given an asynchronous operation with Completion signature \tcode{void(R1 r1, R2 r2)}, an initiating function meeting these requirements may be implemented as follows:
+\enterexample Given an asynchronous operation with Completion signature \tcode{void(R1 r1, R2 r2)}, an initiating function meeting these requirements may be implemented as follows:
 
 \begin{codeblock}
 template<class CompletionToken>
@@ -558,8 +552,7 @@ auto async_xyz(T1 t1, T2 t2, CompletionToken&& token)
 }
 \end{codeblock}
 
-\pnum
-—end example]
+\exitexample
 
 
 
