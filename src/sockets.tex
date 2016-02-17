@@ -1374,7 +1374,7 @@ inline namespace v1 {
     // types:
 
     typedef io_context::executor_type executor_type;
-    typedef @\textit{implementation defined}@ native_handle_type; // See native handles
+    typedef @\textit{implementation defined}@ native_handle_type; // \nativeref
     typedef Protocol protocol_type;
     typedef typename protocol_type::endpoint endpoint_type;
 
@@ -1382,16 +1382,16 @@ inline namespace v1 {
 
     executor_type get_executor() noexcept;
 
-    native_handle_type native_handle(); // See native handles
+    native_handle_type native_handle(); // \nativeref
 
     void open(const protocol_type& protocol = protocol_type());
     void open(const protocol_type& protocol, error_code& ec);
 
     void assign(const protocol_type& protocol,
-                const native_handle_type& native_socket); // See native handles
+                const native_handle_type& native_socket); // \nativeref
     void assign(const protocol_type& protocol,
                 const native_handle_type& native_socket,
-                error_code& ec); // See native handles
+                error_code& ec); // \nativeref
 
     bool is_open() const noexcept;
 
@@ -1462,7 +1462,7 @@ inline namespace v1 {
     basic_socket(io_context& ctx, const protocol_type& protocol);
     basic_socket(io_context& ctx, const endpoint_type& endpoint);
     basic_socket(io_context& ctx, const protocol_type& protocol,
-                 const native_handle_type& native_socket); // See native handles
+                 const native_handle_type& native_socket); // \nativeref
     basic_socket(const basic_socket&) = delete;
     basic_socket(basic_socket&& rhs);
     template<class OtherProtocol>
@@ -2150,7 +2150,7 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef @\textit{implementation defined}@ native_handle_type; // See native handles
+    typedef @\textit{implementation defined}@ native_handle_type; // \nativeref
     typedef Protocol protocol_type;
     typedef typename protocol_type::endpoint endpoint_type;
 
@@ -2808,7 +2808,7 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef @\textit{implementation defined}@ native_handle_type; // See native handles
+    typedef @\textit{implementation defined}@ native_handle_type; // \nativeref
     typedef Protocol protocol_type;
     typedef typename protocol_type::endpoint endpoint_type;
 
@@ -3280,7 +3280,7 @@ inline namespace v1 {
     // types:
 
     typedef io_context::executor_type executor_type;
-    typedef @\textit{implementation defined}@ native_handle_type; // See native handles
+    typedef @\textit{implementation defined}@ native_handle_type; // \nativeref
     typedef AcceptableProtocol protocol_type;
     typedef typename protocol_type::endpoint endpoint_type;
     typedef typename protocol_type::socket socket_type;
@@ -3309,16 +3309,16 @@ inline namespace v1 {
 
     executor_type get_executor() noexcept;
 
-    native_handle_type native_handle(); // See native handles
+    native_handle_type native_handle(); // \nativeref
 
     void open(const protocol_type& protocol = protocol_type());
     void open(const protocol_type& protocol, error_code& ec);
 
     void assign(const protocol_type& protocol,
-                const native_handle_type& native_acceptor); // See native handles
+                const native_handle_type& native_acceptor); // \nativeref
     void assign(const protocol_type& protocol,
                 const native_handle_type& native_acceptor,
-                error_code& ec); // See native handles
+                error_code& ec); // \nativeref
 
     bool is_open() const;
 
