@@ -1745,18 +1745,18 @@ namespace net {
 inline namespace v1 {
 namespace ip {
 
-  template<> class basic_address_iterator<@\textit{Address}@>
+  template<> class basic_address_iterator<@\placeholder{Address}@>
   {
   public:
     // types:
-    typedef @\textit{Address}@ value_type;
+    typedef @\placeholder{Address}@ value_type;
     typedef ptrdiff_t difference_type;
-    typedef const @\textit{Address}@* pointer;
-    typedef const @\textit{Address}@& reference;
+    typedef const @\placeholder{Address}@* pointer;
+    typedef const @\placeholder{Address}@& reference;
     typedef input_iterator_tag iterator_category;
 
     // constructors:
-    basic_address_iterator(const @\textit{Address}@& a) noexcept;
+    basic_address_iterator(const @\placeholder{Address}@& a) noexcept;
 
     // members:
     reference operator*() const noexcept;
@@ -1769,7 +1769,7 @@ namespace ip {
     // other members as required by \CppXref{input.iterators}
 
   private:
-    @\textit{Address}@ address_; // \expos
+    @\placeholder{Address}@ address_; // \expos
   };
 
 } // namespace ip
@@ -1783,7 +1783,7 @@ namespace ip {
 Specializations of \tcode{basic_address_iterator} satisfy the requirements for input iterators (\CppXref{input.iterators}).
 
 \begin{itemdecl}
-basic_address_iterator(const @\textit{Address}@& a) noexcept;
+basic_address_iterator(const @\placeholder{Address}@& a) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1871,23 +1871,23 @@ namespace net {
 inline namespace v1 {
 namespace ip {
 
-  template<> class basic_address_range<@\textit{Address}@>
+  template<> class basic_address_range<@\placeholder{Address}@>
   {
   public:
     // types:
-    typedef basic_address_iterator<@\textit{Address}@> iterator;
+    typedef basic_address_iterator<@\placeholder{Address}@> iterator;
 
     // constructors:
     basic_address_range() noexcept;
-    basic_address_range(const @\textit{Address}@& first,
-                        const @\textit{Address}@& last) noexcept;
+    basic_address_range(const @\placeholder{Address}@& first,
+                        const @\placeholder{Address}@& last) noexcept;
 
     // members:
     iterator begin() const noexcept;
     iterator end() const noexcept;
     bool empty() const noexcept;
     size_t size() const noexcept; @\textit{// not always defined}@
-    iterator find(const @\textit{Address}@& addr) const noexcept;
+    iterator find(const @\placeholder{Address}@& addr) const noexcept;
   };
 
 } // namespace ip
@@ -1906,17 +1906,17 @@ basic_address_range() noexcept;
 
 \begin{itemdescr}
 \pnum
-\effects Constructs an object of type \tcode{basic_address_range<} Address\tcode{>} that represents an empty range.
+\effects Constructs an object of type \tcode{basic_address_range<\placeholder{Address}>} that represents an empty range.
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_address_range(const @\textit{Address}@& first,
-                    const @\textit{Address}@& last) noexcept;
+basic_address_range(const @\placeholder{Address}@& first,
+                    const @\placeholder{Address}@& last) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Constructs an object of type \tcode{basic_address_range<}Address\tcode{>} that represents the half open range [\tcode{first},\tcode{last}).
+\effects Constructs an object of type \tcode{basic_address_range<\placeholder{Address}>} that represents the half open range [\tcode{first},\tcode{last}).
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1955,11 +1955,11 @@ size_t size() const noexcept;
 \returns The number of unique addresses in the range.
 
 \pnum
-\remarks This member function is not defined when Address is type \tcode{address_v6}.
+\remarks This member function is not defined when \placeholder{Address} is type \tcode{address_v6}.
 \end{itemdescr}
 
 \begin{itemdecl}
-iterator find(const @\textit{Address}@& addr) const noexcept;
+iterator find(const @\placeholder{Address}@& addr) const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
