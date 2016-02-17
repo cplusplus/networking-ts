@@ -3,8 +3,10 @@
 \rSec0[socket]{Sockets}
 
 
+\indexlibrary{\idxhdr{experimental/socket}}%
 \rSec1[socket.synop]{Header \tcode{<experimental/socket>} synopsis}
 
+\indexlibrary{\idxcode{socket_errc}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -194,6 +196,7 @@ When there are multiple outstanding asynchronous write operations~(\ref{buffer.r
 
 
 
+\indextext{native handles}%
 \rSec2[socket.reqmts.native]{Native handles}
 
 \pnum
@@ -205,6 +208,7 @@ Several classes described in this Technical Specification have a member type \tc
 
 
 
+\indextext{\idxcode{Endpoint}}%
 \rSec2[socket.reqmts.endpoint]{Endpoint requirements}
 
 \pnum
@@ -238,6 +242,7 @@ type meeting \tcode{Protocol}~(\ref{socket.reqmts.protocol}) requirements  &
 
 \end{libreqtab3}
 
+\indexextensible{Endpoint}%
 \pnum
 In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{b} denotes a value of type \tcode{X}, and \tcode{s} denotes a (possibly const) value of a type that is convertible to \tcode{size_t} and denotes a size in bytes.
 
@@ -282,6 +287,7 @@ Returns a value suitable for passing as the \tcode{address_len} argument to func
 
 
 
+\indextext{\idxcode{EndpointSequence}}%
 \rSec2[socket.reqmts.endpointsequence]{Endpoint sequence requirements}
 
 \pnum
@@ -313,6 +319,7 @@ A type meeting the requirements for forward iterators (\CppXref{forward.iterator
 
 
 
+\indextext{\idxcode{Protocol}}%
 \rSec2[socket.reqmts.protocol]{Protocol requirements}
 
 \pnum
@@ -339,6 +346,7 @@ type meeting endpoint~(\ref{socket.reqmts.endpoint}) requirements  &
 
 \end{libreqtab3}
 
+\indexextensible{Protocol}%
 \pnum
 In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}.
 
@@ -373,6 +381,7 @@ Returns a value suitable for passing as the protocol argument to POSIX socket (o
 
 
 
+\indextext{\idxcode{Acceptable}}%
 \rSec2[socket.reqmts.acceptableprotocol]{Acceptable protocol requirements}
 
 \pnum
@@ -401,6 +410,7 @@ A type that satisfies the requirements of \tcode{Destructible} (\CppXref{destruc
 
 
 
+\indextext{\idxcode{GettableSocketOption}}%
 \rSec2[socket.reqmts.gettablesocketoption]{Gettable socket option requirements}
 
 \pnum
@@ -448,6 +458,7 @@ post: \tcode{b.size(p) == s}.Passed the value contained in the option_lenargumen
 
 
 
+\indextext{\idxcode{SettableSocketOption}}%
 \rSec2[socket.reqmts.settablesocketoption]{Settable socket option requirements}
 
 \pnum
@@ -491,6 +502,7 @@ Returns a value suitable for passing as the option_len argument to POSIX setsock
 
 
 
+\indextext{\idxcode{BooleanSocketOption}}%
 \rSec2[socket.reqmts.opt.bool]{Boolean socket options}
 
 \pnum
@@ -557,8 +569,9 @@ public:
 };
 \end{codeblock}
 
+\indexextensible{BooleanSocketOption}%
 \pnum
- Extensible implementations provide the following member functions:
+Extensible implementations provide the following member functions:
 
 \begin{codeblock}
 class @\placeholder{C}@
@@ -692,6 +705,7 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 
 
 
+\indextext{\idxcode{IntegerSocketOption}}%
 \rSec2[socket.reqmts.opt.int]{Integer socket options}
 
 \pnum
@@ -747,8 +761,9 @@ public:
 };
 \end{codeblock}
 
+\indexextensible{BooleanSocketOption}%
 \pnum
- Extensible implementations provide the following member functions:
+Extensible implementations provide the following member functions:
 
 \begin{codeblock}
 class @\placeholder{C}@
@@ -864,6 +879,7 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 
 
 
+\indextext{\idxcode{IoControlCommand}}%
 \rSec2[socket.reqmts.iocontrolcommand]{I/O control command requirements}
 
 \pnum
@@ -899,6 +915,7 @@ Returns a value suitable for passing as the request argument to POSIX \tcode{ioc
 
 
 
+\indextext{\idxcode{ConnectCondition}}%
 \rSec2[socket.reqmts.connectcondition]{Connect condition requirements}
 
 \pnum
@@ -931,8 +948,10 @@ Returns \tcode{true} to indicate that the \tcode{connect} or \tcode{async_connec
 
 
 
+\indextext{error codes!socket}%
 \rSec1[socket.err]{Error codes}
 
+\indexlibrary{\idxcode{socket_category}}%
 \begin{itemdecl}
 const error_category& socket_category() noexcept;
 \end{itemdecl}
@@ -945,6 +964,8 @@ const error_category& socket_category() noexcept;
 The object's \tcode{default_error_condition} and \tcode{equivalent} virtual functions behave as specified for the class \tcode{error_category}. The object's \tcode{name} virtual function returns a pointer to the string \tcode{"socket"}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{make_error_code}}%
+\indexlibrary{\idxcode{socket_errc}!\idxcode{make_error_code}}%
 \begin{itemdecl}
 error_code make_error_code(socket_errc e) noexcept;
 \end{itemdecl}
@@ -954,6 +975,8 @@ error_code make_error_code(socket_errc e) noexcept;
 \returns \tcode{error_code(static_cast<int>(e), socket_category())}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{make_error_condition}}%
+\indexlibrary{\idxcode{socket_errc}!\idxcode{make_error_condition}}%
 \begin{itemdecl}
 error_condition make_error_condition(socket_errc e) noexcept;
 \end{itemdecl}
@@ -965,6 +988,7 @@ error_condition make_error_condition(socket_errc e) noexcept;
 
 
 
+\indexlibrary{\idxcode{socket_base}}%
 \rSec1[socket.base]{Class \tcode{socket_base}}
 
 \begin{codeblock}
@@ -1090,6 +1114,7 @@ Wait until the socket has a pending error condition.For a given socket, when a \
 \end{libreqtab3}
 
 
+\indextext{socket options}%
 \rSec1[socket.opt]{Socket options}
 
 \pnum
@@ -1183,6 +1208,7 @@ Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type req
 \end{libreqtab5}
 
 
+\indexlibrary{\idxcode{linger}}%
 \rSec2[socket.opt.linger]{Class \tcode{socket_base::linger}}
 
 \pnum
@@ -1218,6 +1244,7 @@ inline namespace v1 {
 \pnum
 \tcode{linger} satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
 
+\indexextensible{linger}%
 \pnum
  Extensible implementations provide the following member functions:
 
@@ -1356,6 +1383,7 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 
 
 
+\indexlibrary{\idxcode{basic_socket}}%
 \rSec1[socket.basic]{Class template \tcode{basic_socket}}
 
 \pnum
@@ -2133,6 +2161,7 @@ When there are multiple outstanding asynchronous wait operations on this socket 
 
 
 
+\indexlibrary{\idxcode{basic_datagram_socket}}%
 \rSec1[socket.dgram]{Class template \tcode{basic_datagram_socket}}
 
 \pnum
@@ -2791,6 +2820,7 @@ If the operation completes successfully, \tcode{n} is the number of bytes sent. 
 
 
 
+\indexlibrary{\idxcode{basic_stream_socket}}%
 \rSec1[socket.stream]{Class template \tcode{basic_stream_socket}}
 
 \pnum
@@ -3262,6 +3292,7 @@ template<class ConstBufferSequence, class CompletionToken>
 
 
 
+\indexlibrary{\idxcode{basic_socket_acceptor}}%
 \rSec1[socket.acceptor]{Class template \tcode{basic_socket_acceptor}}
 
 \pnum

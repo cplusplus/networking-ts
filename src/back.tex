@@ -1,10 +1,20 @@
 %!TEX root = ts.tex
+
+% Prevent previous section name appearing in footer in indices:
+\renewcommand{\leftmark}{}
+
+\printindex[generalindex]
+
+\clearpage
+\renewcommand{\preindexhook}{}
+\renewcommand{\indexname}{Index of library names}
+\printindex[libraryindex]
+
+\clearpage
 \renewcommand{\preindexhook}{The entries in this section are rough descriptions; exact
 specifications are at the indicated page in the general text.\\}
-% There must be an easier way to get a one-column index, but using
-% makeindex[impldefindex, columns=1] doesn't work.
-\renewcommand{\indexname}{Index of implementation-defined behavior}
-\let\oldtwocolumn\twocolumn
+% FIXME: There must be a better way to get a one-column index,
+% but makeindex[impldefindex, columns=1] doesn't work.
 \renewcommand{\twocolumn}[1][]{#1}
+\renewcommand{\indexname}{Index of implementation-defined behavior}
 \printindex[impldefindex]
-\renewcommand{\twocolumn}[1][]{\oldtwocolumn}
