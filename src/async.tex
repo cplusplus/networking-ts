@@ -785,7 +785,7 @@ inline namespace v1 {
     async_completion(const async_completion&) = delete;
     async_completion& operator=(const async_completion&) = delete;
 
-    @\textit{see below}@ completion_handler;
+    @\seebelow@ completion_handler;
     async_result<decay_t<CompletionToken>, Signature> result;
   };
 
@@ -808,7 +808,7 @@ explicit async_completion(CompletionToken& t);
 \end{itemdescr}
 
 \begin{itemdecl}
-@\textit{see below}@ completion_handler;
+@\seebelow@ completion_handler;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -832,7 +832,7 @@ inline namespace v1 {
   template<class T, class ProtoAllocator = allocator<void>>
   struct associated_allocator
   {
-    typedef @\textit{see below}@ type;
+    typedef @\seebelow@ type;
 
     static type get(const T& t, const ProtoAllocator& a = ProtoAllocator()) noexcept;
   };
@@ -879,7 +879,7 @@ Shall not exit via an exception.Equivalent to \tcode{X::get(t, ProtoAllocator())
 \rSec2[async.assoc.alloc.members]{\tcode{associated_allocator} members}
 
 \begin{itemdecl}
-typedef @\textit{see below}@ type;
+typedef @\seebelow@ type;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1263,7 +1263,7 @@ inline namespace v1 {
   template<class T, class Executor = system_executor>
   struct associated_executor
   {
-    typedef @\textit{see below}@ type;
+    typedef @\seebelow@ type;
 
     static type get(const T& t, const Executor& e = Executor()) noexcept;
   };
@@ -1310,7 +1310,7 @@ Shall not exit via an exception.Equivalent to \tcode{X::get(t, Executor())}.  \\
 \rSec2[async.assoc.exec.members]{\tcode{associated_executor} members}
 
 \begin{itemdecl}
-typedef @\textit{see below}@ type;
+typedef @\seebelow@ type;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3330,8 +3330,8 @@ For any executor type \tcode{E}, the associated object for the associator \tcode
 template<class ProtoAllocator, class Result, class... Args>
 class async_result<use_future_t<ProtoAllocator>, Result(Args...)>
 {
-  typedef @\textit{see below}@ completion_handler_type;
-  typedef @\textit{see below}@ return_type;
+  typedef @\seebelow@ completion_handler_type;
+  typedef @\seebelow@ return_type;
 
   explicit async_result(completion_handler_type& h);
   async_result(const async_result&) = delete;
