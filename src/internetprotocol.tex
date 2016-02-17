@@ -363,14 +363,14 @@ In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}
 In this Technical Specification, types that satisfy the \tcode{MulticastGroupSocketOption} requirements are defined as follows.
 
 \begin{codeblock}
-class @\textit{C}@
+class @\placeholder{C}@
 {
 public:
   // constructors:
-  explicit @\textit{C}@(const address& multicast_group) noexcept;
-  explicit @\textit{C}@(const address_v4& multicast_group,
+  explicit @\placeholder{C}@(const address& multicast_group) noexcept;
+  explicit @\placeholder{C}@(const address_v4& multicast_group,
              const address_v4& network_interface = address_v4::any()) noexcept;
-  explicit @\textit{C}@(const address_v6& multicast_group,
+  explicit @\placeholder{C}@(const address_v6& multicast_group,
              unsigned int network_interface = 0) noexcept;
 };
 \end{codeblock}
@@ -379,7 +379,7 @@ public:
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-class @\textit{C}@
+class @\placeholder{C}@
 {
 public:
   template<class Protocol> int level(const Protocol& p) const noexcept;
@@ -397,7 +397,7 @@ private:
 Let L and N identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
 
 \begin{itemdecl}
-explicit @\textit{C}@(const address& multicast_group) noexcept;
+explicit @\placeholder{C}@(const address& multicast_group) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -406,7 +406,7 @@ explicit @\textit{C}@(const address& multicast_group) noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-explicit @\textit{C}@(const address_v4& multicast_group,
+explicit @\placeholder{C}@(const address_v4& multicast_group,
            const address_v4& network_interface = address_v4::any()) noexcept;
 \end{itemdecl}
 
@@ -416,7 +416,7 @@ explicit @\textit{C}@(const address_v4& multicast_group,
 \end{itemdescr}
 
 \begin{itemdecl}
-explicit @\textit{C}@(const address_v6& multicast_group,
+explicit @\placeholder{C}@(const address_v6& multicast_group,
            unsigned int network_interface = 0) noexcept;
 \end{itemdecl}
 
