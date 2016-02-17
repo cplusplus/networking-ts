@@ -540,15 +540,15 @@ Returns \tcode{!a.value()}.  \\
 In this Technical Specification, types that satisfy the \tcode{BooleanSocketOption} requirements are defined as follows.
 
 \begin{codeblock}
-class @\textit{C}@
+class @\placeholder{C}@
 {
 public:
   // constructors:
-  @\textit{C}@() noexcept;
-  explicit @\textit{C}@(bool v) noexcept;
+  @\placeholder{C}@() noexcept;
+  explicit @\placeholder{C}@(bool v) noexcept;
 
   // members:
-  @\textit{C}@& operator=(bool v) noexcept;
+  @\placeholder{C}@& operator=(bool v) noexcept;
 
   bool value() const noexcept;
 
@@ -561,7 +561,7 @@ public:
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-class @\textit{C}@
+class @\placeholder{C}@
 {
 public:
   template<class Protocol> int level(const Protocol& p) const noexcept;
@@ -580,7 +580,7 @@ private:
 Let L and N identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
 
 \begin{itemdecl}
-@\textit{C}@() noexcept;
+@\placeholder{C}@() noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -589,7 +589,7 @@ Let L and N identify the POSIX macros to be passed as the level and option_name 
 \end{itemdescr}
 
 \begin{itemdecl}
-explicit @\textit{C}@(bool v) noexcept;
+explicit @\placeholder{C}@(bool v) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -598,7 +598,7 @@ explicit @\textit{C}@(bool v) noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-@\textit{C}@& operator=(bool v) noexcept;
+@\placeholder{C}@& operator=(bool v) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -733,15 +733,15 @@ post: \tcode{u.value() == b}.  \\ \rowsep
 In this Technical Specification, types that satisfy the \tcode{IntegerSocketOption} requirements are defined as follows.
 
 \begin{codeblock}
-class @\textit{C}@
+class @\placeholder{C}@
 {
 public:
   // constructors:
-  @\textit{C}@() noexcept;
-  explicit @\textit{C}@(int v) noexcept;
+  @\placeholder{C}@() noexcept;
+  explicit @\placeholder{C}@(int v) noexcept;
 
   // members:
-  @\textit{C}@& operator=(int v) noexcept;
+  @\placeholder{C}@& operator=(int v) noexcept;
 
   int value() const noexcept;
 };
@@ -751,7 +751,7 @@ public:
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-class @\textit{C}@
+class @\placeholder{C}@
 {
 public:
   template<class Protocol> int level(const Protocol& p) const noexcept;
@@ -770,7 +770,7 @@ private:
 Let L and N identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
 
 \begin{itemdecl}
-@\textit{C}@() noexcept;
+@\placeholder{C}@() noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -779,7 +779,7 @@ Let L and N identify the POSIX macros to be passed as the level and option_name 
 \end{itemdescr}
 
 \begin{itemdecl}
-explicit @\textit{C}@(int v) noexcept;
+explicit @\placeholder{C}@(int v) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -788,7 +788,7 @@ explicit @\textit{C}@(int v) noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-@\textit{C}@& operator=(int v) noexcept;
+@\placeholder{C}@& operator=(int v) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
