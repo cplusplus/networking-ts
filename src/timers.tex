@@ -200,7 +200,7 @@ inline namespace v1 {
     void wait(error_code& ec);
 
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_wait(CompletionToken&& token);
+      @\DEDUCED@ async_wait(CompletionToken&& token);
   };
 
 } // inline namespace v1
@@ -402,7 +402,7 @@ void wait(error_code& ec);
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_wait(CompletionToken&& token);
+  @\DEDUCED@ async_wait(CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}

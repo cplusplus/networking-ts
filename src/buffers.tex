@@ -180,25 +180,25 @@ inline namespace v1 {
 
   template<class AsyncReadStream, class MutableBufferSequence,
     class CompletionToken>
-      @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
-                      const MutableBufferSequence& buffers,
-                      CompletionToken&& token);
+      @\DEDUCED@ async_read(AsyncReadStream& stream,
+                         const MutableBufferSequence& buffers,
+                         CompletionToken&& token);
   template<class AsyncReadStream, class MutableBufferSequence,
     class CompletionCondition, class CompletionToken>
-      @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
-                      const MutableBufferSequence& buffers,
-                      CompletionCondition completion_condition,
-                      CompletionToken&& token);
+      @\DEDUCED@ async_read(AsyncReadStream& stream,
+                         const MutableBufferSequence& buffers,
+                         CompletionCondition completion_condition,
+                         CompletionToken&& token);
 
   template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
-    @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
-                    DynamicBuffer&& b, CompletionToken&& token);
+    @\DEDUCED@ async_read(AsyncReadStream& stream,
+                       DynamicBuffer&& b, CompletionToken&& token);
   template<class AsyncReadStream, class DynamicBuffer,
     class CompletionCondition, class CompletionToken>
-      @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
-                      DynamicBuffer&& b,
-                      CompletionCondition completion_condition,
-                      CompletionToken&& token);
+      @\DEDUCED@ async_read(AsyncReadStream& stream,
+                         DynamicBuffer&& b,
+                         CompletionCondition completion_condition,
+                         CompletionToken&& token);
 
   // synchronous write operations:
 
@@ -235,25 +235,25 @@ inline namespace v1 {
 
   template<class AsyncWriteStream, class ConstBufferSequence,
     class CompletionToken>
-      @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
-                       const ConstBufferSequence& buffers,
-                       CompletionToken&& token);
+      @\DEDUCED@ async_write(AsyncWriteStream& stream,
+                          const ConstBufferSequence& buffers,
+                          CompletionToken&& token);
   template<class AsyncWriteStream, class ConstBufferSequence,
     class CompletionCondition, class CompletionToken>
-      @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
-                       const ConstBufferSequence& buffers,
-                       CompletionCondition completion_condition,
-                       CompletionToken&& token);
+      @\DEDUCED@ async_write(AsyncWriteStream& stream,
+                          const ConstBufferSequence& buffers,
+                          CompletionCondition completion_condition,
+                          CompletionToken&& token);
 
   template<class AsyncWriteStream, class DynamicBuffer, class CompletionToken>
-    @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
+    @\DEDUCED@ async_write(AsyncWriteStream& stream,
                      DynamicBuffer&& b, CompletionToken&& token);
   template<class AsyncWriteStream, class DynamicBuffer,
     class CompletionCondition, class CompletionToken>
-      @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
-                       DynamicBuffer&& b,
-                       CompletionCondition completion_condition,
-                       CompletionToken&& token);
+      @\DEDUCED@ async_write(AsyncWriteStream& stream,
+                          DynamicBuffer&& b,
+                          CompletionCondition completion_condition,
+                          CompletionToken&& token);
 
   // synchronous delimited read operations:
 
@@ -271,13 +271,13 @@ inline namespace v1 {
   // asynchronous delimited read operations:
 
   template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
-    @\textit{DEDUCED}@ async_read_until(AsyncReadStream& s,
-                          DynamicBuffer&& b, char delim,
-                          CompletionToken&& token);
+    @\DEDUCED@ async_read_until(AsyncReadStream& s,
+                             DynamicBuffer&& b, char delim,
+                             CompletionToken&& token);
   template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
-    @\textit{DEDUCED}@ async_read_until(AsyncReadStream& s,
-                          DynamicBuffer&& b, string_view delim,
-                          CompletionToken&& token);
+    @\DEDUCED@ async_read_until(AsyncReadStream& s,
+                             DynamicBuffer&& b, string_view delim,
+                             CompletionToken&& token);
 
 } // inline namespace v1
 } // namespace net

@@ -88,26 +88,26 @@ inline namespace v1 {
   // asynchronous connect operations:
 
   template<class Protocol, class EndpointSequence, class CompletionToken>
-    @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
+    @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
                           const EndpointSequence& endpoints,
                           CompletionToken&& token);
-  template<class Protocol, class EndpointSequence,
-    class ConnectCondition, class CompletionToken>
-      @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
-                            const EndpointSequence& endpoints,
-                            ConnectCondition c,
-                            CompletionToken&& token);
+  template<class Protocol, class EndpointSequence, class ConnectCondition,
+           class CompletionToken>
+    @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
+                          const EndpointSequence& endpoints,
+                          ConnectCondition c,
+                          CompletionToken&& token);
 
   template<class Protocol, class InputIterator, class CompletionToken>
-    @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
+    @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
                           InputIterator first, InputIterator last,
                           CompletionToken&& token);
-  template<class Protocol, class InputIterator,
-    class ConnectCondition, class CompletionToken>
-      @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
-                            InputIterator first, InputIterator last,
-                            ConnectCondition c,
-                            CompletionToken&& token);
+  template<class Protocol, class InputIterator, class ConnectCondition,
+           class CompletionToken>
+    @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
+                          InputIterator first, InputIterator last,
+                          ConnectCondition c,
+                          CompletionToken&& token);
 
 } // inline namespace v1
 } // namespace net
@@ -1474,14 +1474,14 @@ inline namespace v1 {
     void connect(const endpoint_type& endpoint, error_code& ec);
 
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_connect(const endpoint_type& endpoint,
+      @\DEDUCED@ async_connect(const endpoint_type& endpoint,
                             CompletionToken&& token);
 
     void wait(wait_type w);
     void wait(wait_type w, error_code& ec);
 
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_wait(wait_type w, CompletionToken&& token);
+      @\DEDUCED@ async_wait(wait_type w, CompletionToken&& token);
 
   protected:
     // construct / copy / destroy:
@@ -2101,7 +2101,7 @@ void connect(const endpoint_type& endpoint, error_code& ec);
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_connect(const endpoint_type& endpoint, CompletionToken&& token);
+  @\DEDUCED@ async_connect(const endpoint_type& endpoint, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2137,7 +2137,7 @@ void wait(wait_type w, error_code& ec);
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_wait(wait_type w, CompletionToken&& token);
+  @\DEDUCED@ async_wait(wait_type w, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2218,11 +2218,11 @@ inline namespace v1 {
                      socket_base::message_flags flags, error_code& ec);
 
     template<class MutableBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+      @\DEDUCED@ async_receive(const MutableBufferSequence& buffers,
                             CompletionToken&& token);
 
     template<class MutableBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+      @\DEDUCED@ async_receive(const MutableBufferSequence& buffers,
                             socket_base::message_flags flags,
                             CompletionToken&& token);
 
@@ -2244,12 +2244,12 @@ inline namespace v1 {
                           error_code& ec);
 
     template<class MutableBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_receive_from(const MutableBufferSequence& buffers,
+      @\DEDUCED@ async_receive_from(const MutableBufferSequence& buffers,
                                  endpoint_type& sender,
                                  CompletionToken&& token);
 
     template<class MutableBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_receive_from(const MutableBufferSequence& buffers,
+      @\DEDUCED@ async_receive_from(const MutableBufferSequence& buffers,
                                  endpoint_type& sender,
                                  socket_base::message_flags flags,
                                  CompletionToken&& token);
@@ -2267,11 +2267,11 @@ inline namespace v1 {
                   socket_base::message_flags flags, error_code& ec);
 
     template<class ConstBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+      @\DEDUCED@ async_send(const ConstBufferSequence& buffers,
                          CompletionToken&& token);
 
     template<class ConstBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+      @\DEDUCED@ async_send(const ConstBufferSequence& buffers,
                          socket_base::message_flags flags,
                          CompletionToken&& token);
 
@@ -2292,12 +2292,12 @@ inline namespace v1 {
                      socket_base::message_flags flags, error_code& ec);
 
     template<class ConstBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_send_to(const ConstBufferSequence& buffers,
+      @\DEDUCED@ async_send_to(const ConstBufferSequence& buffers,
                             const endpoint_type& recipient,
                             CompletionToken&& token);
 
     template<class ConstBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_send_to(const ConstBufferSequence& buffers,
+      @\DEDUCED@ async_send_to(const ConstBufferSequence& buffers,
                             const endpoint_type& recipient,
                             socket_base::message_flags flags,
                             CompletionToken&& token);
@@ -2475,7 +2475,7 @@ recvmsg(native_handle(), &message, static_cast<int>(flags));
 
 \begin{itemdecl}
 template<class MutableBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+  @\DEDUCED@ async_receive(const MutableBufferSequence& buffers,
                         CompletionToken&& token);
 \end{itemdecl}
 
@@ -2486,7 +2486,7 @@ template<class MutableBufferSequence, class CompletionToken>
 
 \begin{itemdecl}
 template<class MutableBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+  @\DEDUCED@ async_receive(const MutableBufferSequence& buffers,
                         socket_base::message_flags flags,
                         CompletionToken&& token);
 \end{itemdecl}
@@ -2580,7 +2580,7 @@ if (result >= 0)
 
 \begin{itemdecl}
 template<class MutableBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_receive_from(const MutableBufferSequence& buffers,
+  @\DEDUCED@ async_receive_from(const MutableBufferSequence& buffers,
                              endpoint_type& sender,
                              CompletionToken&& token);
 \end{itemdecl}
@@ -2592,7 +2592,7 @@ template<class MutableBufferSequence, class CompletionToken>
 
 \begin{itemdecl}
 template<class MutableBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_receive_from(const MutableBufferSequence& buffers,
+  @\DEDUCED@ async_receive_from(const MutableBufferSequence& buffers,
                              endpoint_type& sender,
                              socket_base::message_flags flags,
                              CompletionToken&& token);
@@ -2682,7 +2682,7 @@ sendmsg(native_handle(), &message, static_cast<int>(flags));
 
 \begin{itemdecl}
 template<class ConstBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers, CompletionToken&& token);
+  @\DEDUCED@ async_send(const ConstBufferSequence& buffers, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2692,7 +2692,7 @@ template<class ConstBufferSequence, class CompletionToken>
 
 \begin{itemdecl}
 template<class ConstBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+  @\DEDUCED@ async_send(const ConstBufferSequence& buffers,
                      socket_base::message_flags flags,
                      CompletionToken&& token);
 \end{itemdecl}
@@ -2773,7 +2773,7 @@ sendmsg(native_handle(), &message, static_cast<int>(flags));
 
 \begin{itemdecl}
 template<class ConstBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_send_to(const ConstBufferSequence& buffers,
+  @\DEDUCED@ async_send_to(const ConstBufferSequence& buffers,
                         const endpoint_type& recipient,
                         CompletionToken&& token);
 \end{itemdecl}
@@ -2785,7 +2785,7 @@ template<class ConstBufferSequence, class CompletionToken>
 
 \begin{itemdecl}
 template<class ConstBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_send_to(const ConstBufferSequence& buffers,
+  @\DEDUCED@ async_send_to(const ConstBufferSequence& buffers,
                         const endpoint_type& recipient,
                         socket_base::message_flags flags,
                         CompletionToken&& token);
@@ -2877,11 +2877,11 @@ inline namespace v1 {
                      socket_base::message_flags flags, error_code& ec);
 
     template<class MutableBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+      @\DEDUCED@ async_receive(const MutableBufferSequence& buffers,
                             CompletionToken&& token);
 
     template<class MutableBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+      @\DEDUCED@ async_receive(const MutableBufferSequence& buffers,
                             socket_base::message_flags flags,
                             CompletionToken&& token);
 
@@ -2898,11 +2898,11 @@ inline namespace v1 {
                   socket_base::message_flags flags, error_code& ec);
 
     template<class ConstBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+      @\DEDUCED@ async_send(const ConstBufferSequence& buffers,
                          CompletionToken&& token);
 
     template<class ConstBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+      @\DEDUCED@ async_send(const ConstBufferSequence& buffers,
                          socket_base::message_flags flags,
                          CompletionToken&& token);
 
@@ -2913,7 +2913,7 @@ inline namespace v1 {
                        error_code& ec);
 
     template<class MutableBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_read_some(const MutableBufferSequence& buffers,
+      @\DEDUCED@ async_read_some(const MutableBufferSequence& buffers,
                               CompletionToken&& token);
 
     template<class ConstBufferSequence>
@@ -2923,7 +2923,7 @@ inline namespace v1 {
                         error_code& ec);
 
     template<class ConstBufferSequence, class CompletionToken>
-      @\textit{DEDUCED}@ async_write_some(const ConstBufferSequence& buffers,
+      @\DEDUCED@ async_write_some(const ConstBufferSequence& buffers,
                                CompletionToken&& token);
   };
 
@@ -3103,7 +3103,7 @@ recvmsg(native_handle(), &message, static_cast<int>(flags));
 
 \begin{itemdecl}
 template<class MutableBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+  @\DEDUCED@ async_receive(const MutableBufferSequence& buffers,
                         CompletionToken&& token);
 \end{itemdecl}
 
@@ -3114,7 +3114,7 @@ template<class MutableBufferSequence, class CompletionToken>
 
 \begin{itemdecl}
 template<class MutableBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_receive(const MutableBufferSequence& buffers,
+  @\DEDUCED@ async_receive(const MutableBufferSequence& buffers,
                         socket_base::message_flags flags,
                         CompletionToken&& token);
 \end{itemdecl}
@@ -3200,7 +3200,7 @@ sendmsg(native_handle(), &message, static_cast<int>(flags));
 
 \begin{itemdecl}
 template<class ConstBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers, CompletionToken&& token);
+  @\DEDUCED@ async_send(const ConstBufferSequence& buffers, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3210,7 +3210,7 @@ template<class ConstBufferSequence, class CompletionToken>
 
 \begin{itemdecl}
 template<class ConstBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_send(const ConstBufferSequence& buffers,
+  @\DEDUCED@ async_send(const ConstBufferSequence& buffers,
                      socket_base::message_flags flags,
                      CompletionToken&& token);
 \end{itemdecl}
@@ -3256,7 +3256,7 @@ template<class MutableBufferSequence>
 
 \begin{itemdecl}
 template<class MutableBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_read_some(const MutableBufferSequence& buffers,
+  @\DEDUCED@ async_read_some(const MutableBufferSequence& buffers,
                           CompletionToken&& token);
 \end{itemdecl}
 
@@ -3280,7 +3280,7 @@ template<class ConstBufferSequence>
 
 \begin{itemdecl}
 template<class ConstBufferSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_write_some(const ConstBufferSequence& buffers,
+  @\DEDUCED@ async_write_some(const ConstBufferSequence& buffers,
                            CompletionToken&& token);
 \end{itemdecl}
 
@@ -3400,9 +3400,9 @@ inline namespace v1 {
     socket_type accept(io_context& ctx, error_code& ec);
 
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_accept(CompletionToken&& token);
+      @\DEDUCED@ async_accept(CompletionToken&& token);
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_accept(io_context& ctx, CompletionToken&& token);
+      @\DEDUCED@ async_accept(io_context& ctx, CompletionToken&& token);
 
     socket_type accept(endpoint_type& endpoint);
     socket_type accept(endpoint_type& endpoint, error_code& ec);
@@ -3411,17 +3411,17 @@ inline namespace v1 {
                        error_code& ec);
 
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_accept(endpoint_type& endpoint,
+      @\DEDUCED@ async_accept(endpoint_type& endpoint,
                            CompletionToken&& token);
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_accept(io_context& ctx, endpoint_type& endpoint,
+      @\DEDUCED@ async_accept(io_context& ctx, endpoint_type& endpoint,
                            CompletionToken&& token);
 
     void wait(wait_type w);
     void wait(wait_type w, error_code& ec);
 
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_wait(wait_type w, CompletionToken&& token);
+      @\DEDUCED@ async_wait(wait_type w, CompletionToken&& token);
 
   private:
     protocol_type protocol_; // \expos
@@ -4038,7 +4038,7 @@ native_handle_type h = accept(native_handle(), nullptr, 0);
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_accept(CompletionToken&& token);
+  @\DEDUCED@ async_accept(CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -4048,7 +4048,7 @@ template<class CompletionToken>
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_accept(io_context& ctx, CompletionToken&& token);
+  @\DEDUCED@ async_accept(io_context& ctx, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -4098,7 +4098,7 @@ if (h >= 0)
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_accept(endpoint_type& endpoint,
+  @\DEDUCED@ async_accept(endpoint_type& endpoint,
                        CompletionToken&& token);
 \end{itemdecl}
 
@@ -4109,7 +4109,7 @@ template<class CompletionToken>
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_accept(io_context& ctx, endpoint_type& endpoint,
+  @\DEDUCED@ async_accept(io_context& ctx, endpoint_type& endpoint,
                        CompletionToken&& token);
 \end{itemdecl}
 
@@ -4142,7 +4142,7 @@ void wait(wait_type w, error_code& ec);
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_wait(wait_type w, CompletionToken&& token);
+  @\DEDUCED@ async_wait(wait_type w, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}

@@ -130,29 +130,29 @@ inline namespace v1 {
   // dispatch:
 
   template<class CompletionToken>
-    @\textit{DEDUCED}@ dispatch(CompletionToken&& token);
+    @\DEDUCED@ dispatch(CompletionToken&& token);
   template<class Executor, class CompletionToken>
-    @\textit{DEDUCED}@ dispatch(const Executor& ex, CompletionToken&& token);
+    @\DEDUCED@ dispatch(const Executor& ex, CompletionToken&& token);
   template<class ExecutionContext, class CompletionToken>
-    @\textit{DEDUCED}@ dispatch(ExecutionContext& ctx, CompletionToken&& token);
+    @\DEDUCED@ dispatch(ExecutionContext& ctx, CompletionToken&& token);
 
   // post:
 
   template<class CompletionToken>
-    @\textit{DEDUCED}@ post(CompletionToken&& token);
+    @\DEDUCED@ post(CompletionToken&& token);
   template<class Executor, class CompletionToken>
-    @\textit{DEDUCED}@ post(const Executor& ex, CompletionToken&& token);
+    @\DEDUCED@ post(const Executor& ex, CompletionToken&& token);
   template<class ExecutionContext, class CompletionToken>
-    @\textit{DEDUCED}@ post(ExecutionContext& ctx, CompletionToken&& token);
+    @\DEDUCED@ post(ExecutionContext& ctx, CompletionToken&& token);
 
   // defer:
 
   template<class CompletionToken>
-    @\textit{DEDUCED}@ defer(CompletionToken&& token);
+    @\DEDUCED@ defer(CompletionToken&& token);
   template<class Executor, class CompletionToken>
-    @\textit{DEDUCED}@ defer(const Executor& ex, CompletionToken&& token);
+    @\DEDUCED@ defer(const Executor& ex, CompletionToken&& token);
   template<class ExecutionContext, class CompletionToken>
-    @\textit{DEDUCED}@ defer(ExecutionContext& ctx, CompletionToken&& token);
+    @\DEDUCED@ defer(ExecutionContext& ctx, CompletionToken&& token);
 
   template<class Executor>
     class strand;
@@ -504,7 +504,7 @@ terms of these names.
 The return type of an initiating function is \tcode{typename async_result<decay_t<CompletionToken>, Signature>::return_type}.
 
 \pnum
-For the sake of exposition, this Technical Specification sometimes annotates functions with a return type \tcode{DEDUCED}. For every function declaration that returns \tcode{DEDUCED}, the meaning is equivalent to specifying the return type as \tcode{typename async_result<decay_t<CompletionToken>, Signature>::return_type}.
+For the sake of exposition, this Technical Specification sometimes annotates functions with a return type \DEDUCED. For every function declaration that returns \DEDUCED, the meaning is equivalent to specifying the return type as \tcode{typename async_result<decay_t<CompletionToken>, Signature>::return_type}.
 
 
 
@@ -2561,7 +2561,7 @@ void swap(executor& a, executor& b) noexcept;
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ dispatch(CompletionToken&& token);
+  @\DEDUCED@ dispatch(CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2583,7 +2583,7 @@ template<class CompletionToken>
 
 \begin{itemdecl}
 template<class Executor, class CompletionToken>
-  @\textit{DEDUCED}@ dispatch(const Executor& ex, CompletionToken&& token);
+  @\DEDUCED@ dispatch(const Executor& ex, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2623,7 +2623,7 @@ and where the effect of \tcode{f()} is:
 
 \begin{itemdecl}
 template<class ExecutionContext, class CompletionToken>
-  @\textit{DEDUCED}@ dispatch(ExecutionContext& ctx, CompletionToken&& token);
+  @\DEDUCED@ dispatch(ExecutionContext& ctx, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2646,7 +2646,7 @@ template<class ExecutionContext, class CompletionToken>
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ post(CompletionToken&& token);
+  @\DEDUCED@ post(CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2668,7 +2668,7 @@ template<class CompletionToken>
 
 \begin{itemdecl}
 template<class Executor, class CompletionToken>
-  @\textit{DEDUCED}@ post(const Executor& ex, CompletionToken&& token);
+  @\DEDUCED@ post(const Executor& ex, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2708,7 +2708,7 @@ and where the effect of \tcode{f()} is:
 
 \begin{itemdecl}
 template<class ExecutionContext, class CompletionToken>
-  @\textit{DEDUCED}@ post(ExecutionContext& ctx, CompletionToken&& token);
+  @\DEDUCED@ post(ExecutionContext& ctx, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2731,7 +2731,7 @@ template<class ExecutionContext, class CompletionToken>
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ defer(CompletionToken&& token);
+  @\DEDUCED@ defer(CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2753,7 +2753,7 @@ template<class CompletionToken>
 
 \begin{itemdecl}
 template<class Executor, class CompletionToken>
-  @\textit{DEDUCED}@ defer(const Executor& ex, CompletionToken&& token);
+  @\DEDUCED@ defer(const Executor& ex, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2793,7 +2793,7 @@ and where the effect of \tcode{f()} is:
 
 \begin{itemdecl}
 template<class ExecutionContext, class CompletionToken>
-  @\textit{DEDUCED}@ defer(ExecutionContext& ctx, CompletionToken&& token);
+  @\DEDUCED@ defer(ExecutionContext& ctx, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}

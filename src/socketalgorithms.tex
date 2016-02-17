@@ -113,7 +113,7 @@ template<class Protocol, class InputIterator, class ConnectCondition>
 
 \begin{itemdecl}
 template<class Protocol, class EndpointSequence, class CompletionToken>
-  @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
+  @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
                         const EndpointSequence& endpoints,
                         CompletionToken&& token);
 \end{itemdecl}
@@ -126,7 +126,7 @@ template<class Protocol, class EndpointSequence, class CompletionToken>
 \begin{itemdecl}
 template<class Protocol, class InputIterator,
   class ConnectCondition, class CompletionToken>
-    @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
+    @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
                           const EndpointSequence& endpoints,
                           ConnectCondition c,
                           CompletionToken&& token);
@@ -161,7 +161,7 @@ template<class Protocol, class InputIterator,
 
 \begin{itemdecl}
 template<class Protocol, class InputIterator, class CompletionToken>
-  @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
+  @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
                         InputIterator first, InputIterator last,
                         CompletionToken&& token);
 \end{itemdecl}
@@ -174,7 +174,7 @@ template<class Protocol, class InputIterator, class CompletionToken>
 \begin{itemdecl}
 template<class Protocol, class InputIterator,
   class ConnectCondition, class CompletionToken>
-    @\textit{DEDUCED}@ async_connect(basic_socket<Protocol>& s,
+    @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
                           InputIterator first, InputIterator last,
                           ConnectCondition c,
                           CompletionToken&& token);

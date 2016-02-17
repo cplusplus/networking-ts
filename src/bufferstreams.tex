@@ -409,17 +409,16 @@ On return, \tcode{ec} contains the \tcode{error_code} value from the most recent
 \rSec1[buffer.async.read]{Asynchronous read operations}
 
 \begin{itemdecl}
-template<class AsyncReadStream, class MutableBufferSequence,
-  class CompletionToken>
-    @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
-                    const MutableBufferSequence& buffers,
-                    CompletionToken&& token);
-template<class AsyncReadStream, class MutableBufferSequence,
-  class CompletionCondition, class CompletionToken>
-    @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
-                    const MutableBufferSequence& buffers,
-                    CompletionCondition completion_condition,
-                    CompletionToken&& token);
+template<class AsyncReadStream, class MutableBufferSequence, class CompletionToken>
+    @\DEDUCED@ async_read(AsyncReadStream& stream,
+                       const MutableBufferSequence& buffers,
+                       CompletionToken&& token);
+template<class AsyncReadStream, class MutableBufferSequence, class CompletionCondition,
+         class CompletionToken>
+    @\DEDUCED@ async_read(AsyncReadStream& stream,
+                       const MutableBufferSequence& buffers,
+                       CompletionCondition completion_condition,
+                       CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -456,16 +455,15 @@ On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class AsyncReadStream, class DynamicBuffer,
-  class CompletionToken>
-    @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
-                    DynamicBuffer&& b, CompletionToken&& token);
-template<class AsyncReadStream, class DynamicBuffer,
-  class CompletionCondition, class CompletionToken>
-    @\textit{DEDUCED}@ async_read(AsyncReadStream& stream,
-                    DynamicBuffer&& b,
-                    CompletionCondition completion_condition,
-                    CompletionToken&& token);
+template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
+    @\DEDUCED@ async_read(AsyncReadStream& stream,
+                       DynamicBuffer&& b, CompletionToken&& token);
+template<class AsyncReadStream, class DynamicBuffer, class CompletionCondition,
+         class CompletionToken>
+    @\DEDUCED@ async_read(AsyncReadStream& stream,
+                       DynamicBuffer&& b,
+                       CompletionCondition completion_condition,
+                       CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -603,17 +601,16 @@ On return, \tcode{ec} contains the \tcode{error_code} value from the most recent
 \rSec1[buffer.async.write]{Asynchronous write operations}
 
 \begin{itemdecl}
-template<class AsyncWriteStream, class ConstBufferSequence,
-  class CompletionToken>
-    @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
-                     const ConstBufferSequence& buffers,
-                     CompletionToken&& token);
-template<class AsyncWriteStream, class ConstBufferSequence,
-  class CompletionCondition, class CompletionToken>
-    @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
-                     const ConstBufferSequence& buffers,
-                     CompletionCondition completion_condition,
-                     CompletionToken&& token);
+template<class AsyncWriteStream, class ConstBufferSequence, class CompletionToken>
+    @\DEDUCED@ async_write(AsyncWriteStream& stream,
+                        const ConstBufferSequence& buffers,
+                        CompletionToken&& token);
+template<class AsyncWriteStream, class ConstBufferSequence, class CompletionCondition,
+         class CompletionToken>
+    @\DEDUCED@ async_write(AsyncWriteStream& stream,
+                        const ConstBufferSequence& buffers,
+                        CompletionCondition completion_condition,
+                        CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -651,14 +648,14 @@ On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code
 
 \begin{itemdecl}
 template<class AsyncWriteStream, class DynamicBuffer, class CompletionToken>
-  @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
-                   DynamicBuffer&& b, CompletionToken&& token);
-template<class AsyncWriteStream, class DynamicBuffer,
-  class CompletionCondition, class CompletionToken>
-    @\textit{DEDUCED}@ async_write(AsyncWriteStream& stream,
-                     DynamicBuffer&& b,
-                     CompletionCondition completion_condition,
-                     CompletionToken&& token);
+  @\DEDUCED@ async_write(AsyncWriteStream& stream,
+                      DynamicBuffer&& b, CompletionToken&& token);
+template<class AsyncWriteStream, class DynamicBuffer, class CompletionCondition,
+         class CompletionToken>
+    @\DEDUCED@ async_write(AsyncWriteStream& stream,
+                        DynamicBuffer&& b,
+                        CompletionCondition completion_condition,
+                        CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -741,13 +738,13 @@ On exit, if the input sequence of \tcode{b} contains the delimiter, \tcode{ec} i
 
 \begin{itemdecl}
 template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
-  @\textit{DEDUCED}@ async_read_until(AsyncReadStream& s,
-                        DynamicBuffer&& b, char delim,
-                        CompletionToken&& token);
+  @\DEDUCED@ async_read_until(AsyncReadStream& s,
+                           DynamicBuffer&& b, char delim,
+                           CompletionToken&& token);
 template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
-  @\textit{DEDUCED}@ async_read_until(AsyncReadStream& s,
-                        DynamicBuffer&& b, string_view delim,
-                        CompletionToken&& token);
+  @\DEDUCED@ async_read_until(AsyncReadStream& s,
+                           DynamicBuffer&& b, string_view delim,
+                           CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}

@@ -3460,10 +3460,10 @@ namespace ip {
                          flags f, error_code& ec);
 
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_resolve(string_view host_name, string_view service_name,
+      @\DEDUCED@ async_resolve(string_view host_name, string_view service_name,
                             CompletionToken&& token);
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_resolve(string_view host_name, string_view service_name,
+      @\DEDUCED@ async_resolve(string_view host_name, string_view service_name,
                             flags f, CompletionToken&& token);
 
     results_type resolve(const protocol_type& protocol,
@@ -3479,11 +3479,11 @@ namespace ip {
                          flags f, error_code& ec);
 
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_resolve(const protocol_type& protocol,
+      @\DEDUCED@ async_resolve(const protocol_type& protocol,
                             string_view host_name, string_view service_name,
                             CompletionToken&& token);
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_resolve(const protocol_type& protocol,
+      @\DEDUCED@ async_resolve(const protocol_type& protocol,
                             string_view host_name, string_view service_name,
                             flags f, CompletionToken&& token);
 
@@ -3491,7 +3491,7 @@ namespace ip {
     results_type resolve(const endpoint_type& e, error_code& ec);
 
     template<class CompletionToken>
-      @\textit{DEDUCED}@ async_resolve(const endpoint_type& e,
+      @\DEDUCED@ async_resolve(const endpoint_type& e,
                             CompletionToken&& token);
   };
 
@@ -3625,7 +3625,7 @@ getaddrinfo(H, S, &hints, &result);
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_resolve(string_view host_name, string_view service_name,
+  @\DEDUCED@ async_resolve(string_view host_name, string_view service_name,
                         CompletionToken&& token);
 \end{itemdecl}
 
@@ -3636,7 +3636,7 @@ template<class CompletionToken>
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_resolve(string_view host_name, string_view service_name,
+  @\DEDUCED@ async_resolve(string_view host_name, string_view service_name,
                         flags f, CompletionToken&& token);
 \end{itemdecl}
 
@@ -3708,7 +3708,7 @@ getaddrinfo(H, S, &hints, &result);
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_resolve(const protocol_type& protocol,
+  @\DEDUCED@ async_resolve(const protocol_type& protocol,
                         string_view host_name, string_view service_name,
                         CompletionToken&& token);
 \end{itemdecl}
@@ -3720,7 +3720,7 @@ template<class CompletionToken>
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_resolve(const protocol& protocol,
+  @\DEDUCED@ async_resolve(const protocol& protocol,
                         string_view host_name, string_view service_name,
                         flags f, CompletionToken&& token);
 \end{itemdecl}
@@ -3782,7 +3782,7 @@ if (result != 0)
 
 \begin{itemdecl}
 template<class CompletionToken>
-  @\textit{DEDUCED}@ async_resolve(const endpoint_type& e,
+  @\DEDUCED@ async_resolve(const endpoint_type& e,
                         CompletionToken&& token);
 \end{itemdecl}
 
