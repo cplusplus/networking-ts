@@ -309,7 +309,7 @@ virtual int_type overflow(int_type c = traits_type::eof()) override;
 
 \begin{itemdescr}
 \pnum
-\effects Behaves according to the description of \tcode{basic_streambuf<char>::overflow(c)}, except that the behavior of "consuming characters" is performed by output of the characters to the socket as if by one or more calls to POSIX sendmsg, and \tcode{ec_} is set to reflect the error code produced by the operation. If the operation does not complete before the absolute timeout specified by \tcode{expiry_}, the socket is closed and \tcode{ec_} is set to \tcode{errc::timed_out}.
+\effects Behaves according to the description of \tcode{basic_streambuf<char>::overflow(c)}, except that the behavior of ``consuming characters'' is performed by output of the characters to the socket as if by one or more calls to POSIX sendmsg, and \tcode{ec_} is set to reflect the error code produced by the operation. If the operation does not complete before the absolute timeout specified by \tcode{expiry_}, the socket is closed and \tcode{ec_} is set to \tcode{errc::timed_out}.
 
 \pnum
 \returns \tcode{traits_type::not_eof(c)} to indicate success, and \tcode{traits_type::eof()} to indicate failure.
@@ -330,7 +330,7 @@ virtual streambuf* setbuf(char_type* s, streamsize n) override;
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{setbuf(nullptr, 0)} is called on a stream before any I/O has occurred on that stream, the stream becomes unbuffered. Otherwise the results are unspecified. "Unbuffered" means that \tcode{pbase()} and \tcode{pptr()} always return null and output to the socket should appear as soon as possible.
+\effects If \tcode{setbuf(nullptr, 0)} is called on a stream before any I/O has occurred on that stream, the stream becomes unbuffered. Otherwise the results are unspecified. ``Unbuffered'' means that \tcode{pbase()} and \tcode{pptr()} always return null and output to the socket should appear as soon as possible.
 \end{itemdescr}
 
 
