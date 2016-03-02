@@ -3358,7 +3358,7 @@ For any executor type \tcode{E}, the associated object for the associator \tcode
 When an object \tcode{r1} of type \tcode{R} is constructed from \tcode{t1}, the expression \tcode{r1.get()} returns a future with the same shared state as \tcode{t1}.
 
 \pnum
-The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are defined in the table below. After establishing these effects, \tcode{F::operator()} makes the shared state ready. In this table, N is the value of \tcode{sizeof...(Args)}; let i be in the range [\tcode{0},\tcode{N}) and let Ti be the ith type in \tcode{Args}; let Ui be \tcode{decay_t<}Ti\tcode{>} for each type Ti in \tcode{Args}; let Ai be the deduced type of the ith argument to \tcode{F::operator()}; and let ai be the ith argument to \tcode{F::operator()}.
+The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are defined in the table below. After establishing these effects, \tcode{F::operator()} makes the shared state ready. In this table, N is the value of \tcode{sizeof...(Args)}; let i be in the range \range{0}{N} and let Ti be the ith type in \tcode{Args}; let Ui be \tcode{decay_t<}Ti\tcode{>} for each type Ti in \tcode{Args}; let Ai be the deduced type of the ith argument to \tcode{F::operator()}; and let ai be the ith argument to \tcode{F::operator()}.
 
 \begin{libreqtab4}
 {async_result<use_future_t<ProtoAllocator>, Result(Args...)> semantics}
