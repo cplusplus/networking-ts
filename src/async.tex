@@ -3296,7 +3296,7 @@ template <class F> @\unspec@ operator()(F&& f) const;
 
 \begin{itemdescr}
 \pnum
-Let T be a completion token type. Let H be a completion handler type and let h be an object of type H. Let FD be the type \tcode{decay_t<F>} and let fd be an lvalue of type FD constructed with \tcode{forward<F>(f)}. Let R(Args...) be the completion signature of an asynchronous operation using H and let N be sizeof...(Args). Let i be in the range [\tcode{0},\tcode{N}) and let Ai be the ith type in \tcode{Args}. Let ai be the argument associated with Ai.
+Let \tcode{T} be a completion token type. Let \tcode{H} be a completion handler type and let \tcode{h} be an object of type \tcode{H}. Let \tcode{FD} be the type \tcode{decay_t<F>} and let \tcode{fd} be an lvalue of type \tcode{FD} constructed with \tcode{forward<F>(f)}. Let \tcode{R(Args...)} be the completion signature of an asynchronous operation using \tcode{H} and let \tcode{N} be \tcode{sizeof...(Args)}. Let \tcode{i} be in the range \range{0}{N} and let \tcode{Ai} be the ith type in \tcode{Args}. Let \tcode{ai} be the argument associated with \tcode{Ai}.
 
 \pnum
 \returns A completion token \tcode{t} of type \tcode{T}.
@@ -3308,7 +3308,7 @@ Let T be a completion token type. Let H be a completion handler type and let h b
 The object \tcode{h} of type \tcode{H} is an asynchronous provider with an associated shared state (\CppXref{futures.state}). The effect of \tcode{h(a0, ..., aN-1)} is to atomically store the result of \tcode{\textit{INVOKE}(fd, forward<A0>(a0), ..., forward<AN-1>(aN-1))} (\CppXref{func.require}) in the shared state and make the shared state ready. If \tcode{fd} exits via an exception then that exception is atomically stored in the shared state and the shared state is made ready.
 
 \pnum
-The implementation provides a partial specialization template <class Result, class... Args> async_result<T, Result(Args...)> such that:
+The implementation provides a partial specialization \tcode{template <class Result, class... Args> async_result<T, Result(Args...)>} such that:
 \begin{itemize}
 \item
  the nested typedef \tcode{completion_handler_type} is a type \tcode{H};
