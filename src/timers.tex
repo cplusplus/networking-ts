@@ -73,7 +73,7 @@ The \tcode{basic_waitable_timer} template uses wait traits to allow programs to 
 For a type \tcode{Clock} meeting the \tcode{Clock} requirements (\CppXref{time.clock.req}), a type \tcode{X} meets the \tcode{WaitTraits} requirements if it satisfies the requirements listed below.
 
 \pnum
-In the table below, \tcode{t} denotes a (possibly const) value of type \tcode{Clock::time_point}; and \tcode{d} denotes a (possibly const) value of type \tcode{Clock::duration}.
+In Table~\ref{tab:timer.reqmts.waittraits.requirements}, \tcode{t} denotes a (possibly const) value of type \tcode{Clock::time_point}; and \tcode{d} denotes a (possibly const) value of type \tcode{Clock::duration}.
 
 \begin{libreqtab3}
 {WaitTraits requirements}
@@ -101,9 +101,7 @@ Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{a
 \end{libreqtab3}
 
 
-
-
-\rSec1[]{Class template \tcode{wait_traits}}
+\rSec1[timer.waittraits]{Class template \tcode{wait_traits}}
 
 \begin{codeblock}
 namespace std {
@@ -147,9 +145,8 @@ static typename Clock::duration to_wait_duration(
 
 \begin{itemdescr}
 \pnum
-\returns Let \tcode{now} be \tcode{Clock::now()}. If \tcode{now + Clock::duration::max()} is before \tcode{t}, \tcode{Clock::duration::max()}; if \tcode{now + Clock::duration::min()} is after \tcode{t}, \tcode{Clock::duration::min()}; otherwise, \tcode{t - now}.
+\returns Let \tcode{now} be \tcode{Clock::now()}. If \tcode{now + Clock::duration::max()} is before \tcode{t}, \tcode{Clock::dur\-ation::max()}; if \tcode{now + Clock::duration::min()} is after \tcode{t}, \tcode{Clock::duration::min()}; otherwise, \tcode{t - now}.
 \end{itemdescr}
-
 
 
 \rSec1[timer.waitable]{Class template \tcode{basic_waitable_timer}}

@@ -301,43 +301,48 @@ inline namespace v1 {
 A mutable buffer sequence represents a set of memory regions that may be used to receive the output of an operation, such as the \tcode{receive} operation of a socket.
 
 \pnum
-A type \tcode{X} meets the \tcode{MutableBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{MutableBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.mutablebuffersequence.requirements}.
 
 \pnum
-In the table below, \tcode{x} denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
+In Table~\ref{tab:buffer.reqmts.mutablebuffersequence.requirements}, \tcode{x}
+denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
 
-\begin{libreqtab3}
+\begin{LongTable}
 {MutableBufferSequence requirements}
 {tab:buffer.reqmts.mutablebuffersequence.requirements}
+{x{.27\hsize}x{.23\hsize}x{.40\hsize}}
 \\ \topline
 \lhdr{expression}  &
 \chdr{return type}  &
-\rhdr{assertion/note pre/post-condition} \\ \capsep
+\rhdr{assertion/note} \\
+\lhdr{}  &
+\chdr{}  &
+\rhdr{pre/post-condition} \\ \capsep
 \endfirsthead
 \continuedcaption\\
 \hline
 \lhdr{expression}  &
 \chdr{return type}  &
-\rhdr{assertion/note pre/post-condition} \\ \capsep
+\rhdr{assertion/note} \\
+\lhdr{}  &
+\chdr{}  &
+\rhdr{pre/post-condition} \\ \capsep
 \endhead
 
-\tcode{std::experimental::net::buffer_sequence_begin(x)}\tcode{std::experimental::net::buffer_sequence_end(x)}  &
+\tcode{net::buffer_sequence_begin(x)}\br
+\tcode{net::buffer_sequence_end(x)}  &
 An iterator type meeting the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) whose value type is convertible to \tcode{mutable_buffer}.  &
   \\ \rowsep
 
-
-\begin{codeblock}
-X u(x);
-\end{codeblock}
+\tcode{X u(x);}
   &
   &
-post:
-\begin{codeblock}
+post: \begin{codeblock}
 equal(
-  std::experimental::net::buffer_sequence_begin(x),
-  std::experimental::net::buffer_sequence_end(x),
-  std::experimental::net::buffer_sequence_begin(u),
-  std::experimental::net::buffer_sequence_end(u),
+  net::buffer_sequence_begin(x),
+  net::buffer_sequence_end(x),
+  net::buffer_sequence_begin(u),
+  net::buffer_sequence_end(u),
   [](const typename X::value_type& v1,
      const typename X::value_type& v2)
    {
@@ -348,9 +353,7 @@ equal(
    })
 \end{codeblock}
   \\
-
-\end{libreqtab3}
-
+\end{LongTable}
 
 
 \rSec2[buffer.reqmts.constbuffersequence]{Constant buffer sequence requirements}
@@ -359,43 +362,48 @@ equal(
 A constant buffer sequence represents a set of memory regions that may be used as input to an operation, such as the \tcode{send} operation of a socket.
 
 \pnum
-A type \tcode{X} meets the \tcode{ConstBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{ConstBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements}.
 
 \pnum
-In the table below, \tcode{x} denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
+In Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements}, \tcode{x} denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
 
-\begin{libreqtab3}
+\begin{LongTable}
 {ConstBufferSequence requirements}
 {tab:buffer.reqmts.constbuffersequence.requirements}
+{x{.27\hsize}x{.22\hsize}x{.40\hsize}}
 \\ \topline
 \lhdr{expression}  &
 \chdr{return type}  &
-\rhdr{assertion/note pre/post-condition} \\ \capsep
+\rhdr{assertion/note} \\
+\lhdr{}  &
+\chdr{}  &
+\rhdr{pre/post-condition} \\ \capsep
 \endfirsthead
 \continuedcaption\\
 \hline
 \lhdr{expression}  &
 \chdr{return type}  &
-\rhdr{assertion/note pre/post-condition} \\ \capsep
+\rhdr{assertion/note} \\
+\lhdr{}  &
+\chdr{}  &
+\rhdr{pre/post-condition} \\ \capsep
 \endhead
 
-\tcode{std::experimental::net::buffer_sequence_begin(x)}\tcode{std::experimental::net::buffer_sequence_end(x)}  &
+\tcode{net::buffer_sequence_begin(x)}\br
+\tcode{net::buffer_sequence_end(x)}  &
 An iterator type meeting the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) whose value type is convertible to \tcode{const_buffer}.  &
   \\ \rowsep
 
-
-\begin{codeblock}
-X u(x);
-\end{codeblock}
+\tcode{X u(x);}
   &
   &
 post:
 \begin{codeblock}
 equal(
-  std::experimental::net::buffer_sequence_begin(x),
-  std::experimental::net::buffer_sequence_end(x),
-  std::experimental::net::buffer_sequence_begin(u),
-  std::experimental::net::buffer_sequence_end(u),
+  net::buffer_sequence_begin(x),
+  net::buffer_sequence_end(x),
+  net::buffer_sequence_begin(u),
+  net::buffer_sequence_end(u),
   [](const typename X::value_type& v1,
      const typename X::value_type& v2)
    {
@@ -407,7 +415,7 @@ equal(
 \end{codeblock}
   \\
 
-\end{libreqtab3}
+\end{LongTable}
 
 
 
@@ -417,10 +425,10 @@ equal(
 A dynamic buffer encapsulates memory storage that may be automatically resized as required, where the memory is divided into two regions: readable bytes followed by writable bytes. These memory regions are internal to the dynamic buffer, but direct access to the elements is provided to permit them to be efficiently used with I/O operations. \enternote Such as the \tcode{send} or \tcode{receive} operations of a socket. The readable bytes would be used as the constant buffer sequence for \tcode{send}, and the writable bytes used as the mutable buffer sequence for \tcode{receive}. \exitnote Data written to the writable bytes of a dynamic buffer object is appended to the readable bytes of the same object.
 
 \pnum
-A type \tcode{X} meets the \tcode{DynamicBuffer} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{DynamicBuffer} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}.
 
 \pnum
-In the table below, \tcode{x} denotes a value of type \tcode{X}, \tcode{x1} denotes a (possibly const) value of type \tcode{X}, and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
+In Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}, \tcode{x} denotes a value of type \tcode{X}, \tcode{x1} denotes a (possibly const) value of type \tcode{X}, and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
 
 \begin{libreqtab3}
 {DynamicBuffer requirements}
@@ -721,15 +729,18 @@ This sub-clause contains templates that may be used to query the properties of a
 \rhdr{Preconditions}  \\ \capsep
 \endhead
 
-\tcode{template<class T> is_mutable_buffer_sequence}  &
+\tcode{template<class T>}\br
+\tcode{struct is_mutable_buffer_sequence}  &
 \tcode{T} meets the syntactic requirements for mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}).  &
 \tcode{T} is a complete type.  \\ \rowsep
 
-\tcode{template<class T> is_const_buffer_sequence}  &
+\tcode{template<class T>}\br
+\tcode{struct is_const_buffer_sequence}  &
 \tcode{T} meets the syntactic requirements for constant buffer sequence~(\ref{buffer.reqmts.constbuffersequence}).  &
 \tcode{T} is a complete type.  \\ \rowsep
 
-\tcode{template<class T> is_dynamic_buffer}  &
+\tcode{template<class T>}\br
+\tcode{struct is_dynamic_buffer}  &
 \tcode{T} meets the syntactic requirements for dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}).  &
 \tcode{T} is a complete type.  \\
 
