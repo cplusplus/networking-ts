@@ -3360,7 +3360,7 @@ namespace ip {
 \end{codeblock}
 
 \pnum
-\tcode{resolver_base} defines a bitmask type, \tcode{flags}, with the bitmask elements shown above.
+\tcode{resolver_base} defines a bitmask type, \tcode{flags}, with the bitmask elements shown in Table~\ref{tab:internet.resolver.base.requirements}.
 
 \begin{libreqtab3}
 {resolver flags}
@@ -3913,10 +3913,10 @@ namespace ip {
 \end{codeblock}
 
 \pnum
- The return values for these member functions are listed in the table below.
+ The return values for these member functions are listed in Table~\ref{tab:internet.tcp.requirements}.
 
 \begin{libreqtab4}
-{Behavior of extensible implementations}
+{Behavior of extensible \tcode{tcp} implementations}
 {tab:internet.tcp.requirements}
 \\ \topline
 \lhdr{value}  &
@@ -3945,7 +3945,7 @@ namespace ip {
 \end{libreqtab4}
 
 \pnum
-\enternote The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_STREAM} are defined in the POSIX header file \tcode{sys/socket.h}. The constant \tcode{IPPROTO_TCP} is defined in the POSIX header file \tcode{netinet/in.h}. \exitnote
+\enternote The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_STREAM} are defined in the POSIX header file \tcode{<sys/socket.h>}. The constant \tcode{IPPROTO_TCP} is defined in the POSIX header file \tcode{<netinet/in.h>}. \exitnote
 
 
 \rSec2[internet.tcp.comparisons]{\tcode{ip::tcp} comparisons}
@@ -4041,10 +4041,10 @@ namespace ip {
 \end{codeblock}
 
 \pnum
- The return values for these member functions are listed in the table below.
+ The return values for these member functions are listed in Table~\ref{tab:internet.udp.requirements}.
 
 \begin{libreqtab4}
-{Behavior of extensible implementations}
+{Behavior of extensible \tcode{udp} implementations}
 {tab:internet.udp.requirements}
 \\ \topline
 \lhdr{value}  &
@@ -4073,7 +4073,7 @@ namespace ip {
 \end{libreqtab4}
 
 \pnum
-\enternote The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_DGRAM} are defined in the POSIX header file \tcode{sys/socket.h}. The constant \tcode{IPPROTO_UDP} is defined in the POSIX header file \tcode{netinet/in.h}. \exitnote
+\enternote The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_DGRAM} are defined in the POSIX header file \tcode{<sys/socket.h>}. The constant \tcode{IPPROTO_UDP} is defined in the POSIX header file \tcode{<netinet/in.h>}. \exitnote
 
 
 \rSec2[internet.udp.comparisons]{\tcode{ip::udp} comparisons}
