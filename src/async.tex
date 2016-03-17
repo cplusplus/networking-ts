@@ -214,7 +214,7 @@ No constructor, comparison operator, copy operation, move operation, swap operat
 Let \tcode{ctx} be the execution context returned by the executor's \tcode{context()} member function. An executor becomes invalid when the first call to \tcode{ctx.shutdown()} returns. The effect of calling \tcode{on_work_started}, \tcode{on_work_finished}, \tcode{dispatch}, \tcode{post}, or \tcode{defer} on an invalid executor is undefined. \enternote The copy constructor, comparison operators, and \tcode{context()} member function continue to remain valid until \tcode{ctx} is destroyed. \exitnote
 
 \pnum
-In the table below, \tcode{x1} and \tcode{x2} denote values of type \tcode{X}, \tcode{cx1} and \tcode{cx2} denote (possibly const) values of type \tcode{X}, \tcode{mx1} denotes an xvalue of type \tcode{X}, \tcode{f} denotes a \tcode{MoveConstructible} (\CppXref{moveconstructible}) function object callable with zero arguments, \tcode{a} denotes a (possibly const) value of type \tcode{A} meeting the \tcode{Allocator} requirements (\CppXref{allocator.requirements}), and \tcode{u} denotes an identifier.
+In Table~\ref{tab:async.reqmts.executor.requirements}, \tcode{x1} and \tcode{x2} denote values of type \tcode{X}, \tcode{cx1} and \tcode{cx2} denote (possibly const) values of type \tcode{X}, \tcode{mx1} denotes an xvalue of type \tcode{X}, \tcode{f} denotes a \tcode{MoveConstructible} (\CppXref{moveconstructible}) function object callable with zero arguments, \tcode{a} denotes a (possibly const) value of type \tcode{A} meeting the \tcode{Allocator} requirements (\CppXref{allocator.requirements}), and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
 {Executor requirements}
@@ -280,7 +280,7 @@ Shall not exit via an exception. \textit{Precondition:} A preceding call \tcode{
 A type \tcode{X} meets the \tcode{ExecutionContext} requirements if it is publicly and unambiguously derived from \tcode{execution_context}, and satisfies the additional requirements listed below.
 
 \pnum
-In the table below, \tcode{x} denotes a value of type \tcode{X}.
+In Table~\ref{tab:async.reqmts.executioncontext.requirements}, \tcode{x} denotes a value of type \tcode{X}.
 
 \begin{libreqtab3}
 {ExecutionContext requirements}
@@ -376,7 +376,7 @@ an associated type \tcode{A} meeting the type requirements \tcode{R} may be comp
 An associator shall be a class template that takes two template type arguments. The first template argument is the source type \tcode{S}. The second template argument is the candidate type \tcode{C}. The second template argument shall be defaulted to some default candidate type \tcode{D} that satisfies the type requirements \tcode{R}.
 
 \pnum
-An associator shall additionally satisfy the requirements in the table below. In this table, \tcode{X} is a class template that meets the associator requirements, \tcode{S} is the source type, \tcode{s} is a (possibly const) value of type \tcode{S}, \tcode{C} is the candidate type, \tcode{c} is a (possibly const) value of type \tcode{C}, \tcode{D} is the default candidate type, and \tcode{d} is a (possibly const) value of type \tcode{D} that is the default candidate object.
+An associator shall additionally satisfy the requirements in Table~\ref{tab:async.reqmts.associator.requirements}. In this table, \tcode{X} is a class template that meets the associator requirements, \tcode{S} is the source type, \tcode{s} is a (possibly const) value of type \tcode{S}, \tcode{C} is the candidate type, \tcode{c} is a (possibly const) value of type \tcode{C}, \tcode{D} is the default candidate type, and \tcode{d} is a (possibly const) value of type \tcode{D} that is the default candidate object.
 
 \begin{libreqtab3}
 {Associator requirements}
@@ -732,7 +732,7 @@ inline namespace v1 {
 The template parameter \tcode{CompletionToken} shall be an object type. The template parameter \tcode{Signature} shall be a call signature (\CppXref{func.def}).
 
 \pnum
-Specializations of \tcode{async_result} shall satisfy the \tcode{Destructible} requirements (\CppXref{destructible}) in addition to the requirements in the table below. In this table, \tcode{R} is a specialization of \tcode{async_result}; \tcode{r} is a modifiable lvalue of type \tcode{R}; and \tcode{h} is a modifiable lvalue of type \tcode{R::completion_handler_type}.
+Specializations of \tcode{async_result} shall satisfy the \tcode{Destructible} requirements (\CppXref{destructible}) in addition to the requirements in Table~\ref{tab:async.async.result.requirements}. In this table, \tcode{R} is a specialization of \tcode{async_result}; \tcode{r} is a modifiable lvalue of type \tcode{R}; and \tcode{h} is a modifiable lvalue of type \tcode{R::completion_handler_type}.
 
 \begin{libreqtab3}
 {\tcode{async_result} specialization requirements}
@@ -850,7 +850,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Specializations of \tcode{associated_allocator} shall satisfy the requirements in the table below. In this table, \tcode{X} is a specialization of \tcode{associated_allocator} for the template parameters \tcode{T} and \tcode{ProtoAllocator}; \tcode{t} is a value of (possibly const) \tcode{T}; and \tcode{a} is an object of type \tcode{ProtoAllocator}.
+Specializations of \tcode{associated_allocator} shall satisfy the requirements in Table~\ref{tab:async.assoc.alloc.requirements}. In this table, \tcode{X} is a specialization of \tcode{associated_allocator} for the template parameters \tcode{T} and \tcode{ProtoAllocator}; \tcode{t} is a value of (possibly const) \tcode{T}; and \tcode{a} is an object of type \tcode{ProtoAllocator}.
 
 \begin{libreqtab3}
 {\tcode{associated_allocator} specialization requirements}
@@ -1281,7 +1281,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Specializations of \tcode{associated_executor} shall satisfy the requirements in the table below. In this table, \tcode{X} is a specialization of \tcode{associated_executor} for the template parameters \tcode{T} and \tcode{Executor}; \tcode{t} is a value of (possibly const) \tcode{T}; and \tcode{e} is an object of type \tcode{Executor}.
+Specializations of \tcode{associated_executor} shall satisfy the requirements in Table~\ref{tab:async.assoc.exec.requirements}. In this table, \tcode{X} is a specialization of \tcode{associated_executor} for the template parameters \tcode{T} and \tcode{Executor}; \tcode{t} is a value of (possibly const) \tcode{T}; and \tcode{e} is an object of type \tcode{Executor}.
 
 \begin{libreqtab3}
 {\tcode{associated_executor} specialization requirements}
@@ -3363,7 +3363,7 @@ For any executor type \tcode{E}, the associated object for the associator \tcode
 When an object \tcode{r1} of type \tcode{R} is constructed from \tcode{t1}, the expression \tcode{r1.get()} returns a future with the same shared state as \tcode{t1}.
 
 \pnum
-The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are defined in the table below. After establishing these effects, \tcode{F::operator()} makes the shared state ready. In this table, N is the value of \tcode{sizeof...(Args)}; let i be in the range \range{0}{N} and let Ti be the ith type in \tcode{Args}; let Ui be \tcode{decay_t<}Ti\tcode{>} for each type Ti in \tcode{Args}; let Ai be the deduced type of the ith argument to \tcode{F::operator()}; and let ai be the ith argument to \tcode{F::operator()}.
+The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are defined in Table~\ref{tab:async.use.future.result.requirements}. After establishing these effects, \tcode{F::operator()} makes the shared state ready. In this table, N is the value of \tcode{sizeof...(Args)}; let i be in the range \range{0}{N} and let Ti be the ith type in \tcode{Args}; let Ui be \tcode{decay_t<}Ti\tcode{>} for each type Ti in \tcode{Args}; let Ai be the deduced type of the ith argument to \tcode{F::operator()}; and let ai be the ith argument to \tcode{F::operator()}.
 
 \begin{LongTable}
 {\tcode{async_result<use_future_t<ProtoAllocator>, Result(Args...)>} semantics}

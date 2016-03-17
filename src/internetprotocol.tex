@@ -4102,7 +4102,7 @@ constexpr bool operator!=(const udp& a, const udp& b) noexcept;
 \rSec1[internet.socket.opt]{Internet socket options}
 
 \pnum
-In the table below, let C denote a socket option class; let L identify the POSIX macro to be passed as the level argument to POSIX setsockopt and getsockopt; let N identify the POSIX macro to be passed as the option_name argument to POSIX setsockopt and getsockopt; let T identify the type of the value whose address will be passed as the option_value argument to POSIX setsockopt and getsockopt; let \tcode{p} denote a (possibly const) value of a type meeting the protocol~(\ref{socket.reqmts.protocol}) requirements, as passed to the socket option's \tcode{level} and \tcode{name} member functions; and let F be the value of \tcode{p.family()}.
+In Table~\ref{tab:internet.socket.opt.requirements}, let C denote a socket option class; let L identify the POSIX macro to be passed as the level argument to POSIX setsockopt and getsockopt; let N identify the POSIX macro to be passed as the option_name argument to POSIX setsockopt and getsockopt; let T identify the type of the value whose address will be passed as the option_value argument to POSIX setsockopt and getsockopt; let \tcode{p} denote a (possibly const) value of a type meeting the protocol~(\ref{socket.reqmts.protocol}) requirements, as passed to the socket option's \tcode{level} and \tcode{name} member functions; and let F be the value of \tcode{p.family()}.
 
 \begin{libreqtab5}
 {Internet socket options}
