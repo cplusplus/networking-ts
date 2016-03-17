@@ -735,7 +735,7 @@ The template parameter \tcode{CompletionToken} shall be an object type. The temp
 Specializations of \tcode{async_result} shall satisfy the \tcode{Destructible} requirements (\CppXref{destructible}) in addition to the requirements in the table below. In this table, \tcode{R} is a specialization of \tcode{async_result}; \tcode{r} is a modifiable lvalue of type \tcode{R}; and \tcode{h} is a modifiable lvalue of type \tcode{R::completion_handler_type}.
 
 \begin{libreqtab3}
-{async_result specialization requirements}
+{\tcode{async_result} specialization requirements}
 {tab:async.async.result.requirements}
 \\ \topline
 \lhdr{Expression}  &
@@ -853,7 +853,7 @@ inline namespace v1 {
 Specializations of \tcode{associated_allocator} shall satisfy the requirements in the table below. In this table, \tcode{X} is a specialization of \tcode{associated_allocator} for the template parameters \tcode{T} and \tcode{ProtoAllocator}; \tcode{t} is a value of (possibly const) \tcode{T}; and \tcode{a} is an object of type \tcode{ProtoAllocator}.
 
 \begin{libreqtab3}
-{associated_allocator specialization requirements}
+{\tcode{associated_allocator} specialization requirements}
 {tab:async.assoc.alloc.requirements}
 \\ \topline
 \lhdr{Expression}  &
@@ -1284,7 +1284,7 @@ inline namespace v1 {
 Specializations of \tcode{associated_executor} shall satisfy the requirements in the table below. In this table, \tcode{X} is a specialization of \tcode{associated_executor} for the template parameters \tcode{T} and \tcode{Executor}; \tcode{t} is a value of (possibly const) \tcode{T}; and \tcode{e} is an object of type \tcode{Executor}.
 
 \begin{libreqtab3}
-{associated_executor specialization requirements}
+{\tcode{associated_executor} specialization requirements}
 {tab:async.assoc.exec.requirements}
 \\ \topline
 \lhdr{Expression}  &
