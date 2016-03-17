@@ -4104,15 +4104,21 @@ constexpr bool operator!=(const udp& a, const udp& b) noexcept;
 \pnum
 In Table~\ref{tab:internet.socket.opt.requirements}, let C denote a socket option class; let L identify the POSIX macro to be passed as the level argument to POSIX setsockopt and getsockopt; let N identify the POSIX macro to be passed as the option_name argument to POSIX setsockopt and getsockopt; let T identify the type of the value whose address will be passed as the option_value argument to POSIX setsockopt and getsockopt; let \tcode{p} denote a (possibly const) value of a type meeting the protocol~(\ref{socket.reqmts.protocol}) requirements, as passed to the socket option's \tcode{level} and \tcode{name} member functions; and let F be the value of \tcode{p.family()}.
 
-\begin{libreqtab5}
+\begin{LongTable}
 {Internet socket options}
 {tab:internet.socket.opt.requirements}
+{x{.15\hsize}x{.18\hsize}x{.17\hsize}x{.17\hsize}x{.21\hsize}}
 \\ \topline
 \lhdr{C}  &
 \chdr{L}  &
 \chdr{N}  &
 \chdr{T}  &
-\rhdr{Requirements, definition or notes}  \\ \capsep
+\rhdr{Requirements,}  \\
+  &
+  &
+  &
+  &
+\rhdr{definition or notes}  \\ \capsep
 \endfirsthead
 \continuedcaption\\
 \hline
@@ -4120,58 +4126,70 @@ In Table~\ref{tab:internet.socket.opt.requirements}, let C denote a socket optio
 \chdr{L}  &
 \chdr{N}  &
 \chdr{T}  &
-\rhdr{Requirements, definition or notes}  \\ \capsep
+\rhdr{Requirements,}  \\
+  &
+  &
+  &
+  &
+\rhdr{definition or notes}  \\ \capsep
 \endhead
 
-ip::tcp::no_delay  &
+\tcode{ip::tcp::}\br
+\tcode{no_delay}  &
 \tcode{IPPROTO_TCP}  &
 \tcode{TCP_NODELAY}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a TCP socket will avoid coalescing of small segments. \enternote That is, setting this option disables the Nagle algorithm. \exitnote  \\ \rowsep
+Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a TCP socket will avoid coalescing of small segments. \enternote That is, setting this option disables the Nagle algorithm. \exitnote  \\ \rowsep
 
-ip::v6_only  &
+\tcode{ip::v6_only}  &
 \tcode{IPPROTO_IPV6}  &
 \tcode{IPV6_V6ONLY}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements.Determines whether a socket created for an IPv6 protocol is restricted to IPv6 communications only.Implementations are not required to support setting the \tcode{v6_only} option to \tcode{false}, and the initial value of the \tcode{v6_only} option for a socket is \impldef{initial value of the \tcode{v6_only} option for a socket}. \enternote As not all operating systems support dual stack IP networking. Some operating systems that do provide dual stack support offer a configuration option to disable it or to set the initial value of the \tcode{v6_only} socket option. \exitnote  \\ \rowsep
+Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket created for an IPv6 protocol is restricted to IPv6 communications only. Implementations are not required to support setting the \tcode{v6_only} option to \tcode{false}, and the initial value of the \tcode{v6_only} option for a socket is \impldef{initial value of the \tcode{v6_only} option for a socket}. \enternote As not all operating systems support dual stack IP networking. Some operating systems that do provide dual stack support offer a configuration option to disable it or to set the initial value of the \tcode{v6_only} socket option. \exitnote  \\ \rowsep
 
-ip::unicast::hops  &
-\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
-\tcode{IPV6_UNICAST_HOPS} if F == AF_INET6, otherwise \tcode{IP_TTL}  &
+\tcode{ip::unicast::}
+\tcode{hops}  &
+\tcode{IPPROTO_IPV6} if \tcode{F == AF_INET6}, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_UNICAST_HOPS} if \tcode{F == AF_INET6}, otherwise \tcode{IP_TTL}  &
 \tcode{int}  &
-Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements.Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams.The constructor and assignment operator for the \tcode{ip::unicast::hops} class throw \tcode{out_of_range} if the \tcode{int} argument is not in the range \tcode{[0, 255]}.  \\ \rowsep
+Satisfies the \tcode{IntegerSocket\-Option}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams. The constructor and assignment operator for the \tcode{ip::unicast::hops} class throw \tcode{out_of_range} if the \tcode{int} argument is not in the range \crange{0}{255}.  \\ \rowsep
 
-ip::multicast::join_group  &
-\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
-\tcode{IPV6_JOIN_GROUP} if F == AF_INET6, otherwise \tcode{IP_ADD_MEMBERSHIP}  &
-\tcode{ipv6_mreq} if F == AF_INET6, otherwise \tcode{ip_mreq}  &
-Satisfies the \tcode{MulticastGroupSocketOption}~(\ref{internet.reqmts.opt.mcast}) type requirements. Requests that the socket join the specified multicast group.  \\ \rowsep
+\tcode{ip::multicast::}
+\tcode{join_group}  &
+\tcode{IPPROTO_IPV6} if \tcode{F == AF_INET6}, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_JOIN_GROUP} if \tcode{F == AF_INET6}, otherwise \tcode{IP_ADD_MEMBERSHIP}  &
+\tcode{ipv6_mreq} if \tcode{F == AF_INET6}, otherwise \tcode{ip_mreq}  &
+Satisfies the \tcode{MulticastGroupSock\-etOption}~(\ref{internet.reqmts.opt.mcast}) type requirements. Requests that the socket join the specified multicast group.  \\ \rowsep
 
-ip::multicast::leave_group  &
-\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
-\tcode{IPV6_LEAVE_GROUP} if F == AF_INET6, otherwise \tcode{IP_DROP_MEMBERSHIP}  &
-\tcode{ipv6_mreq} if F == AF_INET6, otherwise \tcode{ip_mreq}  &
-Satisfies the \tcode{MulticastGroupSocketOption}~(\ref{internet.reqmts.opt.mcast}) type requirements. Requests that the socket leave the specified multicast group.  \\ \rowsep
+\tcode{ip::multicast::}
+\tcode{leave_group}  &
+\tcode{IPPROTO_IPV6} if \tcode{F == AF_INET6}, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_LEAVE_GROUP} if \tcode{F == AF_INET6}, otherwise \tcode{IP_DROP_MEMBERSHIP}  &
+\tcode{ipv6_mreq} if \tcode{F == AF_INET6}, otherwise \tcode{ip_mreq}  &
+Satisfies the \tcode{MulticastGroupSock\-etOption}~(\ref{internet.reqmts.opt.mcast}) type requirements. Requests that the socket leave the specified multicast group.  \\ \rowsep
 
-ip::multicast::outbound_interface~(\ref{internet.multicast.outbound})  &
-\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
-\tcode{IPV6_MULTICAST_IF} if F == AF_INET6, otherwise \tcode{IP_MULTICAST_IF}  &
-\tcode{unsigned int} if F == AF_INET6, otherwise \tcode{in_addr}  &
+\tcode{ip::multicast::}
+\tcode{outbound_interface}\br~(\ref{internet.multicast.outbound})  &
+\tcode{IPPROTO_IPV6} if \tcode{F == AF_INET6}, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_MULTICAST_IF} if \tcode{F == AF_INET6}, otherwise \tcode{IP_MULTICAST_IF}  &
+\tcode{unsigned int} if \tcode{F == AF_INET6}, otherwise \tcode{in_addr}  &
  Specifies the network interface to use for outgoing multicast datagrams.  \\ \rowsep
 
-ip::multicast::hops  &
-\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
-\tcode{IPV6_MULTICAST_HOPS} if F == AF_INET6, otherwise \tcode{IP_MULTICAST_TTL}  &
+\tcode{ip::multicast::}
+\tcode{hops}  &
+\tcode{IPPROTO_IPV6} if \tcode{F == AF_INET6}, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_MULTICAST_HOPS} if \tcode{F == AF_INET6}, otherwise \tcode{IP_MULTICAST_TTL}  &
 \tcode{int}  &
-Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements.Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams.The constructor and assignment operator for the \tcode{ip::multicast::hops} class throw \tcode{out_of_range} if the \tcode{int} argument is not in the range \tcode{[0, 255]}.  \\ \rowsep
+Satisfies the \tcode{IntegerSocket\-Option}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams. The constructor and assignment operator for the \tcode{ip::multicast::hops} class throw \tcode{out_of_range} if the \tcode{int} argument is not in the range \crange{0}{255}.  \\ \rowsep
 
-ip::multicast::enable_loopback  &
-\tcode{IPPROTO_IPV6} if F == AF_INET6, otherwise \tcode{IPPROTO_IP}  &
-\tcode{IPV6_MULTICAST_LOOP} if F == AF_INET6, otherwise \tcode{IP_MULTICAST_LOOP}  &
+\tcode{ip::multicast::}
+\tcode{enable_loopback}  &
+\tcode{IPPROTO_IPV6} if \tcode{F == AF_INET6}, otherwise \tcode{IPPROTO_IP}  &
+\tcode{IPV6_MULTICAST_LOOP} if \tcode{F == AF_INET6}, otherwise \tcode{IP_MULTICAST_LOOP}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether multicast datagrams are delivered back to the local application.  \\
+Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether multicast datagrams are delivered back to the local application.  \\
 
-\end{libreqtab5}
+\end{LongTable}
 
 
 \indexlibrary{\idxcode{outbound_interface}}%
