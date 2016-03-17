@@ -1120,9 +1120,10 @@ Wait until the socket has a pending error condition.For a given socket, when a \
 \pnum
 In the table below, let C denote a socket option class; let L identify the POSIX macro to be passed as the level argument to POSIX setsockopt and getsockopt; let N identify the POSIX macro to be passed as the option_name argument to POSIX setsockopt and getsockopt; and let T identify the type of the value whose address will be passed as the option_value argument to POSIX setsockopt and getsockopt.
 
-\begin{libreqtab5}
+\begin{LongTable}
 {socket options}
 {tab:socket.opt.requirements}
+{p{1in}lllp{2.5in}}
 \\ \topline
 \lhdr{C}  &
 \chdr{L}  &
@@ -1139,73 +1140,84 @@ In the table below, let C denote a socket option class; let L identify the POSIX
 \rhdr{Requirements, definition or notes}  \\ \capsep
 \endhead
 
-socket_base::broadcast  &
-SOL_SOCKET  &
-SO_BROADCAST  &
-int  &
+\tcode{socket_base::}
+\tcode{broadcast}  &
+\tcode{SOL_SOCKET}  &
+\tcode{SO_BROADCAST}  &
+\tcode{int}  &
 Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket permits sending of broadcast messages, if supported by the protocol.  \\ \rowsep
 
-socket_base::debug  &
-SOL_SOCKET  &
-SO_DEBUG  &
-int  &
+\tcode{socket_base::}
+\tcode{debug}  &
+\tcode{SOL_SOCKET}  &
+\tcode{SO_DEBUG}  &
+\tcode{int}  &
 Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether debugging information is recorded by the underlying protocol.  \\ \rowsep
 
-socket_base::do_not_route  &
-SOL_SOCKET  &
-SO_DONTROUTE  &
-int  &
+\tcode{socket_base::}
+\tcode{do_not_route}  &
+\tcode{SOL_SOCKET}  &
+\tcode{SO_DONTROUTE}  &
+\tcode{int}  &
 Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether outgoing messages bypass standard routing facilities.  \\ \rowsep
 
-socket_base::keep_alive  &
-SOL_SOCKET  &
-SO_KEEPALIVE  &
-int  &
+\tcode{socket_base::}
+\tcode{keep_alive}  &
+\tcode{SOL_SOCKET}  &
+\tcode{SO_KEEPALIVE}  &
+\tcode{int}  &
 Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket permits sending of keep_alive messages, if supported by the protocol.  \\ \rowsep
 
-socket_base::linger~(\ref{socket.opt.linger})  &
-SOL_SOCKET  &
-SO_LINGER  &
-linger  &
+\tcode{socket_base::}
+\tcode{linger}~(\ref{socket.opt.linger})  &
+\tcode{SOL_SOCKET}  &
+\tcode{SO_LINGER}  &
+\tcode{linger}  &
  Controls the behavior when a socket is closed and unsent data is present.  \\ \rowsep
 
-socket_base::out_of_band_inline  &
-SOL_SOCKET  &
-SO_OOBINLINE  &
-int  &
+\tcode{socket_base::}
+\tcode{out_of_band_inline}  &
+\tcode{SOL_SOCKET}  &
+\tcode{SO_OOBINLINE}  &
+\tcode{int}  &
 Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether out-of-band data (also known as urgent data) is received inline.  \\ \rowsep
 
-socket_base::receive_buffer_size  &
-SOL_SOCKET  &
-SO_RCVBUF  &
-int  &
+\tcode{socket_base::}
+\tcode{receive_buffer_size}  &
+\tcode{SOL_SOCKET}  &
+\tcode{SO_RCVBUF}  &
+\tcode{int}  &
 Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the size of the receive buffer associated with a socket.  \\ \rowsep
 
-socket_base::receive_low_watermark  &
-SOL_SOCKET  &
-SO_RCVLOWAT  &
-int  &
+\tcode{socket_base::}
+\tcode{receive_low_watermark}  &
+\tcode{SOL_SOCKET}  &
+\tcode{SO_RCVLOWAT}  &
+\tcode{int}  &
 Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the minimum number of bytes to process for socket input operations.  \\ \rowsep
 
-socket_base::reuse_address  &
-SOL_SOCKET  &
-SO_REUSEADDR  &
-int  &
+\tcode{socket_base::}
+\tcode{reuse_address}  &
+\tcode{SOL_SOCKET}  &
+\tcode{SO_REUSEADDR}  &
+\tcode{int}  &
 Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether the validation of endpoints used for binding a socket should allow the reuse of local endpoints, if supported by the protocol.  \\ \rowsep
 
-socket_base::send_buffer_size  &
-SOL_SOCKET  &
-SO_SNDBUF  &
-int  &
+\tcode{socket_base::}
+\tcode{send_buffer_size}  &
+\tcode{SOL_SOCKET}  &
+\tcode{SO_SNDBUF}  &
+\tcode{int}  &
 Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the size of the send buffer associated with a socket.  \\ \rowsep
 
-socket_base::send_low_watermark  &
-SOL_SOCKET  &
-SO_SNDLOWAT  &
-int  &
+\tcode{socket_base::}
+\tcode{send_low_watermark}  &
+\tcode{SOL_SOCKET}  &
+\tcode{SO_SNDLOWAT}  &
+\tcode{int}  &
 Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the minimum number of bytes to process for socket output operations.  \\
 
-\end{libreqtab5}
+\end{LongTable}
 
 
 \indexlibrary{\idxcode{linger}}%
