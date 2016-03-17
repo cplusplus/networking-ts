@@ -9,10 +9,10 @@
 \rSec2[buffer.stream.reqmts.syncreadstream]{Buffer-oriented synchronous read stream requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{SyncReadStream} requirements if it satisfies the requirements listed below.
+A type \tcode{X} meets the \tcode{SyncReadStream} requirements if it satisfies the requirements listed in Table~\ref{tab:buffer.stream.reqmts.syncreadstream.requirements}.
 
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X}, \tcode{mb} denotes a (possibly const) value satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements, and \tcode{ec} denotes an object of type \tcode{error_code}.
+In Table~\ref{tab:buffer.stream.reqmts.syncreadstream.requirements}, \tcode{a} denotes a value of type \tcode{X}, \tcode{mb} denotes a (possibly const) value satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements, and \tcode{ec} denotes an object of type \tcode{error_code}.
 
 \begin{libreqtab3}
 {SyncReadStream requirements}
@@ -29,12 +29,12 @@ In the table below, \tcode{a} denotes a value of type \tcode{X}, \tcode{mb} deno
 \rhdr{semantics, pre/post-conditions} \\ \capsep
 \endhead
 
-\tcode{a.read_some(mb)}\tcode{a.read_some(mb,ec)}  &
+\tcode{a.read_some(mb)}
+\tcode{a.read_some(mb,ec)}  &
 \tcode{size_t}  &
-Meets the requirements for a read operation~(\ref{buffer.reqmts.read.write}).If \tcode{buffer_size(mb) > 0}, reads one or more bytes of data from the stream \tcode{a} into the buffer sequence \tcode{mb}. If successful, sets \tcode{ec} such that \tcode{!ec} is \tcode{true}, and returns the number of bytes read. If an error occurred, sets \tcode{ec} such that \tcode{!!ec} is \tcode{true}, and returns 0. If all data has been read from the stream, and the stream performed an orderly shutdown, sets \tcode{ec} to \tcode{stream_errc::eof} and returns 0.If \tcode{buffer_size(mb) == 0}, the operation shall not block. Sets \tcode{ec} such that \tcode{!ec} is \tcode{true}, and returns 0.  \\
+Meets the requirements for a read operation~(\ref{buffer.reqmts.read.write}). If \tcode{buffer_size(mb) > 0}, reads one or more bytes of data from the stream \tcode{a} into the buffer sequence \tcode{mb}. If successful, sets \tcode{ec} such that \tcode{!ec} is \tcode{true}, and returns the number of bytes read. If an error occurred, sets \tcode{ec} such that \tcode{!!ec} is \tcode{true}, and returns 0. If all data has been read from the stream, and the stream performed an orderly shutdown, sets \tcode{ec} to \tcode{stream_errc::eof} and returns 0. If \tcode{buffer_size(mb) == 0}, the operation shall not block. Sets \tcode{ec} such that \tcode{!ec} is \tcode{true}, and returns 0.  \\
 
 \end{libreqtab3}
-
 
 
 \rSec2[buffer.stream.reqmts.asyncreadstream]{Buffer-oriented asynchronous read stream requirements}
@@ -66,10 +66,9 @@ A type satisfying the Executor requirements~(\ref{async.reqmts.executor}).  &
 
 \tcode{a.async_read_some(mb,t)}  &
 The return type is determined according to the requirements for an asynchronous operation~(\ref{async.reqmts.async}).  &
-Meets the requirements for a read operation~(\ref{buffer.reqmts.read.write}) and an asynchronous operation~(\ref{async.reqmts.async}) with completion signature \tcode{void(error_code ec, size_t n)}.If \tcode{buffer_size(mb) > 0}, initiates an asynchronous operation to read one or more bytes of data from the stream \tcode{a} into the buffer sequence \tcode{mb}. If successful, \tcode{ec} is set such that \tcode{!ec} is \tcode{true}, and \tcode{n} is the number of bytes read. If an error occurred, \tcode{ec} is set such that \tcode{!!ec} is \tcode{true}, and \tcode{n} is 0. If all data has been read from the stream, and the stream performed an orderly shutdown, \tcode{ec} is \tcode{stream_errc::eof} and \tcode{n} is 0.If \tcode{buffer_size(mb) == 0}, the operation completes immediately. \tcode{ec} is set such that \tcode{!ec} is \tcode{true}, and \tcode{n} is 0.  \\
+Meets the requirements for a read operation~(\ref{buffer.reqmts.read.write}) and an asynchronous operation~(\ref{async.reqmts.async}) with completion signature \tcode{void(error_code ec, size_t n)}. If \tcode{buffer_size(mb) > 0}, initiates an asynchronous operation to read one or more bytes of data from the stream \tcode{a} into the buffer sequence \tcode{mb}. If successful, \tcode{ec} is set such that \tcode{!ec} is \tcode{true}, and \tcode{n} is the number of bytes read. If an error occurred, \tcode{ec} is set such that \tcode{!!ec} is \tcode{true}, and \tcode{n} is 0. If all data has been read from the stream, and the stream performed an orderly shutdown, \tcode{ec} is \tcode{stream_errc::eof} and \tcode{n} is 0. If \tcode{buffer_size(mb) == 0}, the operation completes immediately. \tcode{ec} is set such that \tcode{!ec} is \tcode{true}, and \tcode{n} is 0.  \\
 
 \end{libreqtab3}
-
 
 
 \rSec2[buffer.stream.reqmts.syncwritestream]{Buffer-oriented synchronous write stream requirements}
@@ -95,9 +94,10 @@ In the table below, \tcode{a} denotes a value of type \tcode{X}, \tcode{cb} deno
 \rhdr{semantics, pre/post-conditions} \\ \capsep
 \endhead
 
-\tcode{a.write_some(cb)}\tcode{a.write_some(cb,ec)}  &
+\tcode{a.write_some(cb)}
+\tcode{a.write_some(cb,ec)}  &
 \tcode{size_t}  &
-Meets the requirements for a write operation~(\ref{buffer.reqmts.read.write}).If \tcode{buffer_size(cb) > 0}, writes one or more bytes of data to the stream \tcode{a} from the buffer sequence \tcode{cb}. If successful, sets \tcode{ec} such that \tcode{!ec} is \tcode{true}, and returns the number of bytes written. If an error occurred, sets \tcode{ec} such that \tcode{!!ec} is \tcode{true}, and returns 0.If \tcode{buffer_size(cb) == 0}, the operation shall not block. Sets \tcode{ec} such that \tcode{!ec} is \tcode{true}, and returns 0.  \\
+Meets the requirements for a write operation~(\ref{buffer.reqmts.read.write}). If \tcode{buffer_size(cb) > 0}, writes one or more bytes of data to the stream \tcode{a} from the buffer sequence \tcode{cb}. If successful, sets \tcode{ec} such that \tcode{!ec} is \tcode{true}, and returns the number of bytes written. If an error occurred, sets \tcode{ec} such that \tcode{!!ec} is \tcode{true}, and returns 0. If \tcode{buffer_size(cb) == 0}, the operation shall not block. Sets \tcode{ec} such that \tcode{!ec} is \tcode{true}, and returns 0.  \\
 
 \end{libreqtab3}
 
@@ -132,7 +132,7 @@ A type satisfying the Executor requirements~(\ref{async.reqmts.executor}).  &
 
 \tcode{a.async_write_some(cb,t)}  &
 The return type is determined according to the requirements for an asynchronous operation~(\ref{async.reqmts.async}).  &
-Meets the requirements for a write operation~(\ref{buffer.reqmts.read.write}) and an asynchronous operation~(\ref{async.reqmts.async}) with completion signature \tcode{void(error_code ec, size_t n)}.If \tcode{buffer_size(cb) > 0}, initiates an asynchronous operation to write one or more bytes of data to the stream \tcode{a} from the buffer sequence \tcode{cb}. If successful, \tcode{ec} is set such that \tcode{!ec} is \tcode{true}, and \tcode{n} is the number of bytes written. If an error occurred, \tcode{ec} is set such that \tcode{!!ec} is \tcode{true}, and \tcode{n} is 0.If \tcode{buffer_size(cb) == 0}, the operation completes immediately. \tcode{ec} is set such that \tcode{!ec} is \tcode{true}, and \tcode{n} is 0.  \\
+Meets the requirements for a write operation~(\ref{buffer.reqmts.read.write}) and an asynchronous operation~(\ref{async.reqmts.async}) with completion signature \tcode{void(error_code ec, size_t n)}. If \tcode{buffer_size(cb) > 0}, initiates an asynchronous operation to write one or more bytes of data to the stream \tcode{a} from the buffer sequence \tcode{cb}. If successful, \tcode{ec} is set such that \tcode{!ec} is \tcode{true}, and \tcode{n} is the number of bytes written. If an error occurred, \tcode{ec} is set such that \tcode{!!ec} is \tcode{true}, and \tcode{n} is 0. If \tcode{buffer_size(cb) == 0}, the operation completes immediately. \tcode{ec} is set such that \tcode{!ec} is \tcode{true}, and \tcode{n} is 0.  \\
 
 \end{libreqtab3}
 
@@ -166,7 +166,7 @@ In the table below, \tcode{x} denotes a value of type \tcode{X}, \tcode{ec} deno
 
 \tcode{x(ec, n)}  &
 \tcode{size_t}  &
-Let \tcode{n} be the total number of bytes transferred by the read or write algorithm so far.Returns the maximum number of bytes to be transferred on the next \tcode{read_some}, \tcode{async_read_some}, \tcode{write_some}, or \tcode{async_write_some} operation performed by the algorithm. Returns \tcode{0} to indicate that the algorithm is complete.  \\
+Let \tcode{n} be the total number of bytes transferred by the read or write algorithm so far. Returns the maximum number of bytes to be transferred on the next \tcode{read_some}, \tcode{async_read_some}, \tcode{write_some}, or \tcode{async_write_some} operation performed by the algorithm. Returns \tcode{0} to indicate that the algorithm is complete.  \\
 
 \end{libreqtab3}
 
