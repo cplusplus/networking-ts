@@ -3365,74 +3365,75 @@ When an object \tcode{r1} of type \tcode{R} is constructed from \tcode{t1}, the 
 \pnum
 The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are defined in the table below. After establishing these effects, \tcode{F::operator()} makes the shared state ready. In this table, N is the value of \tcode{sizeof...(Args)}; let i be in the range \range{0}{N} and let Ti be the ith type in \tcode{Args}; let Ui be \tcode{decay_t<}Ti\tcode{>} for each type Ti in \tcode{Args}; let Ai be the deduced type of the ith argument to \tcode{F::operator()}; and let ai be the ith argument to \tcode{F::operator()}.
 
-\begin{libreqtab4}
-{async_result<use_future_t<ProtoAllocator>, Result(Args...)> semantics}
+\begin{LongTable}
+{\tcode{async_result<use_future_t<ProtoAllocator>, Result(Args...)>} semantics}
 {tab:async.use.future.result.requirements}
+{cllp{3in}}
 \\ \topline
 \lhdr{N}  &
 \chdr{U0}  &
-\chdr{R::return_type}  &
-\rhdr{F::operator() effects} \\ \capsep
+\chdr{\tcode{R::return_type}}  &
+\rhdr{\tcode{F::operator()} effects} \\ \capsep
 \endfirsthead
 \continuedcaption\\
 \hline
 \lhdr{N}  &
 \chdr{U0}  &
-\chdr{R::return_type}  &
-\rhdr{F::operator() effects} \\ \capsep
+\chdr{\tcode{R::return_type}}  &
+\rhdr{\tcode{F::operator()} effects} \\ \capsep
 \endhead
 
  0  &
   &
-future<void>  &
+\tcode{future<void>}  &
  None.  \\ \rowsep
 
  1  &
 \tcode{error_code}  &
-future<void>  &
-If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by make_exception_ptr(system_error(a0)) in the shared state.  \\ \rowsep
+\tcode{future<void>}  &
+If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by \tcode{make_exception_ptr(system_error(a0))} in the shared state.  \\ \rowsep
 
  1  &
 \tcode{exception_ptr}  &
-future<void>  &
+\tcode{future<void>}  &
 If a0 is non-null, atomically stores the exception pointer a0 in the shared state.  \\ \rowsep
 
  1  &
  all other types  &
-future<U0>  &
-Atomically stores forward<A0>(a0) in the shared state.  \\ \rowsep
+\tcode{future<U0>}  &
+Atomically stores \tcode{forward<A0>(a0)} in the shared state.  \\ \rowsep
 
  2  &
 \tcode{error_code}  &
-future<U1>  &
-If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by make_exception_ptr(system_error(a0)) in the shared state; otherwise, atomically stores forward<A1>(a1) in the shared state.  \\ \rowsep
+\tcode{future<U1>}  &
+If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by \tcode{make_exception_ptr(system_error(a0))} in the shared state; otherwise, atomically stores \tcode{forward<A1>(a1)} in the shared state.  \\ \rowsep
 
  2  &
 \tcode{exception_ptr}  &
-future<U1>  &
-If a0 is non-null, atomically stores the exception pointer in the shared state; otherwise, atomically stores forward<A1>(a1) in the shared state.  \\ \rowsep
+\tcode{future<U1>}  &
+If a0 is non-null, atomically stores the exception pointer in the shared state; otherwise, atomically stores \tcode{forward<A1>(a1)} in the shared state.  \\ \rowsep
 
  2  &
  all other types  &
-future<tuple<U0,U1>>  &
-Atomically stores forward_as_tuple(forward<A0>(a0),forward<A1>(a1)) in the shared state.  \\ \rowsep
+\tcode{future<tuple<U0,U1>>}  &
+Atomically stores \tcode{forward_as_tuple(forward<A0>(a0), forward<A1>(a1))} in the shared state.  \\ \rowsep
 
  >2  &
 \tcode{error_code}  &
-future<tuple<U1,...,UN-1>>  &
-If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by make_exception_ptr(system_error(a0)) in the shared state; otherwise, atomically stores forward_as_tuple(forward<A1>(a1),...,forward<AN-1>(aN-1)) in the shared state.  \\ \rowsep
+\tcode{future<tuple<U1,...,UN-1>>}  &
+If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by \tcode{make_exception_ptr(system_error(a0))} in the shared state; otherwise, atomically stores \tcode{forward_as_tuple(forward<A1>(a1), ..., forward<AN-1>(aN-1))} in the shared state.  \\ \rowsep
 
  >2  &
 \tcode{exception_ptr}  &
-future<tuple<U1,...,UN-1>>  &
-If a0 is non-null, atomically stores the exception pointer in the shared state; otherwise, atomically stores forward_as_tuple(forward<A1>(a1),...,forward<AN-1>(aN-1)) in the shared state.  \\ \rowsep
+\tcode{future<tuple<U1,...,UN-1>>}  &
+If a0 is non-null, atomically stores the exception pointer in the shared state; otherwise, atomically stores \tcode{forward_as_tuple(forward<A1>(a1), ..., forward<AN-1>(aN-1))} in the shared state.  \\ \rowsep
 
  >2  &
  all other types  &
-future<tuple<U0,...,UN-1>>  &
-Atomically stores forward_as_tuple(forward<A0>(a0),...,forward<AN-1>(aN-1)) in the shared state.  \\
+\tcode{future<tuple<U0,...,UN-1>>}  &
+Atomically stores \tcode{forward_as_tuple(forward<A0>(a0), ..., forward<AN-1>(aN-1))} in the shared state.  \\
 
-\end{libreqtab4}
+\end{LongTable}
 
 
 \rSec1[async.packaged.task.spec]{Partial specialization of \tcode{async_result} for \tcode{packaged_task}}
