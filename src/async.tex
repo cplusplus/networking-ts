@@ -484,7 +484,12 @@ specify a completion signature, which is a call signature (\CppXref{func.def}) \
 \end{itemize}
 
 \pnum
-An initiating function determines the type \tcode{CompletionHandler} of its completion handler function object by performing \tcode{typename async_result<decay_t<CompletionToken>, Signature>::completion_handler_type}. The completion handler object \tcode{completion_handler} is initialized with \tcode{forward<CompletionToken>(token)}. \enternote No other requirements are placed on the type \tcode{CompletionToken}. \exitnote
+An initiating function determines the type \tcode{CompletionHandler} of its
+completion handler function object by performing
+\tcode{typename async_result<decay_t<CompletionToken>, Signature>::completion_handler_type}.
+The completion handler object \tcode{completion_handler} is initialized with
+\tcode{std::forward<Completion\-Token>(token)}.
+\enternote No other requirements are placed on the type \tcode{CompletionToken}. \exitnote
 
 \pnum
 The type \tcode{CompletionHandler} must satisfy the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), and be callable with the specified call signature.
@@ -501,7 +506,7 @@ terms of these names.
 \rSec3[async.reqmts.async.return.type]{Deduction of initiating function return type}
 
 \pnum
-The return type of an initiating function is \tcode{typename async_result<decay_t<CompletionToken>, Signature>::return_type}.
+The return type of an initiating function is \tcode{typename async_result<decay_t<CompletionToken>, Sig\-nature>::return_type}.
 
 \pnum
 For the sake of exposition, this Technical Specification sometimes annotates functions with a return type \DEDUCED. For every function declaration that returns \DEDUCED, the meaning is equivalent to specifying the return type as \tcode{typename async_result<decay_t<CompletionToken>, Signature>::return_type}.
