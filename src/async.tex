@@ -233,22 +233,22 @@ In the table below, \tcode{x1} and \tcode{x2} denote values of type \tcode{X}, \
 
 \tcode{X u(cx1);}  &
   &
-Shall not exit via an exception.post: \tcode{u == cx1} and \tcode{std::addressof(u.context()) == std::addressof(cx1.context()).}  \\ \rowsep
+Shall not exit via an exception. \textit{post:} \tcode{u == cx1} and \tcode{std::addressof(u.context()) == std::addressof(cx1.context()).}  \\ \rowsep
 
 \tcode{X u(mx1);}  &
   &
-Shall not exit via an exception.post: \tcode{u} equals the prior value of \tcode{mx1} and \tcode{std::addressof(u.context())} equals the prior value of \tcode{std::addressof(mx1.context())}.  \\ \rowsep
+Shall not exit via an exception. \textit{post:} \tcode{u} equals the prior value of \tcode{mx1} and \tcode{std::addressof(u.context())} equals the prior value of \tcode{std::addressof(mx1.context())}.  \\ \rowsep
 
 \tcode{cx1 == cx2}  &
 \tcode{bool}  &
-Returns \tcode{true} only if \tcode{cx1} and \tcode{cx2} can be interchanged with identical effects in any of the expressions defined in these type requirements. \enternote Returning \tcode{false} does not necessarily imply that the effects are not identical. \exitnote \tcode{operator==} shall be reflexive, symmetric, and transitive, and shall not exit via an exception.  \\ \rowsep
+Returns \tcode{true} only if \tcode{cx1} and \tcode{cx2} can be interchanged with identical effects in any of the expressions defined in these type requirements. \enternote Returning \tcode{false} does not necessarily imply that the effects are not identical. \exitnote\ \tcode{operator==} shall be reflexive, symmetric, and transitive, and shall not exit via an exception.  \\ \rowsep
 
 \tcode{cx1 != cx2}  &
 \tcode{bool}  &
 Same as \tcode{!(cx1 == cx2)}.  \\ \rowsep
 
 \tcode{x1.context()}  &
-\tcode{execution_context\&}, or \tcode{E\&} where \tcode{E} is a type that satifisfies the \tcode{ExecutionContext}~(\ref{async.reqmts.executioncontext}) requirements.  &
+\tcode{execution_context\&}, or \tcode{E\&} where \tcode{E} is a type that satifisfies the \tcode{ExecutionContext} ~(\ref{async.reqmts.executioncontext}) requirements.  &
 Shall not exit via an exception. The comparison operators and member functions defined in these requirements shall not alter the reference returned by this function.  \\ \rowsep
 
 \tcode{x1.on_work_started()}  &
@@ -257,18 +257,18 @@ Shall not exit via an exception. The comparison operators and member functions d
 
 \tcode{x1.on_work_finished()}  &
   &
-Shall not exit via an exception.Precondition: A preceding call \tcode{x2.on_work_started()} where \tcode{x1 == x2}.  \\ \rowsep
+Shall not exit via an exception. \textit{Precondition:} A preceding call \tcode{x2.on_work_started()} where \tcode{x1 == x2}.  \\ \rowsep
 
 \tcode{x1.dispatch(std::move(f),a)}  &
   &
-\effects Creates an object \tcode{f1} initialized with \tcode{\textit{DECAY_COPY}(forward<Func>(f))} (\CppXref{thread.decaycopy}) in the current thread of execution . Calls \tcode{f1()} at most once. The executor may block forward progress of the caller until \tcode{f1()} finishes execution.Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote\br
+\effects Creates an object \tcode{f1} initialized with \tcode{\textit{DECAY_COPY}(forward<Func>(f))} (\CppXref{thread.decaycopy}) in the current thread of execution . Calls \tcode{f1()} at most once. The executor may block forward progress of the caller until \tcode{f1()} finishes execution. Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote\br
 \sync The invocation of \tcode{dispatch} synchronizes with (\CppXref{intro.multithread}) the invocation of \tcode{f1}.  \\ \rowsep
 
 \tcode{x1.post(std::move(f),a)}\br
 \tcode{x1.defer(std::move(f),a)}  &
   &
-\effects Creates an object \tcode{f1} initialized with \tcode{\textit{DECAY_COPY}(forward<Func>(f))} in the current thread of execution. Calls \tcode{f1()} at most once. The executor shall not block forward progress of the caller pending completion of \tcode{f1()}.Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote\br
-\sync The invocation of \tcode{post} or \tcode{defer} synchronizes with (\CppXref{intro.multithread}) the invocation of \tcode{f1}.\enternote Although the requirements placed on \tcode{defer} are identical to \tcode{post}, the use of \tcode{post} conveys a preference that the caller does notblock the first step of f1's progress, whereas \tcode{defer} conveys a preference that the caller doesblock the first step of f1. One use of \tcode{defer} is to convey the intention of the caller that f1is a continuation of the current call context. The executor may use this information to optimize or otherwise adjust the way in which \tcode{f1} is invoked. \exitnote  \\
+\effects Creates an object \tcode{f1} initialized with \tcode{\textit{DECAY_COPY}(forward<Func>(f))} in the current thread of execution. Calls \tcode{f1()} at most once. The executor shall not block forward progress of the caller pending completion of \tcode{f1()}. Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote\br
+\sync The invocation of \tcode{post} or \tcode{defer} synchronizes with (\CppXref{intro.multithread}) the invocation of \tcode{f1}. \enternote Although the requirements placed on \tcode{defer} are identical to \tcode{post}, the use of \tcode{post} conveys a preference that the caller does notblock the first step of \tcode{f1}'s progress, whereas \tcode{defer} conveys a preference that the caller does block the first step of \tcode{f1}. One use of \tcode{defer} is to convey the intention of the caller that \tcode{f1} is a continuation of the current call context. The executor may use this information to optimize or otherwise adjust the way in which \tcode{f1} is invoked. \exitnote  \\
 
 \end{libreqtab3}
 
