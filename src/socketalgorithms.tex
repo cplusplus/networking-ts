@@ -17,7 +17,7 @@ template<class Protocol, class InputIterator>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{connect(s, endpoints, [](auto, auto){ return true; }, ec)}.
+\returns \tcode{connect(s, endpoints, [](auto, auto)\{ return true; \}, ec)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -68,7 +68,7 @@ template<class Protocol, class InputIterator>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{connect(s, first, last, [](auto, auto){ return true; }, ec)}.
+\returns \tcode{connect(s, first, last, [](auto, auto)\{ return true; \}, ec)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -84,7 +84,7 @@ template<class Protocol, class InputIterator, class ConnectCondition>
 
 \begin{itemdescr}
 \pnum
-\effects Performs \tcode{ec.clear()}, then finds the first iterator \tcode{i} in the range [\tcode{first},\tcode{last}) for which:
+\effects Performs \tcode{ec.clear()}, then finds the first iterator \tcode{i} in the range \range{first}{last} for which:
 \begin{itemize}
 \item
 \tcode{c(ec, *i)} yields \tcode{true};
@@ -120,7 +120,7 @@ template<class Protocol, class EndpointSequence, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_connect(s, endpoints, [](auto, auto){ return true; }, forward<CompletionToken>(token))}.
+\returns \tcode{async_connect(s, endpoints, [](auto, auto)\{ return true; \}, forward<Completion\-Token>(token))}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -168,7 +168,7 @@ template<class Protocol, class InputIterator, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_connect(s, first, last, [](auto, auto){ return true; }, forward<CompletionToken>(token))}.
+\returns \tcode{async_connect(s, first, last, [](auto, auto)\{ return true; \}, forward<Completion\-Token>(token))}.
 \end{itemdescr}
 
 \begin{itemdecl}
