@@ -873,7 +873,7 @@ A type meeting the proto-allocator~(\ref{async.reqmts.proto.allocator}) requirem
 
 \tcode{X::get(t)}  &
 \tcode{X::type}  &
-Shall not exit via an exception.Equivalent to \tcode{X::get(t, ProtoAllocator())}.  \\ \rowsep
+Shall not exit via an exception. Equivalent to \tcode{X::get(t, ProtoAllocator())}.  \\ \rowsep
 
 \tcode{X::get(t, a)}  &
 \tcode{X::type}  &
@@ -1029,9 +1029,9 @@ void notify_fork(fork_event e);
 \effects For each service object \tcode{svc} in the set:
 \begin{itemize}
 \item
- If\tcode{e == fork_event::prepare}, performs \tcode{svc->notify_fork(e)} in reverse order of addition to the set.
+ If \tcode{e == fork_event::prepare}, performs \tcode{svc->notify_fork(e)} in reverse order of addition to the set.
 \item
- Otherwise, performs\tcode{svc->notify_fork(e)} in order of addition to the set.
+ Otherwise, performs \tcode{svc->notify_fork(e)} in order of addition to the set.
 \end{itemize}
 \end{itemdescr}
 
@@ -1304,7 +1304,7 @@ A type meeting Executor requirements~(\ref{async.reqmts.executor}).  &
 
 \tcode{X::get(t)}  &
 \tcode{X::type}  &
-Shall not exit via an exception.Equivalent to \tcode{X::get(t, Executor())}.  \\ \rowsep
+Shall not exit via an exception. Equivalent to \tcode{X::get(t, Executor())}.  \\ \rowsep
 
 \tcode{X::get(t, e)}  &
 \tcode{X::type}  &
@@ -2510,7 +2510,7 @@ bool operator==(const executor& a, const executor& b) noexcept;
 \item
 \tcode{true} if \tcode{e} and \tcode{f} are the same type and \tcode{e == f}, where \tcode{e} is the target of \tcode{a} and \tcode{f} is the target of \tcode{b};
 \item
- otherwise\tcode{false}.
+ otherwise \tcode{false}.
 \end{itemize}
 \end{itemdescr}
 
