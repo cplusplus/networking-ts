@@ -1369,7 +1369,7 @@ namespace ip {
 \tcode{address_v6} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
-\enternote The implementations of the functions \tcode{is_unspecified}, \tcode{is_loopback}, \tcode{is_multicast}, \tcode{is_link_local}, \tcode{is_site_local}, \tcode{is_v4_mapped}, \tcode{is_multicast_node_local}, \tcode{is_multicast_link_local}, \tcode{is_multicast_site_local}, \tcode{is_multicast_org_local} and \tcode{is_multicast_global} are determined by [RFC4291]. \exitnote
+\enternote The implementations of the functions \tcode{is_unspecified}, \tcode{is_loopback}, \tcode{is_multicast}, \tcode{is_link_local}, \tcode{is_site_local}, \tcode{is_v4_mapped}, \tcode{is_multicast_node_local}, \tcode{is_multicast_link_local}, \tcode{is_multi\-cast_site_local}, \tcode{is_multicast_org_local} and \tcode{is_multicast_global} are determined by [RFC4291]. \exitnote
 
 
 \rSec2[internet.address.v6.bytes]{Struct \tcode{ip::address_v6::bytes_type}}
@@ -2911,7 +2911,7 @@ constexpr size_t size() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{sizeof(sockaddr_in6)} if \tcode{protocol().family() == AF_INET6}, otherwise \tcode{sizeof(sockaddr_in)}.
+\returns \tcode{sizeof(sockaddr_in6)} if \tcode{protocol().family() == AF_INET6}, otherwise \tcode{sizeof(sock\-addr_in)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2920,7 +2920,7 @@ void resize(size_t s);
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{length_error} if the condition \tcode{protocol().family() == AF_INET6 \&\& s != sizeof(sockaddr_in6)} \tcode{||} \tcode{protocol().family() == AF_INET4 \&\& s != sizeof(sockaddr_in)} is \tcode{true}.
+\remarks \tcode{length_error} if the condition \tcode{protocol().family() == AF_INET6 \&\& s != sizeof(sock\-addr_in6)} \tcode{||} \tcode{protocol().family() == AF_INET4 \&\& s != sizeof(sockaddr_in)} is \tcode{true}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3631,7 +3631,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_resolve(host_name, service_name, resolver_base::flags(), forward<CompletionToken>(token))}.
+\returns \tcode{async_resolve(host_name, service_name, resolver_base::flags(), forward<Completion\-Token>(token))}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3715,7 +3715,7 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_resolve(protocol, host_name, service_name, resolver_base::flags(), forward<CompletionToken>(token))}.
+\returns \tcode{async_resolve(protocol, host_name, service_name, resolver_base::flags(), for\-ward<CompletionToken>(token))}.
 \end{itemdescr}
 
 \begin{itemdecl}
