@@ -37,10 +37,10 @@ inline namespace v1 {
   const const_buffer* buffer_sequence_begin(const const_buffer& b);
   const mutable_buffer* buffer_sequence_end(const mutable_buffer& b);
   const const_buffer* buffer_sequence_end(const const_buffer& b);
-  template <class C> auto buffer_sequence_begin(C& c) -> decltype(c.begin());
-  template <class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin());
-  template <class C> auto buffer_sequence_end(C& c) -> decltype(c.end());
-  template <class C> auto buffer_sequence_end(const C& c) -> decltype(c.end());
+  template<class C> auto buffer_sequence_begin(C& c) -> decltype(c.begin());
+  template<class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin());
+  template<class C> auto buffer_sequence_end(C& c) -> decltype(c.end());
+  template<class C> auto buffer_sequence_end(const C& c) -> decltype(c.end());
 
   // buffer size:
 
@@ -771,8 +771,8 @@ const const_buffer* buffer_sequence_end(const const_buffer& b);
 \end{itemdescr}
 
 \begin{itemdecl}
-template <class C> auto buffer_sequence_begin(C& c) -> decltype(c.begin());
-template <class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin());
+template<class C> auto buffer_sequence_begin(C& c) -> decltype(c.begin());
+template<class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin());
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -781,8 +781,8 @@ template <class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin())
 \end{itemdescr}
 
 \begin{itemdecl}
-template <class C> auto buffer_sequence_end(C& c) -> decltype(c.end());
-template <class C> auto buffer_sequence_end(const C& c) -> decltype(c.end());
+template<class C> auto buffer_sequence_end(C& c) -> decltype(c.end());
+template<class C> auto buffer_sequence_end(const C& c) -> decltype(c.end());
 \end{itemdecl}
 
 \begin{itemdescr}
