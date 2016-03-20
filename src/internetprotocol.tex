@@ -403,7 +403,7 @@ private:
 \end{codeblock}
 
 \pnum
-Let L and N identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
+Let \placeholder{L} and \placeholder{N} identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
 
 \begin{itemdecl}
 explicit @\placeholder{C}@(const address& multicast_group) noexcept;
@@ -411,7 +411,7 @@ explicit @\placeholder{C}@(const address& multicast_group) noexcept;
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{multicast_group.is_v6()} is \tcode{true}, calls C\tcode{(multicast_group.to_v6())}; otherwise, calls C\tcode{(multicast_group.to_v4())}.
+\effects If \tcode{multicast_group.is_v6()} is \tcode{true}, calls \placeholder{C}\tcode{(multicast_group.to_v6())}; otherwise, calls \placeholder{C}\tcode{(multicast_group.to_v4())}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -440,7 +440,7 @@ template<class Protocol> int level(const Protocol& p) const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{L}.
+\returns \placeholder{L}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -449,7 +449,7 @@ template<class Protocol> int name(const Protocol& p) const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{N}.
+\returns \placeholder{N}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4102,17 +4102,17 @@ constexpr bool operator!=(const udp& a, const udp& b) noexcept;
 \rSec1[internet.socket.opt]{Internet socket options}
 
 \pnum
-In Table~\ref{tab:internet.socket.opt.requirements}, let C denote a socket option class; let L identify the POSIX macro to be passed as the level argument to POSIX setsockopt and getsockopt; let N identify the POSIX macro to be passed as the option_name argument to POSIX setsockopt and getsockopt; let T identify the type of the value whose address will be passed as the option_value argument to POSIX setsockopt and getsockopt; let \tcode{p} denote a (possibly const) value of a type meeting the protocol~(\ref{socket.reqmts.protocol}) requirements, as passed to the socket option's \tcode{level} and \tcode{name} member functions; and let F be the value of \tcode{p.family()}.
+In Table~\ref{tab:internet.socket.opt.requirements}, let \placeholder{C} denote a socket option class; let \placeholder{L} identify the POSIX macro to be passed as the level argument to POSIX setsockopt and getsockopt; let \placeholder{N} identify the POSIX macro to be passed as the option_name argument to POSIX setsockopt and getsockopt; let \placeholder{T} identify the type of the value whose address will be passed as the option_value argument to POSIX setsockopt and getsockopt; let \tcode{p} denote a (possibly const) value of a type meeting the protocol~(\ref{socket.reqmts.protocol}) requirements, as passed to the socket option's \tcode{level} and \tcode{name} member functions; and let F be the value of \tcode{p.family()}.
 
 \begin{LongTable}
 {Internet socket options}
 {tab:internet.socket.opt.requirements}
 {x{.15\hsize}x{.18\hsize}x{.17\hsize}x{.17\hsize}x{.21\hsize}}
 \\ \topline
-\lhdr{C}  &
-\chdr{L}  &
-\chdr{N}  &
-\chdr{T}  &
+\lhdr{\placeholder{C}}  &
+\chdr{\placeholder{L}}  &
+\chdr{\placeholder{N}}  &
+\chdr{\placeholder{T}}  &
 \rhdr{Requirements,}  \\
   &
   &
@@ -4122,10 +4122,10 @@ In Table~\ref{tab:internet.socket.opt.requirements}, let C denote a socket optio
 \endfirsthead
 \continuedcaption\\
 \hline
-\lhdr{C}  &
-\chdr{L}  &
-\chdr{N}  &
-\chdr{T}  &
+\lhdr{\placeholder{C}}  &
+\chdr{\placeholder{L}}  &
+\chdr{\placeholder{N}}  &
+\chdr{\placeholder{T}}  &
 \rhdr{Requirements,}  \\
   &
   &
