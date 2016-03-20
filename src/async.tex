@@ -434,7 +434,7 @@ where X is replaced with the name of the associator class template. \enternote T
 \rSec2[async.reqmts.async]{Requirements on asynchronous operations}
 
 \pnum
-This section uses the names \tcode{Alloc1}, \tcode{Alloc2}, \tcode{alloc1}, \tcode{alloc2}, \tcode{Args}, \tcode{CompletionHandler}, \tcode{completion_handler}, \tcode{Executor1}, \tcode{Executor2}, \tcode{ex1}, \tcode{ex2}, \tcode{f}, i, N, \tcode{Signature}, \tcode{token}, Ti, ti, \tcode{work1}, and \tcode{work2} as placeholders for specifying the requirements below.
+This section uses the names \tcode{Alloc1}, \tcode{Alloc2}, \tcode{alloc1}, \tcode{alloc2}, \tcode{Args}, \tcode{CompletionHandler}, \tcode{completion_handler}, \tcode{Executor1}, \tcode{Executor2}, \tcode{ex1}, \tcode{ex2}, \tcode{f}, \placeholder{i}, \placeholder{N}, \tcode{Signature}, \tcode{token}, \tcode{T}$_i$, \tcode{t}$_i$, \tcode{work1}, and \tcode{work2} as placeholders for specifying the requirements below.
 
 
 \rSec3[async.reqmts.async.concepts]{General asynchronous operation concepts}
@@ -670,10 +670,10 @@ Prior to completion handler execution, deallocate any memory allocated using the
 \rSec3[async.reqmts.async.completion]{Execution of completion handler on completion of asynchronous operation}
 
 \pnum
-Let \tcode{Args...} be the argument types of the completion signature \tcode{Signature} and let N be \tcode{sizeof...(Args)}. Let i be in the range [\tcode{0},N). Let Ti be the ith type in \tcode{Args...} and let ti be the ith completion handler argument associated with Ti.
+Let \tcode{Args...} be the argument types of the completion signature \tcode{Signature} and let \placeholder{N} be \tcode{sizeof...(Args)}. Let \placeholder{i} be in the range \range{0}{\placeholder{N}}. Let \tcode{T}$_i$ be the $i^\text{th}$ type in \tcode{Args...} and let \tcode{t}$_i$ be the $i^\text{th}$ completion handler argument associated with \tcode{T}$_i$.
 
 \pnum
-Let \tcode{f} be a function object, callable as \tcode{f()}, that invokes \tcode{completion_handler} as if by \tcode{completion_handler(forward<T0>(t0), ..., forward<TN-1>(tN-1))}.
+Let \tcode{f} be a function object, callable as \tcode{f()}, that invokes \tcode{completion_handler} as if by \tcode{completion_handler(forward<T$_0$>(t$_0$), ..., forward<T$_N$-1>(t$_N$-1))}.
 
 \pnum
 If an asynchonous operation completes immediately (that is, within the thread of execution calling the initiating function, and before the initiating function returns), the completion handler shall be submitted for execution as if by performing \tcode{ex2.post(std::move(f), alloc2)}. Otherwise, the completion handler shall be submitted for execution as if by performing \tcode{ex2.dispatch(std::move(f), alloc2)}.
@@ -3301,7 +3301,7 @@ template <class F> @\unspec@ operator()(F&& f) const;
 
 \begin{itemdescr}
 \pnum
-Let \tcode{T} be a completion token type. Let \tcode{H} be a completion handler type and let \tcode{h} be an object of type \tcode{H}. Let \tcode{FD} be the type \tcode{decay_t<F>} and let \tcode{fd} be an lvalue of type \tcode{FD} constructed with \tcode{forward<F>(f)}. Let \tcode{R(Args...)} be the completion signature of an asynchronous operation using \tcode{H} and let \tcode{N} be \tcode{sizeof...(Args)}. Let \tcode{i} be in the range \range{0}{N} and let \tcode{Ai} be the ith type in \tcode{Args}. Let \tcode{ai} be the argument associated with \tcode{Ai}.
+Let \tcode{T} be a completion token type. Let \tcode{H} be a completion handler type and let \tcode{h} be an object of type \tcode{H}. Let \tcode{FD} be the type \tcode{decay_t<F>} and let \tcode{fd} be an lvalue of type \tcode{FD} constructed with \tcode{forward<F>(f)}. Let \tcode{R(Args...)} be the completion signature of an asynchronous operation using \tcode{H} and let \placeholder{N} be \tcode{sizeof...(Args)}. Let \placeholder{i} be in the range \range{0}{\placeholder{N}} and let \tcode{A$_i$} be the $i^\text{th}$ type in \tcode{Args}. Let \tcode{a$_i$} be the argument associated with \tcode{A$_i$}.
 
 \pnum
 \returns A completion token \tcode{t} of type \tcode{T}.
@@ -3310,7 +3310,7 @@ Let \tcode{T} be a completion token type. Let \tcode{H} be a completion handler 
 \remarks The return type \tcode{T} satisfies the \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}) requirements.
 
 \pnum
-The object \tcode{h} of type \tcode{H} is an asynchronous provider with an associated shared state (\CppXref{futures.state}). The effect of \tcode{h(a0, ..., aN-1)} is to atomically store the result of \tcode{\textit{INVOKE}(fd, forward<A0>(a0), ..., forward<AN-1>(aN-1))} (\CppXref{func.require}) in the shared state and make the shared state ready. If \tcode{fd} exits via an exception then that exception is atomically stored in the shared state and the shared state is made ready.
+The object \tcode{h} of type \tcode{H} is an asynchronous provider with an associated shared state (\CppXref{futures.state}). The effect of \tcode{h(a$_0$, ..., a$_{N-1}$)} is to atomically store the result of \tcode{\textit{INVOKE}(fd, forward<A$_0$>(a$_0$), ..., forward<A$_{N-1}$>(a$_{N-1}$))} (\CppXref{func.require}) in the shared state and make the shared state ready. If \tcode{fd} exits via an exception then that exception is atomically stored in the shared state and the shared state is made ready.
 
 \pnum
 The implementation provides a partial specialization \tcode{template <class Result, class... Args> async_result<T, Result(Args...)>} such that:
@@ -3363,7 +3363,7 @@ For any executor type \tcode{E}, the associated object for the associator \tcode
 When an object \tcode{r1} of type \tcode{R} is constructed from \tcode{t1}, the expression \tcode{r1.get()} returns a future with the same shared state as \tcode{t1}.
 
 \pnum
-The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are defined in Table~\ref{tab:async.use.future.result.requirements}. After establishing these effects, \tcode{F::operator()} makes the shared state ready. In this table, N is the value of \tcode{sizeof...(Args)}; let i be in the range \range{0}{N} and let Ti be the ith type in \tcode{Args}; let Ui be \tcode{decay_t<}Ti\tcode{>} for each type Ti in \tcode{Args}; let Ai be the deduced type of the ith argument to \tcode{F::operator()}; and let ai be the ith argument to \tcode{F::operator()}.
+The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are defined in Table~\ref{tab:async.use.future.result.requirements}. After establishing these effects, \tcode{F::operator()} makes the shared state ready. In this table, \placeholder{N} is the value of \tcode{sizeof...(Args)}; let \placeholder{i} be in the range \range{0}{\placeholder{N}} and let \tcode{T}$_i$ be the $i^\text{th}$ type in \tcode{Args}; let \tcode{U}$_i$ be \tcode{decay_t<T}$_i$\tcode{>} for each type \tcode{T}$_i$ in \tcode{Args}; let \tcode{A}$_i$ be the deduced type of the $i^\text{th}$ argument to \tcode{F::operator()}; and let \tcode{a}$_i$ be the $i^\text{th}$ argument to \tcode{F::operator()}.
 
 \begin{LongTable}
 {\tcode{async_result<use_future_t<ProtoAllocator>, Result(Args...)>} semantics}
@@ -3371,14 +3371,14 @@ The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are 
 {cllp{3in}}
 \\ \topline
 \lhdr{N}  &
-\chdr{U0}  &
+\chdr{U$_0$}  &
 \chdr{\tcode{R::return_type}}  &
 \rhdr{\tcode{F::operator()} effects} \\ \capsep
 \endfirsthead
 \continuedcaption\\
 \hline
 \lhdr{N}  &
-\chdr{U0}  &
+\chdr{U$_0$}  &
 \chdr{\tcode{R::return_type}}  &
 \rhdr{\tcode{F::operator()} effects} \\ \capsep
 \endhead
@@ -3391,47 +3391,47 @@ The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are 
  1  &
 \tcode{error_code}  &
 \tcode{future<void>}  &
-If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by \tcode{make_exception_ptr(system_error(a0))} in the shared state.  \\ \rowsep
+If a$_0$ evaluates to \tcode{true}, atomically stores the exception pointer produced by \tcode{make_exception_ptr(system_error(a$_0$))} in the shared state.  \\ \rowsep
 
  1  &
 \tcode{exception_ptr}  &
 \tcode{future<void>}  &
-If a0 is non-null, atomically stores the exception pointer a0 in the shared state.  \\ \rowsep
+If a$_0$ is non-null, atomically stores the exception pointer a$_0$ in the shared state.  \\ \rowsep
 
  1  &
  all other types  &
-\tcode{future<U0>}  &
-Atomically stores \tcode{forward<A0>(a0)} in the shared state.  \\ \rowsep
+\tcode{future<U$_0$>}  &
+Atomically stores \tcode{forward<A$_0$>(a$_0$)} in the shared state.  \\ \rowsep
 
  2  &
 \tcode{error_code}  &
-\tcode{future<U1>}  &
-If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by \tcode{make_exception_ptr(system_error(a0))} in the shared state; otherwise, atomically stores \tcode{forward<A1>(a1)} in the shared state.  \\ \rowsep
+\tcode{future<U$_1$>}  &
+If a$_0$ evaluates to \tcode{true}, atomically stores the exception pointer produced by \tcode{make_exception_ptr(system_error(a$_0$))} in the shared state; otherwise, atomically stores \tcode{forward<A$_1$>(a$_1$)} in the shared state.  \\ \rowsep
 
  2  &
 \tcode{exception_ptr}  &
-\tcode{future<U1>}  &
-If a0 is non-null, atomically stores the exception pointer in the shared state; otherwise, atomically stores \tcode{forward<A1>(a1)} in the shared state.  \\ \rowsep
+\tcode{future<U$_1$>}  &
+If a$_0$ is non-null, atomically stores the exception pointer in the shared state; otherwise, atomically stores \tcode{forward<A$_1$>(a$_1$)} in the shared state.  \\ \rowsep
 
  2  &
  all other types  &
-\tcode{future<tuple<U0,U1>>}  &
-Atomically stores \tcode{forward_as_tuple(forward<A0>(a0), forward<A1>(a1))} in the shared state.  \\ \rowsep
+\tcode{future<tuple<U$_0$, U$_1$>>}  &
+Atomically stores \tcode{forward_as_tuple(forward<A$_0$>(a$_0$), forward<A$_1$>(a$_1$))} in the shared state.  \\ \rowsep
 
  >2  &
 \tcode{error_code}  &
-\tcode{future<tuple<U1,...,UN-1>>}  &
-If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by \tcode{make_exception_ptr(system_error(a0))} in the shared state; otherwise, atomically stores \tcode{forward_as_tuple(forward<A1>(a1), ..., forward<AN-1>(aN-1))} in the shared state.  \\ \rowsep
+\tcode{future<tuple<U1,...,U$_{N-1}$>>}  &
+If a0 evaluates to \tcode{true}, atomically stores the exception pointer produced by \tcode{make_exception_ptr(system_error(a0))} in the shared state; otherwise, atomically stores \tcode{forward_as_tuple(forward<A1>(a1), ..., forward<A$_{N-1}$>(a$_{N-1}$))} in the shared state.  \\ \rowsep
 
  >2  &
 \tcode{exception_ptr}  &
-\tcode{future<tuple<U1,...,UN-1>>}  &
-If a0 is non-null, atomically stores the exception pointer in the shared state; otherwise, atomically stores \tcode{forward_as_tuple(forward<A1>(a1), ..., forward<AN-1>(aN-1))} in the shared state.  \\ \rowsep
+\tcode{future<tuple<U1,...,U$_{N-1}$>>}  &
+If a0 is non-null, atomically stores the exception pointer in the shared state; otherwise, atomically stores \tcode{forward_as_tuple(forward<A1>(a1), ..., forward<A$_{N-1}$>(a$_{N-1}$))} in the shared state.  \\ \rowsep
 
  >2  &
  all other types  &
-\tcode{future<tuple<U0,...,UN-1>>}  &
-Atomically stores \tcode{forward_as_tuple(forward<A0>(a0), ..., forward<AN-1>(aN-1))} in the shared state.  \\
+\tcode{future<tuple<U0,...,U$_{N-1}$>>}  &
+Atomically stores \tcode{forward_as_tuple(forward<A0>(a0), ..., forward<A$_{N-1}$>(a$_{N-1}$))} in the shared state.  \\
 
 \end{LongTable}
 
