@@ -106,6 +106,7 @@
 \newcommand{\term}[1]{\textit{#1}\xspace}
 \newcommand{\grammarterm}[1]{\textit{#1}\xspace}
 \newcommand{\placeholder}[1]{\textit{#1}}
+\newcommand{\placeholdernc}[1]{\textit{#1\nocorr}}
 
 %%--------------------------------------------------
 %% allow line break if needed for justification
@@ -115,9 +116,7 @@
 
 %%--------------------------------------------------
 %% Macros for funky text
-\newcommand{\Rplus}{\protect\hspace{-.1em}\protect\raisebox{.35ex}{\smaller{\smaller\textbf{+}}}}
-% \newcommand{\Rplus}{+}
-\newcommand{\Cpp}{\mbox{C\Rplus\Rplus}\xspace}
+\newcommand{\Cpp}{\texorpdfstring{C\kern-0.05em\protect\raisebox{.35ex}{\textsmaller[2]{+\kern-0.05em+}}}{C++}\xspace}
 \newcommand{\CppIII}{\Cpp 2003\xspace}
 \newcommand{\CppXI}{\Cpp 2011\xspace}
 \newcommand{\CppXIV}{\Cpp 2014\xspace}
@@ -504,3 +503,7 @@
 \newcommand{\definition}[2]{%
 \subsection[#1]{\hfill[#2]}\vspace{-.3\onelineskip}\label{#2}\textbf{#1}\\%
 }
+\newcommand{\definitionx}[2]{%
+\subsubsection[#1]{\hfill[#2]}\vspace{-.3\onelineskip}\label{#2}\textbf{#1}\\%
+}
+\newcommand{\defncontext}[1]{\textlangle#1\textrangle}
