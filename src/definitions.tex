@@ -1,29 +1,24 @@
 %!TEX root = ts.tex
 
-\rSec0[defs]{Definitions}
+\rSec0[defs]{Terms and definitions}
 
+\setcounter{section}{1}
+\setcounter{tocdepth}{0}
 
-\rSec1[defs.host.byte.order]{host byte order}
+\definition{host byte order}{defs.host.byte.order}
+see section 3.194 of POSIX Base Definitions, Host Byte Order
 
-See section 3.194 of POSIX Base Definitions, Host Byte Order.
+\definition{network byte order}{defs.net.byte.order}
+see section 3.238 of POSIX Base Definitions, Network Byte Order
 
-\rSec1[defs.net.byte.order]{network byte order}
+\definition{synchronous operation}{defs.sync.op}
+an operation where control is not returned until the operation completes
 
-See section 3.238 of POSIX Base Definitions, Network Byte Order.
+\definition{asynchronous operation}{defs.async.op}
+an operation where control is returned immediately without waiting for the operation to complete
+\enternote Multiple asynchronous operations may be executed concurrently. \exitnote
 
-\rSec1[defs.sync.op]{synchronous operation}
+\definition{orderly shutdown}{defs.orderly.shutdown}
+the procedure for shutting down a stream after all work in progress has been completed, without loss of data
 
-A synchronous operation is one where control is not returned until the
-operation completes.
-
-\rSec1[defs.async.op]{asynchronous operation}
-
-An asynchronous operation is one where control is returned immediately
-without waiting for the operation to complete. Multiple asynchronous
-operations may be executed concurrently.
-
-\rSec1[defs.orderly.shutdown]{orderly shutdown}
-
-The procedure for shutting down a stream after all work in progress has
-been completed, without loss of data.
-
+\setcounter{tocdepth}{1}
