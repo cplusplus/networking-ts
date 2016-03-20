@@ -129,17 +129,17 @@ inline namespace v1 {
 
   template<class T, class Allocator>
     dynamic_vector_buffer<T, Allocator>
-      dynamic_buffer(vector<T, Allocator>& vec) noexcept;
+    dynamic_buffer(vector<T, Allocator>& vec) noexcept;
   template<class T, class Allocator>
     dynamic_vector_buffer<T, Allocator>
-      dynamic_buffer(vector<T, Allocator>& vec, size_t n) noexcept;
+    dynamic_buffer(vector<T, Allocator>& vec, size_t n) noexcept;
 
   template<class CharT, class Traits, class Allocator>
     dynamic_string_buffer<CharT, Traits, Allocator>
-      dynamic_buffer(basic_string<CharT, Traits, Allocator>& str) noexcept;
+    dynamic_buffer(basic_string<CharT, Traits, Allocator>& str) noexcept;
   template<class CharT, class Traits, class Allocator>
     dynamic_string_buffer<CharT, Traits, Allocator>
-      dynamic_buffer(basic_string<CharT, Traits, Allocator>& str, size_t n) noexcept;
+    dynamic_buffer(basic_string<CharT, Traits, Allocator>& str, size_t n) noexcept;
 
   class transfer_all;
   class transfer_at_least;
@@ -1342,7 +1342,7 @@ size_ -= m;
 \begin{itemdecl}
 template<class T, class Allocator>
   dynamic_vector_buffer<T, Allocator>
-    dynamic_buffer(vector<T, Allocator>& vec) noexcept;
+  dynamic_buffer(vector<T, Allocator>& vec) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1353,7 +1353,7 @@ template<class T, class Allocator>
 \begin{itemdecl}
 template<class T, class Allocator>
   dynamic_vector_buffer<T, Allocator>
-    dynamic_buffer(vector<T, Allocator>& vec, size_t n) noexcept;
+  dynamic_buffer(vector<T, Allocator>& vec, size_t n) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1364,7 +1364,7 @@ template<class T, class Allocator>
 \begin{itemdecl}
 template<class CharT, class Traits, class Allocator>
   dynamic_string_buffer<CharT, Traits, Allocator>
-    dynamic_buffer(basic_string<CharT, Traits, Allocator>& str) noexcept;
+  dynamic_buffer(basic_string<CharT, Traits, Allocator>& str) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1375,7 +1375,7 @@ template<class CharT, class Traits, class Allocator>
 \begin{itemdecl}
 template<class CharT, class Traits, class Allocator>
   dynamic_string_buffer<CharT, Traits, Allocator>
-    dynamic_buffer(basic_string<CharT, Traits, Allocator>& str, size_t n) noexcept;
+  dynamic_buffer(basic_string<CharT, Traits, Allocator>& str, size_t n) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
