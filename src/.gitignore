@@ -1,3 +1,6 @@
 *.aux
+*.idx
+*.ilg
+*.ind
 ts.*
 !ts.tex
