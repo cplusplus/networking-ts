@@ -86,10 +86,10 @@ The class \tcode{io_context} satisfies the ExecutionContext type requirements~(\
 unsigned integral type of at least 32 bits.
 
 \pnum
-The \tcode{io_context} member functions \tcode{run}, \tcode{run_for}, \tcode{run_until}, \tcode{run_one}, \tcode{run_one_for}, \tcode{run_one_until}, \tcode{poll}, and \tcode{poll_one} are collectively referred to as the run functions. The run functions must be called for the \tcode{io_context} to perform asynchronous operations~(\ref{defs.async.op}) on behalf of a \Cpp program. Notification that an asynchronous operation has completed is delivered by execution of the associated completion handler function object, as determined by the requirements for asynchronous operations~(\ref{async.reqmts.async}).
+The \tcode{io_context} member functions \tcode{run}, \tcode{run_for}, \tcode{run_until}, \tcode{run_one}, \tcode{run_one_for}, \tcode{run_one_until}, \tcode{poll}, and \tcode{poll_one} are collectively referred to as the \defn{run functions}. The run functions must be called for the \tcode{io_context} to perform asynchronous operations~(\ref{defs.async.op}) on behalf of a \Cpp program. Notification that an asynchronous operation has completed is delivered by execution of the associated completion handler function object, as determined by the requirements for asynchronous operations~(\ref{async.reqmts.async}).
 
 \pnum
-For an object of type \tcode{io_context}, outstanding work is defined as the sum of:
+For an object of type \tcode{io_context}, \defn{outstanding work} is defined as the sum of:
 
 \begin{itemize}
 \item

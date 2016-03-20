@@ -298,7 +298,7 @@ inline namespace v1 {
 \rSec2[buffer.reqmts.mutablebuffersequence]{Mutable buffer sequence requirements}
 
 \pnum
-A mutable buffer sequence represents a set of memory regions that may be used to receive the output of an operation, such as the \tcode{receive} operation of a socket.
+A \defn{mutable buffer sequence} represents a set of memory regions that may be used to receive the output of an operation, such as the \tcode{receive} operation of a socket.
 
 \pnum
 A type \tcode{X} meets the \tcode{MutableBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.mutablebuffersequence.requirements}.
@@ -359,7 +359,7 @@ equal(
 \rSec2[buffer.reqmts.constbuffersequence]{Constant buffer sequence requirements}
 
 \pnum
-A constant buffer sequence represents a set of memory regions that may be used as input to an operation, such as the \tcode{send} operation of a socket.
+A \defn{constant buffer sequence} represents a set of memory regions that may be used as input to an operation, such as the \tcode{send} operation of a socket.
 
 \pnum
 A type \tcode{X} meets the \tcode{ConstBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements}.
@@ -422,7 +422,7 @@ equal(
 \rSec2[buffer.reqmts.dynamicbuffer]{Dynamic buffer requirements}
 
 \pnum
-A dynamic buffer encapsulates memory storage that may be automatically resized as required, where the memory is divided into two regions: readable bytes followed by writable bytes. These memory regions are internal to the dynamic buffer, but direct access to the elements is provided to permit them to be efficiently used with I/O operations. \enternote Such as the \tcode{send} or \tcode{receive} operations of a socket. The readable bytes would be used as the constant buffer sequence for \tcode{send}, and the writable bytes used as the mutable buffer sequence for \tcode{receive}. \exitnote Data written to the writable bytes of a dynamic buffer object is appended to the readable bytes of the same object.
+A \defn{dynamic buffer} encapsulates memory storage that may be automatically resized as required, where the memory is divided into two regions: readable bytes followed by writable bytes. These memory regions are internal to the dynamic buffer, but direct access to the elements is provided to permit them to be efficiently used with I/O operations. \enternote Such as the \tcode{send} or \tcode{receive} operations of a socket. The readable bytes would be used as the constant buffer sequence for \tcode{send}, and the writable bytes used as the mutable buffer sequence for \tcode{receive}. \exitnote Data written to the writable bytes of a dynamic buffer object is appended to the readable bytes of the same object.
 
 \pnum
 A type \tcode{X} meets the \tcode{DynamicBuffer} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}.
@@ -488,10 +488,10 @@ Removes \tcode{n} bytes from beginning of the readable bytes. If \tcode{n} is gr
 \rSec2[buffer.reqmts.read.write]{Requirements on read and write operations}
 
 \pnum
-A read operation is an operation that reads data into a mutable buffer sequence argument of a type meeting \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements. The mutable buffer sequence specifies memory where the data should be placed. A read operation shall always fill a buffer in the sequence completely before proceeding to the next.
+A \defn{read operation} is an operation that reads data into a mutable buffer sequence argument of a type meeting \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements. The mutable buffer sequence specifies memory where the data should be placed. A read operation shall always fill a buffer in the sequence completely before proceeding to the next.
 
 \pnum
-A write operation is an operation that writes data from a constant buffer sequence argument of a type meeting \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements. The constant buffer sequence specifies memory where the data to be written is located. A write operation shall always write a buffer in the sequence completely before proceeding to the next.
+A \defn{write operation} is an operation that writes data from a constant buffer sequence argument of a type meeting \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements. The constant buffer sequence specifies memory where the data to be written is located. A write operation shall always write a buffer in the sequence completely before proceeding to the next.
 
 \pnum
 If a read or write operation is also an asynchronous operation~(\ref{async.reqmts.async}), the operation shall maintain one or more copies of the buffer sequence until such time as the operation no longer requires access to the memory specified by the buffers in the sequence. The program shall ensure the memory remains valid until:
