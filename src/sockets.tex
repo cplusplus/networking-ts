@@ -590,7 +590,7 @@ private:
 \end{codeblock}
 
 \pnum
-Let L and N identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
+Let \placeholder{L} and \placeholder{N} identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
 
 \begin{itemdecl}
 @\placeholder{C}@() noexcept;
@@ -655,7 +655,7 @@ template<class Protocol> int level(const Protocol& p) const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{L}.
+\returns \placeholder{L}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -664,7 +664,7 @@ template<class Protocol> int name(const Protocol& p) const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{N}.
+\returns \placeholder{N}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -782,7 +782,7 @@ private:
 \end{codeblock}
 
 \pnum
-Let L and N identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
+Let \placeholder{L} and \placeholder{N} identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
 
 \begin{itemdecl}
 @\placeholder{C}@() noexcept;
@@ -829,7 +829,7 @@ template<class Protocol> int level(const Protocol& p) const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{L}.
+\returns \placeholder{L}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -838,7 +838,7 @@ template<class Protocol> int name(const Protocol& p) const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{N}.
+\returns \placeholder{N}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1118,25 +1118,25 @@ Wait until the socket has a pending error condition. For a given socket, when a 
 \rSec1[socket.opt]{Socket options}
 
 \pnum
-In the table below, let C denote a socket option class; let L identify the POSIX macro to be passed as the level argument to POSIX setsockopt and getsockopt; let N identify the POSIX macro to be passed as the option_name argument to POSIX setsockopt and getsockopt; and let T identify the type of the value whose address will be passed as the option_value argument to POSIX setsockopt and getsockopt.
+In the table below, let \placeholder{C} denote a socket option class; let \placeholder{L} identify the POSIX macro to be passed as the level argument to POSIX setsockopt and getsockopt; let \placeholder{N} identify the POSIX macro to be passed as the option_name argument to POSIX setsockopt and getsockopt; and let \placeholder{T} identify the type of the value whose address will be passed as the option_value argument to POSIX setsockopt and getsockopt.
 
 \begin{LongTable}
 {Socket options}
 {tab:socket.opt.requirements}
 {p{1in}lllp{2.5in}}
 \\ \topline
-\lhdr{C}  &
-\chdr{L}  &
-\chdr{N}  &
-\chdr{T}  &
+\lhdr{\placeholder{C}}  &
+\chdr{\placeholder{L}}  &
+\chdr{\placeholder{N}}  &
+\chdr{\placeholder{T}}  &
 \rhdr{Requirements, definition or notes}  \\ \capsep
 \endfirsthead
 \continuedcaption\\
 \hline
-\lhdr{C}  &
-\chdr{L}  &
-\chdr{N}  &
-\chdr{T}  &
+\lhdr{\placeholder{C}}  &
+\chdr{\placeholder{L}}  &
+\chdr{\placeholder{N}}  &
+\chdr{\placeholder{T}}  &
 \rhdr{Requirements, definition or notes}  \\ \capsep
 \endhead
 
