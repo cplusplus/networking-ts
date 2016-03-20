@@ -403,7 +403,7 @@ private:
 \end{codeblock}
 
 \pnum
-Let \placeholder{L} and \placeholder{N} identify the POSIX macros to be passed as the level and option_name arguments, respectively, to POSIX setsockopt and getsockopt.
+Let \placeholder{L} and \placeholder{N} identify the POSIX macros to be passed as the \tcode{level} and \tcode{option_name} arguments, respectively, to POSIX \tcode{setsockopt} and \tcode{getsockopt}.
 
 \begin{itemdecl}
 explicit @\placeholder{C}@(const address& multicast_group) noexcept;
@@ -1097,7 +1097,7 @@ template<class Allocator = allocator<char>>
 
 \begin{itemdescr}
 \pnum
-\returns If successful, the textual representation of the address, determined as if by POSIX inet_ntop when invoked with address family \tcode{AF_INET}. Otherwise \tcode{basic_string<char, char_traits<char>, Allocator>(a)}.
+\returns If successful, the textual representation of the address, determined as if by POSIX \tcode{inet_ntop} when invoked with address family \tcode{AF_INET}. Otherwise \tcode{basic_string<char, char_traits<char>, Allocator>(a)}.
 \end{itemdescr}
 
 
@@ -1250,7 +1250,7 @@ address_v4 make_address_v4(string_view str, error_code& ec) noexcept;
 
 \begin{itemdescr}
 \pnum
-\effects Converts a textual representation of an address into a corresponding \tcode{address_v4} value, as if by POSIX inet_pton when invoked with address family \tcode{AF_INET}.
+\effects Converts a textual representation of an address into a corresponding \tcode{address_v4} value, as if by POSIX \tcode{inet_pton} when invoked with address family \tcode{AF_INET}.
 
 \pnum
 \returns If successful, an \tcode{address_v4} value corresponding to the string \tcode{str}. Otherwise \tcode{address_v4()}.
@@ -1599,7 +1599,7 @@ template<class Allocator = allocator<char>>
 
 \begin{itemdescr}
 \pnum
-\effects Converts an address into a textual representation. If \tcode{scope_id() == 0}, converts as if by POSIX inet_ntop when invoked with address family \tcode{AF_INET6}. If \tcode{scope_id() != 0}, the format is \tcode{address}\tcode{\%}\tcode{scope-id}, where \tcode{address} is the textual representation of the equivalent address having \tcode{scope_id() == 0}, and \tcode{scope-id} is an \impldef{textual representation of IPv6 scope identifiers} textual representation of the scope identifier.
+\effects Converts an address into a textual representation. If \tcode{scope_id() == 0}, converts as if by POSIX \tcode{inet_ntop} when invoked with address family \tcode{AF_INET6}. If \tcode{scope_id() != 0}, the format is \tcode{address}\tcode{\%}\tcode{scope-id}, where \tcode{address} is the textual representation of the equivalent address having \tcode{scope_id() == 0}, and \tcode{scope-id} is an \impldef{textual representation of IPv6 scope identifiers} textual representation of the scope identifier.
 
 \pnum
 \returns If successful, the textual representation of the address. Otherwise \tcode{basic_string<char, char_traits<char>, Allocator>(a)}.
@@ -1735,7 +1735,7 @@ address_v6 make_address_v6(string_view str, error_code& ec) noexcept;
 
 \begin{itemdescr}
 \pnum
-\effects Converts a textual representation of an address into a corresponding \tcode{address_v6} value. The format is either \tcode{address} or \tcode{address}\tcode{\%}\tcode{scope-id}, where \tcode{address} is in the format specified by POSIX inet_pton when invoked with address family \tcode{AF_INET6}, and \tcode{scope-id} is an optional string specifying the scope identifier. All implementations accept as \tcode{scope-id} a textual representation of an unsigned decimal integer. It is \impldef{whether alternative IPv6 scope identifier representations are permitted} whether alternative scope identifier representations are permitted. If \tcode{scope-id} is not supplied, an \tcode{address_v6} object is returned such that \tcode{scope_id() == 0}.
+\effects Converts a textual representation of an address into a corresponding \tcode{address_v6} value. The format is either \tcode{address} or \tcode{address}\tcode{\%}\tcode{scope-id}, where \tcode{address} is in the format specified by POSIX \tcode{inet_pton} when invoked with address family \tcode{AF_INET6}, and \tcode{scope-id} is an optional string specifying the scope identifier. All implementations accept as \tcode{scope-id} a textual representation of an unsigned decimal integer. It is \impldef{whether alternative IPv6 scope identifier representations are permitted} whether alternative scope identifier representations are permitted. If \tcode{scope-id} is not supplied, an \tcode{address_v6} object is returned such that \tcode{scope_id() == 0}.
 
 \pnum
 \returns If successful, an \tcode{address_v6} value corresponding to the string \tcode{str}. Otherwise returns \tcode{address_v6()}.
@@ -3832,7 +3832,7 @@ template<class Allocator>
 
 \begin{itemdescr}
 \pnum
-\returns The standard host name for the current machine, determined as if by POSIX gethostname.
+\returns The standard host name for the current machine, determined as if by POSIX \tcode{gethostname}.
 
 \pnum
 \remarks In the last two overloads, ill-formed unless \tcode{allocator_traits<Allocator>::value_type} is \tcode{char}.
@@ -4102,7 +4102,7 @@ constexpr bool operator!=(const udp& a, const udp& b) noexcept;
 \rSec1[internet.socket.opt]{Internet socket options}
 
 \pnum
-In Table~\ref{tab:internet.socket.opt.requirements}, let \placeholder{C} denote a socket option class; let \placeholder{L} identify the POSIX macro to be passed as the level argument to POSIX setsockopt and getsockopt; let \placeholder{N} identify the POSIX macro to be passed as the option_name argument to POSIX setsockopt and getsockopt; let \placeholder{T} identify the type of the value whose address will be passed as the option_value argument to POSIX setsockopt and getsockopt; let \tcode{p} denote a (possibly const) value of a type meeting the protocol~(\ref{socket.reqmts.protocol}) requirements, as passed to the socket option's \tcode{level} and \tcode{name} member functions; and let F be the value of \tcode{p.family()}.
+In Table~\ref{tab:internet.socket.opt.requirements}, let \placeholder{C} denote a socket option class; let \placeholder{L} identify the POSIX macro to be passed as the \tcode{level} argument to POSIX \tcode{setsockopt} and getsockopt; let \placeholder{N} identify the POSIX macro to be passed as the \tcode{option_name} argument to POSIX \tcode{setsockopt} and \tcode{getsockopt}; let \placeholder{T} identify the type of the value whose address will be passed as the \tcode{option_value} argument to POSIX \tcode{setsockopt} and \tcode{getsockopt}; let \tcode{p} denote a (possibly const) value of a type meeting the protocol~(\ref{socket.reqmts.protocol}) requirements, as passed to the socket option's \tcode{level} and \tcode{name} member functions; and let F be the value of \tcode{p.family()}.
 
 \begin{LongTable}
 {Internet socket options}
