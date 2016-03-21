@@ -673,7 +673,7 @@ Prior to completion handler execution, deallocate any memory allocated using the
 Let \tcode{Args...} be the argument types of the completion signature \tcode{Signature} and let \placeholder{N} be \tcode{sizeof...(Args)}. Let \placeholder{i} be in the range \range{0}{\placeholder{N}}. Let \tcode{T}$_i$ be the $i^\text{th}$ type in \tcode{Args...} and let \tcode{t}$_i$ be the $i^\text{th}$ completion handler argument associated with \tcode{T}$_i$.
 
 \pnum
-Let \tcode{f} be a function object, callable as \tcode{f()}, that invokes \tcode{completion_handler} as if by \tcode{completion_handler(forward<T$_0$>(t$_0$), ..., forward<T$_N$-1>(t$_N$-1))}.
+Let \tcode{f} be a function object, callable as \tcode{f()}, that invokes \tcode{completion_handler} as if by \tcode{completion_handler(forward<T$_0$>(t$_0$), ..., forward<T$_{N-1}$>(t$_{N-1}$))}.
 
 \pnum
 If an asynchonous operation completes immediately (that is, within the thread of execution calling the initiating function, and before the initiating function returns), the completion handler shall be submitted for execution as if by performing \tcode{ex2.post(std::move(f), alloc2)}. Otherwise, the completion handler shall be submitted for execution as if by performing \tcode{ex2.dispatch(std::move(f), alloc2)}.
