@@ -259,13 +259,13 @@ Shall not exit via an exception. The comparison operators and member functions d
   &
 Shall not exit via an exception. \br\textit{Precondition:} A preceding call \tcode{x2.on_work_started()} where \tcode{x1 == x2}.  \\ \rowsep
 
-\tcode{x1.dispatch(std::move(f),a)}  &
+\tcode{x1.dispatch(\br\mbox{\ \ }std::move(f),~a)}  &
   &
 \effects Creates an object \tcode{f1} initialized with \tcode{\textit{DECAY_COPY}(forward<Func>(f))} (\CppXref{thread.decaycopy}) in the current thread of execution . Calls \tcode{f1()} at most once. The executor may block forward progress of the caller until \tcode{f1()} finishes execution. Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote \br
 \sync The invocation of \tcode{dispatch} synchronizes with (\CppXref{intro.multithread}) the invocation of \tcode{f1}.  \\ \rowsep
 
-\tcode{x1.post(std::move(f),a)}\br
-\tcode{x1.defer(std::move(f),a)}  &
+\tcode{x1.post(std::move(f), a)}\br
+\tcode{x1.defer(std::move(f), a)}  &
   &
 \effects Creates an object \tcode{f1} initialized with \tcode{\textit{DECAY_COPY}(forward<Func>(f))} in the current thread of execution. Calls \tcode{f1()} at most once. The executor shall not block forward progress of the caller pending completion of \tcode{f1()}. Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \enternote Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \exitnote\br
 \sync The invocation of \tcode{post} or \tcode{defer} synchronizes with (\CppXref{intro.multithread}) the invocation of \tcode{f1}. \enternote Although the requirements placed on \tcode{defer} are identical to \tcode{post}, the use of \tcode{post} conveys a preference that the caller does notblock the first step of \tcode{f1}'s progress, whereas \tcode{defer} conveys a preference that the caller does block the first step of \tcode{f1}. One use of \tcode{defer} is to convey the intention of the caller that \tcode{f1} is a continuation of the current call context. The executor may use this information to optimize or otherwise adjust the way in which \tcode{f1} is invoked. \exitnote  \\
@@ -621,7 +621,7 @@ Let \tcode{Executor1} be the type of the associated executor. Let \tcode{ex1} be
 \rSec3[async.reqmts.async.handler.exec]{Completion handler executor}
 
 \pnum
-A completion handler object of type \tcode{CompletionHandler} has an associated executor of type \tcode{Executor2} satisfying the Executor requirements~(\ref{async.reqmts.executor}). The type \tcode{Executor2} is \tcode{associated_executor_t<CompletionHandler, Executor1>}. Let \tcode{ex2} be a value of type \tcode{Executor2} obtained by performing \tcode{get_associated_executor(completion_handler, ex1)}.
+A completion handler object of type \tcode{CompletionHandler} has an associated executor of type \tcode{Executor2} satisfying the Executor requirements~(\ref{async.reqmts.executor}). The type \tcode{Executor2} is \tcode{associated_executor_t<Completion\-Handler, Executor1>}. Let \tcode{ex2} be a value of type \tcode{Executor2} obtained by performing \tcode{get_associated_executor(completion_handler, ex1)}.
 
 
 
@@ -810,7 +810,7 @@ explicit async_completion(CompletionToken& t);
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{CompletionToken} and \tcode{completion_handler_type} are the same type, binds \tcode{completion_handler} to \tcode{t}; otherwise, initializes \tcode{completion_handler} with the result of \tcode{forward<CompletionToken>(t)}. Initializes \tcode{result} with \tcode{completion_handler}.
+\effects If \tcode{CompletionToken} and \tcode{completion_handler_type} are the same type, binds \tcode{completion_handler} to \tcode{t}; otherwise, initializes \tcode{completion_handler} with the result of \tcode{std::forward<Com\-pletionToken>(t)}. Initializes \tcode{result} with \tcode{completion_handler}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -890,7 +890,8 @@ typedef @\seebelow@ type;
 
 \begin{itemdescr}
 \pnum
-\ctype If \tcode{T} has a nested type \tcode{allocator_type}, \tcode{typename T::allocator_type}. Otherwise \tcode{ProtoAllocator}.
+\ctype If \tcode{T} has a nested type \tcode{allocator_type},
+\tcode{typename T::allocator_type}. Otherwise \tcode{Proto\-Allocator}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -933,7 +934,8 @@ template<class T, class ProtoAllocator>
 \rSec1[async.exec.ctx]{Class \tcode{execution_context}}
 
 \pnum
-Class \tcode{execution_context} implements an extensible, type-safe, polymorphic set of services, indexed by service type.
+Class \tcode{execution_context} implements an extensible, type-safe,
+polymorphic set of services, indexed by service type.
 
 \begin{codeblock}
 namespace std {
@@ -941,8 +943,7 @@ namespace experimental {
 namespace net {
 inline namespace v1 {
 
-  class execution_context
-  {
+  class execution_context {
   public:
     class service;
 
@@ -1246,7 +1247,9 @@ Uses-executor construction with executor \tcode{Executor} refers to the construc
 
 \begin{itemize}
 \item
-if \tcode{uses_executor<T, Executor>::value} is \tcode{true} and \tcode{is_constructible<T, executor_arg_t, Executor, V1, V2, ..., VN>::value} is \tcode{true}, then \tcode{obj} is initialized as \tcode{obj(executor_arg, ex, v1, v2, ..., vN)};
+if \tcode{uses_executor<T, Executor>::value} is \tcode{true} and
+\tcode{is_constructible<T, executor_arg_t, Exe\-cutor, V1, V2, ..., VN>::value}
+is \tcode{true}, then \tcode{obj} is initialized as \tcode{obj(executor_arg, ex, v1, v2, ..., vN)};
 
 \item
 otherwise, \tcode{obj} is initialized as \tcode{obj(v1, v2, ..., vN)}.
@@ -1359,7 +1362,7 @@ template<class T, class Executor>
 \returns \tcode{associated_executor<T, Executor>::get(t, ex)}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Execu\-tor>::value} is \tcode{true}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1373,7 +1376,7 @@ template<class T, class ExecutionContext>
 \returns \tcode{get_associated_executor(t, ctx.get_executor())}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<Execution\-Context\&, execution_context\&>::value} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -1381,7 +1384,7 @@ template<class T, class ExecutionContext>
 \rSec1[async.exec.binder]{Class template \tcode{executor_binder}}
 
 \pnum
-\tcode{executor_binder<T, Executor>} binds an executor of type \tcode{Executor} satisfying Executor requirements~(\ref{async.reqmts.executor}) to an object or function of type \tcode{T}.
+The class \tcode{executor_binder<T, Executor>} binds an executor of type \tcode{Executor} satisfying Executor requirements~(\ref{async.reqmts.executor}) to an object or function of type \tcode{T}.
 
 \begin{codeblock}
 namespace std {
@@ -1390,8 +1393,7 @@ namespace net {
 inline namespace v1 {
 
   template<class T, class Executor>
-  class executor_binder
-  {
+  class executor_binder {
   public:
     // types:
 
@@ -1687,7 +1689,7 @@ template<class Executor, class T>
 \returns \tcode{executor_binder<decay_t<T>, Executor>(forward<T>(t), ex)}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Execu\-tor>::value} is \tcode{true}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1701,7 +1703,7 @@ template<class ExecutionContext, class CompletionToken>
 \returns \tcode{bind_executor(ctx.get_executor(), forward<T>(t))}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<Execution\-Context\&, execution_context\&>::value} is \tcode{true}.
 \end{itemdescr}
 
 
