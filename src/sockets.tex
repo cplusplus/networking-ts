@@ -263,15 +263,15 @@ In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}
 
 \tcode{a.data()}  &
 \tcode{const void*}  &
-Returns a pointer suitable for passing as the address argument to functions such as POSIX \tcode{connect}, or as the \tcode{dest_addr} argument to functions such as POSIX \tcode{sendto}. The implementation shall perform a \tcode{static_cast} on the pointer to convert it to \tcode{const sockaddr*}.  \\ \rowsep
+Returns a pointer suitable for passing as the \tcode{address} argument to functions such as POSIX \tcode{connect}, or as the \tcode{dest_addr} argument to functions such as POSIX \tcode{sendto}. The implementation shall perform a \tcode{static_cast} on the pointer to convert it to \tcode{const sockaddr*}.  \\ \rowsep
 
 \tcode{b.data()}  &
 \tcode{void*}  &
-Returns a pointer suitable for passing as the address argument to functions such as POSIX accept, getpeername, getsockname and recvfrom. The implementation shall perform a \tcode{static_cast} on the pointer to convert it to \tcode{sockaddr*}.  \\ \rowsep
+Returns a pointer suitable for passing as the \tcode{address} argument to functions such as POSIX \tcode{accept}, \tcode{getpeername}, \tcode{getsockname} and \tcode{recvfrom}. The implementation shall perform a \tcode{static_cast} on the pointer to convert it to \tcode{sockaddr*}.  \\ \rowsep
 
 \tcode{a.size()}  &
 \tcode{size_t}  &
-Returns a value suitable for passing as the address_len argument to functions such as POSIX \tcode{connect}, or as the \tcode{dest_len} argument to functions such as POSIX \tcode{sendto}, after appropriate integer conversion has been performed.  \\ \rowsep
+Returns a value suitable for passing as the \tcode{address_len} argument to functions such as POSIX \tcode{connect}, or as the \tcode{dest_len} argument to functions such as POSIX \tcode{sendto}, after appropriate integer conversion has been performed.  \\ \rowsep
 
 \tcode{b.resize(s)}  &
   &
