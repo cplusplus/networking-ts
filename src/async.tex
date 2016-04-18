@@ -1764,7 +1764,7 @@ explicit executor_work_guard(const executor_type& ex) noexcept;
 \effects Initializes \tcode{ex_} with \tcode{ex}, and then performs \tcode{ex_.on_work_started()}.
 
 \pnum
-\postconditions \tcode{ex == ex_} and \tcode{owns_ == true}.
+\postconditions \tcode{ex_ == ex} and \tcode{owns_ == true}.
 \end{itemdescr}
 
 \begin{itemdecl}
