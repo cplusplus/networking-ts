@@ -1085,15 +1085,15 @@ a constant, \tcode{max_listen_connections}, for use with the \tcode{basic_socket
 
 \tcode{wait_read}  &
   &
-Wait until the socket is ready-to-read. For a given socket, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_read} completes successfuly, a subsequent call to the socket's \tcode{receive} or \tcode{receive_from} functions may complete without blocking. Similarly, for a given acceptor, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_read} completes successfully, a subsequent call to the acceptor's \tcode{accept} function may complete without blocking.  \\ \rowsep
+Wait until the socket is ready-to-read. For a given socket, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_read} completes successfully, a subsequent call to the socket's \tcode{receive} or \tcode{receive_from} functions may complete without blocking. Similarly, for a given acceptor, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_read} completes successfully, a subsequent call to the acceptor's \tcode{accept} function may complete without blocking.  \\ \rowsep
 
 \tcode{wait_write}  &
   &
-Wait until the socket is ready-to-write. For a given socket, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_write} completes successfuly, a subsequent call to the socket's \tcode{send} or \tcode{send_to} functions may complete without blocking.  \\ \rowsep
+Wait until the socket is ready-to-write. For a given socket, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_write} completes successfully, a subsequent call to the socket's \tcode{send} or \tcode{send_to} functions may complete without blocking.  \\ \rowsep
 
 \tcode{wait_error}  &
   &
-Wait until the socket has a pending error condition. For a given socket, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_error} completes successfuly, a subsequent call to one of the socket's synchronous operations may complete without blocking. The nature of the pending error condition determines which.  \\ \rowsep
+Wait until the socket has a pending error condition. For a given socket, when a \tcode{wait} or \tcode{async_wait} operation using \tcode{wait_error} completes successfully, a subsequent call to one of the socket's synchronous operations may complete without blocking. The nature of the pending error condition determines which.  \\ \rowsep
 
 \tcode{message_peek}  &
 \tcode{MSG_PEEK}  &
