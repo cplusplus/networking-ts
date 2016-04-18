@@ -349,7 +349,7 @@ size_t cancel_one();
 \effects Causes the outstanding asynchronous wait operation that was initiated first, if any, to complete as soon as possible. The completion handler for the canceled operation is passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
 
 \pnum
-\returns \tcode{1} if an operation was cancelled, otherwise \tcode{0}.
+\returns \tcode{1} if an operation was canceled, otherwise \tcode{0}.
 
 \pnum
 \remarks Does not block (\CppXref{defns.block}) the calling thread pending completion of the canceled operation.
