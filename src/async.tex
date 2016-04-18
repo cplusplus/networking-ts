@@ -676,7 +676,7 @@ Let \tcode{Args...} be the argument types of the completion signature \tcode{Sig
 Let \tcode{f} be a function object, callable as \tcode{f()}, that invokes \tcode{completion_handler} as if by \tcode{completion_handler(forward<T$_0$>(t$_0$), ..., forward<T$_{N-1}$>(t$_{N-1}$))}.
 
 \pnum
-If an asynchonous operation completes immediately (that is, within the thread of execution calling the initiating function, and before the initiating function returns), the completion handler shall be submitted for execution as if by performing \tcode{ex2.post(std::move(f), alloc2)}. Otherwise, the completion handler shall be submitted for execution as if by performing \tcode{ex2.dispatch(std::move(f), alloc2)}.
+If an asynchronous operation completes immediately (that is, within the thread of execution calling the initiating function, and before the initiating function returns), the completion handler shall be submitted for execution as if by performing \tcode{ex2.post(std::move(f), alloc2)}. Otherwise, the completion handler shall be submitted for execution as if by performing \tcode{ex2.dispatch(std::move(f), alloc2)}.
 
 
 
