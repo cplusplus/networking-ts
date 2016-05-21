@@ -230,7 +230,7 @@ inline namespace v1 {
   {
   public:
     explicit transfer_at_least(size_t m);
-    size_t operator()(const error_code& ec, size_t s) const;
+    size_t operator()(const error_code& ec, size_t n) const;
   private:
     size_t minimum_; // \expos
   };
@@ -279,7 +279,7 @@ inline namespace v1 {
   {
   public:
     explicit transfer_exactly(size_t e);
-    size_t operator()(const error_code& ec, size_t s) const;
+    size_t operator()(const error_code& ec, size_t n) const;
   private:
     size_t exact_; // \expos
   };
