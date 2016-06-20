@@ -337,17 +337,17 @@ inline namespace v1 {
 
     bool running_in_this_thread() const noexcept;
 
-    io_context& context() noexcept;
+    io_context& context() const noexcept;
 
-    void on_work_started() noexcept;
-    void on_work_finished() noexcept;
+    void on_work_started() const noexcept;
+    void on_work_finished() const noexcept;
 
     template<class Func, class ProtoAllocator>
-      void dispatch(Func&& f, const ProtoAllocator& a);
+      void dispatch(Func&& f, const ProtoAllocator& a) const;
     template<class Func, class ProtoAllocator>
-      void post(Func&& f, const ProtoAllocator& a);
+      void post(Func&& f, const ProtoAllocator& a) const;
     template<class Func, class ProtoAllocator>
-      void defer(Func&& f, const ProtoAllocator& a);
+      void defer(Func&& f, const ProtoAllocator& a) const;
   };
 
   bool operator==(const io_context::executor_type& a,
@@ -429,7 +429,7 @@ bool running_in_this_thread() const noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-io_context& context() noexcept;
+io_context& context() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -438,7 +438,7 @@ io_context& context() noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-void on_work_started() noexcept;
+void on_work_started() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -447,7 +447,7 @@ void on_work_started() noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-void on_work_finished() noexcept;
+void on_work_finished() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -457,7 +457,7 @@ void on_work_finished() noexcept;
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void dispatch(Func&& f, const ProtoAllocator& a);
+  void dispatch(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -467,7 +467,7 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void post(Func&& f, const ProtoAllocator& a);
+  void post(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -477,7 +477,7 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void defer(Func&& f, const ProtoAllocator& a);
+  void defer(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
