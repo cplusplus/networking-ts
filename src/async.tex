@@ -1907,17 +1907,17 @@ inline namespace v1 {
 
     // executor operations:
 
-    system_context& context() noexcept;
+    system_context& context() const noexcept;
 
-    void on_work_started() noexcept {}
-    void on_work_finished() noexcept {}
+    void on_work_started() const noexcept {}
+    void on_work_finished() const noexcept {}
 
     template<class Func, class ProtoAllocator>
-      void dispatch(Func&& f, const ProtoAllocator& a);
+      void dispatch(Func&& f, const ProtoAllocator& a) const;
     template<class Func, class ProtoAllocator>
-      void post(Func&& f, const ProtoAllocator& a);
+      void post(Func&& f, const ProtoAllocator& a) const;
     template<class Func, class ProtoAllocator>
-      void defer(Func&& f, const ProtoAllocator& a);
+      void defer(Func&& f, const ProtoAllocator& a) const;
   };
 
   bool operator==(const system_executor&, const system_executor&) noexcept;
@@ -1939,7 +1939,7 @@ To satisfy the \tcode{Executor} requirements for the \tcode{post} and \tcode{def
 \rSec2[async.system.exec.ops]{\tcode{system_executor} operations}
 
 \begin{itemdecl}
-system_context& context() noexcept;
+system_context& context() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1949,7 +1949,7 @@ system_context& context() noexcept;
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void dispatch(Func&& f, const ProtoAllocator& a);
+  void dispatch(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1959,9 +1959,9 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void post(Func&& f, const ProtoAllocator& a);
+  void post(Func&& f, const ProtoAllocator& a) const;
 template<class Func, class ProtoAllocator>
-  void defer(Func&& f, const ProtoAllocator& a);
+  void defer(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
