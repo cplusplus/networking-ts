@@ -355,8 +355,6 @@ inline namespace v1 {
   bool operator!=(const io_context::executor_type& a,
                   const io_context::executor_type& b) noexcept;
 
-  template<> struct is_executor<io_context::executor_type> : true_type {};
-
 } // inline namespace v1
 } // namespace net
 } // namespace experimental
