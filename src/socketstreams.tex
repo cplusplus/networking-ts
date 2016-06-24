@@ -47,7 +47,7 @@ inline namespace v1 {
     basic_socket_streambuf* connect(const endpoint_type& e);
     template<class... Args> basic_socket_streambuf* connect(Args&&... );
 
-    basic_socket_streambuf<protocol_type>* close();
+    basic_socket_streambuf* close();
 
     basic_socket<protocol_type>& socket();
     error_code error() const;
@@ -174,7 +174,7 @@ basic_socket_streambuf& operator=(basic_socket_streambuf&& rhs);
 \rSec2[socket.streambuf.members]{\tcode{basic_socket_streambuf} members}
 
 \begin{itemdecl}
-basic_socket_streambuf<protocol_type>* connect(const endpoint_type& e);
+basic_socket_streambuf* connect(const endpoint_type& e);
 \end{itemdecl}
 
 \begin{itemdescr}
