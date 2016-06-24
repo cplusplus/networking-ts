@@ -214,7 +214,7 @@ No constructor, comparison operator, copy operation, move operation, swap operat
 Let \tcode{ctx} be the execution context returned by the executor's \tcode{context()} member function. An executor becomes invalid when the first call to \tcode{ctx.shutdown()} returns. The effect of calling \tcode{on_work_started}, \tcode{on_work_finished}, \tcode{dispatch}, \tcode{post}, or \tcode{defer} on an invalid executor is undefined. \enternote The copy constructor, comparison operators, and \tcode{context()} member function continue to remain valid until \tcode{ctx} is destroyed. \exitnote
 
 \pnum
-In Table~\ref{tab:async.reqmts.executor.requirements}, \tcode{x1} and \tcode{x2} denote values of type \tcode{X}, \tcode{cx1} and \tcode{cx2} denote (possibly const) values of type \tcode{X}, \tcode{mx1} denotes an xvalue of type \tcode{X}, \tcode{f} denotes a \tcode{MoveConstructible} (\CppXref{moveconstructible}) function object callable with zero arguments, \tcode{a} denotes a (possibly const) value of type \tcode{A} meeting the \tcode{Allocator} requirements (\CppXref{allocator.requirements}), and \tcode{u} denotes an identifier.
+In Table~\ref{tab:async.reqmts.executor.requirements}, \tcode{x1} and \tcode{x2} denote (possibly const) values of type \tcode{X}, \tcode{mx1} denotes an xvalue of type \tcode{X}, \tcode{f} denotes a \tcode{MoveConstructible} (\CppXref{moveconstructible}) function object callable with zero arguments, \tcode{a} denotes a (possibly const) value of type \tcode{A} meeting the \tcode{Allocator} requirements (\CppXref{allocator.requirements}), and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
 {Executor requirements}
@@ -231,21 +231,21 @@ In Table~\ref{tab:async.reqmts.executor.requirements}, \tcode{x1} and \tcode{x2}
 \rhdr{assertion/note pre/post-conditions} \\ \capsep
 \endhead
 
-\tcode{X u(cx1);}  &
+\tcode{X u(x1);}  &
   &
-Shall not exit via an exception.\br\textit{post:} \tcode{u == cx1} and \tcode{std::addressof(u.context()) == std::addressof(cx1.context()).}  \\ \rowsep
+Shall not exit via an exception.\br\textit{post:} \tcode{u == x1} and \tcode{std::addressof(u.context()) == std::addressof(x1.context()).}  \\ \rowsep
 
 \tcode{X u(mx1);}  &
   &
 Shall not exit via an exception.\br\textit{post:} \tcode{u} equals the prior value of \tcode{mx1} and \tcode{std::addressof(u.context())} equals the prior value of \tcode{std::addressof(mx1.context())}.  \\ \rowsep
 
-\tcode{cx1 == cx2}  &
+\tcode{x1 == x2}  &
 \tcode{bool}  &
-Returns \tcode{true} only if \tcode{cx1} and \tcode{cx2} can be interchanged with identical effects in any of the expressions defined in these type requirements. \enternote Returning \tcode{false} does not necessarily imply that the effects are not identical. \exitnote\br\tcode{operator==} shall be reflexive, symmetric, and transitive, and shall not exit via an exception.  \\ \rowsep
+Returns \tcode{true} only if \tcode{x1} and \tcode{x2} can be interchanged with identical effects in any of the expressions defined in these type requirements. \enternote Returning \tcode{false} does not necessarily imply that the effects are not identical. \exitnote\br\tcode{operator==} shall be reflexive, symmetric, and transitive, and shall not exit via an exception.  \\ \rowsep
 
-\tcode{cx1 != cx2}  &
+\tcode{x1 != x2}  &
 \tcode{bool}  &
-Same as \tcode{!(cx1 == cx2)}.  \\ \rowsep
+Same as \tcode{!(x1 == x2)}.  \\ \rowsep
 
 \tcode{x1.context()}  &
 \tcode{execution_context\&}, or \tcode{E\&} where \tcode{E} is a type that satisfies the \tcode{ExecutionContext} ~(\ref{async.reqmts.executioncontext}) requirements.  &
@@ -1907,17 +1907,17 @@ inline namespace v1 {
 
     // executor operations:
 
-    system_context& context() noexcept;
+    system_context& context() const noexcept;
 
-    void on_work_started() noexcept {}
-    void on_work_finished() noexcept {}
+    void on_work_started() const noexcept {}
+    void on_work_finished() const noexcept {}
 
     template<class Func, class ProtoAllocator>
-      void dispatch(Func&& f, const ProtoAllocator& a);
+      void dispatch(Func&& f, const ProtoAllocator& a) const;
     template<class Func, class ProtoAllocator>
-      void post(Func&& f, const ProtoAllocator& a);
+      void post(Func&& f, const ProtoAllocator& a) const;
     template<class Func, class ProtoAllocator>
-      void defer(Func&& f, const ProtoAllocator& a);
+      void defer(Func&& f, const ProtoAllocator& a) const;
   };
 
   bool operator==(const system_executor&, const system_executor&) noexcept;
@@ -1939,7 +1939,7 @@ To satisfy the \tcode{Executor} requirements for the \tcode{post} and \tcode{def
 \rSec2[async.system.exec.ops]{\tcode{system_executor} operations}
 
 \begin{itemdecl}
-system_context& context() noexcept;
+system_context& context() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1949,7 +1949,7 @@ system_context& context() noexcept;
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void dispatch(Func&& f, const ProtoAllocator& a);
+  void dispatch(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1959,9 +1959,9 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void post(Func&& f, const ProtoAllocator& a);
+  void post(Func&& f, const ProtoAllocator& a) const;
 template<class Func, class ProtoAllocator>
-  void defer(Func&& f, const ProtoAllocator& a);
+  void defer(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2169,17 +2169,17 @@ inline namespace v1 {
 
     // executor operations:
 
-    execution_context& context() noexcept;
+    execution_context& context() const noexcept;
 
-    void on_work_started() noexcept;
-    void on_work_finished() noexcept;
+    void on_work_started() const noexcept;
+    void on_work_finished() const noexcept;
 
     template<class Func, class ProtoAllocator>
-      void dispatch(Func&& f, const ProtoAllocator& a);
+      void dispatch(Func&& f, const ProtoAllocator& a) const;
     template<class Func, class ProtoAllocator>
-      void post(Func&& f, const ProtoAllocator& a);
+      void post(Func&& f, const ProtoAllocator& a) const;
     template<class Func, class ProtoAllocator>
-      void defer(Func&& f, const ProtoAllocator& a);
+      void defer(Func&& f, const ProtoAllocator& a) const;
 
     // executor capacity:
 
@@ -2381,7 +2381,7 @@ template<class Executor, class ProtoAllocator>
 \rSec2[async.executor.ops]{\tcode{executor} operations}
 
 \begin{itemdecl}
-execution_context& context() noexcept;
+execution_context& context() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2393,7 +2393,7 @@ execution_context& context() noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-void on_work_started() noexcept;
+void on_work_started() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2405,7 +2405,7 @@ void on_work_started() noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-void on_work_finished() noexcept;
+void on_work_finished() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2418,7 +2418,7 @@ void on_work_finished() noexcept;
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void dispatch(Func&& f, const ProtoAllocator& a);
+  void dispatch(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2431,7 +2431,7 @@ Let \tcode{e} be the target object of \tcode{*this}. Let \tcode{a1} be the alloc
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void post(Func&& f, const ProtoAllocator& a);
+  void post(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2444,7 +2444,7 @@ Let \tcode{e} be the target object of \tcode{*this}. Let \tcode{a1} be the alloc
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void defer(Func&& f, const ProtoAllocator& a);
+  void defer(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2857,17 +2857,17 @@ inline namespace v1 {
 
     bool running_in_this_thread() const noexcept;
 
-    execution_context& context() noexcept;
+    execution_context& context() const noexcept;
 
-    void on_work_started() noexcept;
-    void on_work_finished() noexcept;
+    void on_work_started() const noexcept;
+    void on_work_finished() const noexcept;
 
     template<class Func, class ProtoAllocator>
-      void dispatch(Func&& f, const ProtoAllocator& a);
+      void dispatch(Func&& f, const ProtoAllocator& a) const;
     template<class Func, class ProtoAllocator>
-      void post(Func&& f, const ProtoAllocator& a);
+      void post(Func&& f, const ProtoAllocator& a) const;
     template<class Func, class ProtoAllocator>
-      void defer(Func&& f, const ProtoAllocator& a);
+      void defer(Func&& f, const ProtoAllocator& a) const;
 
   private:
     Executor inner_ex_; // \expos
@@ -3137,7 +3137,7 @@ bool running_in_this_thread() const noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-execution_context& context() noexcept;
+execution_context& context() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3146,7 +3146,7 @@ execution_context& context() noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-void on_work_started() noexcept;
+void on_work_started() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3155,7 +3155,7 @@ void on_work_started() noexcept;
 \end{itemdescr}
 
 \begin{itemdecl}
-void on_work_finished() noexcept;
+void on_work_finished() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3165,7 +3165,7 @@ void on_work_finished() noexcept;
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void dispatch(Func&& f, const ProtoAllocator& a);
+  void dispatch(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3175,7 +3175,7 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void post(Func&& f, const ProtoAllocator& a);
+  void post(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3185,7 +3185,7 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void defer(Func&& f, const ProtoAllocator& a);
+  void defer(Func&& f, const ProtoAllocator& a) const;
 \end{itemdecl}
 
 \begin{itemdescr}
