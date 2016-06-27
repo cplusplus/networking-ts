@@ -509,7 +509,7 @@ Returns a value suitable for passing as the \tcode{option_len} argument to POSIX
 A type \tcode{X} meets the \tcode{BooleanSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), \tcode{X} is contextually convertible to bool, and \tcode{X} satisfies the additional requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{b} denotes a (possibly const) value of type \tcode{bool}, and \tcode{u} denotes an identifier.
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{v} denotes a (possibly const) value of type \tcode{bool}, and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
 {BooleanSocketOption requirements}
@@ -530,9 +530,9 @@ In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}
   &
 post: \tcode{!u.value()}.  \\ \rowsep
 
-\tcode{X u(b);}  &
+\tcode{X u(v);}  &
   &
-post: \tcode{u.value() == b}.  \\ \rowsep
+post: \tcode{u.value() == v}.  \\ \rowsep
 
 \tcode{a.value()}  &
 \tcode{bool}  &
@@ -712,7 +712,7 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 A type \tcode{X} meets the \tcode{IntegerSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{b} denotes a (possibly const) value of type \tcode{int}, and \tcode{u} denotes an identifier.
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}, \tcode{v} denotes a (possibly const) value of type \tcode{int}, and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
 {IntegerSocketOption requirements}
@@ -733,9 +733,9 @@ In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}
   &
 post: \tcode{u.value() == 0}.  \\ \rowsep
 
-\tcode{X u(b);}  &
+\tcode{X u(v);}  &
   &
-post: \tcode{u.value() == b}.  \\ \rowsep
+post: \tcode{u.value() == v}.  \\ \rowsep
 
 \tcode{a.value()}  &
 \tcode{int}  &
