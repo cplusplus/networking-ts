@@ -452,7 +452,7 @@ Returns a value suitable for passing as the \tcode{option_len} argument to POSIX
 
 \tcode{b.resize(p,s)}  &
   &
-post: \tcode{b.size(p) == s}. Passed the value contained in the \tcode{option_lenargument} to POSIX \tcode{getsockopt} (or equivalent) after successful completion of the function. Permitted to throw an exception if the socket option object \tcode{b} does not support the specified size.  \\
+post: \tcode{b.size(p) == s}. Passed the value contained in the \tcode{option_len} argument to POSIX \tcode{getsockopt} (or equivalent) after successful completion of the function. Permitted to throw an exception if the socket option object \tcode{b} does not support the specified size.  \\
 
 \end{libreqtab3}
 
