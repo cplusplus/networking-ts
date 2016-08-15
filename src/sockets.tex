@@ -2070,7 +2070,7 @@ endpoint_type local_endpoint(error_code& ec) const;
 \begin{codeblock}
 endpoint_type endpoint;
 socklen_t endpoint_len = endpoint.capacity();
-int result == getsockname(native_handle(), endpoint.data(), &endpoint_len);
+int result = getsockname(native_handle(), endpoint.data(), &endpoint_len);
 if (result == 0)
   endpoint.resize(endpoint_len);
 \end{codeblock}
@@ -2091,7 +2091,7 @@ endpoint_type remote_endpoint(error_code& ec) const;
 \begin{codeblock}
 endpoint_type endpoint;
 socklen_t endpoint_len = endpoint.capacity();
-int result == getpeername(native_handle(), endpoint.data(), &endpoint_len);
+int result = getpeername(native_handle(), endpoint.data(), &endpoint_len);
 if (result == 0)
   endpoint.resize(endpoint_len);
 \end{codeblock}
@@ -3986,7 +3986,7 @@ endpoint_type local_endpoint(error_code& ec) const;
 \begin{codeblock}
 endpoint_type endpoint;
 socklen_t endpoint_len = endpoint.capacity();
-int result == getsockname(native_handle(), endpoint.data(), &endpoint_len);
+int result = getsockname(native_handle(), endpoint.data(), &endpoint_len);
 if (result == 0)
   endpoint.resize(endpoint_len);
 \end{codeblock}
