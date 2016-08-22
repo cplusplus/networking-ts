@@ -50,10 +50,14 @@ inline namespace v1 {
     class address;
     class address_v4;
     class address_v6;
-    class address_iterator_v4;
-    class address_iterator_v6;
-    class address_range_v4;
-    class address_range_v6;
+    template<class Address>
+      class basic_address_iterator;
+    typedef basic_address_iterator<address_v4> address_v4_iterator;
+    typedef basic_address_iterator<address_v6> address_v6_iterator;
+    template<class Address>
+      class basic_address_range;
+    typedef basic_address_range<address_v4> address_v4_range;
+    typedef basic_address_range<address_v6> address_v6_range;
     class network_v4;
     class network_v6;
     template<class InternetProtocol>
