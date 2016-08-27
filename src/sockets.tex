@@ -3966,7 +3966,7 @@ void bind(const endpoint_type& endpoint, error_code& ec);
 \end{itemdescr}
 
 \begin{itemdecl}
-void listen(int backlog = socket_base::max_connections);
+void listen(int backlog = socket_base::max_listen_connections);
 void listen(int backlog, error_code& ec);
 \end{itemdecl}
 
