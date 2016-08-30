@@ -3577,6 +3577,8 @@ basic_socket_acceptor(basic_socket_acceptor&& rhs);
 \item
 \tcode{enable_connection_aborted()} returns the same value as \tcode{rhs.enable_connection_aborted()} prior to the constructor invocation.
 \item
+\tcode{native_handle()} returns the prior value of \tcode{rhs.native_handle()}.
+\item
 \tcode{protocol_} is equal to the prior value of \tcode{rhs.protocol_}.
 \item
 \tcode{rhs.is_open() == false}.
