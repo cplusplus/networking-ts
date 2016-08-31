@@ -3418,17 +3418,17 @@ Atomically stores \tcode{forward_as_tuple(forward<A$_0$>(a$_0$), forward<A$_1$>(
 
  >2  &
 \tcode{error_code}  &
-\tcode{future<tuple<U1,~...,~U$_{N-1}$>>}  &
+\tcode{future<tuple<U$_1$,~...,~U$_{N-1}$>>}  &
 If \tcode{a$_0$} evaluates to \tcode{true}, atomically stores the exception pointer produced by \tcode{make_exception_ptr(system_error(a$_0$))} in the shared state; otherwise, atomically stores \tcode{forward_as_tuple(forward<A$_1$>(a$_1$), ..., forward<A$_{N-1}$>(a$_{N-1}$))} in the shared state.  \\ \rowsep
 
  >2  &
 \tcode{exception_ptr}  &
-\tcode{future<tuple<U1,~...,~U$_{N-1}$>>}  &
+\tcode{future<tuple<U$_1$,~...,~U$_{N-1}$>>}  &
 If \tcode{a$_0$} is non-null, atomically stores the exception pointer in the shared state; otherwise, atomically stores \tcode{forward_as_tuple(forward<A$_1$>(a$_1$), ..., forward<A$_{N-1}$>(a$_{N-1}$))} in the shared state.  \\ \rowsep
 
  >2  &
  all other types  &
-\tcode{future<tuple<U0,~...,~U$_{N-1}$>>}  &
+\tcode{future<tuple<U$_0$,~...,~U$_{N-1}$>>}  &
 Atomically stores \tcode{forward_as_tuple(forward<A$_0$>(a$_0$), ..., forward<A$_{N-1}$>(a$_{N-1}$))} in the shared state.  \\
 
 \end{LongTable}
