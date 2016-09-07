@@ -91,7 +91,7 @@ basic_socket_streambuf();
 \effects Initializes \tcode{socket_} with \tcode{ctx}, where \tcode{ctx} is an unspecified object of class \tcode{io_context}.
 
 \pnum
-\postconditions \tcode{expiry() == clock_type::max()}.
+\postconditions \tcode{expiry() == clock_type::max()} and \tcode{!error()}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -103,7 +103,7 @@ explicit basic_socket_streambuf(basic_stream_socket<protocol_type> s);
 \effects Initializes \tcode{socket_} with \tcode{std::move(s)}.
 
 \pnum
-\postconditions \tcode{expiry() == clock_type::max()}.
+\postconditions \tcode{expiry() == clock_type::max()} and \tcode{!error()}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -121,6 +121,10 @@ basic_socket_streambuf(basic_socket_streambuf&& rhs);
 \tcode{is_open() == rhs_p.is_open()}
 \item
 \tcode{rhs_a.is_open() == false}
+\item
+\tcode{error() == rhs_p.error()}
+\item
+\tcode{!rhs_a.error()}
 \item
 \tcode{expiry() == rhs_p.expiry()}
 \item
