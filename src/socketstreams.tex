@@ -163,7 +163,7 @@ basic_socket_streambuf& operator=(basic_socket_streambuf&& rhs);
 
 \begin{itemdescr}
 \pnum
-\effects Calls \tcode{this->close()} then move assigns from \tcode{rhs}. After the move assignment \tcode{*this} has the observable state it would have had if it had been move constructed from \tcode{rhs}.
+\effects Calls \tcode{this->close()} then move assigns from \tcode{rhs}. After the move assignment \tcode{*this} and \tcode{rhs} have the observable state they would have had if \tcode{*this} had been move constructed from \tcode{rhs}.
 
 \pnum
 \returns \tcode{*this}.
