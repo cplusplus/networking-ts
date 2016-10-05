@@ -1560,7 +1560,7 @@ template<class... Args>
 
 \rSec2[async.exec.binder.async.result]{Class template partial specialization \tcode{async_result}}
 
-\begin{itemdecl}
+\begin{codeblock}
 namespace std {
 namespace experimental {
 namespace net {
@@ -1589,7 +1589,9 @@ inline namespace v1 {
 } // namespace net
 } // namespace experimental
 } // namespace std
+\end{codeblock}
 
+\begin{itemdecl}
 explicit async_result(completion_handler_type& h);
 \end{itemdecl}
 
