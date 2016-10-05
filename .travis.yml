@@ -10,7 +10,7 @@ env:
 
 script:
   # Build ts.pdf
-  - pushd source
+  - pushd src
   - if [ "$BUILD_TYPE" = "latexmk" ]; then
       latexmk -pdf ts;
     fi
