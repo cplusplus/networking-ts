@@ -1971,7 +1971,7 @@ template<class Func, class ProtoAllocator>
 
 
 
-\rSec2[async.system.exec.comparisons]{\tcode{system_executor} comparisons}
+\rSec2[async.system.exec.cmp]{\tcode{system_executor} comparisons}
 
 \begin{itemdecl}
 bool operator==(const system_executor&, const system_executor&) noexcept;
@@ -2491,7 +2491,7 @@ template<class Executor> const Executor* target() const noexcept;
 
 
 
-\rSec2[async.executor.comparisons]{\tcode{executor} comparisons}
+\rSec2[async.executor.comp]{\tcode{executor} comparisons}
 
 \begin{itemdecl}
 bool operator==(const executor& a, const executor& b) noexcept;
@@ -3193,7 +3193,7 @@ template<class Func, class ProtoAllocator>
 
 
 
-\rSec2[async.strand.comparisons]{\tcode{strand} comparisons}
+\rSec2[async.strand.comp]{\tcode{strand} comparisons}
 
 \begin{itemdecl}
 bool operator==(const strand<Executor>& a, const strand<Executor>& b);
