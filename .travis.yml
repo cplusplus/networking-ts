@@ -1,0 +1,46 @@
+#
+# Builds the C++ TS document on Travis CI <https://travis-ci.org/cplusplus/networking-ts>
+#
+
+env:
+  - BUILD_TYPE=latexmk   # build using latexmk
+  - BUILD_TYPE=make      # build using Makefile
+  - BUILD_TYPE=manual    # build manually
+  - BUILD_TYPE=complete  # build manually and regenerate indices
+
+script:
+  # Build ts.pdf
+  - pushd source
+  - if [ "$BUILD_TYPE" = "latexmk" ]; then
+      latexmk -pdf ts;
+    fi
+  - if [ "$BUILD_TYPE" = "make" ]; then
+      make -j2;
+    fi
+  - if [ "$BUILD_TYPE" = "manual" -o "$BUILD_TYPE" = "complete" ]; then
+      pdflatex ts;
+      pdflatex ts;
+      pdflatex ts;
+      makeindex generalindex;
+      makeindex libraryindex;
+      makeindex impldefindex;
+      pdflatex ts;
+      pdflatex ts;
+    fi
+  - popd
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+    - latexmk
+    - poppler-utils
+    - texlive-binaries
+    - texlive-fonts-recommended
+    - texlive-latex-base
+    - texlive-latex-extra
+    - texlive-latex-recommended
+    - texlive-binaries
+    - graphviz
+    - lmodern
