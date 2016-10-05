@@ -91,7 +91,7 @@ basic_socket_streambuf();
 \effects Initializes \tcode{socket_} with \tcode{ctx}, where \tcode{ctx} is an unspecified object of class \tcode{io_context}.
 
 \pnum
-\postconditions \tcode{expiry() == clock_type::max()}.
+\postconditions \tcode{expiry() == time_point::max()}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -103,7 +103,7 @@ explicit basic_socket_streambuf(basic_stream_socket<protocol_type> s);
 \effects Initializes \tcode{socket_} with \tcode{std::move(s)}.
 
 \pnum
-\postconditions \tcode{expiry() == clock_type::max()}.
+\postconditions \tcode{expiry() == time_point::max()}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -124,7 +124,7 @@ basic_socket_streambuf(basic_socket_streambuf&& rhs);
 \item
 \tcode{expiry() == rhs_p.expiry()}
 \item
-\tcode{rhs_a.expiry() == clock_type::max()}
+\tcode{rhs_a.expiry() == time_point::max()}
 \item
 \tcode{gptr() - eback() == rhs_p.gptr() - rhs_p.eback()}
 \item
