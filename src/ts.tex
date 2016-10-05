@@ -67,11 +67,6 @@
 % \input{cxx}
 % \newcommand{\CppXref}[1]{\CppXIV \S\cxxref{#1}}
 
-% Add two names to the library index as both #1!#2 and #2!#1
-\newcommand{\indexlibrarytwo}[2]{%
-\indexlibrary{\idxcode{#1}!\idxcode{#2}}%
-\indexlibrary{\idxcode{#2}!\idxcode{#1}}%
-}
 % Add an extensible implementation entry to the main and library name indices
 \newcommand{\indexextensible}[1]{%
 \indextext{extensible implementation!\idxcode{#1}}%
