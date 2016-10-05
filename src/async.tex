@@ -1648,7 +1648,7 @@ static type get(const executor_binder<T, Executor>& b,
 
 \rSec2[async.exec.binder.assoc.exec]{Class template partial specialization \tcode{associated_executor}}
 
-\begin{itemdecl}
+\begin{codeblock}
 namespace std {
 namespace experimental {
 namespace net {
@@ -1667,7 +1667,9 @@ inline namespace v1 {
 } // namespace net
 } // namespace experimental
 } // namespace std
+\end{codeblock}
 
+\begin{itemdecl}
 static type get(const executor_binder<T, Executor>& b,
                 const Executor1& e = Executor1()) noexcept;
 \end{itemdecl}
