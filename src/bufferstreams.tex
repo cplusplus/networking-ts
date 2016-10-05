@@ -12,7 +12,7 @@
 A type \tcode{X} meets the \tcode{SyncReadStream} requirements if it satisfies the requirements listed in Table~\ref{tab:buffer.stream.reqmts.syncreadstream.requirements}.
 
 \pnum
-In Table~\ref{tab:buffer.stream.reqmts.syncreadstream.requirements}, \tcode{a} denotes a value of type \tcode{X}, \tcode{mb} denotes a (possibly const) value satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements, and \tcode{ec} denotes an object of type \tcode{error_code}.
+In Table~\ref{tab:buffer.stream.reqmts.syncreadstream.requirements}, \tcode{a} denotes a value of type \tcode{X}, \tcode{mb} denotes a (possibly const) value satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutable.buf.seq}) requirements, and \tcode{ec} denotes an object of type \tcode{error_code}.
 
 \begin{libreqtab3}
 {SyncReadStream requirements}
@@ -44,7 +44,7 @@ If \tcode{buffer_size(mb) > 0}, reads one or more bytes of data from the stream 
 A type \tcode{X} meets the \tcode{AsyncReadStream} requirements if it satisfies the requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X}, \tcode{mb} denotes a (possibly const) value satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements, and \tcode{t} is a completion token.
+In the table below, \tcode{a} denotes a value of type \tcode{X}, \tcode{mb} denotes a (possibly const) value satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutable.buf.seq}) requirements, and \tcode{t} is a completion token.
 
 \begin{libreqtab3}
 {AsyncReadStream requirements}
@@ -79,7 +79,7 @@ If \tcode{buffer_size(mb) > 0}, initiates an asynchronous operation to read one 
 A type \tcode{X} meets the \tcode{SyncWriteStream} requirements if it satisfies the requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X}, \tcode{cb} denotes a (possibly const) value satisfying the \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements, and \tcode{ec} denotes an object of type \tcode{error_code}.
+In the table below, \tcode{a} denotes a value of type \tcode{X}, \tcode{cb} denotes a (possibly const) value satisfying the \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.const.buf.seq}) requirements, and \tcode{ec} denotes an object of type \tcode{error_code}.
 
 \begin{libreqtab3}
 {SyncWriteStream requirements}
@@ -112,7 +112,7 @@ If \tcode{buffer_size(cb) > 0}, writes one or more bytes of data to the stream \
 A type \tcode{X} meets the \tcode{AsyncWriteStream} requirements if it satisfies the requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X}, \tcode{cb} denotes a (possibly const) value satisfying the \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements, and \tcode{t} is a completion token.
+In the table below, \tcode{a} denotes a value of type \tcode{X}, \tcode{cb} denotes a (possibly const) value satisfying the \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.const.buf.seq}) requirements, and \tcode{t} is a completion token.
 
 \begin{libreqtab3}
 {AsyncWriteStream requirements}
@@ -386,7 +386,7 @@ template<class SyncReadStream, class DynamicBuffer,
 \effects Clears \tcode{ec}, then reads data from the synchronous read stream~(\ref{buffer.stream.reqmts.syncreadstream}) object \tcode{stream} by performing zero or more calls to the stream's \tcode{read_some} member function.
 
 \pnum
-Data is placed into the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) is obtained prior to each \tcode{read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value less than or equal to \tcode{b.max_size() - b.size()}. \enternote Implementations are encouraged to use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of \tcode{read_some} calls performed on the stream. \exitnote After each \tcode{read_some} call, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the return value from \tcode{read_some}.
+Data is placed into the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutable.buf.seq}) is obtained prior to each \tcode{read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value less than or equal to \tcode{b.max_size() - b.size()}. \enternote Implementations are encouraged to use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of \tcode{read_some} calls performed on the stream. \exitnote After each \tcode{read_some} call, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the return value from \tcode{read_some}.
 
 \pnum
 The \tcode{completion_condition} parameter specifies a completion condition to be called prior to each call to the stream's \tcode{read_some} member function. The completion condition is passed the \tcode{error_code} value from the most recent \tcode{read_some} call, and the total number of bytes transferred in the synchronous read operation so far. The completion condition return value specifies the maximum number of bytes to be read on the subsequent \tcode{read_some} call. Overloads where a completion condition is not specified behave as if called with an object of class \tcode{transfer_all}.
@@ -479,7 +479,7 @@ template<class AsyncReadStream, class DynamicBuffer, class CompletionCondition,
 \effects Initiates an asynchronous operation to read data from the buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream}) object \tcode{stream} by performing one or more asynchronous read_some operations on the stream.
 
 \pnum
-Data is placed into the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) is obtained prior to each \tcode{async_read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value such that \tcode{N} is less than or equal to \tcode{b.max_size() - b.size()}. \enternote Implementations are encouraged to use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of asynchronous read_some operations performed on the stream. \exitnote After the completion of each asynchronous read_some operation, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the value passed to the asynchronous read_some operation's completion handler.
+Data is placed into the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutable.buf.seq}) is obtained prior to each \tcode{async_read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value such that \tcode{N} is less than or equal to \tcode{b.max_size() - b.size()}. \enternote Implementations are encouraged to use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of asynchronous read_some operations performed on the stream. \exitnote After the completion of each asynchronous read_some operation, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the value passed to the asynchronous read_some operation's completion handler.
 
 \pnum
 The \tcode{completion_condition} parameter specifies a completion condition to be called prior to each asynchronous read_some operation. The completion condition is passed the \tcode{error_code} value from the most recent asynchronous read_some operation, and the total number of bytes transferred in the asynchronous read operation so far. The completion condition return value specifies the maximum number of bytes to be read on the subsequent asynchronous read_some operation. Overloads where a completion condition is not specified behave as if called with an object of class \tcode{transfer_all}.
@@ -578,7 +578,7 @@ template<class SyncWriteStream, class DynamicBuffer, class CompletionCondition>
 \effects Writes data to the synchronous write stream~(\ref{buffer.stream.reqmts.syncwritestream}) object \tcode{stream} by performing zero or more calls to the stream's \tcode{write_some} member function.
 
 \pnum
-Data is written from the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A constant buffer sequence~(\ref{buffer.reqmts.constbuffersequence}) is obtained using \tcode{b.data()}. After the data has been written to the stream, the implementation performs \tcode{b.consume(n)}, where \tcode{n} is the number of bytes successfully written.
+Data is written from the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A constant buffer sequence~(\ref{buffer.reqmts.const.buf.seq}) is obtained using \tcode{b.data()}. After the data has been written to the stream, the implementation performs \tcode{b.consume(n)}, where \tcode{n} is the number of bytes successfully written.
 
 \pnum
 The \tcode{completion_condition} parameter specifies a completion condition to be called after each call to the stream's \tcode{write_some} member function. The completion condition is passed the \tcode{error_code} value from the most recent \tcode{write_some} call, and the total number of bytes transferred in the synchronous write operation so far. The completion condition return value specifies the maximum number of bytes to be written on the subsequent \tcode{write_some} call. Overloads where a completion condition is not specified behave as if called with an object of class \tcode{transfer_all}.
@@ -671,7 +671,7 @@ template<class AsyncWriteStream, class DynamicBuffer, class CompletionCondition,
 \effects Initiates an asynchronous operation to write data to the buffer-oriented asynchronous write stream~(\ref{buffer.stream.reqmts.asyncwritestream}) object \tcode{stream} by performing zero or more asynchronous write_some operations on the stream.
 
 \pnum
-Data is written from the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A constant buffer sequence~(\ref{buffer.reqmts.constbuffersequence}) is obtained using \tcode{b.data()}. After the data has been written to the stream, the implementation performs \tcode{b.consume(n)}, where \tcode{n} is the number of bytes successfully written.
+Data is written from the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A constant buffer sequence~(\ref{buffer.reqmts.const.buf.seq}) is obtained using \tcode{b.data()}. After the data has been written to the stream, the implementation performs \tcode{b.consume(n)}, where \tcode{n} is the number of bytes successfully written.
 
 \pnum
 The \tcode{completion_condition} parameter specifies a completion condition to be called prior to each asynchronous write_some operation. The completion condition is passed the \tcode{error_code} value from the most recent asynchronous write_some operation, and the total number of bytes transferred in the asynchronous write operation so far. The completion condition return value specifies the maximum number of bytes to be written on the subsequent asynchronous write_some operation. Overloads where a completion condition is not specified behave as if called with an object of class \tcode{transfer_all}.
@@ -716,7 +716,7 @@ template<class SyncReadStream, class DynamicBuffer>
 \effects Reads data from the buffer-oriented synchronous read stream~(\ref{buffer.stream.reqmts.syncreadstream}) object \tcode{stream} by performing zero or more calls to the stream's \tcode{read_some} member function, until the input sequence of the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b} contains the specified delimiter \tcode{delim}.
 
 \pnum
-Data is placed into the dynamic buffer object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) is obtained prior to each \tcode{read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value such that \tcode{N <= max_size() - size()}. \enternote Implementations are encouraged to use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of \tcode{read_some} calls performed on the stream. \exitnote After each \tcode{read_some} call, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the return value from \tcode{read_some}.
+Data is placed into the dynamic buffer object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutable.buf.seq}) is obtained prior to each \tcode{read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value such that \tcode{N <= max_size() - size()}. \enternote Implementations are encouraged to use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of \tcode{read_some} calls performed on the stream. \exitnote After each \tcode{read_some} call, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the return value from \tcode{read_some}.
 
 \pnum
 The synchronous read_until operation continues until:
@@ -760,7 +760,7 @@ template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
 \effects Initiates an asynchronous operation to read data from the buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream}) object \tcode{stream} by performing zero or more asynchronous read_some operations on the stream, until the readable bytes of the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b} contain the specified delimiter \tcode{delim}.
 
 \pnum
-Data is placed into the dynamic buffer object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) is obtained prior to each \tcode{async_read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value such that \tcode{N <= max_size() - size()}. \enternote Implementations are encouraged to use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of asynchronous read_some operations performed on the stream. \exitnote After the completion of each asynchronous read_some operation, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the value passed to the asynchronous read_some operation's completion handler.
+Data is placed into the dynamic buffer object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutable.buf.seq}) is obtained prior to each \tcode{async_read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value such that \tcode{N <= max_size() - size()}. \enternote Implementations are encouraged to use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of asynchronous read_some operations performed on the stream. \exitnote After the completion of each asynchronous read_some operation, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the value passed to the asynchronous read_some operation's completion handler.
 
 \pnum
 The asynchronous read_until operation continues until:
