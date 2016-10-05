@@ -295,7 +295,7 @@ inline namespace v1 {
 \rSec1[buffer.reqmts]{Requirements}
 
 
-\rSec2[buffer.reqmts.mutablebuffersequence]{Mutable buffer sequence requirements}
+\rSec2[buffer.reqmts.mutable.buf.seq]{Mutable buffer sequence requirements}
 
 \pnum
 A \defn{mutable buffer sequence} represents a set of memory regions that may be used to receive the output of an operation, such as the \tcode{receive} operation of a socket.
@@ -488,7 +488,7 @@ Removes \tcode{n} bytes from beginning of the readable bytes. If \tcode{n} is gr
 \rSec2[buffer.reqmts.read.write]{Requirements on read and write operations}
 
 \pnum
-A \defn{read operation} is an operation that reads data into a mutable buffer sequence argument of a type meeting \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements. The mutable buffer sequence specifies memory where the data should be placed. A read operation shall always fill a buffer in the sequence completely before proceeding to the next.
+A \defn{read operation} is an operation that reads data into a mutable buffer sequence argument of a type meeting \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutable.buf.seq}) requirements. The mutable buffer sequence specifies memory where the data should be placed. A read operation shall always fill a buffer in the sequence completely before proceeding to the next.
 
 \pnum
 A \defn{write operation} is an operation that writes data from a constant buffer sequence argument of a type meeting \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements. The constant buffer sequence specifies memory where the data to be written is located. A write operation shall always write a buffer in the sequence completely before proceeding to the next.
@@ -573,7 +573,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-The \tcode{mutable_buffer} class satisfies requirements of \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
+The \tcode{mutable_buffer} class satisfies requirements of \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutable.buf.seq}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \begin{itemdecl}
 mutable_buffer() noexcept;
@@ -755,7 +755,7 @@ This sub-clause contains templates that may be used to query the properties of a
 
 \tcode{template<class T>}\br
 \tcode{struct is_mutable_buffer_sequence}  &
-\tcode{T} meets the syntactic requirements for mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}).  &
+\tcode{T} meets the syntactic requirements for mutable buffer sequence~(\ref{buffer.reqmts.mutable.buf.seq}).  &
 \tcode{T} is a complete type.  \\ \rowsep
 
 \tcode{template<class T>}\br
