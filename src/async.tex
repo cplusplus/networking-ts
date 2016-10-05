@@ -1113,7 +1113,7 @@ template<class Service> bool has_service(const execution_context& ctx) noexcept;
 
 \rSec1[async.exec.ctx.svc]{Class \tcode{execution_context::service}}
 
-\begin{itemdecl}
+\begin{codeblock}
 namespace std {
 namespace experimental {
 namespace net {
@@ -1146,7 +1146,9 @@ inline namespace v1 {
 } // namespace net
 } // namespace experimental
 } // namespace std
+\end{codeblock}
 
+\begin{itemdecl}
 explicit service(execution_context& owner);
 \end{itemdecl}
 
