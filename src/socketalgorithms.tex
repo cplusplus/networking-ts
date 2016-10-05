@@ -149,7 +149,7 @@ template<class Protocol, class InputIterator,
  the asynchronous operation \tcode{s.async_connect(ep, \unspec)} succeeds.
 \end{itemize}
 \pnum
-\tcode{ec} is updated with the result of the \tcode{s.async_connect(ep, \unspec)} operation, if any. If no such element is found, or if the operation fails with one of the error conditions listed below, \tcode{ep} is set to \tcode{typename Protocol::endpoint()}. \enternote The underlying \tcode{close}, \tcode{open}, and \tcode{async_connect} operations are performed sequentially. \exitnote
+\tcode{ec} is updated with the result of the \tcode{s.async_connect(ep, \unspec)} operation, if any. If no such element is found, or if the operation fails with one of the error conditions listed below, \tcode{ep} is set to \tcode{typename Protocol::endpoint()}. \begin{note} The underlying \tcode{close}, \tcode{open}, and \tcode{async_connect} operations are performed sequentially. \end{note}
 
 \pnum
 \errors
@@ -199,7 +199,7 @@ template<class Protocol, class InputIterator,
  the asynchronous operation \tcode{s.async_connect(*i, \unspec)} succeeds.
 \end{itemize}
 \pnum
-\tcode{ec} is updated with the result of the \tcode{s.async_connect(*i, \unspec)} operation, if any. If no such iterator is found, or if the operation fails with one of the error conditions listed below, \tcode{i} is set to \tcode{last}. \enternote The underlying \tcode{close}, \tcode{open}, and \tcode{async_connect} operations are performed sequentially. \exitnote
+\tcode{ec} is updated with the result of the \tcode{s.async_connect(*i, \unspec)} operation, if any. If no such iterator is found, or if the operation fails with one of the error conditions listed below, \tcode{i} is set to \tcode{last}. \begin{note} The underlying \tcode{close}, \tcode{open}, and \tcode{async_connect} operations are performed sequentially. \end{note}
 
 \pnum
 \errors

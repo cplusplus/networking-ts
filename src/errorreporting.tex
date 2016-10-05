@@ -8,14 +8,14 @@
 \pnum
 Most synchronous network library functions provide two overloads, one that throws an exception to report system errors, and another that sets an \tcode{error_code} (\CppXref{syserr}).
 
-\enternote This supports two common use cases:
+\begin{note} This supports two common use cases:
 \begin{itemize}
 \item
  Uses where system errors are truly exceptional and indicate a serious failure. Throwing an exception is the most appropriate response.
 \item
  Uses where system errors are routine and do not necessarily represent failure. Returning an error code is the most appropriate response. This allows application specific error handling, including simply ignoring the error.
-\exitnote
-\end{itemize}
+\end{itemize}\end{note}
+
 \pnum
 Functions not having an argument of type \tcode{error_code\&} report errors as follows, unless otherwise specified:
 
@@ -63,7 +63,7 @@ if (ec) throw system_error(ec, S);
 \end{codeblock}
 
 \pnum
-except that the type thrown may differ as specified above. \tcode{S} is an \ntbs indicating where the exception was thrown. \enternote A possible value for \tcode{S} is \tcode{__func__}. \exitnote
+except that the type thrown may differ as specified above. \tcode{S} is an \ntbs indicating where the exception was thrown. \begin{note} A possible value for \tcode{S} is \tcode{__func__}. \end{note}
 
 \pnum
  For both overloads, failure to allocate storage is reported by throwing an exception as described in the \Cpp standard (\CppXref{res.on.exception.handling}).
@@ -91,7 +91,7 @@ Asynchronous network library functions in this Technical Specification are ident
 If a call by the implementation to an operating system or other underlying API results in an error that prevents the asynchronous operation from meeting its specifications, the completion handler is invoked with an \tcode{error_code} value \tcode{ec} that is set as appropriate for the specific error. Otherwise, the \tcode{error_code} value \tcode{ec} is set such that \tcode{!ec} is \tcode{true}.
 
 \item
-Asynchronous operations shall not fail with an error condition that indicates interruption of an operating system or underlying API by a signal \enternote Such as POSIX error number \tcode{EINTR} \exitnote . Asynchronous operations shall not fail with any error condition associated with non-blocking operations \enternote Such as POSIX error numbers \tcode{EWOULDBLOCK}, \tcode{EAGAIN}, or \tcode{EINPROGRESS}; Windows error numbers \tcode{WSAEWOULDBLOCK} or \tcode{WSAEINPROGRESS} \exitnote .
+Asynchronous operations shall not fail with an error condition that indicates interruption of an operating system or underlying API by a signal. \begin{note} Such as POSIX error number \tcode{EINTR} \end{note} Asynchronous operations shall not fail with any error condition associated with non-blocking operations. \begin{note} Such as POSIX error numbers \tcode{EWOULDBLOCK}, \tcode{EAGAIN}, or \tcode{EINPROGRESS}; Windows error numbers \tcode{WSAEWOULDBLOCK} or \tcode{WSAEINPROGRESS} \end{note}
 \end{itemize}
 
 \pnum
@@ -113,7 +113,7 @@ Otherwise, the \tcode{error_code} shall be set to an implementation-defined valu
 \end{itemize}
 
 \pnum
-\enterexample The POSIX specification for \tcode{shutdown} lists \tcode{EBADF} as one of its possible errors. If a function that is specified ``as if'' implemented by \tcode{shutdown} fails with \tcode{EBADF} then the following condition holds for the \tcode{error_code} value \tcode{ec}: \tcode{ec == errc::bad_file_descriptor} \exitexample
+\begin{example} The POSIX specification for \tcode{shutdown} lists \tcode{EBADF} as one of its possible errors. If a function that is specified ``as if'' implemented by \tcode{shutdown} fails with \tcode{EBADF} then the following condition holds for the \tcode{error_code} value \tcode{ec}: \tcode{ec == errc::bad_file_descriptor} \end{example}
 
 \pnum
 When the description of a function contains the element Error conditions, this lists conditions where the operation may fail. The conditions are listed, together with a suitable explanation, as \tcode{enum class} constants. Unless otherwise specified, this list is a subset of the failure conditions associated with the function.

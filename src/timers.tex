@@ -6,17 +6,17 @@
 This clause defines components for performing timer operations.
 
 \pnum
-\enterexample Performing a synchronous wait operation on a timer: 
+\begin{example} Performing a synchronous wait operation on a timer: 
 \begin{codeblock}
 io_context c;
 steady_timer t(c);
 t.expires_after(seconds(5));
 t.wait();
 \end{codeblock}
- \exitexample
+ \end{example}
 
 \pnum
-\enterexample Performing an asynchronous wait operation on a timer: 
+\begin{example} Performing an asynchronous wait operation on a timer: 
 \begin{codeblock}
 void handler(error_code ec) { ... }
 ...
@@ -26,7 +26,7 @@ t.expires_after(seconds(5));
 t.async_wait(handler);
 c.run();
 \end{codeblock}
- \exitexample
+ \end{example}
 
 
 \indexlibrary{\idxhdr{experimental/timer}}%
@@ -63,7 +63,7 @@ inline namespace v1 {
 \rSec2[timer.reqmts.waittraits]{Wait traits requirements}
 
 \pnum
-The \tcode{basic_waitable_timer} template uses wait traits to allow programs to customize \tcode{wait} and \tcode{async_wait} behavior. \enternote Possible uses of wait traits include:
+The \tcode{basic_waitable_timer} template uses wait traits to allow programs to customize \tcode{wait} and \tcode{async_wait} behavior. \begin{note} Possible uses of wait traits include:
 \begin{itemize}
 \item
  To enable timers based on non-realtime clocks.
@@ -72,8 +72,9 @@ The \tcode{basic_waitable_timer} template uses wait traits to allow programs to 
 \item
  Correcting for errors or rounding timeouts to boundaries.
 \item
- Preventing duration overflow. That is, a program may set a timer's expiry \tcode{e} to be \tcode{Clock::max()} (meaning never reached) or \tcode{Clock::min()} (meaning always in the past). As a result, computing the duration until timer expiry as \tcode{e - Clock::now()} may cause overflow. \exitnote
-\end{itemize}\pnum
+ Preventing duration overflow. That is, a program may set a timer's expiry \tcode{e} to be \tcode{Clock::max()} (meaning never reached) or \tcode{Clock::min()} (meaning always in the past). As a result, computing the duration until timer expiry as \tcode{e - Clock::now()} may cause overflow. \end{itemize}\end{note}
+
+\pnum
 For a type \tcode{Clock} meeting the \tcode{Clock} requirements (\CppXref{time.clock.req}), a type \tcode{X} meets the \tcode{WaitTraits} requirements if it satisfies the requirements listed below.
 
 \pnum
@@ -96,11 +97,11 @@ In Table~\ref{tab:timer.reqmts.waittraits.requirements}, \tcode{t} denotes a (po
 
 \tcode{X::to_wait_duration(d)}  &
 \tcode{Clock::duration}  &
-Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{async_wait} operation. \enternote The return value is typically representative of the duration \tcode{d}. \exitnote  \\ \rowsep
+Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{async_wait} operation. \begin{note} The return value is typically representative of the duration \tcode{d}. \end{note}  \\ \rowsep
 
 \tcode{X::to_wait_duration(t)}  &
 \tcode{Clock::duration}  &
-Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{async_wait} operation. \enternote The return value is typically representative of the duration from \tcode{Clock::now()} until the time point \tcode{t}. \exitnote  \\
+Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{async_wait} operation. \begin{note} The return value is typically representative of the duration from \tcode{Clock::now()} until the time point \tcode{t}. \end{note}  \\
 
 \end{libreqtab3}
 
@@ -414,7 +415,7 @@ template<class CompletionToken>
 \effects Initiates an asynchronous wait operation to repeatedly wait for the relative time produced by \tcode{WaitTraits::to_wait_duration(e)}, where \tcode{e} is a value of type \tcode{time_point} such that \tcode{e <= expiry()}. The completion handler is submitted for execution only when the condition \tcode{ec || expiry() <= clock_type::now()} yields \tcode{true}.
 
 \pnum
-\enternote To implement \tcode{async_wait}, an \tcode{io_context} object \tcode{ctx} may maintain a priority queue for each specialization of \tcode{basic_waitable_timer<Clock, WaitTraits>} for which a timer object was initialized with \tcode{ctx}. Only the time point \tcode{e} of the earliest outstanding expiry need be passed to \tcode{WaitTraits::to_wait_duration(e)}. \exitnote
+\begin{note} To implement \tcode{async_wait}, an \tcode{io_context} object \tcode{ctx} may maintain a priority queue for each specialization of \tcode{basic_waitable_timer<Clock, WaitTraits>} for which a timer object was initialized with \tcode{ctx}. Only the time point \tcode{e} of the earliest outstanding expiry need be passed to \tcode{WaitTraits::to_wait_duration(e)}. \end{note}
 \end{itemdescr}
 
 

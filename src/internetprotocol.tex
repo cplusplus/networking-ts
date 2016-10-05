@@ -1016,7 +1016,7 @@ constexpr address_v4(const bytes_type& bytes);
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \tcode{[0, 0xFF]}. \enternote For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \exitnote
+\remarks \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \tcode{[0, 0xFF]}. \begin{note} For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \end{note}
 
 \pnum
 \postconditions \tcode{to_bytes() == bytes} and \tcode{to_uint() == (bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3]}.
@@ -1028,7 +1028,7 @@ explicit constexpr address_v4(address_v4::uint_type val);
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{out_of_range} if \tcode{val} is not in the range \tcode{[0, 0xFFFFFFFF]}. \enternote For implementations where \tcode{numeric_limits<address_v4::uint_type>::max() == 0xFFFFFFFF}, no out-of-range detection is needed. \exitnote
+\remarks \tcode{out_of_range} if \tcode{val} is not in the range \tcode{[0, 0xFFFFFFFF]}. \begin{note} For implementations where \tcode{numeric_limits<address_v4::uint_type>::max() == 0xFFFFFFFF}, no out-of-range detection is needed. \end{note}
 
 \pnum
 \postconditions \tcode{to_uint() == val} and \tcode{to_bytes()} is \tcode{\{ (val >> 24) \& 0xFF, (val >> 16) \& 0xFF, (val >> 8) \& 0xFF, val \& 0xFF \}}.
@@ -1369,7 +1369,7 @@ namespace ip {
 \tcode{address_v6} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
-\enternote The implementations of the functions \tcode{is_unspecified}, \tcode{is_loopback}, \tcode{is_multicast}, \tcode{is_link_local}, \tcode{is_site_local}, \tcode{is_v4_mapped}, \tcode{is_multicast_node_local}, \tcode{is_multicast_link_local}, \tcode{is_multi\-cast_site_local}, \tcode{is_multicast_org_local} and \tcode{is_multicast_global} are determined by [RFC4291]. \exitnote
+\begin{note} The implementations of the functions \tcode{is_unspecified}, \tcode{is_loopback}, \tcode{is_multicast}, \tcode{is_link_local}, \tcode{is_site_local}, \tcode{is_v4_mapped}, \tcode{is_multicast_node_local}, \tcode{is_multicast_link_local}, \tcode{is_multi\-cast_site_local}, \tcode{is_multicast_org_local} and \tcode{is_multicast_global} are determined by [RFC4291]. \end{note}
 
 
 \rSec2[internet.address.v6.bytes]{Struct \tcode{ip::address_v6::bytes_type}}
@@ -1419,7 +1419,7 @@ constexpr address_v6(const bytes_type& bytes,
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \tcode{[0, 0xFF]}. \enternote For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \exitnote
+\remarks \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \tcode{[0, 0xFF]}. \begin{note} For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \end{note}
 
 \pnum
 \postconditions \tcode{to_bytes() == bytes} and \tcode{scope_id() == scope}.
@@ -2223,7 +2223,7 @@ address_v4_range hosts() const noexcept;
 \returns If \tcode{is_host() == true}, an \tcode{address_v4_range} object representing the single address \tcode{this->address()}. Otherwise, an \tcode{address_v4_range} object representing the range of unique host IP addresses in the network.
 
 \pnum
-\enternote For IPv4, the network address and the broadcast address are not included in the range of host IP addresses. For example, given a network \tcode{192.168.1.0/24}, the range returned by \tcode{hosts()} is from \tcode{192.168.1.1} to \tcode{192.168.1.254} inclusive, and neither \tcode{192.168.1.0} nor the broadcast address \tcode{192.168.1.255} are in the range. \exitnote
+\begin{note} For IPv4, the network address and the broadcast address are not included in the range of host IP addresses. For example, given a network \tcode{192.168.1.0/24}, the range returned by \tcode{hosts()} is from \tcode{192.168.1.1} to \tcode{192.168.1.254} inclusive, and neither \tcode{192.168.1.0} nor the broadcast address \tcode{192.168.1.255} are in the range. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2881,7 +2881,7 @@ os << ss.str();
 \end{itemdescr}
 
 \pnum
-\enternote The representation of the endpoint when it contains an IP version 6 address is based on [RFC2732]. \exitnote
+\begin{note} The representation of the endpoint when it contains an IP version 6 address is based on [RFC2732]. \end{note}
 
 
 \rSec2[internet.endpoint.extensible]{\tcode{ip::basic_endpoint} members (extensible implementations)}
@@ -3945,7 +3945,7 @@ namespace ip {
 \end{libreqtab4}
 
 \pnum
-\enternote The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_STREAM} are defined in the POSIX header file \tcode{<sys/socket.h>}. The constant \tcode{IPPROTO_TCP} is defined in the POSIX header file \tcode{<netinet/in.h>}. \exitnote
+\begin{note} The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_STREAM} are defined in the POSIX header file \tcode{<sys/socket.h>}. The constant \tcode{IPPROTO_TCP} is defined in the POSIX header file \tcode{<netinet/in.h>}. \end{note}
 
 
 \rSec2[internet.tcp.comparisons]{\tcode{ip::tcp} comparisons}
@@ -4073,7 +4073,7 @@ namespace ip {
 \end{libreqtab4}
 
 \pnum
-\enternote The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_DGRAM} are defined in the POSIX header file \tcode{<sys/socket.h>}. The constant \tcode{IPPROTO_UDP} is defined in the POSIX header file \tcode{<netinet/in.h>}. \exitnote
+\begin{note} The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_DGRAM} are defined in the POSIX header file \tcode{<sys/socket.h>}. The constant \tcode{IPPROTO_UDP} is defined in the POSIX header file \tcode{<netinet/in.h>}. \end{note}
 
 
 \rSec2[internet.udp.comparisons]{\tcode{ip::udp} comparisons}
@@ -4139,13 +4139,13 @@ In Table~\ref{tab:internet.socket.opt.requirements}, let \placeholder{C} denote 
 \tcode{IPPROTO_TCP}  &
 \tcode{TCP_NODELAY}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a TCP socket will avoid coalescing of small segments. \enternote That is, setting this option disables the Nagle algorithm. \exitnote  \\ \rowsep
+Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a TCP socket will avoid coalescing of small segments. \begin{note} That is, setting this option disables the Nagle algorithm. \end{note}  \\ \rowsep
 
 \tcode{ip::v6_only}  &
 \tcode{IPPROTO_IPV6}  &
 \tcode{IPV6_V6ONLY}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket created for an IPv6 protocol is restricted to IPv6 communications only. Implementations are not required to support setting the \tcode{v6_only} option to \tcode{false}, and the initial value of the \tcode{v6_only} option for a socket is \impldef{initial value of the \tcode{v6_only} option for a socket}. \enternote As not all operating systems support dual stack IP networking. Some operating systems that do provide dual stack support offer a configuration option to disable it or to set the initial value of the \tcode{v6_only} socket option. \exitnote  \\ \rowsep
+Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket created for an IPv6 protocol is restricted to IPv6 communications only. Implementations are not required to support setting the \tcode{v6_only} option to \tcode{false}, and the initial value of the \tcode{v6_only} option for a socket is \impldef{initial value of the \tcode{v6_only} option for a socket}. \begin{note} As not all operating systems support dual stack IP networking. Some operating systems that do provide dual stack support offer a configuration option to disable it or to set the initial value of the \tcode{v6_only} socket option. \end{note}  \\ \rowsep
 
 \tcode{ip::unicast::}
 \tcode{hops}  &

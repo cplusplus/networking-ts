@@ -185,12 +185,10 @@
 \newcommand{\leftshift}[1]{\ensuremath{\, \mathsf{lshift}_#1 \,}}
 
 %% Notes and examples
-\newcommand{\EnterBlock}[1]{[\,\textit{#1:}\xspace}
-\newcommand{\ExitBlock}[1]{\textit{\,---\,end #1}\,]\xspace}
-\newcommand{\enternote}{\EnterBlock{Note}}
-\newcommand{\exitnote}{\ExitBlock{note}}
-\newcommand{\enterexample}{\EnterBlock{Example}}
-\newcommand{\exitexample}{\ExitBlock{example}}
+\newcommand{\noteintro}[1]{[\,\textit{#1:}\space}
+\newcommand{\noteoutro}[1]{\textit{\,---\,end #1}\,]}
+\newenvironment{note}[1][Note]{\noteintro{#1}}{\noteoutro{note}\xspace}
+\newenvironment{example}[1][Example]{\noteintro{#1}}{\noteoutro{example}\xspace}
 
 %% Library function descriptions
 \newcommand{\Fundescx}[1]{\textit{#1}\xspace}
@@ -208,8 +206,6 @@
 \newcommand{\complexity}{\Fundesc{Complexity}}
 \newcommand{\remark}{\Fundesc{Remark}}
 \newcommand{\remarks}{\Fundesc{Remarks}}
-\newcommand{\note}{\remark}
-\newcommand{\notes}{\remarks}
 \newcommand{\realnote}{\Fundesc{Note}}
 \newcommand{\realnotes}{\Fundesc{Notes}}
 \newcommand{\errors}{\Fundesc{Error conditions}}

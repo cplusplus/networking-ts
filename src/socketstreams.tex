@@ -6,10 +6,10 @@
 \rSec1[socket.streambuf]{Class template \tcode{basic_socket_streambuf}}
 
 \pnum
-The class \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} associates both the input sequence and the output sequence with a socket. The input and output sequences do not support seeking. \enternote The input and output sequences are independent as a stream socket provides full duplex I/O. \exitnote
+The class \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} associates both the input sequence and the output sequence with a socket. The input and output sequences do not support seeking. \begin{note} The input and output sequences are independent as a stream socket provides full duplex I/O. \end{note}
 
 \pnum
- \enternote This class is intended for sending and receiving bytes, not characters. The conversion from characters to bytes, and vice versa, must occur elsewhere. \exitnote
+ \begin{note} This class is intended for sending and receiving bytes, not characters. The conversion from characters to bytes, and vice versa, must occur elsewhere. \end{note}
 
 \begin{codeblock}
 namespace std {
@@ -154,7 +154,7 @@ virtual ~basic_socket_streambuf();
 
 \begin{itemdescr}
 \pnum
-\effects If a put area exists, calls \tcode{overflow(traits_type::eof())} to flush characters. \enternote The socket is closed by the \tcode{basic_stream_socket<protocol_type>} destructor. \exitnote
+\effects If a put area exists, calls \tcode{overflow(traits_type::eof())} to flush characters. \begin{note} The socket is closed by the \tcode{basic_stream_socket<protocol_type>} destructor. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -342,7 +342,7 @@ virtual streambuf* setbuf(char_type* s, streamsize n) override;
 The class template \tcode{basic_socket_iostream<Protocol, Clock, WaitTraits>} supports reading and writing on sockets. It uses a \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} object to control the associated sequences.
 
 \pnum
- \enternote This class is intended for sending and receiving bytes, not characters. The conversion from characters to bytes, and vice versa, must occur elsewhere. \exitnote
+ \begin{note} This class is intended for sending and receiving bytes, not characters. The conversion from characters to bytes, and vice versa, must occur elsewhere. \end{note}
 
 \begin{codeblock}
 namespace std {

@@ -12,13 +12,13 @@
  Some behavior is specified by reference to POSIX. How such behavior is actually implemented is unspecified.
 
 \pnum
- \enternote This constitutes an ``as if'' rule allowing implementations to call native operating system or other APIs. \exitnote
+ \begin{note} This constitutes an ``as if'' rule allowing implementations to call native operating system or other APIs. \end{note}
 
 \pnum
 Implementations are encouraged to provide such behavior as it is defined by POSIX. Implementations shall document any behavior that differs from the behavior defined by POSIX. Implementations that do not support exact POSIX behavior are encouraged to provide behavior as close to POSIX behavior as is reasonable given the limitations of actual operating systems and file systems. If an implementation cannot provide any reasonable behavior, the implementation shall report an error as specified in Error Reporting~(\ref{err.report}).
 
 \pnum
- \enternote This allows users to rely on an exception being thrown or an error code being set when an implementation cannot provide any reasonable behavior. \exitnote
+ \begin{note} This allows users to rely on an exception being thrown or an error code being set when an implementation cannot provide any reasonable behavior. \end{note}
 
 \pnum
  Implementations are not required to provide behavior that is not supported by a particular operating system.
@@ -31,13 +31,13 @@ Implementations are encouraged to provide such behavior as it is defined by POSI
 This Technical Specification defines conditionally-supported features, in the form of additional member functions on types that satisfy \tcode{Protocol}~(\ref{socket.reqmts.protocol}), \tcode{Endpoint}~(\ref{socket.reqmts.endpoint}), \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}) or \tcode{IoControlCommand}~(\ref{socket.reqmts.iocontrolcommand}) requirements.
 
 \pnum
- \enternote This is so that, when the additional member functions are available, \Cpp programs may extend the library to add support for other protocols and socket options. \exitnote
+ \begin{note} This is so that, when the additional member functions are available, \Cpp programs may extend the library to add support for other protocols and socket options. \end{note}
 
 \pnum
 For the purposes of this Technical Specification, implementations that provide all of the additional member functions are known as extensible implementations.
 
 \pnum
- \enternote Implementations are encouraged to provide the additional member functions, where possible. It is intended that POSIX and Windows implementations will provide them. \exitnote
+ \begin{note} Implementations are encouraged to provide the additional member functions, where possible. It is intended that POSIX and Windows implementations will provide them. \end{note}
 
 
 

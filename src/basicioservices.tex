@@ -104,7 +104,7 @@ the number of function objects that are currently being executed by the \tcode{i
 If at any time the outstanding work falls to \tcode{0}, the \tcode{io_context} is stopped as if by \tcode{stop()}.
 
 \pnum
-The \tcode{io_context} member functions \tcode{get_executor}, \tcode{stop}, and \tcode{stopped}, the run functions, and the \tcode{io_context::executor_type} copy constructors, member functions and comparison operators, do not introduce data races as a result of concurrent calls to those functions from different threads of execution. \enternote The \tcode{restart} member function is excluded from these thread safety requirements. \exitnote
+The \tcode{io_context} member functions \tcode{get_executor}, \tcode{stop}, and \tcode{stopped}, the run functions, and the \tcode{io_context::executor_type} copy constructors, member functions and comparison operators, do not introduce data races as a result of concurrent calls to those functions from different threads of execution. \begin{note} The \tcode{restart} member function is excluded from these thread safety requirements. \end{note}
 
 
 \rSec2[io_context.io_context.members]{\tcode{io_context} members}
@@ -290,7 +290,7 @@ void stop();
 \postconditions \tcode{stopped() == true}.
 
 \pnum
-\enternote When \tcode{stopped() == true}, subsequent calls to a run function will exit immediately with a return value of \tcode{0}, without executing any function objects. An \tcode{io_context} remains in the stopped state until a call to \tcode{restart()}. \exitnote
+\begin{note} When \tcode{stopped() == true}, subsequent calls to a run function will exit immediately with a return value of \tcode{0}, without executing any function objects. An \tcode{io_context} remains in the stopped state until a call to \tcode{restart()}. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -423,7 +423,7 @@ bool running_in_this_thread() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{true} if the current thread of execution is calling a run function of the associated \tcode{io_context} object. \enternote That is, the current thread of execution's call chain includes a run function. \exitnote
+\returns \tcode{true} if the current thread of execution is calling a run function of the associated \tcode{io_context} object. \begin{note} That is, the current thread of execution's call chain includes a run function. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -460,7 +460,7 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{running_in_this_thread()} is \tcode{true}, calls \tcode{\textit{DECAY_COPY}(forward<Func>(f))()} (\CppXref{thread.decaycopy}). \enternote If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \exitnote Otherwise, calls \tcode{post(forward<Func>(f), a)}.
+\effects If \tcode{running_in_this_thread()} is \tcode{true}, calls \tcode{\textit{DECAY_COPY}(forward<Func>(f))()} (\CppXref{thread.decaycopy}). \begin{note} If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \end{note} Otherwise, calls \tcode{post(forward<Func>(f), a)}.
 \end{itemdescr}
 
 \begin{itemdecl}

@@ -161,7 +161,7 @@ that POSIX function lists \tcode{EWOULDBLOCK} or \tcode{EAGAIN} in its failure c
 the effects of the operation cannot be established immediately
 \end{itemize}
 
-then the synchronous socket operation shall not block the calling thread. \enternote And the effects of the operation are not established. \exitnote
+then the synchronous socket operation shall not block the calling thread. \begin{note} And the effects of the operation are not established. \end{note}
 
 \pnum
 Otherwise, the synchronous socket operation shall block the calling thread until the effects are established.
@@ -204,7 +204,7 @@ Several classes described in this Technical Specification have a member type \tc
 \impldef{presence and meaning of \tcode{native_handle_type} and \tcode{native_handle}}.
 
 \pnum
-\enternote These members allow implementations to provide access to their implementation details. Their names are specified to facilitate portable compile-time detection. Actual use of these members is inherently non-portable. For operating systems that are based on POSIX, implementations are encouraged to define the \tcode{native_handle_type} for sockets as \tcode{int}, representing the native file descriptor associated with the socket. \exitnote
+\begin{note} These members allow implementations to provide access to their implementation details. Their names are specified to facilitate portable compile-time detection. Actual use of these members is inherently non-portable. For operating systems that are based on POSIX, implementations are encouraged to define the \tcode{native_handle_type} for sockets as \tcode{int}, representing the native file descriptor associated with the socket. \end{note}
 
 
 
@@ -1951,7 +1951,7 @@ void non_blocking(bool mode, error_code& ec);
 \postconditions \tcode{non_blocking() == mode}.
 
 \pnum
- \enternote The non-blocking mode has no effect on the behavior of asynchronous operations. \exitnote
+ \begin{note} The non-blocking mode has no effect on the behavior of asynchronous operations. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1993,7 +1993,7 @@ if (flags >= 0)
 \item
 \tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \item
-\tcode{errc::invalid_argument} --- if \tcode{mode == false} and \tcode{non_blocking() == true}. \enternote As the combination does not make sense. \exitnote
+\tcode{errc::invalid_argument} --- if \tcode{mode == false} and \tcode{non_blocking() == true}. \begin{note} As the combination does not make sense. \end{note}
 \end{itemize}
 \end{itemdescr}
 
@@ -2016,7 +2016,7 @@ bool at_mark(error_code& ec) const;
 
 \begin{itemdescr}
 \pnum
-\effects Determines if this socket is at the out-of-band data mark, as if by POSIX \tcode{sockatmark(native_handle())}. \enternote The \tcode{at_mark()} function must be used in conjunction with the \tcode{socket_base::out_of_band_inline} socket option. \exitnote
+\effects Determines if this socket is at the out-of-band data mark, as if by POSIX \tcode{sockatmark(native_handle())}. \begin{note} The \tcode{at_mark()} function must be used in conjunction with the \tcode{socket_base::out_of_band_inline} socket option. \end{note}
 
 \pnum
 \returns A \tcode{bool} indicating whether this socket is at the out-of-band data mark. \tcode{false} if an error occurs.
@@ -2482,7 +2482,7 @@ recvmsg(native_handle(), &message, static_cast<int>(flags));
 \returns On success, the number of bytes received. Otherwise \tcode{0}.
 
 \pnum
- \enternote This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \exitnote
+ \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2526,7 +2526,7 @@ recvmsg(native_handle(), &message, static_cast<int>(flags));
 If the operation completes successfully, \tcode{n} is the number of bytes received. Otherwise \tcode{n} is \tcode{0}.
 
 \pnum
- \enternote This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \exitnote
+ \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \end{note}
 
 \pnum
 \errors
@@ -2587,7 +2587,7 @@ if (result >= 0)
 \returns On success, the number of bytes received. Otherwise \tcode{0}.
 
 \pnum
- \enternote This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \exitnote
+ \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2638,7 +2638,7 @@ if (result >= 0)
 If the operation completes successfully, \tcode{n} is the number of bytes received. Otherwise \tcode{n} is \tcode{0}.
 
 \pnum
- \enternote This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \exitnote
+ \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \end{note}
 
 \pnum
 \errors
@@ -3897,7 +3897,7 @@ void non_blocking(bool mode, error_code& ec);
 \postconditions \tcode{non_blocking() == mode}.
 
 \pnum
- \enternote The non-blocking mode has no effect on the behavior of asynchronous operations. \exitnote
+ \begin{note} The non-blocking mode has no effect on the behavior of asynchronous operations. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3939,7 +3939,7 @@ if (flags >= 0)
 \item
 \tcode{errc::bad_file_descriptor} --- if \tcode{is_open()} is \tcode{false}.
 \item
-\tcode{errc::invalid_argument} --- if \tcode{mode == false} and \tcode{non_blocking() == true}. \enternote As the combination does not make sense. \exitnote
+\tcode{errc::invalid_argument} --- if \tcode{mode == false} and \tcode{non_blocking() == true}. \begin{note} As the combination does not make sense. \end{note}
 \end{itemize}
 \end{itemdescr}
 
@@ -4002,7 +4002,7 @@ void enable_connection_aborted(bool mode);
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{mode} is true, subsequent synchronous or asynchronous accept operations on this acceptor are permitted to fail with error condition \tcode{errc::connection_aborted}. If \tcode{mode} is \tcode{false}, subsequent accept operations will not fail with \tcode{errc::connection_aborted}. \enternote If \tcode{mode} is \tcode{false}, the implementation will restart the call to POSIX \tcode{accept} if it fails with \tcode{ECONNABORTED}. \exitnote
+\effects If \tcode{mode} is true, subsequent synchronous or asynchronous accept operations on this acceptor are permitted to fail with error condition \tcode{errc::connection_aborted}. If \tcode{mode} is \tcode{false}, subsequent accept operations will not fail with \tcode{errc::connection_aborted}. \begin{note} If \tcode{mode} is \tcode{false}, the implementation will restart the call to POSIX \tcode{accept} if it fails with \tcode{ECONNABORTED}. \end{note}
 
 \pnum
 \errors
