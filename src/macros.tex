@@ -269,8 +269,8 @@
 
 %% Double underscore
 \newcommand{\ungap}{\kern.5pt}
-\newcommand{\unun}{\_\ungap\_}
-\newcommand{\xname}[1]{\unun\ungap#1}
+\newcommand{\unun}{\textunderscore\ungap\textunderscore}
+\newcommand{\xname}[1]{\tcode{\unun\ungap#1}}
 \newcommand{\mname}[1]{\tcode{\unun\ungap#1\ungap\unun}}
 
 %% Ranges
