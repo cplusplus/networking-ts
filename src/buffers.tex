@@ -1353,7 +1353,7 @@ void consume(size_t n);
 \effects Performs:
 \begin{codeblock}
 size_t m = min(n, size_);
-str_.erase(m);
+str_.erase(0, m);
 size_ -= m;
 \end{codeblock}
 
