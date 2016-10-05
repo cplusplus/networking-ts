@@ -757,7 +757,7 @@ template<class Allocator = allocator<char>>
 
 
 \indexlibrarytwo{address}{operator==}%
-\rSec2[internet.address.comparisons]{\tcode{ip::address} comparisons}
+\rSec2[internet.address.comp]{\tcode{ip::address} comparisons}
 
 \begin{itemdecl}
 constexpr bool operator==(const address& a, const address& b) noexcept;
@@ -1136,7 +1136,7 @@ static constexpr address_v4 broadcast() noexcept;
 
 
 
-\rSec2[internet.address.v4.comparisons]{\tcode{ip::address_v4} comparisons}
+\rSec2[internet.address.v4.comp]{\tcode{ip::address_v4} comparisons}
 
 \indexlibrarytwo{address_v4}{operator==}%
 \begin{itemdecl}
@@ -1631,7 +1631,7 @@ static constexpr address_v6 loopback() noexcept;
 
 
 
-\rSec2[internet.address.v6.comparisons]{\tcode{ip::address_v6} comparisons}
+\rSec2[internet.address.v6.comp]{\tcode{ip::address_v6} comparisons}
 
 \indexlibrarytwo{address_v6}{operator==}%
 \begin{itemdecl}
@@ -2266,7 +2266,7 @@ template<class Allocator = allocator<char>>
 
 
 
-\rSec2[internet.network.v4.comparisons]{\tcode{ip::network_v4} comparisons}
+\rSec2[internet.network.v4.comp]{\tcode{ip::network_v4} comparisons}
 
 \begin{itemdecl}
 constexpr bool operator==(const network_v4& a, const network_v4& b) noexcept;
@@ -2512,7 +2512,7 @@ template<class Allocator = allocator<char>>
 
 
 
-\rSec2[internet.network.v6.comparisons]{\tcode{ip::network_v6} comparisons}
+\rSec2[internet.network.v6.comp]{\tcode{ip::network_v6} comparisons}
 
 \begin{itemdecl}
 constexpr bool operator==(const network_v6& a, const network_v6& b) noexcept;
@@ -2783,7 +2783,7 @@ void port(port_type port_num) noexcept;
 
 
 
-\rSec2[internet.endpoint.comparisons]{\tcode{ip::basic_endpoint} comparisons}
+\rSec2[internet.endpoint.comp]{\tcode{ip::basic_endpoint} comparisons}
 
 \begin{itemdecl}
 template<class InternetProtocol>
@@ -3070,7 +3070,7 @@ template<class Allocator = allocator<char>>
 
 
 
-\rSec2[internet.resolver.entry.comparisons]{\tcode{op::basic_resolver_entry} comparisons}
+\rSec2[internet.resolver.entry.comp]{\tcode{op::basic_resolver_entry} comparisons}
 
 \begin{itemdecl}
 template<class InternetProtocol>
@@ -3297,7 +3297,7 @@ void swap(basic_resolver_results& that) noexcept;
 
 
 
-\rSec2[internet.resolver.results.comparisons]{\tcode{ip::basic_resolver_results} comparisons}
+\rSec2[internet.resolver.results.comp]{\tcode{ip::basic_resolver_results} comparisons}
 
 \begin{itemdecl}
 template<class InternetProtocol>
@@ -3948,7 +3948,7 @@ namespace ip {
 \enternote The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_STREAM} are defined in the POSIX header file \tcode{<sys/socket.h>}. The constant \tcode{IPPROTO_TCP} is defined in the POSIX header file \tcode{<netinet/in.h>}. \exitnote
 
 
-\rSec2[internet.tcp.comparisons]{\tcode{ip::tcp} comparisons}
+\rSec2[internet.tcp.comp]{\tcode{ip::tcp} comparisons}
 
 \begin{itemdecl}
 constexpr bool operator==(const tcp& a, const tcp& b) noexcept;
@@ -4076,7 +4076,7 @@ namespace ip {
 \enternote The constants \tcode{AF_INET}, \tcode{AF_INET6} and \tcode{SOCK_DGRAM} are defined in the POSIX header file \tcode{<sys/socket.h>}. The constant \tcode{IPPROTO_UDP} is defined in the POSIX header file \tcode{<netinet/in.h>}. \exitnote
 
 
-\rSec2[internet.udp.comparisons]{\tcode{ip::udp} comparisons}
+\rSec2[internet.udp.comp]{\tcode{ip::udp} comparisons}
 
 \begin{itemdecl}
 constexpr bool operator==(const udp& a, const udp& b) noexcept;
