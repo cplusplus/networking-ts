@@ -1613,7 +1613,7 @@ return_type get();
 
 \rSec2[async.exec.binder.assoc.alloc]{Class template partial specialization \tcode{associated_allocator}}
 
-\begin{itemdecl}
+\begin{codeblock}
 namespace std {
 namespace experimental {
 namespace net {
@@ -1632,7 +1632,9 @@ inline namespace v1 {
 } // namespace net
 } // namespace experimental
 } // namespace std
+\end{codeblock}
 
+\begin{itemdecl}
 static type get(const executor_binder<T, Executor>& b,
                 const ProtoAllocator& a = ProtoAllocator()) noexcept;
 \end{itemdecl}
