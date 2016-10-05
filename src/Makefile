@@ -28,26 +28,19 @@ rebuild:
 	$(TSPDF)
 	$(TSPDF)
 
-full: $(FIGURES) grammar xrefs reindex
+full: $(FIGURES) reindex
 
 %.pdf: %.dot
 	dot -o $@ -Tpdf $<
 
-grammar:
-	sh ../tools/makegram
-
-xrefs:
-	sh ../tools/makexref
-
-# reindex:
-# 	$(TSPDF)
-# 	$(TSPDF)
-# 	$(TSPDF)
-# 	makeindex generalindex
-# 	makeindex libraryindex
-# 	makeindex grammarindex
-# 	makeindex impldefindex
-# 	$(TSPDF)
-# 	$(TSPDF)
+reindex:
+	$(TSPDF)
+	$(TSPDF)
+	$(TSPDF)
+	makeindex generalindex
+	makeindex libraryindex
+	makeindex impldefindex
+	$(TSPDF)
+	$(TSPDF)
 
 ### Makefile ends here
