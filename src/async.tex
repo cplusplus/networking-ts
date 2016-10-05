@@ -2106,7 +2106,7 @@ void join();
 \pnum
 An exception of type \tcode{bad_executor} is thrown by \tcode{executor} member functions \tcode{dispatch}, \tcode{post}, and \tcode{defer} when the executor object has no target.
 
-\begin{itemdecl}
+\begin{codeblock}
 namespace std {
 namespace experimental {
 namespace net {
@@ -2123,7 +2123,9 @@ inline namespace v1 {
 } // namespace net
 } // namespace experimental
 } // namespace std
+\end{codeblock}
 
+\begin{itemdecl}
 bad_executor() noexcept;
 \end{itemdecl}
 
