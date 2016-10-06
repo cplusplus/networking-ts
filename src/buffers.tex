@@ -6,6 +6,7 @@
 \indexlibrary{\idxhdr{experimental/buffer}}%
 \rSec1[buffer.synop]{Header \tcode{<experimental/buffer>} synopsis}
 
+\indexlibrary{\idxcode{stream_errc}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -307,6 +308,7 @@ A type \tcode{X} meets the \tcode{MutableBufferSequence} requirements if it sati
 In Table~\ref{tab:buffer.reqmts.mutablebuffersequence.requirements}, \tcode{x}
 denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
 
+\indextext{requirements!\idxcode{MutableBufferSequence}}%
 \begin{LongTable}
 {MutableBufferSequence requirements}
 {tab:buffer.reqmts.mutablebuffersequence.requirements}
@@ -367,6 +369,7 @@ A type \tcode{X} meets the \tcode{ConstBufferSequence} requirements if it satisf
 \pnum
 In Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements}, \tcode{x} denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
 
+\indextext{requirements!\idxcode{ConstBufferSequence}}%
 \begin{LongTable}
 {ConstBufferSequence requirements}
 {tab:buffer.reqmts.constbuffersequence.requirements}
@@ -430,6 +433,7 @@ A type \tcode{X} meets the \tcode{DynamicBuffer} requirements if it satisfies th
 \pnum
 In Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}, \tcode{x} denotes a value of type \tcode{X}, \tcode{x1} denotes a (possibly const) value of type \tcode{X}, and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
 
+\indextext{requirements!\idxcode{DynamicBuffer}}%
 \begin{libreqtab3}
 {DynamicBuffer requirements}
 {tab:buffer.reqmts.dynamicbuffer.requirements}
@@ -493,6 +497,7 @@ A \defn{read operation} is an operation that reads data into a mutable buffer se
 \pnum
 A \defn{write operation} is an operation that writes data from a constant buffer sequence argument of a type meeting \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements. The constant buffer sequence specifies memory where the data to be written is located. A write operation shall always write a buffer in the sequence completely before proceeding to the next.
 
+\indextext{asynchronous operation}%
 \pnum
 If a read or write operation is also an asynchronous operation~(\ref{async.reqmts.async}), the operation shall maintain one or more copies of the buffer sequence until such time as the operation no longer requires access to the memory specified by the buffers in the sequence. The program shall ensure the memory remains valid until:
 
@@ -509,6 +514,7 @@ whichever comes first.
 \indextext{error codes!stream}%
 \rSec1[buffer.err]{Error codes}
 
+\indexlibrary{\idxcode{stream_category}}%
 \begin{itemdecl}
 const error_category& stream_category() noexcept;
 \end{itemdecl}
@@ -521,6 +527,7 @@ const error_category& stream_category() noexcept;
 The object's \tcode{default_error_condition} and \tcode{equivalent} virtual functions behave as specified for the class \tcode{error_category}. The object's \tcode{name} virtual function returns a pointer to the string \tcode{"stream"}.
 \end{itemdescr}
 
+\indexlibrarymember{make_error_code}{stream_errc}%
 \begin{itemdecl}
 error_code make_error_code(stream_errc e) noexcept;
 \end{itemdecl}
@@ -530,6 +537,7 @@ error_code make_error_code(stream_errc e) noexcept;
 \returns \tcode{error_code(static_cast<int>(e), stream_category())}.
 \end{itemdescr}
 
+\indexlibrarymember{make_error_condition}{stream_errc}%
 \begin{itemdecl}
 error_condition make_error_condition(stream_errc e) noexcept;
 \end{itemdecl}
@@ -543,6 +551,7 @@ error_condition make_error_condition(stream_errc e) noexcept;
 
 \rSec1[buffer.mutable]{Class \tcode{mutable_buffer}}
 
+\indexlibrary{\idxcode{mutable_buffer}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -575,6 +584,7 @@ inline namespace v1 {
 \pnum
 The \tcode{mutable_buffer} class satisfies requirements of \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
+\indexlibrary{\idxcode{mutable_buffer}!constructor}%
 \begin{itemdecl}
 mutable_buffer() noexcept;
 \end{itemdecl}
@@ -584,6 +594,7 @@ mutable_buffer() noexcept;
 \postconditions \tcode{data_ == nullptr} and \tcode{size_ == 0}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{mutable_buffer}!constructor}%
 \begin{itemdecl}
 mutable_buffer(void* p, size_t n) noexcept;
 \end{itemdecl}
@@ -593,6 +604,7 @@ mutable_buffer(void* p, size_t n) noexcept;
 \postconditions \tcode{data_ == p} and \tcode{size_ == n}.
 \end{itemdescr}
 
+\indexlibrarymember{data}{mutable_buffer}%
 \begin{itemdecl}
 void* data() const noexcept;
 \end{itemdecl}
@@ -602,6 +614,7 @@ void* data() const noexcept;
 \returns \tcode{data_}.
 \end{itemdescr}
 
+\indexlibrarymember{size}{mutable_buffer}%
 \begin{itemdecl}
 size_t size() const noexcept;
 \end{itemdecl}
@@ -611,6 +624,7 @@ size_t size() const noexcept;
 \returns \tcode{size_}.
 \end{itemdescr}
 
+\indexlibrarymember{operator+=}{mutable_buffer}%
 \begin{itemdecl}
 mutable_buffer& operator+=(size_t n) noexcept;
 \end{itemdecl}
@@ -659,6 +673,7 @@ inline namespace v1 {
 \pnum
 The \tcode{const_buffer} class satisfies requirements of \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
+\indexlibrary{\idxcode{const_buffer}!constructor}%
 \begin{itemdecl}
 const_buffer() noexcept;
 \end{itemdecl}
@@ -668,6 +683,7 @@ const_buffer() noexcept;
 \postconditions \tcode{data_ == nullptr} and \tcode{size_ == 0}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{const_buffer}!constructor}%
 \begin{itemdecl}
 const_buffer(const void* p, size_t n) noexcept;
 \end{itemdecl}
@@ -677,6 +693,7 @@ const_buffer(const void* p, size_t n) noexcept;
 \postconditions \tcode{data_ == p} and \tcode{size_ == n}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{const_buffer}!constructor}%
 \begin{itemdecl}
 const_buffer(const mutable_buffer& b);
 \end{itemdecl}
@@ -686,6 +703,7 @@ const_buffer(const mutable_buffer& b);
 \postconditions \tcode{data_ == b.data()} and \tcode{size_ == b.size()}.
 \end{itemdescr}
 
+\indexlibrarymember{data}{const_buffer}%
 \begin{itemdecl}
 const void* data() const noexcept;
 \end{itemdecl}
@@ -695,6 +713,7 @@ const void* data() const noexcept;
 \returns \tcode{data_}.
 \end{itemdescr}
 
+\indexlibrarymember{size}{const_buffer}%
 \begin{itemdecl}
 size_t size() const noexcept;
 \end{itemdecl}
@@ -704,6 +723,7 @@ size_t size() const noexcept;
 \returns \tcode{size_}.
 \end{itemdescr}
 
+\indexlibrarymember{operator+=}{mutable_buffer}%
 \begin{itemdecl}
 const_buffer& operator+=(size_t n) noexcept;
 \end{itemdecl}
@@ -719,6 +739,9 @@ const_buffer& operator+=(size_t n) noexcept;
 
 \rSec1[buffer.traits]{Buffer type traits}
 
+\indexlibrary{\idxcode{is_mutable_buffer_sequence}}%
+\indexlibrary{\idxcode{is_const_buffer_sequence}}%
+\indexlibrary{\idxcode{is_dynamic_buffer}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -774,6 +797,7 @@ This sub-clause contains templates that may be used to query the properties of a
 
 \rSec1[buffer.seq.access]{Buffer sequence access}
 
+\indexlibrary{\idxcode{buffer_sequence_begin}}%
 \begin{itemdecl}
 const mutable_buffer* buffer_sequence_begin(const mutable_buffer& b);
 const const_buffer* buffer_sequence_begin(const const_buffer& b);
@@ -784,6 +808,7 @@ const const_buffer* buffer_sequence_begin(const const_buffer& b);
 \returns \tcode{std::addressof(b)}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{buffer_sequence_end}}%
 \begin{itemdecl}
 const mutable_buffer* buffer_sequence_end(const mutable_buffer& b);
 const const_buffer* buffer_sequence_end(const const_buffer& b);
@@ -794,6 +819,7 @@ const const_buffer* buffer_sequence_end(const const_buffer& b);
 \returns \tcode{std::addressof(b) + 1}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{buffer_sequence_begin}}%
 \begin{itemdecl}
 template<class C> auto buffer_sequence_begin(C& c) -> decltype(c.begin());
 template<class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin());
@@ -804,6 +830,7 @@ template<class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin());
 \returns \tcode{c.begin()}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{buffer_sequence_end}}%
 \begin{itemdecl}
 template<class C> auto buffer_sequence_end(C& c) -> decltype(c.end());
 template<class C> auto buffer_sequence_end(const C& c) -> decltype(c.end());
@@ -818,6 +845,7 @@ template<class C> auto buffer_sequence_end(const C& c) -> decltype(c.end());
 
 \rSec1[buffer.size]{Function \tcode{buffer_size}}
 
+\indexlibrary{\idxcode{buffer_sequence_size}}%
 \begin{itemdecl}
 template<class ConstBufferSequence>
   size_t buffer_size(const ConstBufferSequence& buffers) noexcept;
@@ -844,6 +872,7 @@ return total_size;
 
 \rSec1[buffer.copy]{Function \tcode{buffer_copy}}
 
+\indexlibrary{\idxcode{buffer_copy}}%
 \begin{itemdecl}
 template<class MutableBufferSequence, class ConstBufferSequence>
   size_t buffer_copy(const MutableBufferSequence& dest,
@@ -928,6 +957,7 @@ For the function overloads below that accept an argument of type \tcode{vector<>
 \pnum
 For the function overloads below that accept an argument of type \tcode{basic_string<>}, the buffer objects returned are invalidated according to the rules defined for invalidation of references, pointers and iterators referring to elements of the sequence (\CppXref{string.require}).
 
+\indexlibrary{\idxcode{buffer}}%
 \begin{itemdecl}
 mutable_buffer buffer(void* p, size_t n) noexcept;
 \end{itemdecl}
@@ -1051,6 +1081,7 @@ template<class CharT, class Traits>
 
 \rSec1[buffer.dynamic.vector]{Class template \tcode{dynamic_vector_buffer}}
 
+\indexlibrary{\idxcode{dynamic_vector_buffer}}%
 \pnum
 Class template \tcode{dynamic_vector_buffer} is an adaptor used to automatically grow or shrink a \tcode{vector} object, to reflect the data successfully transferred in an I/O operation.
 
@@ -1101,6 +1132,7 @@ The \tcode{dynamic_vector_buffer} class template meets the requirements of \tcod
 \pnum
 The \tcode{dynamic_vector_buffer} class template requires that \tcode{T} is a trivially copyable or standard-layout type (\CppXref{basic.types}) and that \tcode{sizeof(T) == 1}.
 
+\indexlibrary{\idxcode{dynamic_vector_buffer}!constructor}%
 \begin{itemdecl}
 explicit dynamic_vector_buffer(vector<T, Allocator>& vec) noexcept;
 \end{itemdecl}
@@ -1110,6 +1142,7 @@ explicit dynamic_vector_buffer(vector<T, Allocator>& vec) noexcept;
 \effects Initializes \tcode{vec_} with \tcode{vec}, \tcode{size_} with \tcode{vec.size()}, and \tcode{max_size_} with \tcode{vec.max_size()}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{dynamic_vector_buffer}!constructor}%
 \begin{itemdecl}
 dynamic_vector_buffer(vector<T, Allocator>& vec,
                       size_t maximum_size) noexcept;
@@ -1123,6 +1156,7 @@ dynamic_vector_buffer(vector<T, Allocator>& vec,
 \effects Initializes \tcode{vec_} with \tcode{vec}, \tcode{size_} with \tcode{vec.size()}, and \tcode{max_size_} with \tcode{maximum_size}.
 \end{itemdescr}
 
+\indexlibrarymember{size}{dynamic_vector_buffer}%
 \begin{itemdecl}
 size_t size() const noexcept;
 \end{itemdecl}
@@ -1132,6 +1166,7 @@ size_t size() const noexcept;
 \returns \tcode{size_}.
 \end{itemdescr}
 
+\indexlibrarymember{max_size}{dynamic_vector_buffer}%
 \begin{itemdecl}
 size_t max_size() const noexcept;
 \end{itemdecl}
@@ -1141,6 +1176,7 @@ size_t max_size() const noexcept;
 \returns \tcode{max_size_}.
 \end{itemdescr}
 
+\indexlibrarymember{capacity}{dynamic_vector_buffer}%
 \begin{itemdecl}
 size_t capacity() const noexcept;
 \end{itemdecl}
@@ -1150,6 +1186,7 @@ size_t capacity() const noexcept;
 \returns \tcode{vec_.capacity()}.
 \end{itemdescr}
 
+\indexlibrarymember{data}{dynamic_vector_buffer}%
 \begin{itemdecl}
 const_buffers_type data() const noexcept;
 \end{itemdecl}
@@ -1159,6 +1196,7 @@ const_buffers_type data() const noexcept;
 \returns \tcode{buffer(vec_, size_)}.
 \end{itemdescr}
 
+\indexlibrarymember{prepare}{dynamic_vector_buffer}%
 \begin{itemdecl}
 mutable_buffers_type prepare(size_t n);
 \end{itemdecl}
@@ -1174,6 +1212,7 @@ mutable_buffers_type prepare(size_t n);
 \remarks \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
 \end{itemdescr}
 
+\indexlibrarymember{commit}{dynamic_vector_buffer}%
 \begin{itemdecl}
 void commit(size_t n);
 \end{itemdecl}
@@ -1188,6 +1227,7 @@ vec_.resize(size_);
 
 \end{itemdescr}
 
+\indexlibrarymember{consume}{dynamic_vector_buffer}%
 \begin{itemdecl}
 void consume(size_t n);
 \end{itemdecl}
@@ -1207,6 +1247,7 @@ size_ -= m;
 
 \rSec1[buffer.dynamic.string]{Class template \tcode{dynamic_string_buffer}}
 
+\indexlibrary{\idxcode{dynamic_string_buffer}}%
 \pnum
 Class template \tcode{dynamic_string_buffer} is an adaptor used to automatically grow or shrink a \tcode{basic_string} object, to reflect the data successfully transferred in an I/O operation.
 
@@ -1257,6 +1298,7 @@ The \tcode{dynamic_string_buffer} class template meets the requirements of \tcod
 \pnum
 The \tcode{dynamic_string_buffer} class template requires that \tcode{sizeof(CharT) == 1}.
 
+\indexlibrary{\idxcode{dynamic_string_buffer}!constructor}%
 \begin{itemdecl}
 explicit dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str) noexcept;
 \end{itemdecl}
@@ -1266,6 +1308,7 @@ explicit dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str) noex
 \effects Initializes \tcode{str_} with \tcode{str}, \tcode{size_} with \tcode{str.size()}, and \tcode{max_size_} with \tcode{str.max_size()}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{dynamic_string_buffer}!constructor}%
 \begin{itemdecl}
 dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str,
                       size_t maximum_size) noexcept;
@@ -1279,6 +1322,7 @@ dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str,
 \effects Initializes \tcode{str_} with \tcode{str}, \tcode{size_} with \tcode{str.size()}, and \tcode{max_size_} with \tcode{maximum_size}.
 \end{itemdescr}
 
+\indexlibrarymember{size}{dynamic_string_buffer}%
 \begin{itemdecl}
 size_t size() const noexcept;
 \end{itemdecl}
@@ -1288,6 +1332,7 @@ size_t size() const noexcept;
 \returns \tcode{size_}.
 \end{itemdescr}
 
+\indexlibrarymember{max_size}{dynamic_string_buffer}%
 \begin{itemdecl}
 size_t max_size() const noexcept;
 \end{itemdecl}
@@ -1297,6 +1342,7 @@ size_t max_size() const noexcept;
 \returns \tcode{max_size_}.
 \end{itemdescr}
 
+\indexlibrarymember{capacity}{dynamic_string_buffer}%
 \begin{itemdecl}
 size_t capacity() const noexcept;
 \end{itemdecl}
@@ -1306,6 +1352,7 @@ size_t capacity() const noexcept;
 \returns \tcode{str_.capacity()}.
 \end{itemdescr}
 
+\indexlibrarymember{data}{dynamic_string_buffer}%
 \begin{itemdecl}
 const_buffers_type data() const noexcept;
 \end{itemdecl}
@@ -1315,6 +1362,7 @@ const_buffers_type data() const noexcept;
 \returns \tcode{buffer(str_, size_)}.
 \end{itemdescr}
 
+\indexlibrarymember{prepare}{dynamic_string_buffer}%
 \begin{itemdecl}
 mutable_buffers_type prepare(size_t n);
 \end{itemdecl}
@@ -1330,6 +1378,7 @@ mutable_buffers_type prepare(size_t n);
 \remarks \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
 \end{itemdescr}
 
+\indexlibrarymember{commit}{dynamic_string_buffer}%
 \begin{itemdecl}
 void commit(size_t n) noexcept;
 \end{itemdecl}
@@ -1344,6 +1393,7 @@ str_.resize(size_);
 
 \end{itemdescr}
 
+\indexlibrarymember{consume}{dynamic_string_buffer}%
 \begin{itemdecl}
 void consume(size_t n);
 \end{itemdecl}
@@ -1363,6 +1413,7 @@ size_ -= m;
 
 \rSec1[buffer.dynamic.creation]{Dynamic buffer creation functions}
 
+\indexlibrary{\idxcode{dynamic_buffer}}%
 \begin{itemdecl}
 template<class T, class Allocator>
   dynamic_vector_buffer<T, Allocator>
