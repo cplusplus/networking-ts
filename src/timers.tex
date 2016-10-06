@@ -63,7 +63,8 @@ inline namespace v1 {
 \rSec2[timer.reqmts.waittraits]{Wait traits requirements}
 
 \pnum
-The \tcode{basic_waitable_timer} template uses wait traits to allow programs to customize \tcode{wait} and \tcode{async_wait} behavior. \begin{note} Possible uses of wait traits include:
+The \tcode{basic_waitable_timer} template uses wait traits to allow programs to customize \tcode{wait} and \tcode{async_wait} behavior.
+\begin{note} Possible uses of wait traits include:
 \begin{itemize}
 \item
  To enable timers based on non-realtime clocks.
@@ -80,6 +81,7 @@ For a type \tcode{Clock} meeting the \tcode{Clock} requirements (\CppXref{time.c
 \pnum
 In Table~\ref{tab:timer.reqmts.waittraits.requirements}, \tcode{t} denotes a (possibly const) value of type \tcode{Clock::time_point}; and \tcode{d} denotes a (possibly const) value of type \tcode{Clock::duration}.
 
+\indextext{requirements!\idxcode{WaitTraits}}%
 \begin{libreqtab3}
 {WaitTraits requirements}
 {tab:timer.reqmts.waittraits.requirements}
@@ -108,6 +110,7 @@ Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{a
 
 \rSec1[timer.waittraits]{Class template \tcode{wait_traits}}
 
+\indexlibrary{\idxcode{wait_traits}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -133,6 +136,7 @@ inline namespace v1 {
 \pnum
 Class template \tcode{wait_traits} satisfies the \tcode{WaitTraits}~(\ref{timer.reqmts.waittraits}) type requirements. Template argument \tcode{Clock} is a type meeting the \tcode{Clock} requirements (\CppXref{time.clock.req}).
 
+\indexlibrarymember{to_wait_duration}{wait_traits}%
 \begin{itemdecl}
 static typename Clock::duration to_wait_duration(
   const typename Clock::duration& d);
@@ -143,6 +147,7 @@ static typename Clock::duration to_wait_duration(
 \returns \tcode{d}.
 \end{itemdescr}
 
+\indexlibrarymember{to_wait_duration}{wait_traits}%
 \begin{itemdecl}
 static typename Clock::duration to_wait_duration(
   const typename Clock::time_point& t);
@@ -156,6 +161,7 @@ static typename Clock::duration to_wait_duration(
 
 \rSec1[timer.waitable]{Class template \tcode{basic_waitable_timer}}
 
+\indexlibrary{\idxcode{basic_waitable_timer}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -217,6 +223,7 @@ Instances of class template \tcode{basic_waitable_timer} meet the requirements o
 
 \rSec2[timer.waitable.cons]{\tcode{basic_waitable_timer} constructors}
 
+\indexlibrary{\idxcode{basic_waitable_timer}!constructor}%
 \begin{itemdecl}
 explicit basic_waitable_timer(io_context& ctx);
 \end{itemdecl}
@@ -277,6 +284,7 @@ basic_waitable_timer(basic_waitable_timer&& rhs);
 
 \rSec2[timer.waitable.dtor]{\tcode{basic_waitable_timer} destructor}
 
+\indexlibrary{\idxcode{basic_waitable_timer}!destructor}%
 \begin{itemdecl}
 ~basic_waitable_timer();
 \end{itemdecl}
@@ -290,6 +298,7 @@ basic_waitable_timer(basic_waitable_timer&& rhs);
 
 \rSec2[timer.waitable.assign]{\tcode{basic_waitable_timer} assignment}
 
+\indexlibrarymember{operator=}{basic_waitable_timer}%
 \begin{itemdecl}
 basic_waitable_timer& operator=(basic_waitable_timer&& rhs);
 \end{itemdecl}
@@ -317,6 +326,7 @@ basic_waitable_timer& operator=(basic_waitable_timer&& rhs);
 
 \rSec2[timer.waitable.ops]{\tcode{basic_waitable_timer} operations}
 
+\indexlibrarymember{get_executor}{basic_waitable_timer}%
 \begin{itemdecl}
 executor_type get_executor() noexcept;
 \end{itemdecl}
@@ -326,6 +336,7 @@ executor_type get_executor() noexcept;
 \returns The associated executor.
 \end{itemdescr}
 
+\indexlibrarymember{cancel}{basic_waitable_timer}%
 \begin{itemdecl}
 size_t cancel();
 \end{itemdecl}
@@ -341,6 +352,7 @@ size_t cancel();
 \remarks Does not block (\CppXref{defns.block}) the calling thread pending completion of the canceled operations.
 \end{itemdescr}
 
+\indexlibrarymember{cancel_one}{basic_waitable_timer}%
 \begin{itemdecl}
 size_t cancel_one();
 \end{itemdecl}
@@ -356,6 +368,7 @@ size_t cancel_one();
 \remarks Does not block (\CppXref{defns.block}) the calling thread pending completion of the canceled operation.
 \end{itemdescr}
 
+\indexlibrarymember{expiry}{basic_waitable_timer}%
 \begin{itemdecl}
 time_point expiry() const;
 \end{itemdecl}
@@ -365,6 +378,7 @@ time_point expiry() const;
 \returns The expiry time associated with the timer, as previously set using \tcode{expires_at()} or \tcode{expires_after()}.
 \end{itemdescr}
 
+\indexlibrarymember{expires_at}{basic_waitable_timer}%
 \begin{itemdecl}
 size_t expires_at(const time_point& t);
 \end{itemdecl}
@@ -380,6 +394,7 @@ size_t expires_at(const time_point& t);
 \postconditions \tcode{expiry() == t}.
 \end{itemdescr}
 
+\indexlibrarymember{expires_after}{basic_waitable_timer}%
 \begin{itemdecl}
 size_t expires_after(const duration& d);
 \end{itemdecl}
@@ -389,6 +404,7 @@ size_t expires_after(const duration& d);
 \returns \tcode{expires_at(clock_type::now() + d)}.
 \end{itemdescr}
 
+\indexlibrarymember{wait}{basic_waitable_timer}%
 \begin{itemdecl}
 void wait();
 void wait(error_code& ec);
@@ -402,6 +418,8 @@ void wait(error_code& ec);
 \postconditions \tcode{ec || expiry() <= clock_type::now()}.
 \end{itemdescr}
 
+\indextext{asynchronous wait operation}%
+\indexlibrarymember{async_wait}{basic_waitable_timer}%
 \begin{itemdecl}
 template<class CompletionToken>
   @\DEDUCED@ async_wait(CompletionToken&& token);
