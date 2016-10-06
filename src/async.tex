@@ -6,6 +6,8 @@
 \indexlibrary{\idxhdr{experimental/executor}}%
 \rSec1[async.synop]{Header \tcode{<experimental/executor>} synopsis}
 
+\indexlibrary{\idxcode{associated_allocator_t}}%
+\indexlibrary{\idxcode{associated_executor_t}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -276,12 +278,14 @@ Shall not exit via an exception. \br\textit{Precondition:} A preceding call \tco
 
 \rSec2[async.reqmts.executioncontext]{Execution context requirements}
 
+\indexlibrary{\idxcode{execution_context}}%
 \pnum
 A type \tcode{X} meets the \tcode{ExecutionContext} requirements if it is publicly and unambiguously derived from \tcode{execution_context}, and satisfies the additional requirements listed below.
 
 \pnum
 In Table~\ref{tab:async.reqmts.executioncontext.requirements}, \tcode{x} denotes a value of type \tcode{X}.
 
+\indextext{requirements!\idxcode{ExecutionContext}}%
 \begin{libreqtab3}
 {ExecutionContext requirements}
 {tab:async.reqmts.executioncontext.requirements}
@@ -315,6 +319,8 @@ type meeting \tcode{Executor}~(\ref{async.reqmts.executor}) requirements  &
 
 \rSec2[async.reqmts.service]{Service requirements}
 
+\indextext{service}
+\indexlibrary{\idxcode{execution_context::service}}%
 \pnum
 A class is a service if it is publicly and unambiguously derived from \tcode{execution_context::service}, or if it is publicly and unambiguously derived from another service. For a service \tcode{S}, \tcode{S::key_type} shall be valid and denote a type (\CppXref{temp.deduct}), \tcode{is_base_of_v<typename S::key_type, S>} shall be \tcode{true}, and \tcode{S} shall satisfy the \tcode{Destructible} requirements (\CppXref{destructible}).
 
@@ -349,13 +355,17 @@ A service's \tcode{shutdown} member function shall destroy all copies of user-de
 
 \rSec2[async.reqmts.signature]{Signature requirements}
 
+\indextext{requirements!signature}%
+\indextext{signature requirements}%
 \pnum
- A type satisfies the signature requirements if it is a call signature (\CppXref{func.def}).
+A type satisfies the signature requirements if it is a call signature (\CppXref{func.def}).
 
 
 
 \rSec2[async.reqmts.associator]{Associator requirements}
 
+\indextext{requirements!associator}%
+\indextext{associator}%
 \pnum
 An associator defines a relationship between different types and objects where, given:
 
@@ -469,20 +479,24 @@ In this Technical Specification, all functions with the prefix \tcode{async_} ar
 
 \rSec3[async.reqmts.async.token]{Completion tokens and handlers}
 
+\indextext{initiating function}%
 \pnum
- Initiating functions:
+Initiating functions:
 
 \begin{itemize}
 \item
 are function templates with template parameter \tcode{CompletionToken};
 
+\indextext{completion token}%
 \item
 accept, as the final parameter, a completion token object \tcode{token} of type \tcode{CompletionToken};
 
+\indextext{completion signature}%
 \item
 specify a completion signature, which is a call signature (\CppXref{func.def}) \tcode{Signature} that determines the arguments to the completion handler.
 \end{itemize}
 
+\indextext{completion handler}%
 \pnum
 An initiating function determines the type \tcode{CompletionHandler} of its
 completion handler function object by performing
@@ -505,6 +519,7 @@ terms of these names.
 
 \rSec3[async.reqmts.async.return.type]{Deduction of initiating function return type}
 
+\indextext{initiating function!deduction of return type}%
 \pnum
 The return type of an initiating function is \tcode{typename async_result<decay_t<CompletionToken>, Sig\-nature>::return_type}.
 
@@ -515,6 +530,7 @@ For the sake of exposition, this Technical Specification sometimes annotates fun
 
 \rSec3[async.reqmts.async.return.value]{Production of initiating function return value}
 
+\indextext{initiating function!production of return value}%
 \pnum
  An initiating function produces its return type as follows:
 
@@ -567,6 +583,7 @@ auto async_xyz(T1 t1, T2 t2, CompletionToken&& token)
 
 \rSec3[async.reqmts.async.lifetime]{Lifetime of initiating function arguments}
 
+\indextext{initiating function!lifetime of arguments}%
 \pnum
  Unless otherwise specified, the lifetime of arguments to initiating functions shall be treated as follows:
 
@@ -582,6 +599,7 @@ Otherwise, the implementation must not assume the validity of the argument after
 
 \rSec3[async.reqmts.async.non.blocking]{Non-blocking requirements on initiating functions}
 
+\indextext{initiating function!non-blocking requirements}%
 \pnum
  An initiating function shall not block (\CppXref{defns.block}) the calling thread pending completion of the outstanding operation.
 
@@ -592,6 +610,7 @@ Otherwise, the implementation must not assume the validity of the argument after
 
 \rSec3[async.reqmts.async.assoc.exec]{Associated executor}
 
+\indextext{associated executor}%
 \pnum
 Certain objects that participate in asynchronous operations have an associated executor. These are obtained as specified below.
 
@@ -599,6 +618,7 @@ Certain objects that participate in asynchronous operations have an associated e
 
 \rSec3[async.reqmts.async.io.exec]{I/O executor}
 
+\indexlibrary{\idxcode{system_executor}}%
 \pnum
 An asynchronous operation has an associated executor satisfying the \tcode{Executor}~(\ref{async.reqmts.executor}) requirements. If not otherwise specified by the asynchronous operation, this associated executor is an object of type \tcode{system_executor}.
 
@@ -627,8 +647,9 @@ A completion handler object of type \tcode{CompletionHandler} has an associated 
 
 \rSec3[async.reqmts.async.work]{Outstanding work}
 
+\indextext{outstanding work}%
 \pnum
- Until the asynchronous operation has completed, the asynchronous operation shall maintain:
+Until the asynchronous operation has completed, the asynchronous operation shall maintain:
 
 \begin{itemize}
 \item
@@ -691,6 +712,7 @@ If an asynchronous operation completes immediately (that is, within the thread o
 
 \rSec1[async.async.result]{Class template \tcode{async_result}}
 
+\indexlibrary{\idxcode{async_result}}%
 \pnum
 The \tcode{async_result} class template is a customization point for asynchronous operations. Template parameter \tcode{CompletionToken} specifies the model used to obtain the result of the asynchronous operation. Template parameter \tcode{Signature} is the call signature (\CppXref{func.def}) for the completion handler type invoked on completion of the asynchronous operation. The \tcode{async_result} template:
 
@@ -734,6 +756,7 @@ The template parameter \tcode{CompletionToken} shall be an object type. The temp
 \pnum
 Specializations of \tcode{async_result} shall satisfy the \tcode{Destructible} requirements (\CppXref{destructible}) in addition to the requirements in Table~\ref{tab:async.async.result.requirements}. In this table, \tcode{R} is a specialization of \tcode{async_result}; \tcode{r} is a modifiable lvalue of type \tcode{R}; and \tcode{h} is a modifiable lvalue of type \tcode{R::completion_handler_type}.
 
+\indextext{requirements!\idxcode{async_result} specialization}%
 \begin{libreqtab3}
 {\tcode{async_result} specialization requirements}
 {tab:async.async.result.requirements}
@@ -771,6 +794,7 @@ A type satisfying \tcode{MoveConstructible} requirements (\CppXref{moveconstruct
 
 \rSec1[async.async.completion]{Class template \tcode{async_completion}}
 
+\indexlibrary{\idxcode{async_completion}}%
 \pnum
 Class template \tcode{async_completion} is provided as a convenience, to simplify the implementation of asynchronous operations that use \tcode{async_result}.
 
@@ -826,6 +850,7 @@ explicit async_completion(CompletionToken& t);
 
 \rSec1[async.assoc.alloc]{Class template \tcode{associated_allocator}}
 
+\indexlibrary{\idxcode{associated_allocator}}%
 \pnum
 Class template \tcode{associated_allocator} is an associator~(\ref{async.reqmts.associator}) for the \tcode{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) type requirements, with default candidate type \tcode{allocator<void>} and default candidate object \tcode{allocator<void>()}.
 
@@ -907,6 +932,7 @@ type get(const T& t, const ProtoAllocator& a = ProtoAllocator()) noexcept;
 
 \rSec1[async.assoc.alloc.get]{Function \tcode{get_associated_allocator}}
 
+\indexlibrary{\idxcode{get_associated_allocator}}%
 \begin{itemdecl}
 template<class T>
   associated_allocator_t<T> get_associated_allocator(const T& t) noexcept;
@@ -932,6 +958,7 @@ template<class T, class ProtoAllocator>
 
 \rSec1[async.exec.ctx]{Class \tcode{execution_context}}
 
+\indexlibrary{\idxcode{execution_context}}%
 \pnum
 Class \tcode{execution_context} implements an extensible, type-safe, polymorphic set of services, indexed by service type.
 
@@ -994,6 +1021,7 @@ Once a service reference is obtained from an \tcode{execution_context} object by
 
 \rSec2[async.exec.ctx.cons]{\tcode{execution_context} constructor}
 
+\indexlibrary{\idxcode{execution_context}!constructor}%
 \begin{itemdecl}
 execution_context();
 \end{itemdecl}
@@ -1007,6 +1035,7 @@ execution_context();
 
 \rSec2[async.exec.ctx.dtor]{\tcode{execution_context} destructor}
 
+\indexlibrary{\idxcode{execution_context}!destructor}%
 \begin{itemdecl}
 ~execution_context();
 \end{itemdecl}
@@ -1020,6 +1049,7 @@ execution_context();
 
 \rSec2[async.exec.ctx.ops]{\tcode{execution_context} operations}
 
+\indexlibrarymember{notify_fork}{execution_context}%
 \begin{itemdecl}
 void notify_fork(fork_event e);
 \end{itemdecl}
@@ -1039,6 +1069,7 @@ void notify_fork(fork_event e);
 
 \rSec2[async.exec.ctx.protected]{\tcode{execution_context} protected operations}
 
+\indexlibrarymember{shutdown}{execution_context}%
 \begin{itemdecl}
 void shutdown() noexcept;
 \end{itemdecl}
@@ -1064,6 +1095,7 @@ void destroy() noexcept;
 \pnum
 The functions \tcode{use_service}, \tcode{make_service}, and \tcode{has_service} do not introduce data races as a result of concurrent calls to those functions from different threads.
 
+\indexlibrary{\idxcode{use_service}}%
 \begin{itemdecl}
 template<class Service> typename Service::key_type&
   use_service(execution_context& ctx);
@@ -1080,6 +1112,7 @@ template<class Service> typename Service::key_type&
 Notes: The reference returned remains valid until a call to \tcode{destroy}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{make_service}}%
 \begin{itemdecl}
 template<class Service, class... Args> Service&
   make_service(execution_context& ctx, Args&&... args);
@@ -1099,6 +1132,7 @@ template<class Service, class... Args> Service&
 Notes: The reference returned remains valid until a call to \tcode{destroy}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{has_service}}%
 \begin{itemdecl}
 template<class Service> bool has_service(const execution_context& ctx) noexcept;
 \end{itemdecl}
@@ -1113,6 +1147,7 @@ template<class Service> bool has_service(const execution_context& ctx) noexcept;
 
 \rSec1[async.exec.ctx.svc]{Class \tcode{execution_context::service}}
 
+\indexlibrary{\idxcode{execution_context::service}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -1148,6 +1183,7 @@ inline namespace v1 {
 } // namespace std
 \end{codeblock}
 
+\indexlibrary{\idxcode{execution_context::service}!constructor}%
 \begin{itemdecl}
 explicit service(execution_context& owner);
 \end{itemdecl}
@@ -1157,6 +1193,7 @@ explicit service(execution_context& owner);
 \postconditions \tcode{std::addressof(context_) == std::addressof(owner)}.
 \end{itemdescr}
 
+\indexlibrarymember{context}{execution_context::service}%
 \begin{itemdecl}
 execution_context& context() noexcept;
 \end{itemdecl}
@@ -1170,6 +1207,7 @@ execution_context& context() noexcept;
 
 \rSec1[async.is.exec]{Class template \tcode{is_executor}}
 
+\indexlibrary{\idxcode{is_executor}}%
 \pnum
 The class template \tcode{is_executor} can be used to detect executor types satisfying the \tcode{Executor}~(\ref{async.reqmts.executor}) type requirements.
 
@@ -1197,6 +1235,8 @@ Class template \tcode{is_executor} is a UnaryTypeTrait (\CppXref{meta.rqmts}) wi
 
 \rSec1[async.executor.arg]{Executor argument tag}
 
+\indexlibrary{\idxcode{executor_arg_t}}%
+\indexlibrary{\idxcode{executor_arg}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -1222,6 +1262,7 @@ The \tcode{executor_arg_t} struct is an empty structure type used as a unique ty
 
 \rSec2[async.uses.executor.trait]{\tcode{uses_executor} trait}
 
+\indexlibrary{\idxcode{uses_executor}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -1243,6 +1284,7 @@ Remark: Detects whether \tcode{T} has a nested \tcode{executor_type} that is con
 
 \rSec2[async.uses.executor.cons]{uses-executor construction}
 
+\indextext{uses-executor construction}%
 \pnum
 Uses-executor construction with executor \tcode{Executor} refers to the construction of an object \tcode{obj} of type \tcode{T}, using constructor arguments \tcode{v1, v2, ..., vN} of types \tcode{V1, V2, ..., VN}, respectively, and an executor \tcode{ex} of type \tcode{Executor}, according to the following rules:
 
@@ -1259,6 +1301,7 @@ otherwise, \tcode{obj} is initialized as \tcode{obj(v1, v2, ..., vN)}.
 
 \rSec1[async.assoc.exec]{Class template \tcode{associated_executor}}
 
+\indexlibrary{\idxcode{associated_executor}}%
 \pnum
 Class template \tcode{associated_allocator} is an associator~(\ref{async.reqmts.associator}) for the \tcode{Executor}~(\ref{async.reqmts.executor}) type requirements, with default candidate type \tcode{system_executor} and default candidate object \tcode{system_executor()}.
 
@@ -1282,6 +1325,7 @@ inline namespace v1 {
 } // namespace std
 \end{codeblock}
 
+\indextext{requirements|\idxcode{associated_executor} specialization}%
 \pnum
 Specializations of \tcode{associated_executor} shall satisfy the requirements in Table~\ref{tab:async.assoc.exec.requirements}. In this table, \tcode{X} is a specialization of \tcode{associated_executor} for the template parameters \tcode{T} and \tcode{Executor}; \tcode{t} is a value of (possibly const) \tcode{T}; and \tcode{e} is an object of type \tcode{Executor}.
 
@@ -1340,6 +1384,7 @@ type get(const T& t, const Executor& e = Executor()) noexcept;
 
 \rSec1[async.assoc.exec.get]{Function \tcode{get_associated_executor}}
 
+\indexlibrary{\idxcode{get_associated_executor}}%
 \begin{itemdecl}
 template<class T>
   associated_executor_t<T> get_associated_executor(const T& t) noexcept;
@@ -1382,6 +1427,7 @@ template<class T, class ExecutionContext>
 
 \rSec1[async.exec.binder]{Class template \tcode{executor_binder}}
 
+\indexlibrary{\idxcode{executor_binder}}%
 \pnum
 \tcode{executor_binder<T, Executor>} binds an executor of type \tcode{Executor} satisfying Executor requirements~(\ref{async.reqmts.executor}) to an object or function of type \tcode{T}.
 
@@ -1454,6 +1500,7 @@ inline namespace v1 {
 
 \rSec2[async.exec.binder.cons]{\tcode{executor_binder} constructors}
 
+\indexlibrary{\idxcode{executor_binder}!constructor}%
 \begin{itemdecl}
 executor_binder(T t, const Executor& ex);
 \end{itemdecl}
@@ -1521,6 +1568,7 @@ template<class U, class OtherExecutor>
 
 \rSec2[async.exec.binder.access]{\tcode{executor_binder} access}
 
+\indexlibrarymember{get}{executor_binder}%
 \begin{itemdecl}
 T& get() noexcept;
 const T& get() const noexcept;
@@ -1531,6 +1579,7 @@ const T& get() const noexcept;
 \returns \tcode{target_}.
 \end{itemdescr}
 
+\indexlibrarymember{get_executor}{executor_binder}%
 \begin{itemdecl}
 executor_type get_executor() const noexcept;
 \end{itemdecl}
@@ -1544,6 +1593,7 @@ executor_type get_executor() const noexcept;
 
 \rSec2[async.exec.binder.invocation]{\tcode{executor_binder} invocation}
 
+\indexlibrarymember{operator()}{executor_binder}%
 \begin{itemdecl}
 template<class... Args>
   result_of_t<T&(Args&&...)> operator()(Args&&... args);
@@ -1560,6 +1610,8 @@ template<class... Args>
 
 \rSec2[async.exec.binder.async.result]{Class template partial specialization \tcode{async_result}}
 
+\indextext{\idxcode{async_result}!specialization for \tcode{executor_binder}}%
+\indexlibrary{\idxcode{async_result}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -1613,6 +1665,8 @@ return_type get();
 
 \rSec2[async.exec.binder.assoc.alloc]{Class template partial specialization \tcode{associated_allocator}}
 
+\indextext{\idxcode{associated_allocator}!specialization for \tcode{executor_binder}}%
+\indexlibrary{\idxcode{associated_allocator}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -1648,6 +1702,8 @@ static type get(const executor_binder<T, Executor>& b,
 
 \rSec2[async.exec.binder.assoc.exec]{Class template partial specialization \tcode{associated_executor}}
 
+\indextext{\idxcode{associated_executor}!specialization for \tcode{executor_binder}}%
+\indexlibrary{\idxcode{associated_executor}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -1684,6 +1740,7 @@ static type get(const executor_binder<T, Executor>& b,
 
 \rSec1[async.bind.executor]{Function \tcode{bind_executor}}
 
+\indexlibrary{\idxcode{bind_executor}}%
 \begin{itemdecl}
 template<class Executor, class T>
   executor_binder<decay_t<T>, Executor>
@@ -1698,6 +1755,7 @@ template<class Executor, class T>
 \remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{bind_executor}}%
 \begin{itemdecl}
 template<class ExecutionContext, class CompletionToken>
   executor_binder<decay_t<T>, typename ExecutionContext::executor_type>
@@ -1716,6 +1774,7 @@ template<class ExecutionContext, class CompletionToken>
 
 \rSec1[async.exec.work.guard]{Class template \tcode{executor_work_guard}}
 
+\indexlibrary{\idxcode{executor_work_guard}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -1763,6 +1822,7 @@ inline namespace v1 {
 
 \rSec2[async.exec.work.guard.members]{\tcode{executor_work_guard} members}
 
+\indexlibrary{\idxcode{executor_work_guard}!constructor}%
 \begin{itemdecl}
 explicit executor_work_guard(const executor_type& ex) noexcept;
 \end{itemdecl}
@@ -1775,6 +1835,7 @@ explicit executor_work_guard(const executor_type& ex) noexcept;
 \postconditions \tcode{ex_ == ex} and \tcode{owns_ == true}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{executor_work_guard}!constructor}%
 \begin{itemdecl}
 executor_work_guard(const executor_work_guard& other) noexcept;
 \end{itemdecl}
@@ -1787,6 +1848,7 @@ executor_work_guard(const executor_work_guard& other) noexcept;
 \postconditions \tcode{ex_ == other.ex_} and \tcode{owns_ == other.owns_}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{executor_work_guard}!constructor}%
 \begin{itemdecl}
 executor_work_guard(executor_work_guard&& other) noexcept;
 \end{itemdecl}
@@ -1796,6 +1858,7 @@ executor_work_guard(executor_work_guard&& other) noexcept;
 \effects Initializes \tcode{ex_} with \tcode{std::move(other.ex_)} and \tcode{owns_} with \tcode{other.owns_}, and sets \tcode{other.owns_} to \tcode{false}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{executor_work_guard}!destructor}%
 \begin{itemdecl}
 ~executor_work_guard();
 \end{itemdecl}
@@ -1805,6 +1868,7 @@ executor_work_guard(executor_work_guard&& other) noexcept;
 \effects If \tcode{owns_} is \tcode{true}, performs \tcode{ex_.on_work_finished()}.
 \end{itemdescr}
 
+\indexlibrarymember{get_executor}{executor_work_guard}%
 \begin{itemdecl}
 executor_type get_executor() const noexcept;
 \end{itemdecl}
@@ -1814,6 +1878,7 @@ executor_type get_executor() const noexcept;
 \returns \tcode{ex_}.
 \end{itemdescr}
 
+\indexlibrarymember{owns_work}{executor_work_guard}%
 \begin{itemdecl}
 bool owns_work() const noexcept;
 \end{itemdecl}
@@ -1823,6 +1888,7 @@ bool owns_work() const noexcept;
 \returns \tcode{owns_}.
 \end{itemdescr}
 
+\indexlibrarymember{reset}{executor_work_guard}%
 \begin{itemdecl}
 void reset() noexcept;
 \end{itemdecl}
@@ -1840,6 +1906,7 @@ void reset() noexcept;
 
 \rSec1[async.make.work.guard]{Function \tcode{make_work_guard}}
 
+\indexlibrary{\idxcode{make_work_guard}}%
 \begin{itemdecl}
 template<class Executor>
   executor_work_guard<Executor>
@@ -1854,6 +1921,7 @@ template<class Executor>
 \remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{make_work_guard}}%
 \begin{itemdecl}
 template<class ExecutionContext>
   executor_work_guard<typename ExecutionContext::executor_type>
@@ -1868,6 +1936,7 @@ template<class ExecutionContext>
 \remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{make_work_guard}}%
 \begin{itemdecl}
 template<class T>
   executor_work_guard<associated_executor_t<T>>
@@ -1882,6 +1951,7 @@ template<class T>
 \remarks This function shall not participate in overload resolution unless \tcode{is_executor<T>::value} is \tcode{false} and \tcode{is_convertible<T\&, execution_context\&>::value} is \tcode{false}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{make_work_guard}}%
 \begin{itemdecl}
 template<class T, class U>
   auto make_work_guard(const T& t, U&& u)
@@ -1897,6 +1967,7 @@ template<class T, class U>
 
 \rSec1[async.system.exec]{Class \tcode{system_executor}}
 
+\indexlibrary{\idxcode{system_executor}}%
 \pnum
 Class \tcode{system_executor} represents a set of rules where function objects are permitted to execute on any thread.
 
@@ -1946,6 +2017,7 @@ To satisfy the \tcode{Executor} requirements for the \tcode{post} and \tcode{def
 
 \rSec2[async.system.exec.ops]{\tcode{system_executor} operations}
 
+\indexlibrarymember{context}{system_executor}%
 \begin{itemdecl}
 system_context& context() const noexcept;
 \end{itemdecl}
@@ -1955,6 +2027,7 @@ system_context& context() const noexcept;
 \returns A reference to an object with static storage duration. All calls to this function return references to the same object.
 \end{itemdescr}
 
+\indexlibrarymember{dispatch}{system_executor}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
   void dispatch(Func&& f, const ProtoAllocator& a) const;
@@ -1965,6 +2038,8 @@ template<class Func, class ProtoAllocator>
 \effects Equivalent to \tcode{\textit{DECAY_COPY}(forward<Func>(f))()} (\CppXref{thread.decaycopy}).
 \end{itemdescr}
 
+\indexlibrarymember{post}{system_executor}%
+\indexlibrarymember{defer}{system_executor}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
   void post(Func&& f, const ProtoAllocator& a) const;
@@ -1981,6 +2056,7 @@ template<class Func, class ProtoAllocator>
 
 \rSec2[async.system.exec.comparisons]{\tcode{system_executor} comparisons}
 
+\indexlibrarymember{operator==}{system_executor}%
 \begin{itemdecl}
 bool operator==(const system_executor&, const system_executor&) noexcept;
 \end{itemdecl}
@@ -1990,6 +2066,7 @@ bool operator==(const system_executor&, const system_executor&) noexcept;
 \returns \tcode{true}.
 \end{itemdescr}
 
+\indexlibrarymember{operator"!=}{system_executor}%
 \begin{itemdecl}
 bool operator!=(const system_executor&, const system_executor&) noexcept;
 \end{itemdecl}
@@ -2004,6 +2081,7 @@ bool operator!=(const system_executor&, const system_executor&) noexcept;
 
 \rSec1[async.system.context]{Class \tcode{system_context}}
 
+\indexlibrary{\idxcode{system_context}}%
 \pnum
 Class \tcode{system_context} implements the execution context associated with \tcode{system_executor} objects.
 
@@ -2048,6 +2126,7 @@ The class \tcode{system_context} satisfies the \tcode{ExecutionContext}~(\ref{as
 \pnum
 The \tcode{system_context} member functions \tcode{get_executor}, \tcode{stop}, and \tcode{stopped}, and the \tcode{system_executor} copy constructors, member functions and comparison operators, do not introduce data races as a result of concurrent calls to those functions from different threads of execution.
 
+\indexlibrary{\idxcode{system_context}!destructor}%
 \begin{itemdecl}
 ~system_context();
 \end{itemdecl}
@@ -2057,6 +2136,7 @@ The \tcode{system_context} member functions \tcode{get_executor}, \tcode{stop}, 
 \effects Performs \tcode{stop()} followed by \tcode{join()}.
 \end{itemdescr}
 
+\indexlibrarymember{get_executor}{system_context}%
 \begin{itemdecl}
 executor_type get_executor() noexcept;
 \end{itemdecl}
@@ -2066,6 +2146,7 @@ executor_type get_executor() noexcept;
 \returns \tcode{system_executor()}.
 \end{itemdescr}
 
+\indexlibrarymember{stop}{system_context}%
 \begin{itemdecl}
 void stop();
 \end{itemdecl}
@@ -2078,6 +2159,7 @@ void stop();
 \postconditions \tcode{stopped() == true}.
 \end{itemdescr}
 
+\indexlibrarymember{stopped}{system_context}%
 \begin{itemdecl}
 bool stopped() const noexcept;
 \end{itemdecl}
@@ -2087,6 +2169,7 @@ bool stopped() const noexcept;
 \returns \tcode{true} if the \tcode{system_context} has been stopped by a prior call to \tcode{stop}.
 \end{itemdescr}
 
+\indexlibrarymember{join}{system_context}%
 \begin{itemdecl}
 void join();
 \end{itemdecl}
@@ -2103,6 +2186,7 @@ void join();
 
 \rSec1[async.bad.exec]{Class \tcode{bad_executor}}
 
+\indexlibrary{\idxcode{bad_executor}}%
 \pnum
 An exception of type \tcode{bad_executor} is thrown by \tcode{executor} member functions \tcode{dispatch}, \tcode{post}, and \tcode{defer} when the executor object has no target.
 
@@ -2142,6 +2226,7 @@ bad_executor() noexcept;
 
 \rSec1[async.executor]{Class \tcode{executor}}
 
+\indexlibrary{\idxcode{executor}}%
 \pnum
 The \tcode{executor} class provides a polymorphic wrapper for types that satisfy the Executor requirements~(\ref{async.reqmts.executor}).
 
@@ -2238,6 +2323,7 @@ The \defnx{target}{target!\tcode{executor}} is the executor object that is held 
 
 \rSec2[async.executor.cons]{\tcode{executor} constructors}
 
+\indexlibrary{\idxcode{executor}!constructor}%
 \begin{itemdecl}
 executor() noexcept;
 \end{itemdecl}
@@ -2247,6 +2333,7 @@ executor() noexcept;
 \postconditions \tcode{!*this}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{executor}!constructor}%
 \begin{itemdecl}
 executor(nullptr_t) noexcept;
 \end{itemdecl}
@@ -2256,6 +2343,7 @@ executor(nullptr_t) noexcept;
 \postconditions \tcode{!*this}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{executor}!constructor}%
 \begin{itemdecl}
 executor(const executor& e) noexcept;
 \end{itemdecl}
@@ -2265,6 +2353,7 @@ executor(const executor& e) noexcept;
 \postconditions \tcode{!*this} if \tcode{!e}; otherwise, \tcode{*this} targets \tcode{e.target()} or a copy of \tcode{e.target()}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{executor}!constructor}%
 \begin{itemdecl}
 executor(executor&& e) noexcept;
 \end{itemdecl}
@@ -2274,6 +2363,7 @@ executor(executor&& e) noexcept;
 \effects If \tcode{!e}, \tcode{*this} has no target; otherwise, moves \tcode{e.target()} or move-constructs the target of \tcode{e} into the target of \tcode{*this}, leaving \tcode{e} in a valid state with an unspecified value.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{executor}!constructor}%
 \begin{itemdecl}
 template<class Executor> executor(Executor e);
 \end{itemdecl}
@@ -2283,6 +2373,7 @@ template<class Executor> executor(Executor e);
 \effects \tcode{*this} targets a copy of \tcode{e} initialized with \tcode{std::move(e)}.
 \end{itemdescr}
 
+\indexlibrary{\idxcode{executor}!constructor}%
 \begin{itemdecl}
 template<class Executor, class ProtoAllocator>
   executor(allocator_arg_t, const ProtoAllocator& a, Executor e);
@@ -2300,6 +2391,7 @@ A copy of the allocator argument is used to allocate memory, if necessary, for t
 
 \rSec2[async.executor.assign]{\tcode{executor} assignment}
 
+\indexlibrarymember{operator=}{executor}%
 \begin{itemdecl}
 executor& operator=(const executor& e) noexcept;
 \end{itemdecl}
@@ -2312,6 +2404,7 @@ executor& operator=(const executor& e) noexcept;
 \returns \tcode{*this}.
 \end{itemdescr}
 
+\indexlibrarymember{operator=}{executor}%
 \begin{itemdecl}
 executor& operator=(executor&& e) noexcept;
 \end{itemdecl}
@@ -2324,6 +2417,7 @@ executor& operator=(executor&& e) noexcept;
 \returns \tcode{*this}.
 \end{itemdescr}
 
+\indexlibrarymember{operator=}{executor}%
 \begin{itemdecl}
 executor& operator=(nullptr_t) noexcept;
 \end{itemdecl}
@@ -2336,6 +2430,7 @@ executor& operator=(nullptr_t) noexcept;
 \returns \tcode{*this}.
 \end{itemdescr}
 
+\indexlibrarymember{operator=}{executor}%
 \begin{itemdecl}
 template<class Executor> executor& operator=(Executor e);
 \end{itemdecl}
@@ -2352,6 +2447,7 @@ template<class Executor> executor& operator=(Executor e);
 
 \rSec2[async.executor.dtor]{\tcode{executor} destructor}
 
+\indexlibrary{\idxcode{executor}!destructor}%
 \begin{itemdecl}
 ~executor();
 \end{itemdecl}
@@ -2365,6 +2461,7 @@ template<class Executor> executor& operator=(Executor e);
 
 \rSec2[async.executor.modifiers]{\tcode{executor} modifiers}
 
+\indexlibrarymember{swap}{executor}%
 \begin{itemdecl}
 void swap(executor& other) noexcept;
 \end{itemdecl}
@@ -2374,6 +2471,7 @@ void swap(executor& other) noexcept;
 \effects Interchanges the targets of \tcode{*this} and \tcode{other}.
 \end{itemdescr}
 
+\indexlibrarymember{assign}{executor}%
 \begin{itemdecl}
 template<class Executor, class ProtoAllocator>
   void assign(Executor e, const ProtoAllocator& a);
@@ -2388,6 +2486,7 @@ template<class Executor, class ProtoAllocator>
 
 \rSec2[async.executor.ops]{\tcode{executor} operations}
 
+\indexlibrarymember{context}{executor}%
 \begin{itemdecl}
 execution_context& context() const noexcept;
 \end{itemdecl}
@@ -2400,6 +2499,7 @@ execution_context& context() const noexcept;
 \returns \tcode{e.context()}, where \tcode{e} is the target object of \tcode{*this}.
 \end{itemdescr}
 
+\indexlibrarymember{on_work_started}{executor}%
 \begin{itemdecl}
 void on_work_started() const noexcept;
 \end{itemdecl}
@@ -2412,6 +2512,7 @@ void on_work_started() const noexcept;
 \effects \tcode{e.on_work_started()}, where \tcode{e} is the target object of \tcode{*this}.
 \end{itemdescr}
 
+\indexlibrarymember{on_work_finished}{executor}%
 \begin{itemdecl}
 void on_work_finished() const noexcept;
 \end{itemdecl}
@@ -2424,6 +2525,7 @@ void on_work_finished() const noexcept;
 \effects \tcode{e.on_work_finished()}, where \tcode{e} is the target object of \tcode{*this}.
 \end{itemdescr}
 
+\indexlibrarymember{dispatch}{executor}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
   void dispatch(Func&& f, const ProtoAllocator& a) const;
@@ -2437,6 +2539,7 @@ Let \tcode{e} be the target object of \tcode{*this}. Let \tcode{a1} be the alloc
 \effects \tcode{e.dispatch(g, a1)}, where \tcode{g} is a function object of unspecified type that, when called as \tcode{g()}, performs \tcode{fd()}. The allocator \tcode{a} is used to allocate any memory required to implement \tcode{g}.
 \end{itemdescr}
 
+\indexlibrarymember{post}{executor}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
   void post(Func&& f, const ProtoAllocator& a) const;
@@ -2450,6 +2553,7 @@ Let \tcode{e} be the target object of \tcode{*this}. Let \tcode{a1} be the alloc
 \effects \tcode{e.post(g, a1)}, where \tcode{g} is a function object of unspecified type that, when called as \tcode{g()}, performs \tcode{fd()}. The allocator \tcode{a} is used to allocate any memory required to implement \tcode{g}.
 \end{itemdescr}
 
+\indexlibrarymember{defer}{executor}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
   void defer(Func&& f, const ProtoAllocator& a) const;
@@ -2467,6 +2571,7 @@ Let \tcode{e} be the target object of \tcode{*this}. Let \tcode{a1} be the alloc
 
 \rSec2[async.executor.capacity]{\tcode{executor} capacity}
 
+\indexlibrarymember{operator bool}{executor}%
 \begin{itemdecl}
 explicit operator bool() const noexcept;
 \end{itemdecl}
@@ -2480,6 +2585,7 @@ explicit operator bool() const noexcept;
 
 \rSec2[async.executor.target]{\tcode{executor} target access}
 
+\indexlibrarymember{target_type}{executor}%
 \begin{itemdecl}
 const type_info& target_type() const noexcept;
 \end{itemdecl}
@@ -2489,6 +2595,7 @@ const type_info& target_type() const noexcept;
 \returns If \tcode{*this} has a target of type \tcode{T}, \tcode{typeid(T)}; otherwise, \tcode{typeid(void)}.
 \end{itemdescr}
 
+\indexlibrarymember{target}{executor}%
 \begin{itemdecl}
 template<class Executor> Executor* target() noexcept;
 template<class Executor> const Executor* target() const noexcept;
@@ -2503,6 +2610,7 @@ template<class Executor> const Executor* target() const noexcept;
 
 \rSec2[async.executor.comparisons]{\tcode{executor} comparisons}
 
+\indexlibrarymember{operator==}{executor}%
 \begin{itemdecl}
 bool operator==(const executor& a, const executor& b) noexcept;
 \end{itemdecl}
@@ -2522,6 +2630,7 @@ bool operator==(const executor& a, const executor& b) noexcept;
 \end{itemize}
 \end{itemdescr}
 
+\indexlibrarymember{operator==}{executor}%
 \begin{itemdecl}
 bool operator==(const executor& e, nullptr_t) noexcept;
 bool operator==(nullptr_t, const executor& e) noexcept;
@@ -2532,6 +2641,7 @@ bool operator==(nullptr_t, const executor& e) noexcept;
 \returns \tcode{!e}.
 \end{itemdescr}
 
+\indexlibrarymember{operator"!=}{executor}%
 \begin{itemdecl}
 bool operator!=(const executor& a, const executor& b) noexcept;
 \end{itemdecl}
@@ -2541,6 +2651,7 @@ bool operator!=(const executor& a, const executor& b) noexcept;
 \returns \tcode{!(a == b)}.
 \end{itemdescr}
 
+\indexlibrarymember{operator"!=}{executor}%
 \begin{itemdecl}
 bool operator!=(const executor& e, nullptr_t) noexcept;
 bool operator!=(nullptr_t, const executor& e) noexcept;
@@ -2555,6 +2666,7 @@ bool operator!=(nullptr_t, const executor& e) noexcept;
 
 \rSec2[async.executor.algo]{\tcode{executor} specialized algorithms}
 
+\indexlibrarymember{swap}{executor}%
 \begin{itemdecl}
 void swap(executor& a, executor& b) noexcept;
 \end{itemdecl}
@@ -2569,6 +2681,7 @@ void swap(executor& a, executor& b) noexcept;
 
 \rSec1[async.dispatch]{Function \tcode{dispatch}}
 
+\indexlibrary{\idxcode{dispatch}}%
 \pnum
 \begin{note} The function \tcode{dispatch} satisfies the requirements for an asynchronous operation~(\ref{async.reqmts.async}), except for the requirement that the operation uses \tcode{post} if it completes immediately. \end{note}
 
@@ -2654,6 +2767,7 @@ template<class ExecutionContext, class CompletionToken>
 
 \rSec1[async.post]{Function \tcode{post}}
 
+\indexlibrary{\idxcode{post}}%
 \pnum
 \begin{note} The function \tcode{post} satisfies the requirements for an asynchronous operation~(\ref{async.reqmts.async}). \end{note}
 
@@ -2739,6 +2853,7 @@ template<class ExecutionContext, class CompletionToken>
 
 \rSec1[async.defer]{Function \tcode{defer}}
 
+\indexlibrary{\idxcode{defer}}%
 \pnum
 \begin{note} The function \tcode{defer} satisfies the requirements for an asynchronous operation~(\ref{async.reqmts.async}), except for the requirement that the operation uses \tcode{post} if it completes immediately. \end{note}
 
@@ -2824,6 +2939,7 @@ template<class ExecutionContext, class CompletionToken>
 
 \rSec1[async.strand]{Class template \tcode{strand}}
 
+\indexlibrary{\idxcode{strand}}%
 \pnum
 The class template \tcode{strand} is a wrapper around an object of type \tcode{Executor} satisfying the Executor requirements~(\ref{async.reqmts.executor}).
 
@@ -2930,6 +3046,7 @@ If any function \tcode{f} executed by the strand throws an exception, the subseq
 
 \rSec2[async.strand.cons]{\tcode{strand} constructors}
 
+\indexlibrary{\idxcode{strand}!constructor}%
 \begin{itemdecl}
 strand();
 \end{itemdecl}
@@ -3031,6 +3148,7 @@ template<class OtherExecutor> strand(strand<OtherExecutor>&& other) noexcept;
 
 \rSec2[async.strand.assign]{\tcode{strand} assignment}
 
+\indexlibrarymember{operator=}{strand}%
 \begin{itemdecl}
 strand& operator=(const strand& other) noexcept;
 \end{itemdecl}
@@ -3113,6 +3231,7 @@ template<class OtherExecutor> strand& operator=(strand<OtherExecutor>&& other) n
 
 \rSec2[async.strand.dtor]{\tcode{strand} destructor}
 
+\indexlibrary{\idxcode{strand}!destructor}%
 \begin{itemdecl}
 ~strand();
 \end{itemdecl}
@@ -3126,6 +3245,7 @@ template<class OtherExecutor> strand& operator=(strand<OtherExecutor>&& other) n
 
 \rSec2[async.strand.ops]{\tcode{strand} operations}
 
+\indexlibrarymember{get_inner_executor}{strand}%
 \begin{itemdecl}
 inner_executor_type get_inner_executor() const noexcept;
 \end{itemdecl}
@@ -3135,6 +3255,7 @@ inner_executor_type get_inner_executor() const noexcept;
 \returns \tcode{inner_ex_}.
 \end{itemdescr}
 
+\indexlibrarymember{running_in_this_thread}{strand}%
 \begin{itemdecl}
 bool running_in_this_thread() const noexcept;
 \end{itemdecl}
@@ -3144,6 +3265,7 @@ bool running_in_this_thread() const noexcept;
 \returns \tcode{true} if the current thread of execution is running a function that was submitted to the strand, or to any other strand object \tcode{s} such that \tcode{s == *this}, using \tcode{dispatch}, \tcode{post} or \tcode{defer}; otherwise \tcode{false}. \begin{note} That is, the current thread of execution's call chain includes a function that was submitted to the strand. \end{note}
 \end{itemdescr}
 
+\indexlibrarymember{context}{strand}%
 \begin{itemdecl}
 execution_context& context() const noexcept;
 \end{itemdecl}
@@ -3153,6 +3275,7 @@ execution_context& context() const noexcept;
 \returns \tcode{inner_ex_.context()}.
 \end{itemdescr}
 
+\indexlibrarymember{on_work_started}{strand}%
 \begin{itemdecl}
 void on_work_started() const noexcept;
 \end{itemdecl}
@@ -3162,6 +3285,7 @@ void on_work_started() const noexcept;
 \effects Calls \tcode{inner_ex_.on_work_started()}.
 \end{itemdescr}
 
+\indexlibrarymember{on_work_finished}{strand}%
 \begin{itemdecl}
 void on_work_finished() const noexcept;
 \end{itemdecl}
@@ -3171,6 +3295,7 @@ void on_work_finished() const noexcept;
 \effects Calls \tcode{inner_ex_.on_work_finished()}.
 \end{itemdescr}
 
+\indexlibrarymember{dispatch}{strand}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
   void dispatch(Func&& f, const ProtoAllocator& a) const;
@@ -3181,6 +3306,7 @@ template<class Func, class ProtoAllocator>
 \effects If \tcode{running_in_this_thread() == true}, calls \tcode{\textit{DECAY_COPY}(forward<Func>(f))()} (\CppXref{thread.decaycopy}). \begin{note} If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \end{note} Otherwise, requests invocation of \tcode{f}, as if by forwarding the function object \tcode{f} and allocator \tcode{a} to the executor \tcode{inner_ex_}, such that the guarantees of ordering and non-concurrency are met.
 \end{itemdescr}
 
+\indexlibrarymember{post}{strand}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
   void post(Func&& f, const ProtoAllocator& a) const;
@@ -3191,6 +3317,7 @@ template<class Func, class ProtoAllocator>
 \effects Requests invocation of \tcode{f}, as if by forwarding the function object \tcode{f} and allocator \tcode{a} to the executor \tcode{inner_ex_}, such that the guarantees of ordering and non-concurrency are met.
 \end{itemdescr}
 
+\indexlibrarymember{defer}{strand}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
   void defer(Func&& f, const ProtoAllocator& a) const;
@@ -3205,6 +3332,7 @@ template<class Func, class ProtoAllocator>
 
 \rSec2[async.strand.comparisons]{\tcode{strand} comparisons}
 
+\indexlibrarymember{operator==}{strand}%
 \begin{itemdecl}
 bool operator==(const strand<Executor>& a, const strand<Executor>& b);
 \end{itemdecl}
@@ -3214,6 +3342,7 @@ bool operator==(const strand<Executor>& a, const strand<Executor>& b);
 \returns \tcode{true}, if the strand objects share the same ordered, non-concurrent state; otherwise \tcode{false}.
 \end{itemdescr}
 
+\indexlibrarymember{operator"!=}{strand}%
 \begin{itemdecl}
 bool operator!=(const strand<Executor>& a, const strand<Executor>& b);
 \end{itemdecl}
@@ -3228,6 +3357,7 @@ bool operator!=(const strand<Executor>& a, const strand<Executor>& b);
 
 \rSec1[async.use.future]{Class template \tcode{use_future_t}}
 
+\indexlibrary{\idxcode{use_future_t}}%
 \pnum
 The class template \tcode{use_future_t} defines a set of types that, when passed as a completion token~(\ref{async.reqmts.async.token}) to an asynchronous operation's initiating function, cause the result of the asynchronous operation to be delivered via a future (\CppXref{futures.uniquefuture}).
 
@@ -3262,6 +3392,7 @@ inline namespace v1 {
 
 \rSec2[async.use.future.cons]{\tcode{use_future_t} constructors}
 
+\indexlibrary{\idxcode{use_future_t}!constructor}%
 \begin{itemdecl}
 constexpr use_future_t() noexcept(noexcept(allocator_type()));
 \end{itemdecl}
@@ -3284,6 +3415,7 @@ explicit use_future_t(const allocator_type& a) noexcept;
 
 \rSec2[async.use.future.members]{\tcode{use_future_t} members}
 
+\indexlibrarymember{rebind}{use_future_t}%
 \begin{itemdecl}
 template<class OtherProtoAllocator> use_future_t<OtherProtoAllocator>
   rebind(const OtherProtoAllocator& a) const noexcept;
@@ -3294,6 +3426,7 @@ template<class OtherProtoAllocator> use_future_t<OtherProtoAllocator>
 \returns A \tcode{use_future_t} object where \tcode{get_allocator() == a}.
 \end{itemdescr}
 
+\indexlibrarymember{get_allocator}{use_future_t}%
 \begin{itemdecl}
 allocator_type get_allocator() const noexcept;
 \end{itemdecl}
@@ -3303,6 +3436,7 @@ allocator_type get_allocator() const noexcept;
 \returns The associated allocator object.
 \end{itemdescr}
 
+\indexlibrarymember{operator()}{use_future_t}%
 \begin{itemdecl}
 template <class F> @\unspec@ operator()(F&& f) const;
 \end{itemdecl}
@@ -3340,6 +3474,8 @@ For any executor type \tcode{E}, the associated object for the associator \tcode
 \rSec2[async.use.future.result]{Partial class template specialization \tcode{async_result}
         for \tcode{use_future_t}}
 
+\indexlibrary{\idxcode{async_result}}%
+\indextext{\idxcode{async_result}!specialization for \tcode{use_future_t}}%
 \begin{codeblock}
 template<class ProtoAllocator, class Result, class... Args>
 class async_result<use_future_t<ProtoAllocator>, Result(Args...)>
@@ -3446,6 +3582,8 @@ Atomically stores \tcode{forward_as_tuple(forward<A$_0$>(a$_0$), ..., forward<A$
 
 \rSec1[async.packaged.task.spec]{Partial specialization of \tcode{async_result} for \tcode{packaged_task}}
 
+\indexlibrary{\idxcode{async_result}}%
+\indextext{\idxcode{async_result}!specialization for \tcode{packaged_task}}%
 \begin{itemdecl}
 namespace std {
 namespace experimental {
