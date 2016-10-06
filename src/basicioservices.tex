@@ -24,6 +24,7 @@ inline namespace v1 {
 
 \rSec1[io_context.io_context]{Class \tcode{io_context}}
 
+\indexlibrary{\idxcode{io_context}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -81,6 +82,7 @@ inline namespace v1 {
 \pnum
 The class \tcode{io_context} satisfies the ExecutionContext type requirements~(\ref{async.reqmts.executioncontext}).
 
+\indexlibrarymember{count_type}{io_context}%
 \pnum
 \tcode{count_type} is an \impldef{type of \tcode{io_context::count_type}}
 unsigned integral type of at least 32 bits.
@@ -109,6 +111,7 @@ The \tcode{io_context} member functions \tcode{get_executor}, \tcode{stop}, and 
 
 \rSec2[io_context.io_context.members]{\tcode{io_context} members}
 
+\indexlibrary{\idxcode{io_context}!constructor}%
 \begin{itemdecl}
 io_context();
 explicit io_context(int concurrency_hint);
@@ -122,6 +125,7 @@ explicit io_context(int concurrency_hint);
 \remarks The \tcode{concurrency_hint} parameter is a suggestion to the implementation on the number of threads that should process asynchronous operations and execute function objects.
 \end{itemdescr}
 
+\indexlibrarymember{get_executor}{io_context}%
 \begin{itemdecl}
 executor_type get_executor() noexcept;
 \end{itemdecl}
@@ -131,6 +135,7 @@ executor_type get_executor() noexcept;
 \returns An executor that may be used for submitting function objects to the \tcode{io_context}.
 \end{itemdescr}
 
+\indexlibrarymember{run}{io_context}%
 \begin{itemdecl}
 count_type run();
 \end{itemdecl}
@@ -153,6 +158,7 @@ while (run_one())
 \returns \tcode{n}.
 \end{itemdescr}
 
+\indexlibrarymember{run_for}{io_context}%
 \begin{itemdecl}
 template<class Rep, class Period>
   count_type run_for(const chrono::duration<Rep, Period>& rel_time);
@@ -167,6 +173,7 @@ return run_until(chrono::steady_clock::now() + rel_time);
 
 \end{itemdescr}
 
+\indexlibrarymember{run_until}{io_context}%
 \begin{itemdecl}
 template<class Clock, class Duration>
   count_type run_until(const chrono::time_point<Clock, Duration>& abs_time);
@@ -187,6 +194,7 @@ while (run_one_until(abs_time))
 \returns \tcode{n}.
 \end{itemdescr}
 
+\indexlibrarymember{run_one}{io_context}%
 \begin{itemdecl}
 count_type run_one();
 \end{itemdecl}
@@ -208,6 +216,7 @@ If an executed function object throws an exception, the exception propagates to 
 Notes: This function may invoke additional function objects through nested calls to the \tcode{io_context} executor's \tcode{dispatch} member function. These do not count towards the return value.
 \end{itemdescr}
 
+\indexlibrarymember{run_one_for}{io_context}%
 \begin{itemdecl}
 template<class Rep, class Period>
   count_type run_one_for(const chrono::duration<Rep, Period>& rel_time);
@@ -222,6 +231,7 @@ return run_one_until(chrono::steady_clock::now() + rel_time);
 
 \end{itemdescr}
 
+\indexlibrarymember{run_one_until}{io_context}%
 \begin{itemdecl}
 template<class Clock, class Duration>
   count_type run_one_until(const chrono::time_point<Clock, Duration>& abs_time);
@@ -241,6 +251,7 @@ If an executed function object throws an exception, the exception propagates to 
 Notes: This function may invoke additional function objects through nested calls to the \tcode{io_context} executor's \tcode{dispatch} member function. These do not count towards the return value.
 \end{itemdescr}
 
+\indexlibrarymember{poll}{io_context}%
 \begin{itemdecl}
 count_type poll();
 \end{itemdecl}
@@ -260,6 +271,7 @@ while (poll_one())
 \returns \tcode{n}.
 \end{itemdescr}
 
+\indexlibrarymember{poll_one}{io_context}%
 \begin{itemdecl}
 count_type poll_one();
 \end{itemdecl}
@@ -278,6 +290,7 @@ If an executed function object throws an exception, the exception propagates to 
 Notes: This function may invoke additional function objects through nested calls to the \tcode{io_context} executor's \tcode{dispatch} member function. These do not count towards the return value.
 \end{itemdescr}
 
+\indexlibrarymember{stop}{io_context}%
 \begin{itemdecl}
 void stop();
 \end{itemdecl}
@@ -293,6 +306,7 @@ void stop();
 \begin{note} When \tcode{stopped() == true}, subsequent calls to a run function will exit immediately with a return value of \tcode{0}, without executing any function objects. An \tcode{io_context} remains in the stopped state until a call to \tcode{restart()}. \end{note}
 \end{itemdescr}
 
+\indexlibrarymember{stopped}{io_context}%
 \begin{itemdecl}
 bool stopped() const noexcept;
 \end{itemdecl}
@@ -302,6 +316,7 @@ bool stopped() const noexcept;
 \returns \tcode{true} if the \tcode{io_context} is stopped.
 \end{itemdescr}
 
+\indexlibrarymember{restart}{io_context}%
 \begin{itemdecl}
 void restart();
 \end{itemdecl}
@@ -316,6 +331,7 @@ void restart();
 
 \rSec1[io_context.exec]{Class \tcode{io_context::executor_type}}
 
+\indexlibrary{\idxcode{io_context::executor_type}}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -367,6 +383,7 @@ inline namespace v1 {
 
 \rSec2[io_context.exec.cons]{\tcode{io_context::executor_type} constructors}
 
+\indexlibrary{\idxcode{io_context::executor_type}!constructor}%
 \begin{itemdecl}
 executor_type(const executor_type& other) noexcept;
 \end{itemdecl}
@@ -389,6 +406,7 @@ executor_type(executor_type&& other) noexcept;
 
 \rSec2[io_context.exec.assign]{\tcode{io_context::executor_type} assignment}
 
+\indexlibrarymember{operator=}{io_context::executor_type}%
 \begin{itemdecl}
 executor_type& operator=(const executor_type& other) noexcept;
 \end{itemdecl}
@@ -417,6 +435,7 @@ executor_type& operator=(executor_type&& other) noexcept;
 
 \rSec2[io_context.exec.ops]{\tcode{io_context::executor_type} operations}
 
+\indexlibrarymember{running_in_this_thread}{io_context::executor_type}%
 \begin{itemdecl}
 bool running_in_this_thread() const noexcept;
 \end{itemdecl}
@@ -426,6 +445,7 @@ bool running_in_this_thread() const noexcept;
 \returns \tcode{true} if the current thread of execution is calling a run function of the associated \tcode{io_context} object. \begin{note} That is, the current thread of execution's call chain includes a run function. \end{note}
 \end{itemdescr}
 
+\indexlibrarymember{context}{io_context::executor_type}%
 \begin{itemdecl}
 io_context& context() const noexcept;
 \end{itemdecl}
@@ -435,6 +455,7 @@ io_context& context() const noexcept;
 \returns A reference to the associated \tcode{io_context} object.
 \end{itemdescr}
 
+\indexlibrarymember{on_work_started}{io_context::executor_type}%
 \begin{itemdecl}
 void on_work_started() const noexcept;
 \end{itemdecl}
@@ -444,6 +465,7 @@ void on_work_started() const noexcept;
 \effects Increments the count of outstanding work associated with the \tcode{io_context}.
 \end{itemdescr}
 
+\indexlibrarymember{on_work_finished}{io_context::executor_type}%
 \begin{itemdecl}
 void on_work_finished() const noexcept;
 \end{itemdecl}
@@ -453,6 +475,7 @@ void on_work_finished() const noexcept;
 \effects Decrements the count of outstanding work associated with the \tcode{io_context}.
 \end{itemdescr}
 
+\indexlibrarymember{dispatch}{io_context::executor_type}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
   void dispatch(Func&& f, const ProtoAllocator& a) const;
@@ -463,6 +486,7 @@ template<class Func, class ProtoAllocator>
 \effects If \tcode{running_in_this_thread()} is \tcode{true}, calls \tcode{\textit{DECAY_COPY}(forward<Func>(f))()} (\CppXref{thread.decaycopy}). \begin{note} If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \end{note} Otherwise, calls \tcode{post(forward<Func>(f), a)}.
 \end{itemdescr}
 
+\indexlibrarymember{post}{io_context::executor_type}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
   void post(Func&& f, const ProtoAllocator& a) const;
@@ -473,6 +497,7 @@ template<class Func, class ProtoAllocator>
 \effects Adds \tcode{f} to the \tcode{io_context}.
 \end{itemdescr}
 
+\indexlibrarymember{defer}{io_context::executor_type}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
   void defer(Func&& f, const ProtoAllocator& a) const;
@@ -487,6 +512,7 @@ template<class Func, class ProtoAllocator>
 
 \rSec2[io_context.exec.comparisons]{\tcode{io_context::executor_type} comparisons}
 
+\indexlibrarymember{operator==}{io_context::executor_type}%
 \begin{itemdecl}
 bool operator==(const io_context::executor_type& a,
                 const io_context::executor_type& b) noexcept;
@@ -497,6 +523,7 @@ bool operator==(const io_context::executor_type& a,
 \returns \tcode{addressof(a.context()) == addressof(b.context())}.
 \end{itemdescr}
 
+\indexlibrarymember{operator"!=}{io_context::executor_type}%
 \begin{itemdecl}
 bool operator!=(const io_context::executor_type& a,
                 const io_context::executor_type& b) noexcept;
