@@ -636,7 +636,7 @@ constexpr address(const address_v6& a) noexcept;
 
 
 
-\indexlibrarymember{address}{operator=}%
+\indexlibrarymember{operator=}{address}%
 \rSec2[internet.address.assign]{\tcode{ip::address} assignment}
 
 \begin{itemdecl}
@@ -667,7 +667,7 @@ address& operator=(const address_v6& a) noexcept;
 
 \rSec2[internet.address.members]{\tcode{ip::address} members}
 
-\indexlibrarymember{address}{is_v4}%
+\indexlibrarymember{is_v4}{address}%
 \begin{itemdecl}
 constexpr bool is_v4() const noexcept;
 \end{itemdecl}
@@ -677,7 +677,7 @@ constexpr bool is_v4() const noexcept;
 \returns \tcode{true} if the object contains an IP version 4 address, otherwise \tcode{false}.
 \end{itemdescr}
 
-\indexlibrarymember{address}{is_v6}%
+\indexlibrarymember{is_v6}{address}%
 \begin{itemdecl}
 constexpr bool is_v6() const noexcept;
 \end{itemdecl}
@@ -687,7 +687,7 @@ constexpr bool is_v6() const noexcept;
 \returns \tcode{true} if the object contains an IP version 6 address, otherwise \tcode{false}.
 \end{itemdescr}
 
-\indexlibrarymember{address}{to_v4}%
+\indexlibrarymember{to_v4}{address}%
 \begin{itemdecl}
 constexpr address_v4 to_v4() const;
 \end{itemdecl}
@@ -700,7 +700,7 @@ constexpr address_v4 to_v4() const;
 \remarks \tcode{bad_address_cast} if \tcode{is_v4() == false}.
 \end{itemdescr}
 
-\indexlibrarymember{address}{to_v6}%
+\indexlibrarymember{to_v6}{address}%
 \begin{itemdecl}
 constexpr address_v6 to_v6() const;
 \end{itemdecl}
@@ -713,7 +713,7 @@ constexpr address_v6 to_v6() const;
 \remarks \tcode{bad_address_cast} if \tcode{is_v6() == false}.
 \end{itemdescr}
 
-\indexlibrarymember{address}{is_unspecified}%
+\indexlibrarymember{is_unspecified}{address}%
 \begin{itemdecl}
 constexpr bool is_unspecified() const noexcept;
 \end{itemdecl}
@@ -723,7 +723,7 @@ constexpr bool is_unspecified() const noexcept;
 \returns If \tcode{is_v4()}, returns \tcode{v4_.is_unspecified()}. Otherwise returns \tcode{v6_.is_unspecified()}.
 \end{itemdescr}
 
-\indexlibrarymember{address}{is_loopback}%
+\indexlibrarymember{is_loopback}{address}%
 \begin{itemdecl}
 constexpr bool is_loopback() const noexcept;
 \end{itemdecl}
@@ -733,7 +733,7 @@ constexpr bool is_loopback() const noexcept;
 \returns If \tcode{is_v4()}, returns \tcode{v4_.is_loopback()}. Otherwise returns \tcode{v6_.is_loopback()}.
 \end{itemdescr}
 
-\indexlibrarymember{address}{is_multicast}%
+\indexlibrarymember{is_multicast}{address}%
 \begin{itemdecl}
 constexpr bool is_multicast() const noexcept;
 \end{itemdecl}
@@ -743,7 +743,7 @@ constexpr bool is_multicast() const noexcept;
 \returns If \tcode{is_v4()}, returns \tcode{v4_.is_multicast()}. Otherwise returns \tcode{v6_.is_multicast()}.
 \end{itemdescr}
 
-\indexlibrarymember{address}{to_string}%
+\indexlibrarymember{to_string}{address}%
 \begin{itemdecl}
 template<class Allocator = allocator<char>>
   basic_string<char, char_traits<char>, Allocator>
@@ -756,7 +756,7 @@ template<class Allocator = allocator<char>>
 \end{itemdescr}
 
 
-\indexlibrarymember{address}{operator==}%
+\indexlibrarymember{operator==}{address}%
 \rSec2[internet.address.comparisons]{\tcode{ip::address} comparisons}
 
 \begin{itemdecl}
@@ -776,7 +776,7 @@ constexpr bool operator==(const address& a, const address& b) noexcept;
 \end{itemize}
 \end{itemdescr}
 
-\indexlibrarymember{address}{operator!=}%
+\indexlibrarymember{operator!=}{address}%
 \begin{itemdecl}
 constexpr bool operator!=(const address& a, const address& b) noexcept;
 \end{itemdecl}
@@ -786,7 +786,7 @@ constexpr bool operator!=(const address& a, const address& b) noexcept;
 \returns \tcode{!(a == b)}.
 \end{itemdescr}
 
-\indexlibrarymember{address}{operator<}%
+\indexlibrarymember{operator<}{address}%
 \begin{itemdecl}
 constexpr bool operator< (const address& a, const address& b) noexcept;
 \end{itemdecl}
@@ -806,7 +806,7 @@ constexpr bool operator< (const address& a, const address& b) noexcept;
 \end{itemize}
 \end{itemdescr}
 
-\indexlibrarymember{address}{operator>}%
+\indexlibrarymember{operator>}{address}%
 \begin{itemdecl}
 constexpr bool operator> (const address& a, const address& b) noexcept;
 \end{itemdecl}
@@ -816,7 +816,7 @@ constexpr bool operator> (const address& a, const address& b) noexcept;
 \returns \tcode{b < a}.
 \end{itemdescr}
 
-\indexlibrarymember{address}{operator<=}%
+\indexlibrarymember{operator<=}{address}%
 \begin{itemdecl}
 constexpr bool operator<=(const address& a, const address& b) noexcept;
 \end{itemdecl}
@@ -826,7 +826,7 @@ constexpr bool operator<=(const address& a, const address& b) noexcept;
 \returns \tcode{!(b < a)}.
 \end{itemdescr}
 
-\indexlibrarymember{address}{operator>=}%
+\indexlibrarymember{operator>=}{address}%
 \begin{itemdecl}
 constexpr bool operator>=(const address& a, const address& b) noexcept;
 \end{itemdecl}
@@ -875,7 +875,7 @@ else
 
 \rSec2[internet.address.io]{\tcode{ip::address} I/O}
 
-\indexlibrarymember{address}{operator<<}%
+\indexlibrarymember{operator<<}{address}%
 \begin{itemdecl}
 template<class CharT, class Traits>
   basic_ostream<CharT, Traits>& operator<<(
@@ -972,7 +972,7 @@ namespace ip {
 
 \rSec2[internet.address.v4.bytes]{Struct \tcode{ip::address_v4::bytes_type}}
 
-\indexlibrarymember{address_v4}{bytes_type}%
+\indexlibrarymember{bytes_type}{address_v4}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -1038,7 +1038,7 @@ explicit constexpr address_v4(address_v4::uint_type val);
 
 \rSec2[internet.address.v4.members]{\tcode{ip::address_v4} members}
 
-\indexlibrarymember{address_v4}{is_unspecified}%
+\indexlibrarymember{is_unspecified}{address_v4}%
 \begin{itemdecl}
 constexpr bool is_unspecified() const noexcept;
 \end{itemdecl}
@@ -1048,7 +1048,7 @@ constexpr bool is_unspecified() const noexcept;
 \returns \tcode{to_uint() == 0}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{is_loopback}%
+\indexlibrarymember{is_loopback}{address_v4}%
 \begin{itemdecl}
 constexpr bool is_loopback() const noexcept;
 \end{itemdecl}
@@ -1058,7 +1058,7 @@ constexpr bool is_loopback() const noexcept;
 \returns \tcode{(to_uint() \& 0xFF000000) == 0x7F000000}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{is_multicast}%
+\indexlibrarymember{is_multicast}{address_v4}%
 \begin{itemdecl}
 constexpr bool is_multicast() const noexcept;
 \end{itemdecl}
@@ -1068,7 +1068,7 @@ constexpr bool is_multicast() const noexcept;
 \returns \tcode{(to_uint() \& 0xF0000000) == 0xE0000000}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{to_bytes}%
+\indexlibrarymember{to_bytes}{address_v4}%
 \begin{itemdecl}
 constexpr bytes_type to_bytes() const noexcept;
 \end{itemdecl}
@@ -1078,7 +1078,7 @@ constexpr bytes_type to_bytes() const noexcept;
 \returns A representation of the address in network byte order~(\ref{defs.net.byte.order}).
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{to_uint}%
+\indexlibrarymember{to_uint}{address_v4}%
 \begin{itemdecl}
 constexpr address_v4::uint_type to_uint() const noexcept;
 \end{itemdecl}
@@ -1088,7 +1088,7 @@ constexpr address_v4::uint_type to_uint() const noexcept;
 \returns A representation of the address in host byte order~(\ref{defs.host.byte.order}).
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{to_string}%
+\indexlibrarymember{to_string}{address_v4}%
 \begin{itemdecl}
 template<class Allocator = allocator<char>>
   basic_string<char, char_traits<char>, Allocator>
@@ -1104,7 +1104,7 @@ template<class Allocator = allocator<char>>
 
 \rSec2[internet.address.v4.static]{\tcode{ip::address_v4} static members}
 
-\indexlibrarymember{address_v4}{any}%
+\indexlibrarymember{any}{address_v4}%
 \begin{itemdecl}
 static constexpr address_v4 any() noexcept;
 \end{itemdecl}
@@ -1114,7 +1114,7 @@ static constexpr address_v4 any() noexcept;
 \returns \tcode{address_v4()}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{loopback}%
+\indexlibrarymember{loopback}{address_v4}%
 \begin{itemdecl}
 static constexpr address_v4 loopback() noexcept;
 \end{itemdecl}
@@ -1124,7 +1124,7 @@ static constexpr address_v4 loopback() noexcept;
 \returns \tcode{address_v4(0x7F000001)}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{multicast}%
+\indexlibrarymember{multicast}{address_v4}%
 \begin{itemdecl}
 static constexpr address_v4 broadcast() noexcept;
 \end{itemdecl}
@@ -1138,7 +1138,7 @@ static constexpr address_v4 broadcast() noexcept;
 
 \rSec2[internet.address.v4.comparisons]{\tcode{ip::address_v4} comparisons}
 
-\indexlibrarymember{address_v4}{operator==}%
+\indexlibrarymember{operator==}{address_v4}%
 \begin{itemdecl}
 constexpr bool operator==(const address_v4& a, const address_v4& b) noexcept;
 \end{itemdecl}
@@ -1148,7 +1148,7 @@ constexpr bool operator==(const address_v4& a, const address_v4& b) noexcept;
 \returns \tcode{a.to_uint() == b.to_uint()}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{operator!=}%
+\indexlibrarymember{operator!=}{address_v4}%
 \begin{itemdecl}
 constexpr bool operator!=(const address_v4& a, const address_v4& b) noexcept;
 \end{itemdecl}
@@ -1158,7 +1158,7 @@ constexpr bool operator!=(const address_v4& a, const address_v4& b) noexcept;
 \returns \tcode{!(a == b)}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{operator<}%
+\indexlibrarymember{operator<}{address_v4}%
 \begin{itemdecl}
 constexpr bool operator< (const address_v4& a, const address_v4& b) noexcept;
 \end{itemdecl}
@@ -1168,7 +1168,7 @@ constexpr bool operator< (const address_v4& a, const address_v4& b) noexcept;
 \returns \tcode{a.to_uint() < b.to_uint()}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{operator>}%
+\indexlibrarymember{operator>}{address_v4}%
 \begin{itemdecl}
 constexpr bool operator> (const address_v4& a, const address_v4& b) noexcept;
 \end{itemdecl}
@@ -1178,7 +1178,7 @@ constexpr bool operator> (const address_v4& a, const address_v4& b) noexcept;
 \returns \tcode{b < a}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{operator<=}%
+\indexlibrarymember{operator<=}{address_v4}%
 \begin{itemdecl}
 constexpr bool operator<=(const address_v4& a, const address_v4& b) noexcept;
 \end{itemdecl}
@@ -1188,7 +1188,7 @@ constexpr bool operator<=(const address_v4& a, const address_v4& b) noexcept;
 \returns \tcode{!(b < a)}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v4}{operator>=}%
+\indexlibrarymember{operator>=}{address_v4}%
 \begin{itemdecl}
 constexpr bool operator>=(const address_v4& a, const address_v4& b) noexcept;
 \end{itemdecl}
@@ -1267,7 +1267,7 @@ address_v4 make_address_v4(string_view str, error_code& ec) noexcept;
 
 \rSec2[internet.address.v4.io]{\tcode{ip::address_v4} I/O}
 
-\indexlibrarymember{address_v4}{operator<<}%
+\indexlibrarymember{operator<<}{address_v4}%
 \begin{itemdecl}
 template<class CharT, class Traits>
   basic_ostream<CharT, Traits>& operator<<(
@@ -1374,7 +1374,7 @@ namespace ip {
 
 \rSec2[internet.address.v6.bytes]{Struct \tcode{ip::address_v6::bytes_type}}
 
-\indexlibrarymember{address_v6}{bytes_type}%
+\indexlibrarymember{bytes_type}{address_v6}%
 \begin{codeblock}
 namespace std {
 namespace experimental {
@@ -1429,7 +1429,7 @@ constexpr address_v6(const bytes_type& bytes,
 
 \rSec2[internet.address.v6.members]{\tcode{ip::address_v6} members}
 
-\indexlibrarymember{address_v6}{scope_id}%
+\indexlibrarymember{scope_id}{address_v6}%
 \begin{itemdecl}
 void scope_id(scope_id_type id) noexcept;
 \end{itemdecl}
@@ -1448,7 +1448,7 @@ constexpr scope_id_type scope_id() const noexcept;
 \returns The scope identifier associated with the address.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{is_unspecified}%
+\indexlibrarymember{is_unspecified}{address_v6}%
 \begin{itemdecl}
 constexpr bool is_unspecified() const noexcept;
 \end{itemdecl}
@@ -1458,7 +1458,7 @@ constexpr bool is_unspecified() const noexcept;
 \returns \tcode{*this == make_address_v6("::")}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{is_loopback}%
+\indexlibrarymember{is_loopback}{address_v6}%
 \begin{itemdecl}
 constexpr bool is_loopback() const noexcept;
 \end{itemdecl}
@@ -1468,7 +1468,7 @@ constexpr bool is_loopback() const noexcept;
 \returns \tcode{*this == make_address_v6("::1")}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{is_multicast}%
+\indexlibrarymember{is_multicast}{address_v6}%
 \begin{itemdecl}
 constexpr bool is_multicast() const noexcept;
 \end{itemdecl}
@@ -1483,7 +1483,7 @@ return b[0] == 0xFF;
 
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{is_link_local}%
+\indexlibrarymember{is_link_local}{address_v6}%
 \begin{itemdecl}
 constexpr bool is_link_local() const noexcept;
 \end{itemdecl}
@@ -1498,7 +1498,7 @@ return b[0] == 0xFE && (b[1] & 0xC0) == 0x80;
 
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{is_site_local}%
+\indexlibrarymember{is_site_local}{address_v6}%
 \begin{itemdecl}
 constexpr bool is_site_local() const noexcept;
 \end{itemdecl}
@@ -1513,7 +1513,7 @@ return b[0] == 0xFE && (b[1] & 0xC0) == 0xC0;
 
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{is_v4_mapped}%
+\indexlibrarymember{is_v4_mapped}{address_v6}%
 \begin{itemdecl}
 constexpr bool is_v4_mapped() const noexcept;
 \end{itemdecl}
@@ -1530,7 +1530,7 @@ return b[ 0] == 0 && b[ 1] == 0 && b[ 2] == 0    && b[ 3] == 0
 
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{is_multicast_node_local}%
+\indexlibrarymember{is_multicast_node_local}{address_v6}%
 \begin{itemdecl}
 constexpr bool is_multicast_node_local() const noexcept;
 \end{itemdecl}
@@ -1540,7 +1540,7 @@ constexpr bool is_multicast_node_local() const noexcept;
 \returns \tcode{is_multicast() \&\& (to_bytes()[1] \& 0x0F) == 0x01}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{is_multicast_link_local}%
+\indexlibrarymember{is_multicast_link_local}{address_v6}%
 \begin{itemdecl}
 constexpr bool is_multicast_link_local() const noexcept;
 \end{itemdecl}
@@ -1550,7 +1550,7 @@ constexpr bool is_multicast_link_local() const noexcept;
 \returns \tcode{is_multicast() \&\& (to_bytes()[1] \& 0x0F) == 0x02}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{is_multicast_site_local}%
+\indexlibrarymember{is_multicast_site_local}{address_v6}%
 \begin{itemdecl}
 constexpr bool is_multicast_site_local() const noexcept;
 \end{itemdecl}
@@ -1560,7 +1560,7 @@ constexpr bool is_multicast_site_local() const noexcept;
 \returns \tcode{is_multicast() \&\& (to_bytes()[1] \& 0x0F) == 0x05}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{is_multicast_org_local}%
+\indexlibrarymember{is_multicast_org_local}{address_v6}%
 \begin{itemdecl}
 constexpr bool is_multicast_org_local() const noexcept;
 \end{itemdecl}
@@ -1570,7 +1570,7 @@ constexpr bool is_multicast_org_local() const noexcept;
 \returns \tcode{is_multicast() \&\& (to_bytes()[1] \& 0x0F) == 0x08}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{is_multicast_global}%
+\indexlibrarymember{is_multicast_global}{address_v6}%
 \begin{itemdecl}
 constexpr bool is_multicast_global() const noexcept;
 \end{itemdecl}
@@ -1580,7 +1580,7 @@ constexpr bool is_multicast_global() const noexcept;
 \returns \tcode{is_multicast() \&\& (to_bytes()[1] \& 0x0F) == 0x0E}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{to_bytes}%
+\indexlibrarymember{to_bytes}{address_v6}%
 \begin{itemdecl}
 constexpr bytes_type to_bytes() const noexcept;
 \end{itemdecl}
@@ -1590,7 +1590,7 @@ constexpr bytes_type to_bytes() const noexcept;
 \returns A representation of the address in network byte order~(\ref{defs.net.byte.order}).
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{to_string}%
+\indexlibrarymember{to_string}{address_v6}%
 \begin{itemdecl}
 template<class Allocator = allocator<char>>
   basic_string<char, char_traits<char>, Allocator>
@@ -1609,7 +1609,7 @@ template<class Allocator = allocator<char>>
 
 \rSec2[internet.address.v6.static]{\tcode{ip::address_v6} static members}
 
-\indexlibrarymember{address_v6}{any}%
+\indexlibrarymember{any}{address_v6}%
 \begin{itemdecl}
 static constexpr address_v6 any() noexcept;
 \end{itemdecl}
@@ -1619,7 +1619,7 @@ static constexpr address_v6 any() noexcept;
 \returns An address \tcode{a} such that the \tcode{a.is_unspecified() == true} and \tcode{a.scope_id() == 0}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{loopback}%
+\indexlibrarymember{loopback}{address_v6}%
 \begin{itemdecl}
 static constexpr address_v6 loopback() noexcept;
 \end{itemdecl}
@@ -1633,7 +1633,7 @@ static constexpr address_v6 loopback() noexcept;
 
 \rSec2[internet.address.v6.comparisons]{\tcode{ip::address_v6} comparisons}
 
-\indexlibrarymember{address_v6}{operator==}%
+\indexlibrarymember{operator==}{address_v6}%
 \begin{itemdecl}
 constexpr bool operator==(const address_v6& a, const address_v6& b) noexcept;
 \end{itemdecl}
@@ -1643,7 +1643,7 @@ constexpr bool operator==(const address_v6& a, const address_v6& b) noexcept;
 \returns \tcode{a.to_bytes() == b.to_bytes() \&\& a.scope_id() == b.scope_id()}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{operator!=}%
+\indexlibrarymember{operator!=}{address_v6}%
 \begin{itemdecl}
 constexpr bool operator!=(const address_v6& a, const address_v6& b) noexcept;
 \end{itemdecl}
@@ -1653,7 +1653,7 @@ constexpr bool operator!=(const address_v6& a, const address_v6& b) noexcept;
 \returns \tcode{!(a == b)}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{operator<}%
+\indexlibrarymember{operator<}{address_v6}%
 \begin{itemdecl}
 constexpr bool operator< (const address_v6& a, const address_v6& b) noexcept;
 \end{itemdecl}
@@ -1663,7 +1663,7 @@ constexpr bool operator< (const address_v6& a, const address_v6& b) noexcept;
 \returns \tcode{a.to_bytes() < b.to_bytes() || (!(b.to_bytes() < a.to_bytes()) \&\& a.scope_id() < b.scope_id())}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{operator>}%
+\indexlibrarymember{operator>}{address_v6}%
 \begin{itemdecl}
 constexpr bool operator> (const address_v6& a, const address_v6& b) noexcept;
 \end{itemdecl}
@@ -1673,7 +1673,7 @@ constexpr bool operator> (const address_v6& a, const address_v6& b) noexcept;
 \returns \tcode{b < a}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{operator<=}%
+\indexlibrarymember{operator<=}{address_v6}%
 \begin{itemdecl}
 constexpr bool operator<=(const address_v6& a, const address_v6& b) noexcept;
 \end{itemdecl}
@@ -1683,7 +1683,7 @@ constexpr bool operator<=(const address_v6& a, const address_v6& b) noexcept;
 \returns \tcode{!(b < a)}.
 \end{itemdescr}
 
-\indexlibrarymember{address_v6}{operator>=}%
+\indexlibrarymember{operator>=}{address_v6}%
 \begin{itemdecl}
 constexpr bool operator>=(const address_v6& a, const address_v6& b) noexcept;
 \end{itemdecl}
@@ -1752,7 +1752,7 @@ address_v6 make_address_v6(string_view str, error_code& ec) noexcept;
 
 \rSec2[internet.address.v6.io]{\tcode{ip::address_v6} I/O}
 
-\indexlibrarymember{address_v6}{operator<<}%
+\indexlibrarymember{operator<<}{address_v6}%
 \begin{itemdecl}
 template<class CharT, class Traits>
   basic_ostream<CharT, Traits>& operator<<(
