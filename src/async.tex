@@ -286,6 +286,7 @@ A type \tcode{X} meets the \tcode{ExecutionContext} requirements if it is public
 In Table~\ref{tab:async.reqmts.executioncontext.requirements}, \tcode{x} denotes a value of type \tcode{X}.
 
 \indextext{requirements!\idxcode{ExecutionContext}}%
+\indextext{\idxcode{ExecutionContext}}%
 \begin{libreqtab3}
 {ExecutionContext requirements}
 {tab:async.reqmts.executioncontext.requirements}
@@ -756,7 +757,7 @@ The template parameter \tcode{CompletionToken} shall be an object type. The temp
 \pnum
 Specializations of \tcode{async_result} shall satisfy the \tcode{Destructible} requirements (\CppXref{destructible}) in addition to the requirements in Table~\ref{tab:async.async.result.requirements}. In this table, \tcode{R} is a specialization of \tcode{async_result}; \tcode{r} is a modifiable lvalue of type \tcode{R}; and \tcode{h} is a modifiable lvalue of type \tcode{R::completion_handler_type}.
 
-\indextext{requirements!\idxcode{async_result} specialization}%
+\indextext{requirements!\idxcode{async_result} specializations}%
 \begin{libreqtab3}
 {\tcode{async_result} specialization requirements}
 {tab:async.async.result.requirements}
@@ -874,6 +875,7 @@ inline namespace v1 {
 } // namespace std
 \end{codeblock}
 
+\indextext{requirements!\idxcode{associated_allocator} specializations}%
 \pnum
 Specializations of \tcode{associated_allocator} shall satisfy the requirements in Table~\ref{tab:async.assoc.alloc.requirements}. In this table, \tcode{X} is a specialization of \tcode{associated_allocator} for the template parameters \tcode{T} and \tcode{ProtoAllocator}; \tcode{t} is a value of (possibly const) \tcode{T}; and \tcode{a} is an object of type \tcode{ProtoAllocator}.
 
@@ -1325,7 +1327,7 @@ inline namespace v1 {
 } // namespace std
 \end{codeblock}
 
-\indextext{requirements|\idxcode{associated_executor} specialization}%
+\indextext{requirements!\idxcode{associated_executor} specializations}%
 \pnum
 Specializations of \tcode{associated_executor} shall satisfy the requirements in Table~\ref{tab:async.assoc.exec.requirements}. In this table, \tcode{X} is a specialization of \tcode{associated_executor} for the template parameters \tcode{T} and \tcode{Executor}; \tcode{t} is a value of (possibly const) \tcode{T}; and \tcode{e} is an object of type \tcode{Executor}.
 
