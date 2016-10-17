@@ -1988,17 +1988,17 @@ inline namespace v1 {
 
     // executor operations:
 
-    system_context& context() const noexcept;
+    system_context& context() noexcept;
 
-    void on_work_started() const noexcept {}
-    void on_work_finished() const noexcept {}
+    void on_work_started() noexcept {}
+    void on_work_finished() noexcept {}
 
     template<class Func, class ProtoAllocator>
-      void dispatch(Func&& f, const ProtoAllocator& a) const;
+      void dispatch(Func&& f, const ProtoAllocator& a);
     template<class Func, class ProtoAllocator>
-      void post(Func&& f, const ProtoAllocator& a) const;
+      void post(Func&& f, const ProtoAllocator& a);
     template<class Func, class ProtoAllocator>
-      void defer(Func&& f, const ProtoAllocator& a) const;
+      void defer(Func&& f, const ProtoAllocator& a);
   };
 
   bool operator==(const system_executor&, const system_executor&) noexcept;
@@ -2021,7 +2021,7 @@ To satisfy the \tcode{Executor} requirements for the \tcode{post} and \tcode{def
 
 \indexlibrarymember{context}{system_executor}%
 \begin{itemdecl}
-system_context& context() const noexcept;
+system_context& context() noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2032,7 +2032,7 @@ system_context& context() const noexcept;
 \indexlibrarymember{dispatch}{system_executor}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void dispatch(Func&& f, const ProtoAllocator& a) const;
+  void dispatch(Func&& f, const ProtoAllocator& a);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2044,9 +2044,9 @@ template<class Func, class ProtoAllocator>
 \indexlibrarymember{defer}{system_executor}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void post(Func&& f, const ProtoAllocator& a) const;
+  void post(Func&& f, const ProtoAllocator& a);
 template<class Func, class ProtoAllocator>
-  void defer(Func&& f, const ProtoAllocator& a) const;
+  void defer(Func&& f, const ProtoAllocator& a);
 \end{itemdecl}
 
 \begin{itemdescr}
