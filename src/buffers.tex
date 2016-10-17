@@ -568,7 +568,6 @@ inline namespace v1 {
     // members:
     void* data() const noexcept;
     size_t size() const noexcept;
-    mutable_buffer& operator+=(size_t n) noexcept;
 
   private:
     void* data_; // \expos
@@ -624,19 +623,6 @@ size_t size() const noexcept;
 \returns \tcode{size_}.
 \end{itemdescr}
 
-\indexlibrarymember{operator+=}{mutable_buffer}%
-\begin{itemdecl}
-mutable_buffer& operator+=(size_t n) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\effects Sets \tcode{data_} to \tcode{static_cast<char*>(data_) + min(n, size_)}, and then \tcode{size_} to \tcode{size_ - min(n, size_)}.
-
-\pnum
-\returns \tcode{*this}.
-\end{itemdescr}
-
 
 \rSec1[buffer.const]{Class \tcode{const_buffer}}
 
@@ -657,7 +643,6 @@ inline namespace v1 {
     // members:
     const void* data() const noexcept;
     size_t size() const noexcept;
-    const_buffer& operator+=(size_t n) noexcept;
 
   private:
     const void* data_; // \expos
@@ -721,19 +706,6 @@ size_t size() const noexcept;
 \begin{itemdescr}
 \pnum
 \returns \tcode{size_}.
-\end{itemdescr}
-
-\indexlibrarymember{operator+=}{mutable_buffer}%
-\begin{itemdecl}
-const_buffer& operator+=(size_t n) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\effects Sets \tcode{data_} to \tcode{static_cast<const char*>(data_) + min(n, size_)}, and then \tcode{size_} to \tcode{size_ - min(n, size_)}.
-
-\pnum
-\returns \tcode{*this}.
 \end{itemdescr}
 
 
