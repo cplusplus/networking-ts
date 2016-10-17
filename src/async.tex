@@ -2289,6 +2289,8 @@ inline namespace v1 {
     template<class Executor> const Executor* target() const noexcept;
   };
 
+  template<> struct is_executor<executor> : true_type {};
+
   // executor comparisons:
 
   bool operator==(const executor& a, const executor& b) noexcept;
