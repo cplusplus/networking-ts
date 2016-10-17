@@ -353,17 +353,17 @@ inline namespace v1 {
 
     bool running_in_this_thread() const noexcept;
 
-    io_context& context() const noexcept;
+    io_context& context() noexcept;
 
-    void on_work_started() const noexcept;
-    void on_work_finished() const noexcept;
+    void on_work_started() noexcept;
+    void on_work_finished() noexcept;
 
     template<class Func, class ProtoAllocator>
-      void dispatch(Func&& f, const ProtoAllocator& a) const;
+      void dispatch(Func&& f, const ProtoAllocator& a);
     template<class Func, class ProtoAllocator>
-      void post(Func&& f, const ProtoAllocator& a) const;
+      void post(Func&& f, const ProtoAllocator& a);
     template<class Func, class ProtoAllocator>
-      void defer(Func&& f, const ProtoAllocator& a) const;
+      void defer(Func&& f, const ProtoAllocator& a);
   };
 
   bool operator==(const io_context::executor_type& a,
@@ -449,7 +449,7 @@ bool running_in_this_thread() const noexcept;
 
 \indexlibrarymember{context}{io_context::executor_type}%
 \begin{itemdecl}
-io_context& context() const noexcept;
+io_context& context() noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -459,7 +459,7 @@ io_context& context() const noexcept;
 
 \indexlibrarymember{on_work_started}{io_context::executor_type}%
 \begin{itemdecl}
-void on_work_started() const noexcept;
+void on_work_started() noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -469,7 +469,7 @@ void on_work_started() const noexcept;
 
 \indexlibrarymember{on_work_finished}{io_context::executor_type}%
 \begin{itemdecl}
-void on_work_finished() const noexcept;
+void on_work_finished() noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -480,7 +480,7 @@ void on_work_finished() const noexcept;
 \indexlibrarymember{dispatch}{io_context::executor_type}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void dispatch(Func&& f, const ProtoAllocator& a) const;
+  void dispatch(Func&& f, const ProtoAllocator& a);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -491,7 +491,7 @@ template<class Func, class ProtoAllocator>
 \indexlibrarymember{post}{io_context::executor_type}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void post(Func&& f, const ProtoAllocator& a) const;
+  void post(Func&& f, const ProtoAllocator& a);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -502,7 +502,7 @@ template<class Func, class ProtoAllocator>
 \indexlibrarymember{defer}{io_context::executor_type}%
 \begin{itemdecl}
 template<class Func, class ProtoAllocator>
-  void defer(Func&& f, const ProtoAllocator& a) const;
+  void defer(Func&& f, const ProtoAllocator& a);
 \end{itemdecl}
 
 \begin{itemdescr}
