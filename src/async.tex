@@ -14,7 +14,7 @@ namespace experimental {
 namespace net {
 inline namespace v1 {
 
-  template<class CompletionToken, class Signature>
+  template<class CompletionToken, class Signature, class = void>
     class async_result;
 
   template<class CompletionToken, class Signature>
@@ -731,7 +731,7 @@ namespace experimental {
 namespace net {
 inline namespace v1 {
 
-  template<class CompletionToken, class Signature>
+  template<class CompletionToken, class Signature, class = void>
   class async_result
   {
   public:
