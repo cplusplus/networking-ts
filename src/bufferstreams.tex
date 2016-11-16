@@ -450,7 +450,7 @@ template<class AsyncReadStream, class MutableBufferSequence, class CompletionCon
 
 \begin{itemdescr}
 \pnum
-A read operation~(\ref{buffer.reqmts.read.write}).
+A composed asynchronous read operation~(\ref{async.reqmts.async.composed}, \ref{buffer.reqmts.read.write}).
 
 \pnum
 \completionsig \tcode{void(error_code ec, size_t n)}.
@@ -646,7 +646,7 @@ template<class AsyncWriteStream, class ConstBufferSequence, class CompletionCond
 
 \begin{itemdescr}
 \pnum
-A write operation~(\ref{buffer.reqmts.read.write}).
+A composed asynchronous write operation~(\ref{async.reqmts.async.composed}, \ref{buffer.reqmts.read.write}).
 
 \pnum
 \completionsig \tcode{void(error_code ec, size_t n)}.
@@ -782,6 +782,9 @@ template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
 \end{itemdecl}
 
 \begin{itemdescr}
+\pnum
+A composed asynchronous operation~(\ref{async.reqmts.async.composed}).
+
 \pnum
 \completionsig \tcode{void(error_code ec, size_t n)}.
 
