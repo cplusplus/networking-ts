@@ -712,7 +712,7 @@ If an asynchronous operation completes immediately (that is, within the thread o
 \rSec3[async.reqmts.async.composed]{Composed asynchronous operations}
 
 \pnum
-In this Technical Specification, a \defn{composed asynchronous operation} is an asynchronous operation that is implemented in terms of zero or more intermediate calls to other asynchronous operations. The intermediate asynchronous operations are performed sequentially. \enternote That is, the completion handler of an intermediate operation initiates the next operation in the sequence. \exitnote
+In this Technical Specification, a \defn{composed asynchronous operation} is an asynchronous operation that is implemented in terms of zero or more intermediate calls to other asynchronous operations. The intermediate asynchronous operations are performed sequentially. \begin{note} That is, the completion handler of an intermediate operation initiates the next operation in the sequence. \end{note}
 
 An intermediate operation's completion handler shall have an associated executor that is either:
 
