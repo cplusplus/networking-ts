@@ -1,13 +1,12 @@
 %!TEX root = ts.tex
 
-% Prevent previous section name appearing in footer in indices:
-\renewcommand{\leftmark}{}
-
+\renewcommand{\leftmark}{\indexname}
 \printindex[generalindex]
 
 \clearpage
 \renewcommand{\preindexhook}{}
 \renewcommand{\indexname}{Index of library names}
+\renewcommand{\leftmark}{\indexname}
 \printindex[libraryindex]
 
 \clearpage
@@ -17,4 +16,5 @@ specifications are at the indicated page in the general text.\\}
 % but makeindex[impldefindex, columns=1] doesn't work.
 \renewcommand{\twocolumn}[1][]{#1}
 \renewcommand{\indexname}{Index of implementation-defined behavior}
+\renewcommand{\leftmark}{\indexname}
 \printindex[impldefindex]
