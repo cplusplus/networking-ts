@@ -6,6 +6,8 @@
 \indexlibrary{\idxhdr{experimental/executor}}%
 \rSec1[async.synop]{Header \tcode{<experimental/executor>} synopsis}
 
+\indexlibrary{\idxcode{is_executor_v}}%
+\indexlibrary{\idxcode{uses_executor_v}}%
 \indexlibrary{\idxcode{associated_allocator_t}}%
 \indexlibrary{\idxcode{associated_executor_t}}%
 \begin{codeblock}
@@ -51,10 +53,16 @@ inline namespace v1 {
 
   template<class T> struct is_executor;
 
+  template<class T>
+    constexpr bool is_executor_v = is_executor<T>::value;
+
   struct executor_arg_t { };
   constexpr executor_arg_t executor_arg = executor_arg_t();
 
   template<class T, class Executor> struct uses_executor;
+
+  template<class T>
+    constexpr bool uses_executor_v = uses_executor<T>::value;
 
   template<class T, class Executor = system_executor>
     struct associated_executor;

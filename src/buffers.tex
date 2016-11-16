@@ -6,6 +6,9 @@
 \indexlibrary{\idxhdr{experimental/buffer}}%
 \rSec1[buffer.synop]{Header \tcode{<experimental/buffer>} synopsis}
 
+\indexlibrary{\idxcode{is_mutable_buffer_sequence_v}}%
+\indexlibrary{\idxcode{is_const_buffer_sequence_v}}%
+\indexlibrary{\idxcode{is_dynamic_buffer_v}}%
 \indexlibrary{\idxcode{stream_errc}}%
 \begin{codeblock}
 namespace std {
@@ -31,6 +34,13 @@ inline namespace v1 {
   template<class T> struct is_mutable_buffer_sequence;
   template<class T> struct is_const_buffer_sequence;
   template<class T> struct is_dynamic_buffer;
+
+  template<class T>
+      constexpr bool is_mutable_buffer_sequence_v = is_mutable_buffer_sequence<T>::value;
+    template<class T>
+      constexpr bool is_const_buffer_sequence_v = is_const_buffer_sequence<T>::value;
+    template<class T>
+      constexpr bool is_dynamic_buffer_v = is_dynamic_buffer<T>::value;
 
   // buffer sequence access:
 
