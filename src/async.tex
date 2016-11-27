@@ -61,8 +61,8 @@ inline namespace v1 {
 
   template<class T, class Executor> struct uses_executor;
 
-  template<class T>
-    constexpr bool uses_executor_v = uses_executor<T>::value;
+  template<class T, class Executor>
+    constexpr bool uses_executor_v = uses_executor<T, Executor>::value;
 
   template<class T, class Executor = system_executor>
     struct associated_executor;
