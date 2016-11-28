@@ -28,7 +28,7 @@ inline namespace v1 {
     typedef Clock clock_type;
     typedef typename clock_type::time_point time_point;
     typedef typename clock_type::duration duration;
-    typedef WaitTraits traits_type;
+    typedef WaitTraits wait_traits_type;
 
     // construct / copy / destroy:
 
@@ -361,7 +361,7 @@ inline namespace v1 {
     typedef Clock clock_type;
     typedef typename clock_type::time_point time_point;
     typedef typename clock_type::duration duration;
-    typedef WaitTraits traits_type;
+    typedef WaitTraits wait_traits_type;
 
     // construct / copy / destroy:
 
@@ -381,7 +381,7 @@ inline namespace v1 {
 
     void close();
 
-    basic_socket_streambuf<protocol_type, clock_type, traits_type>* rdbuf() const;
+    basic_socket_streambuf<protocol_type, clock_type, wait_traits_type>* rdbuf() const;
 
     basic_socket<protocol_type>& socket();
     error_code error() const;
@@ -391,7 +391,7 @@ inline namespace v1 {
     void expires_after(const duration& d);
 
   private:
-    basic_socket_streambuf<protocol_type, clock_type, traits_type> sb_; // \expos
+    basic_socket_streambuf<protocol_type, clock_type, wait_traits_type> sb_; // \expos
   };
 
 } // inline namespace v1
@@ -479,12 +479,12 @@ void close();
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket_streambuf<protocol_type, clock_type, traits_type>* rdbuf() const;
+basic_socket_streambuf<protocol_type, clock_type, wait_traits_type>* rdbuf() const;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{const_cast<basic_socket_streambuf<protocol_type, clock_type, traits_type>*>(std::addressof(sb_))}.
+\returns \tcode{const_cast<basic_socket_streambuf<protocol_type, clock_type, wait_traits_type>*>(std::addressof(sb_))}.
 \end{itemdescr}
 
 \begin{itemdecl}
