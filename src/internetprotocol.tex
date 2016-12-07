@@ -2119,7 +2119,7 @@ namespace ip {
   // network_v4 I/O:
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
-      basic_ostream<CharT, Traits>& os, const network_v4& addr);
+      basic_ostream<CharT, Traits>& os, const network_v4& net);
 
 } // namespace ip
 } // inline namespace v1
@@ -2392,13 +2392,13 @@ namespace ip {
   network_v6 make_network_v6(const char* str, error_code& ec) noexcept;
   network_v6 make_network_v6(const string& str);
   network_v6 make_network_v6(const string& str, error_code& ec) noexcept;
-  network_v6 make_network_v6(const string_v6& str);
-  network_v6 make_network_v6(const string_v6& str, error_code& ec) noexcept;
+  network_v6 make_network_v6(string_view str);
+  network_v6 make_network_v6(string_view str, error_code& ec) noexcept;
 
   // network_v6 I/O:
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
-      basic_ostream<CharT, Traits>& os, const network_v6& addr);
+      basic_ostream<CharT, Traits>& os, const network_v6& net);
 
 } // namespace ip
 } // inline namespace v1
@@ -2552,8 +2552,8 @@ network_v6 make_network_v6(const char* str);
 network_v6 make_network_v6(const char* str, error_code& ec) noexcept;
 network_v6 make_network_v6(const string& str);
 network_v6 make_network_v6(const string& str, error_code& ec) noexcept;
-network_v6 make_network_v6(const string_v6& str);
-network_v6 make_network_v6(const string_v6& str, error_code& ec) noexcept;
+network_v6 make_network_v6(string_view str);
+network_v6 make_network_v6(string_view str, error_code& ec) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -4293,7 +4293,7 @@ template<class Protocol> int name(const Protocol& p) const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{IPV6_MULTICAST_HOPS} if \tcode{p.family() == AF_INET6}, otherwise \tcode{IP_MULTICAST_HOPS}.
+\returns \tcode{IPV6_MULTICAST_IF} if \tcode{p.family() == AF_INET6}, otherwise \tcode{IP_MULTICAST_IF}.
 \end{itemdescr}
 
 \begin{itemdecl}
