@@ -343,7 +343,7 @@ denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an ide
 
 \tcode{net::buffer_sequence_begin(x)}\br
 \tcode{net::buffer_sequence_end(x)}  &
-An iterator type meeting the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) whose value type is convertible to \tcode{mutable_buffer}.  &
+An iterator type whose value type is convertible to \tcode{mutable_buffer}, and which satisfies all the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) except that, for two user-defined dereferenceable iterators \tcode{a} and \tcode{b} where \tcode{a == b}, there is no requirement that \tcode{a} and \tcode{b} refer to the same object.  &
   \\ \rowsep
 
 \tcode{X u(x);}
@@ -404,7 +404,7 @@ In Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements}, \tcode{x} den
 
 \tcode{net::buffer_sequence_begin(x)}\br
 \tcode{net::buffer_sequence_end(x)}  &
-An iterator type meeting the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) whose value type is convertible to \tcode{const_buffer}.  &
+An iterator type whose value type is convertible to \tcode{const_buffer}, and which satisfies all the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) except that, for two user-defined dereferenceable iterators \tcode{a} and \tcode{b} where \tcode{a == b}, there is no requirement that \tcode{a} and \tcode{b} refer to the same object.  &
   \\ \rowsep
 
 \tcode{X u(x);}
