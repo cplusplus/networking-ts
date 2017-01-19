@@ -17,7 +17,7 @@ Most synchronous network library functions provide two overloads, one that throw
 \end{itemize}\end{note}
 
 \pnum
-Functions not having an argument of type \tcode{error_code\&} report errors as follows, unless otherwise specified:
+Functions not having a parameter of type \tcode{error_code\&} report errors as follows, unless otherwise specified:
 
 \begin{itemize}
 \item
@@ -28,7 +28,7 @@ Destructors throw nothing.
 \end{itemize}
 
 \pnum
-Functions having an argument of type \tcode{error_code\&} report errors as follows, unless otherwise specified:
+Functions having a parameter of type \tcode{error_code\&} report errors as follows, unless otherwise specified:
 
 \begin{itemize}
 \item
@@ -36,7 +36,7 @@ If a call by the implementation to an operating system or other underlying API r
 \end{itemize}
 
 \pnum
-Where a function is specified as two overloads, with and without an argument of type \tcode{error_code\&}:
+Where a function is specified as two overloads, with and without a parameter of type \tcode{error_code\&}:
 
 \begin{codeblock}
 @\textit{R f}@(@\textit{A1}@ a1, @\textit{A2}@ a2, ..., @\textit{AN}@ aN);
