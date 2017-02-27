@@ -534,13 +534,11 @@
 
 %%--------------------------------------------------
 %% Definitions section
+\newcommand{\nocontentsline}[3]{}
+\newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
+\newcommand{\definitionx}[3]{%
+\tocless{#1[#2]}{\hfill[#3]}\vspace{-.3\onelineskip}\label{#3}\textbf{#2}\\%
+}
+% \newcommand{\defncontext}[1]{\textlangle#1\textrangle}
 % usage: \definition{name}{xref}
-%\newcommand{\definition}[2]{\rSec2[#2]{#1}}
-% for ISO format, use:
-\newcommand{\definition}[2]{%
-\subsection[#1]{\hfill[#2]}\vspace{-.3\onelineskip}\label{#2}\textbf{#1}\\%
-}
-\newcommand{\definitionx}[2]{%
-\subsubsection[#1]{\hfill[#2]}\vspace{-.3\onelineskip}\label{#2}\textbf{#1}\\%
-}
-\newcommand{\defncontext}[1]{\textlangle#1\textrangle}
+\newcommand{\definition}[2]{\definitionx{\section}{#1}{#2}}%
