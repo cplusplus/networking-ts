@@ -45,9 +45,9 @@ inline namespace v1 {
   template<class Clock, class WaitTraits = wait_traits<Clock>>
     class basic_waitable_timer;
 
-  typedef basic_waitable_timer<chrono::system_clock> system_timer;
-  typedef basic_waitable_timer<chrono::steady_clock> steady_timer;
-  typedef basic_waitable_timer<chrono::high_resolution_clock> high_resolution_timer;
+  using system_timer = basic_waitable_timer<chrono::system_clock>;
+  using steady_timer = basic_waitable_timer<chrono::steady_clock>;
+  using high_resolution_timer = basic_waitable_timer<chrono::high_resolution_clock>;
 
 } // inline namespace v1
 } // namespace net
@@ -174,11 +174,11 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef io_context::executor_type executor_type;
-    typedef Clock clock_type;
-    typedef typename clock_type::duration duration;
-    typedef typename clock_type::time_point time_point;
-    typedef WaitTraits traits_type;
+    using executor_type = io_context::executor_type;
+    using clock_type = Clock;
+    using duration = typename clock_type::duration;
+    using time_point = typename clock_type::time_point;
+    using traits_type = WaitTraits;
 
     // construct / copy / destroy:
 

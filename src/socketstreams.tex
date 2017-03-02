@@ -23,12 +23,12 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef Protocol protocol_type;
-    typedef typename protocol_type::endpoint endpoint_type;
-    typedef Clock clock_type;
-    typedef typename clock_type::time_point time_point;
-    typedef typename clock_type::duration duration;
-    typedef WaitTraits wait_traits_type;
+    using protocol_type = Protocol;
+    using endpoint_type = typename protocol_type::endpoint;
+    using clock_type = Clock;
+    using time_point = typename clock_type::time_point;
+    using duration = typename clock_type::duration;
+    using wait_traits_type = WaitTraits;
 
     // construct / copy / destroy:
 
@@ -356,12 +356,12 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef Protocol protocol_type;
-    typedef typename protocol_type::endpoint endpoint_type;
-    typedef Clock clock_type;
-    typedef typename clock_type::time_point time_point;
-    typedef typename clock_type::duration duration;
-    typedef WaitTraits wait_traits_type;
+    using protocol_type = Protocol;
+    using endpoint_type = typename protocol_type::endpoint;
+    using clock_type = Clock;
+    using time_point = typename clock_type::time_point;
+    using duration = typename clock_type::duration;
+    using wait_traits_type = WaitTraits;
 
     // construct / copy / destroy:
 

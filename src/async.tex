@@ -346,7 +346,7 @@ A service shall provide an explicit constructor with a single parameter of lvalu
 class my_service : public execution_context::service
 {
 public:
-  typedef my_service key_type;
+  using key_type = my_service;
   explicit my_service(execution_context& ctx);
   my_service(execution_context& ctx, int some_value);
 private:
@@ -768,8 +768,8 @@ inline namespace v1 {
   class async_result
   {
   public:
-    typedef CompletionToken completion_handler_type;
-    typedef void return_type;
+    using completion_handler_type = CompletionToken;
+    using return_type = void;
 
     explicit async_result(completion_handler_type&) {}
     async_result(const async_result&) = delete;
@@ -841,9 +841,8 @@ inline namespace v1 {
   template<class CompletionToken, class Signature>
   struct async_completion
   {
-    typedef async_result<decay_t<CompletionToken>,
-      Signature>::completion_handler_type
-        completion_handler_type;
+    using completion_handler_type = async_result<decay_t<CompletionToken>,
+      Signature>::completion_handler_type;
 
     explicit async_completion(CompletionToken& t);
     async_completion(const async_completion&) = delete;
@@ -897,7 +896,7 @@ inline namespace v1 {
   template<class T, class ProtoAllocator = allocator<void>>
   struct associated_allocator
   {
-    typedef @\seebelow@ type;
+    using type = @\seebelow@;
 
     static type get(const T& t, const ProtoAllocator& a = ProtoAllocator()) noexcept;
   };
@@ -945,7 +944,7 @@ Shall not exit via an exception. Equivalent to \tcode{X::get(t, ProtoAllocator()
 \rSec2[async.assoc.alloc.members]{\tcode{associated_allocator} members}
 
 \begin{itemdecl}
-typedef @\seebelow@ type;
+using type = @\seebelow@;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1349,7 +1348,7 @@ inline namespace v1 {
   template<class T, class Executor = system_executor>
   struct associated_executor
   {
-    typedef @\seebelow@ type;
+    using type = @\seebelow@;
 
     static type get(const T& t, const Executor& e = Executor()) noexcept;
   };
@@ -1397,7 +1396,7 @@ Shall not exit via an exception. Equivalent to \tcode{X::get(t, Executor())}.  \
 \rSec2[async.assoc.exec.members]{\tcode{associated_executor} members}
 
 \begin{itemdecl}
-typedef @\seebelow@ type;
+using type = @\seebelow@;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1478,8 +1477,8 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef T target_type;
-    typedef Executor executor_type;
+    using target_type = T;
+    using executor_type = Executor;
 
     // construct / copy / destroy:
 
@@ -1657,10 +1656,10 @@ inline namespace v1 {
   class async_result<executor_binder<T, Executor>, Signature>
   {
   public:
-    typedef executor_binder<
+    using completion_handler_type = executor_binder<
       typename async_result<T, Signature>::completion_handler_type,
-        Executor> completion_handler_type;
-    typedef typename async_result<T, Signature>::return_type return_type;
+        Executor>;
+    using return_type = typename async_result<T, Signature>::return_type;
 
     explicit async_result(completion_handler_type& h);
     async_result(const async_result&) = delete;
@@ -1711,7 +1710,7 @@ inline namespace v1 {
   template<class T, class Executor, class ProtoAllocator>
     struct associated_allocator<executor_binder<T, Executor>, ProtoAllocator>
   {
-    typedef associated_allocator_t<T, ProtoAllocator> type;
+    using type = associated_allocator_t<T, ProtoAllocator>;
 
     static type get(const executor_binder<T, Executor>& b,
                     const ProtoAllocator& a = ProtoAllocator()) noexcept;
@@ -1748,7 +1747,7 @@ inline namespace v1 {
   template<class T, class Executor, class Executor1>
     struct associated_executor<executor_binder<T, Executor>, Executor1>
   {
-    typedef Executor type;
+    using type = Executor;
 
     static type get(const executor_binder<T, Executor>& b,
                     const Executor1& e = Executor1()) noexcept;
@@ -1822,7 +1821,7 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef Executor executor_type;
+    using executor_type = Executor;
 
     // construct / copy / destroy:
 
@@ -2131,7 +2130,7 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef system_executor executor_type;
+    using executor_type = system_executor;
 
     // construct / copy / destroy:
 
@@ -2990,7 +2989,7 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef Executor inner_executor_type;
+    using inner_executor_type = Executor;
 
     // construct / copy / destroy:
 
@@ -3407,7 +3406,7 @@ inline namespace v1 {
   {
   public:
     // use_future_t types:
-    typedef ProtoAllocator allocator_type;
+    using allocator_type = ProtoAllocator;
 
     // use_future_t members:
     constexpr use_future_t() noexcept(noexcept(allocator_type()));
@@ -3515,8 +3514,8 @@ For any executor type \tcode{E}, the associated object for the associator \tcode
 template<class ProtoAllocator, class Result, class... Args>
 class async_result<use_future_t<ProtoAllocator>, Result(Args...)>
 {
-  typedef @\seebelow@ completion_handler_type;
-  typedef @\seebelow@ return_type;
+  using completion_handler_type = @\seebelow@;
+  using return_type =  @\seebelow@;
 
   explicit async_result(completion_handler_type& h);
   async_result(const async_result&) = delete;
@@ -3629,8 +3628,8 @@ inline namespace v1 {
   class async_result<packaged_task<Result(Args...)>, Signature>
   {
   public:
-    typedef packaged_task<Result(Args...)> completion_handler_type;
-    typedef future<Result> return_type;
+    using completion_handler_type = packaged_task<Result(Args...)>;
+    using return_type = future<Result>;
 
     explicit async_result(completion_handler_type& h);
     async_result(const async_result&) = delete;

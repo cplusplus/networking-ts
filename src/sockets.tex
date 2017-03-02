@@ -1014,17 +1014,17 @@ inline namespace v1 {
     class send_buffer_size;
     class send_low_watermark;
 
-    typedef @\placeholder{T1}@ shutdown_type;
+    using shutdown_type = @\placeholder{T1}@;
     static constexpr shutdown_type shutdown_receive;
     static constexpr shutdown_type shutdown_send;
     static constexpr shutdown_type shutdown_both;
 
-    typedef @\placeholder{T2}@ wait_type;
+    using wait_type = @\placeholder{T2}@;
     static constexpr wait_type wait_read;
     static constexpr wait_type wait_write;
     static constexpr wait_type wait_error;
 
-    typedef @\placeholder{T3}@ message_flags;
+    using message_flags = @\placeholder{T3}@;
     static constexpr message_flags message_peek;
     static constexpr message_flags message_out_of_band;
     static constexpr message_flags message_do_not_route;
@@ -1417,10 +1417,10 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef io_context::executor_type executor_type;
-    typedef @\textit{implementation defined}@ native_handle_type; // \nativeref
-    typedef Protocol protocol_type;
-    typedef typename protocol_type::endpoint endpoint_type;
+    using executor_type = io_context::executor_type;
+    using native_handle_type = @\textit{implementation defined}@; // \nativeref
+    using protocol_type = Protocol;
+    using endpoint_type = typename protocol_type::endpoint;
 
     // basic_socket operations:
 
@@ -2195,9 +2195,9 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef @\textit{implementation defined}@ native_handle_type; // \nativeref
-    typedef Protocol protocol_type;
-    typedef typename protocol_type::endpoint endpoint_type;
+    using native_handle_type = @\textit{implementation defined}@; // \nativeref
+    using protocol_type = Protocol;
+    using endpoint_type = typename protocol_type::endpoint;
 
     // construct / copy / destroy:
 
@@ -2854,9 +2854,9 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef @\textit{implementation defined}@ native_handle_type; // \nativeref
-    typedef Protocol protocol_type;
-    typedef typename protocol_type::endpoint endpoint_type;
+    using native_handle_type = @\textit{implementation defined}@; // \nativeref
+    using protocol_type = Protocol;
+    using endpoint_type = typename protocol_type::endpoint;
 
     // construct / copy / destroy:
 
@@ -3326,11 +3326,11 @@ inline namespace v1 {
   public:
     // types:
 
-    typedef io_context::executor_type executor_type;
-    typedef @\textit{implementation defined}@ native_handle_type; // \nativeref
-    typedef AcceptableProtocol protocol_type;
-    typedef typename protocol_type::endpoint endpoint_type;
-    typedef typename protocol_type::socket socket_type;
+    using executor_type = io_context::executor_type;
+    using native_handle_type = @\textit{implementation defined}@; // \nativeref
+    using protocol_type = AcceptableProtocol;
+    using endpoint_type = typename protocol_type::endpoint;
+    using socket_type = typename protocol_type::socket;
 
     // construct / copy / destroy:
 
