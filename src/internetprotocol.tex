@@ -13,8 +13,7 @@
 \indexlibrary{\idxcode{v4_mapped}}%
 \begin{codeblock}
 namespace std {
-namespace experimental {
-namespace net {
+namespace experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -260,8 +259,7 @@ namespace ip {
   } // namespace multicast
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
+} // namespace experimental::net
 
   template<> struct is_error_condition_enum<
     experimental::net::v1::ip::resolver_errc>
@@ -536,9 +534,7 @@ The class \tcode{address} is a version-independent representation for an IP addr
 \indexlibrary{\idxcode{address}!\idxcode{is_multicast}}%
 \indexlibrary{\idxcode{address}!\idxcode{to_string}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -596,9 +592,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \indexlibrary{\idxcode{address}}%
@@ -905,9 +899,7 @@ The class \tcode{address_v4} is a representation of an IPv4 address.
 
 \indexlibrary{\idxcode{address_v4}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -969,9 +961,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -982,9 +972,7 @@ namespace ip {
 
 \indexlibrarymember{bytes_type}{address_v4}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -996,9 +984,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -1300,9 +1286,7 @@ The class \tcode{address_v6} is a representation of an IPv6 address.
 
 \indexlibrary{\idxcode{address_v6}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -1371,9 +1355,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -1387,9 +1369,7 @@ namespace ip {
 
 \indexlibrarymember{bytes_type}{address_v6}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -1401,9 +1381,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -1785,9 +1763,7 @@ template<class CharT, class Traits>
 An exception of type \tcode{bad_address_cast} is thrown by a failed \tcode{address_cast}.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -1800,9 +1776,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \begin{itemdecl}
@@ -1841,9 +1815,7 @@ template<> struct hash<experimental::net::v1::ip::address_v6>;
 The class template \tcode{basic_address_iterator} enables iteration over IP addresses in network byte order. This clause defines two specializations of the class template \tcode{basic_address_iterator}: \tcode{basic_address_iterator<address_v4>} and \tcode{basic_address_iterator<address_v6>}. The members and operational semantics of these specializations are defined below.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -1876,9 +1848,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -1968,9 +1938,7 @@ basic_address_iterator operator--(int) noexcept;
 The class template \tcode{basic_address_range} represents a range of IP addresses in network byte order. This clause defines two specializations of the class template \tcode{basic_address_range}: \tcode{basic_address_range<address_v4>} and \tcode{basic_address_range<address_v6>}. The members and operational semantics of these specializations are defined below.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -1995,9 +1963,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -2082,9 +2048,7 @@ Complexity: Constant time.
 The class \tcode{network_v4} provides the ability to use and manipulate IPv4 network addresses.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -2132,9 +2096,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -2365,9 +2327,7 @@ template<class CharT, class Traits>
 The class \tcode{network_v6} provides the ability to use and manipulate IPv6 network addresses.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -2411,9 +2371,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -2602,9 +2560,7 @@ template<class CharT, class Traits>
 An object of type \tcode{basic_endpoint<InternetProtocol>} represents a protocol-specific endpoint, where an endpoint consists of an IP address and port number. Endpoints may be used to identify sources and destinations for socket connections and datagrams.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -2658,9 +2614,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -2671,9 +2625,7 @@ Instances of the \tcode{basic_endpoint} class template meet the requirements for
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -2697,9 +2649,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 
@@ -2952,9 +2902,7 @@ constexpr size_t capacity() const noexcept;
 An object of type \tcode{basic_resolver_entry<InternetProtocol>} represents a single element in the results returned by a name resolution operation.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -2993,9 +2941,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 
@@ -3117,9 +3063,7 @@ represents a sequence of \tcode{basic_res\-olver_entry<InternetProtocol>} elemen
 resulting from a single name resolution operation.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -3171,9 +3115,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -3342,9 +3284,7 @@ template<class InternetProtocol>
 
 \indexlibrary{\idxcode{resolve_base}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -3367,9 +3307,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -3429,9 +3367,7 @@ If used with \tcode{v4_mapped}, return all matching IPv6 and IPv4 addresses.  \\
 Objects of type \tcode{basic_resolver<InternetProtocol>} are used to perform name resolution. Name resolution is the translation of a host name and service name into a sequence of endpoints, or the translation of an endpoint into its corresponding host name and service name.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -3509,9 +3445,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 
@@ -3860,9 +3794,7 @@ template<class Allocator>
 The class \tcode{tcp} encapsulates the types and flags necessary for TCP sockets.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -3890,9 +3822,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -3903,9 +3833,7 @@ The \tcode{tcp} class meets the requirements for an \tcode{InternetProtocol}~(\r
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -3920,9 +3848,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -3991,9 +3917,7 @@ constexpr bool operator!=(const tcp& a, const tcp& b) noexcept;
 The class \tcode{udp} encapsulates the types and flags necessary for UDP sockets.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -4018,9 +3942,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -4031,9 +3953,7 @@ The \tcode{udp} class meets the requirements for an \tcode{InternetProtocol}~(\r
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 namespace ip {
 
@@ -4048,9 +3968,7 @@ namespace ip {
 
 } // namespace ip
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -4215,12 +4133,9 @@ Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type 
 The \tcode{outbound_interface} class represents a socket option that specifies the network interface to use for outgoing multicast datagrams.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
-namespace ip {
-namespace multicast {
+namespace ip::multicast {
 
   class outbound_interface
   {
@@ -4230,12 +4145,9 @@ namespace multicast {
     explicit outbound_interface(unsigned int network_interface) noexcept;
   };
 
-} // namespace multicast
-} // namespace ip
+} // namespace ip::multicast
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -4246,12 +4158,9 @@ namespace multicast {
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
-namespace ip {
-namespace multicast {
+namespace ip::multicast {
 
   class outbound_interface
   {
@@ -4266,12 +4175,9 @@ namespace multicast {
       unsigned int v6_value_; // \expos
   };
 
-} // namespace multicast
-} // namespace ip
+} // namespace ip::multicast
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \begin{itemdecl}

@@ -7,17 +7,13 @@
 \rSec1[io_context.synop]{Header \tcode{<experimental/io_context>} synopsis}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   class io_context;
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 
@@ -26,9 +22,7 @@ inline namespace v1 {
 
 \indexlibrary{\idxcode{io_context}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   class io_context : public execution_context
@@ -74,9 +68,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -333,9 +325,7 @@ void restart();
 
 \indexlibrary{\idxcode{io_context::executor_type}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   class io_context::executor_type
@@ -372,9 +362,7 @@ inline namespace v1 {
                   const io_context::executor_type& b) noexcept;
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum

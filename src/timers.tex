@@ -35,9 +35,7 @@ c.run();
 \begin{codeblock}
 #include <chrono>
 
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class Clock> struct wait_traits;
@@ -50,9 +48,7 @@ inline namespace v1 {
   using high_resolution_timer = basic_waitable_timer<chrono::high_resolution_clock>;
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 
@@ -114,9 +110,7 @@ Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{a
 
 \indexlibrary{\idxcode{wait_traits}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class Clock>
@@ -130,9 +124,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -165,9 +157,7 @@ static typename Clock::duration to_wait_duration(
 
 \indexlibrary{\idxcode{basic_waitable_timer}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class Clock, class WaitTraits = wait_traits<Clock>>
@@ -214,9 +204,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
