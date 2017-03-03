@@ -340,7 +340,7 @@ The first parameter of all service constructors shall be an lvalue reference to 
 A service shall provide an explicit constructor with a single parameter of lvalue reference to \tcode{execution_context}. \begin{note} This constructor may be called by the \tcode{use_service} function. \end{note}
 
 \pnum
-\begin{example} 
+\begin{example}
 
 \begin{codeblock}
 class my_service : public execution_context::service
@@ -2651,7 +2651,7 @@ bool operator==(const executor& a, const executor& b) noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns 
+\returns
 \begin{itemize}
 \item
 \tcode{true} if \tcode{!a} and \tcode{!b};
@@ -2729,7 +2729,7 @@ template<class CompletionToken>
 \completionsig \tcode{void()}.
 
 \pnum
-\effects 
+\effects
 \begin{itemize}
 \item
  Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
@@ -2751,7 +2751,7 @@ template<class Executor, class CompletionToken>
 \completionsig \tcode{void()}.
 
 \pnum
-\effects 
+\effects
 \begin{itemize}
 \item
  Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
@@ -2815,7 +2815,7 @@ template<class CompletionToken>
 \completionsig \tcode{void()}.
 
 \pnum
-\effects 
+\effects
 \begin{itemize}
 \item
  Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
@@ -2837,7 +2837,7 @@ template<class Executor, class CompletionToken>
 \completionsig \tcode{void()}.
 
 \pnum
-\effects 
+\effects
 \begin{itemize}
 \item
  Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
@@ -2901,7 +2901,7 @@ template<class CompletionToken>
 \completionsig \tcode{void()}.
 
 \pnum
-\effects 
+\effects
 \begin{itemize}
 \item
  Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
@@ -2923,7 +2923,7 @@ template<class Executor, class CompletionToken>
 \completionsig \tcode{void()}.
 
 \pnum
-\effects 
+\effects
 \begin{itemize}
 \item
  Constructs an object \tcode{completion} of type \tcode{async_completion<CompletionToken, void()>}, initialized with \tcode{token}.
@@ -3121,7 +3121,7 @@ strand(const strand& other) noexcept;
 \effects Initializes \tcode{inner_ex_} as \tcode{inner_ex_(other.inner_ex_)}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{*this == other}
@@ -3139,7 +3139,7 @@ strand(strand&& other) noexcept;
 \effects Initializes \tcode{inner_ex_} as \tcode{inner_ex_(std::move(other.inner_ex_))}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{*this} is equal to the prior value of \tcode{other}
@@ -3192,7 +3192,7 @@ strand& operator=(const strand& other) noexcept;
 \requires \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{*this == other}
@@ -3213,7 +3213,7 @@ strand& operator=(strand&& other) noexcept;
 \requires \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{*this} is equal to the prior value of \tcode{other}

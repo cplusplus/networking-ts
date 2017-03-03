@@ -1544,7 +1544,7 @@ explicit basic_socket(io_context& ctx);
 
 \begin{itemdescr}
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == ctx.get_executor()}.
@@ -1562,7 +1562,7 @@ basic_socket(io_context& ctx, const protocol_type& protocol);
 \effects Opens this socket as if by calling \tcode{open(protocol)}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == ctx.get_executor()}.
@@ -1581,7 +1581,7 @@ basic_socket(io_context& ctx, const endpoint_type& endpoint);
 
 \begin{itemdescr}
 \pnum
-\effects Opens and binds this socket as if by calling: 
+\effects Opens and binds this socket as if by calling:
 \begin{codeblock}
 open(endpoint.protocol());
 bind(endpoint);
@@ -1589,7 +1589,7 @@ bind(endpoint);
 
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == ctx.get_executor()}.
@@ -1615,7 +1615,7 @@ basic_socket(io_context& ctx, const protocol_type& protocol,
 \effects Assigns the existing native socket into this socket as if by calling \tcode{assign(protocol, native_socket)}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == ctx.get_executor()}.
@@ -1637,7 +1637,7 @@ basic_socket(basic_socket&& rhs);
 \effects Move constructs an object of class \tcode{basic_socket<Protocol>} that refers to the state originally represented by \tcode{rhs}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == rhs.get_executor()}.
@@ -1667,7 +1667,7 @@ template<class OtherProtocol>
 \effects Move constructs an object of class \tcode{basic_socket<Protocol>} that refers to the state originally represented by \tcode{rhs}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == rhs.get_executor()}.
@@ -1713,7 +1713,7 @@ basic_socket& operator=(basic_socket&& rhs);
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this socket. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}. Disables the linger socket option to prevent the assignment from blocking, and releases socket resources as if by POSIX \tcode{close(native_handle())}. Moves into \tcode{*this} the state originally represented by \tcode{rhs}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == rhs.get_executor()}.
@@ -1744,7 +1744,7 @@ template<class OtherProtocol>
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this socket. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}. Disables the linger socket option to prevent the assignment from blocking, and releases socket resources as if by POSIX \tcode{close(native_handle())}. Moves into \tcode{*this} the state originally represented by \tcode{rhs}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == rhs.get_executor()}.
@@ -1797,7 +1797,7 @@ void open(const protocol_type& protocol, error_code& ec);
 \effects Establishes the postcondition, as if by POSIX \tcode{socket(protocol.family(), protocol.type(), protocol.protocol())}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{is_open() == true}.
@@ -1830,7 +1830,7 @@ void assign(const protocol_type& protocol,
 \effects Assigns the native socket handle to this socket object.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{is_open() == true}.
@@ -1911,7 +1911,7 @@ template<class GettableSocketOption>
 
 \begin{itemdescr}
 \pnum
-\effects Gets an option from this socket, as if by POSIX: 
+\effects Gets an option from this socket, as if by POSIX:
 \begin{codeblock}
 socklen_t option_len = option.size(protocol_);
 int result = getsockopt(native_handle(), option.level(protocol_),
@@ -1974,7 +1974,7 @@ void native_non_blocking(bool mode, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Sets the non-blocking mode of the underlying native socket, as if by POSIX: 
+\effects Sets the non-blocking mode of the underlying native socket, as if by POSIX:
 \begin{codeblock}
 int flags = fcntl(native_handle(), F_GETFL, 0);
 if (flags >= 0)
@@ -2070,7 +2070,7 @@ endpoint_type local_endpoint(error_code& ec) const;
 
 \begin{itemdescr}
 \pnum
-\effects Determines the locally-bound endpoint associated with the socket, as if by POSIX: 
+\effects Determines the locally-bound endpoint associated with the socket, as if by POSIX:
 \begin{codeblock}
 endpoint_type endpoint;
 socklen_t endpoint_len = endpoint.capacity();
@@ -2091,7 +2091,7 @@ endpoint_type remote_endpoint(error_code& ec) const;
 
 \begin{itemdescr}
 \pnum
-\effects Determines the remote endpoint associated with this socket, as if by POSIX: 
+\effects Determines the remote endpoint associated with this socket, as if by POSIX:
 \begin{codeblock}
 endpoint_type endpoint;
 socklen_t endpoint_len = endpoint.capacity();
@@ -2468,7 +2468,7 @@ template<class MutableBufferSequence>
 A read operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and reads data from this socket as if by POSIX: 
+\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and reads data from this socket as if by POSIX:
 \begin{codeblock}
 msghdr message;
 message.msg_name = nullptr;
@@ -2512,7 +2512,7 @@ template<class MutableBufferSequence, class CompletionToken>
 \completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
-\effects Initiates an asynchronous operation to read data from this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX: 
+\effects Initiates an asynchronous operation to read data from this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX:
 \begin{codeblock}
 msghdr message;
 message.msg_name = nullptr;
@@ -2571,7 +2571,7 @@ template<class MutableBufferSequence>
 A read operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and reads data from this socket as if by POSIX: 
+\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and reads data from this socket as if by POSIX:
 \begin{codeblock}
 msghdr message;
 message.msg_name = sender.data();
@@ -2622,7 +2622,7 @@ A read operation~(\ref{buffer.reqmts.read.write}).
 \completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
-\effects Initiates an asynchronous operation to read data from this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX: 
+\effects Initiates an asynchronous operation to read data from this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX:
 \begin{codeblock}
 msghdr message;
 message.msg_name = sender.data();
@@ -2678,7 +2678,7 @@ template<class ConstBufferSequence>
 A write operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and writes data to this socket as if by POSIX: 
+\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and writes data to this socket as if by POSIX:
 \begin{codeblock}
 msghdr message;
 message.msg_name = nullptr;
@@ -2721,7 +2721,7 @@ A write operation~(\ref{buffer.reqmts.read.write}).
 \completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
-\effects Initiates an asynchronous operation to write data to this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX: 
+\effects Initiates an asynchronous operation to write data to this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX:
 \begin{codeblock}
 msghdr message;
 message.msg_name = nullptr;
@@ -2769,7 +2769,7 @@ template<class ConstBufferSequence>
 A write operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and writes data to this socket as if by POSIX: 
+\effects Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and writes data to this socket as if by POSIX:
 \begin{codeblock}
 msghdr message;
 message.msg_name = recipient.data();
@@ -2815,7 +2815,7 @@ A write operation~(\ref{buffer.reqmts.read.write}).
 \completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
-\effects Initiates an asynchronous operation to write data to this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX: 
+\effects Initiates an asynchronous operation to write data to this socket. Constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX:
 \begin{codeblock}
 msghdr message;
 message.msg_name = recipient.data();
@@ -3092,7 +3092,7 @@ template<class MutableBufferSequence>
 A read operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
-\effects If \tcode{buffer_size(buffers) == 0}, returns immediately with no error. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and reads data from this socket as if by POSIX: 
+\effects If \tcode{buffer_size(buffers) == 0}, returns immediately with no error. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, and reads data from this socket as if by POSIX:
 \begin{codeblock}
 msghdr message;
 message.msg_name = nullptr;
@@ -3143,7 +3143,7 @@ A read operation~(\ref{buffer.reqmts.read.write}).
 \completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
-\effects Initiates an asynchronous operation to read data from this socket. If \tcode{buffer_size(buffers) == 0}, the asynchronous operation completes immediately with no error and \tcode{n == 0}. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX: 
+\effects Initiates an asynchronous operation to read data from this socket. If \tcode{buffer_size(buffers) == 0}, the asynchronous operation completes immediately with no error and \tcode{n == 0}. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then reads data as if by POSIX:
 \begin{codeblock}
 msghdr message;
 message.msg_name = nullptr;
@@ -3239,7 +3239,7 @@ A write operation~(\ref{buffer.reqmts.read.write}).
 \completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
-\effects Initiates an asynchronous operation to write data to this socket. If \tcode{buffer_size(buffers) == 0}, the asynchronous operation completes immediately with no error and \tcode{n == 0}. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX: 
+\effects Initiates an asynchronous operation to write data to this socket. If \tcode{buffer_size(buffers) == 0}, the asynchronous operation completes immediately with no error and \tcode{n == 0}. Otherwise, constructs an array \tcode{iov} of POSIX type \tcode{struct iovec} and length \tcode{iovlen}, corresponding to \tcode{buffers}, then writes data as if by POSIX:
 \begin{codeblock}
 msghdr message;
 message.msg_name = nullptr;
@@ -3467,7 +3467,7 @@ explicit basic_socket_acceptor(io_context& ctx);
 
 \begin{itemdescr}
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == ctx.get_executor()}.
@@ -3485,7 +3485,7 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
 \effects Opens this acceptor as if by calling \tcode{open(protocol)}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == ctx.get_executor()}.
@@ -3507,7 +3507,7 @@ basic_socket_acceptor(io_context& ctx, const endpoint_type& endpoint,
 
 \begin{itemdescr}
 \pnum
-\effects Opens and binds this acceptor as if by calling: 
+\effects Opens and binds this acceptor as if by calling:
 \begin{codeblock}
 open(endpoint.protocol());
 if (reuse_addr)
@@ -3518,7 +3518,7 @@ listen();
 
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == ctx.get_executor()}.
@@ -3546,7 +3546,7 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
 \effects Assigns the existing native acceptor into this acceptor as if by calling \tcode{assign(protocol, native_acceptor)}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == ctx.get_executor()}.
@@ -3570,7 +3570,7 @@ basic_socket_acceptor(basic_socket_acceptor&& rhs);
 \effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol>} that refers to the state originally represented by \tcode{rhs}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == rhs.get_executor()}.
@@ -3600,7 +3600,7 @@ template<class OtherProtocol>
 \effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol>} that refers to the state originally represented by \tcode{rhs}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == rhs.get_executor()}.
@@ -3648,7 +3648,7 @@ basic_socket_acceptor& operator=(basic_socket_acceptor&& rhs);
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this acceptor, and releases acceptor resources as if by POSIX \tcode{close(native_handle())}. Then moves into \tcode{*this} the state originally represented by \tcode{rhs}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == rhs.get_executor()}.
@@ -3683,7 +3683,7 @@ template<class OtherProtocol>
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this acceptor, and releases acceptor resources as if by POSIX \tcode{close(native_handle())}. Then moves into \tcode{*this} the state originally represented by \tcode{rhs}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == rhs.get_executor()}.
@@ -3740,7 +3740,7 @@ void open(const protocol_type& protocol, error_code& ec);
 \effects Establishes the postcondition, as if by POSIX \tcode{socket(protocol.family(), protocol.type(), protocol.protocol())}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{is_open() == true}.
@@ -3775,7 +3775,7 @@ void assign(const protocol_type& protocol,
 \effects Assigns the native acceptor handle to this acceptor object.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{is_open() == true}.
@@ -3857,7 +3857,7 @@ template<class GettableSocketOption>
 
 \begin{itemdescr}
 \pnum
-\effects Gets an option from this acceptor, as if by POSIX: 
+\effects Gets an option from this acceptor, as if by POSIX:
 \begin{codeblock}
 socklen_t option_len = option.size(protocol_);
 int result = getsockopt(native_handle(), option.level(protocol_),
@@ -3920,7 +3920,7 @@ void native_non_blocking(bool mode, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Sets the non-blocking mode of the underlying native acceptor, as if by POSIX: 
+\effects Sets the non-blocking mode of the underlying native acceptor, as if by POSIX:
 \begin{codeblock}
 int flags = fcntl(native_handle(), F_GETFL, 0);
 if (flags >= 0)
@@ -3986,7 +3986,7 @@ endpoint_type local_endpoint(error_code& ec) const;
 
 \begin{itemdescr}
 \pnum
-\effects Determines the locally-bound endpoint associated with this acceptor, as if by POSIX: 
+\effects Determines the locally-bound endpoint associated with this acceptor, as if by POSIX:
 \begin{codeblock}
 endpoint_type endpoint;
 socklen_t endpoint_len = endpoint.capacity();
@@ -4042,7 +4042,7 @@ socket_type accept(io_context& ctx, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Extracts a socket from the queue of pending connections of the acceptor, as if by POSIX: 
+\effects Extracts a socket from the queue of pending connections of the acceptor, as if by POSIX:
 \begin{codeblock}
 native_handle_type h = accept(native_handle(), nullptr, 0);
 \end{codeblock}
@@ -4072,7 +4072,7 @@ template<class CompletionToken>
 \completionsig \tcode{void(error_code ec, socket_type s)}.
 
 \pnum
-\effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX: 
+\effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX:
 \begin{codeblock}
 native_handle_type h = accept(native_handle(), nullptr, 0);
 \end{codeblock}
@@ -4097,7 +4097,7 @@ socket_type accept(io_context& ctx, endpoint_type& endpoint,
 
 \begin{itemdescr}
 \pnum
-\effects Extracts a socket from the queue of pending connections of the acceptor, as if by POSIX: 
+\effects Extracts a socket from the queue of pending connections of the acceptor, as if by POSIX:
 \begin{codeblock}
 socklen_t endpoint_len = endpoint.capacity();
 native_handle_type h = accept(native_handle(),
@@ -4134,7 +4134,7 @@ template<class CompletionToken>
 \completionsig \tcode{void(error_code ec, socket_type s)}.
 
 \pnum
-\effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX: 
+\effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX:
 \begin{codeblock}
 socklen_t endpoint_len = endpoint.capacity();
 native_handle_type h = accept(native_handle(),

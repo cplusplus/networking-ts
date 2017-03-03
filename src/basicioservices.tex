@@ -145,7 +145,7 @@ count_type run();
 \requires Must not be called from a thread that is currently calling a run function.
 
 \pnum
-\effects Equivalent to: 
+\effects Equivalent to:
 \begin{codeblock}
 count_type n = 0;
 while (run_one())
@@ -166,7 +166,7 @@ template<class Rep, class Period>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to: 
+\effects Equivalent to:
 \begin{codeblock}
 return run_until(chrono::steady_clock::now() + rel_time);
 \end{codeblock}
@@ -181,7 +181,7 @@ template<class Clock, class Duration>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to: 
+\effects Equivalent to:
 \begin{codeblock}
 count_type n = 0;
 while (run_one_until(abs_time))
@@ -224,7 +224,7 @@ template<class Rep, class Period>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to: 
+\effects Equivalent to:
 \begin{codeblock}
 return run_one_until(chrono::steady_clock::now() + rel_time);
 \end{codeblock}
@@ -258,7 +258,7 @@ count_type poll();
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to: 
+\effects Equivalent to:
 \begin{codeblock}
 count_type n = 0;
 while (poll_one())

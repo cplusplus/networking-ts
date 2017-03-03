@@ -929,7 +929,7 @@ mutable_buffer operator+(size_t n, const mutable_buffer& b) noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns A \tcode{mutable_buffer} equivalent to 
+\returns A \tcode{mutable_buffer} equivalent to
 \begin{codeblock}
 mutable_buffer(
   static_cast<char*>(b.data()) + min(n, b.size()),
@@ -945,7 +945,7 @@ const_buffer operator+(size_t n, const const_buffer& b) noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns A \tcode{const_buffer} equivalent to 
+\returns A \tcode{const_buffer} equivalent to
 \begin{codeblock}
 const_buffer(
   static_cast<const char*>(b.data()) + min(n, b.size()),
@@ -1047,7 +1047,7 @@ template<class CharT, class Traits>
 
 \begin{itemdescr}
 \pnum
-\returns 
+\returns
 \begin{codeblock}
 buffer(
   begin(data) != end(data) ? std::addressof(*begin(data)) : nullptr,
