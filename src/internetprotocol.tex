@@ -29,8 +29,8 @@ namespace ip {
   error_code make_error_code(resolver_errc e) noexcept;
   error_condition make_error_condition(resolver_errc e) noexcept;
 
-  typedef uint_least16_t port_type;
-  typedef uint_least32_t scope_id_type;
+  using port_type = uint_least16_t;
+  using scope_id_type = uint_least32_t;
 
   struct v4_mapped_t {};
   constexpr v4_mapped_t v4_mapped;
@@ -112,15 +112,15 @@ namespace ip {
 
   template<class> class basic_address_iterator; // \notdef
   template<> class basic_address_iterator<address_v4>;
-  typedef basic_address_iterator<address_v4> address_v4_iterator;
+  using address_v4_iterator = basic_address_iterator<address_v4>;
   template<> class basic_address_iterator<address_v6>;
-  typedef basic_address_iterator<address_v6> address_v6_iterator;
+  using address_v6_iterator = basic_address_iterator<address_v6>;
 
   template<class> class basic_address_range; // \notdef
   template<> class basic_address_range<address_v4>;
-  typedef basic_address_range<address_v4> address_v4_range;
+  using address_v4_range = basic_address_range<address_v4>;
   template<> class basic_address_range<address_v6>;
-  typedef basic_address_range<address_v6> address_v6_range;
+  using address_v6_range = basic_address_range<address_v6>;
 
   class network_v4;
   class network_v6;
@@ -909,7 +909,7 @@ namespace ip {
   {
   public:
     // types:
-    typedef uint_least32_t uint_type;
+    using uint_type = uint_least32_t;
     struct bytes_type;
 
     // constructors:
@@ -1842,11 +1842,11 @@ namespace ip {
   {
   public:
     // types:
-    typedef @\placeholder{Address}@ value_type;
-    typedef ptrdiff_t difference_type;
-    typedef const @\placeholder{Address}@* pointer;
-    typedef const @\placeholder{Address}@& reference;
-    typedef input_iterator_tag iterator_category;
+    using value_type = @\placeholder{Address}@;
+    using difference_type = ptrdiff_t;
+    using pointer = const @\placeholder{Address}@*;
+    using reference = const @\placeholder{Address}@&;
+    using iterator_category = input_iterator_tag;
 
     // constructors:
     basic_address_iterator(const @\placeholder{Address}@& a) noexcept;
@@ -1969,7 +1969,7 @@ namespace ip {
   {
   public:
     // types:
-    typedef basic_address_iterator<@\placeholder{Address}@> iterator;
+    using iterator = basic_address_iterator<@\placeholder{Address}@>;
 
     // constructors:
     basic_address_range() noexcept;
@@ -2604,7 +2604,7 @@ namespace ip {
   {
   public:
     // types:
-    typedef InternetProtocol protocol_type;
+    using protocol_type = InternetProtocol;
 
     // constructors:
     constexpr basic_endpoint() noexcept;
@@ -2954,8 +2954,8 @@ namespace ip {
   {
   public:
     // types:
-    typedef InternetProtocol protocol_type;
-    typedef typename InternetProtocol::endpoint endpoint_type;
+    using protocol_type = InternetProtocol;
+    using endpoint_type = typename InternetProtocol::endpoint;
 
     // constructors:
     basic_resolver_entry();
@@ -3117,15 +3117,15 @@ namespace ip {
   {
   public:
     // types:
-    typedef InternetProtocol protocol_type;
-    typedef typename protocol_type::endpoint endpoint_type;
-    typedef basic_resolver_entry<protocol_type> value_type;
-    typedef const value_type& const_reference;
-    typedef value_type& reference;
-    typedef @\impdefx{type of \tcode{basic_resolver_results::const_iterator}}@ const_iterator;
-    typedef const_iterator iterator;
-    typedef ptrdiff_t difference_type;
-    typedef size_t size_type;
+    using protocol_type = InternetProtocol;
+    using endpoint_type = typename protocol_type::endpoint;
+    using value_type = basic_resolver_entry<protocol_type>;
+    using const_reference = const value_type&;
+    using reference = value_type&;
+    using const_iterator = @\impdefx{type of \tcode{basic_resolver_results::const_iterator}}@;
+    using iterator = const_iterator;
+    using difference_type = ptrdiff_t;
+    using size_type = size_t;
 
     // construct / copy / destroy:
     basic_resolver_results();
@@ -3340,7 +3340,7 @@ namespace ip {
   class resolver_base
   {
   public:
-    typedef @\textit{T1}@ flags;
+    using flags = @\textit{T1}@;
     static const flags passive;
     static const flags canonical_name;
     static const flags numeric_host;
@@ -3430,10 +3430,10 @@ namespace ip {
   public:
     // types:
 
-    typedef io_context::executor_type executor_type;
-    typedef InternetProtocol protocol_type;
-    typedef typename InternetProtocol::endpoint endpoint_type;
-    typedef basic_resolver_results<InternetProtocol> results_type;
+    using executor_type = io_context::executor_type;
+    using protocol_type = InternetProtocol;
+    using endpoint_type = typename InternetProtocol::endpoint;
+    using results_type = basic_resolver_results<InternetProtocol>;
 
     // construct / copy / destroy:
 
@@ -3859,11 +3859,11 @@ namespace ip {
   {
   public:
     // types:
-    typedef basic_endpoint<tcp> endpoint;
-    typedef basic_resolver<tcp> resolver;
-    typedef basic_stream_socket<tcp> socket;
-    typedef basic_socket_acceptor<tcp> acceptor;
-    typedef basic_socket_iostream<tcp> iostream;
+    using endpoint = basic_endpoint<tcp>;
+    using resolver = basic_resolver<tcp>;
+    using socket = basic_stream_socket<tcp>;
+    using acceptor = basic_socket_acceptor<tcp>;
+    using iostream = basic_socket_iostream<tcp>;
     class no_delay;
 
     // static members:
@@ -3990,9 +3990,9 @@ namespace ip {
   {
   public:
     // types:
-    typedef basic_endpoint<udp> endpoint;
-    typedef basic_resolver<udp> resolver;
-    typedef basic_datagram_socket<udp> socket;
+    using endpoint = basic_endpoint<udp>;
+    using resolver = basic_resolver<udp>;
+    using socket = basic_datagram_socket<udp>;
 
     // static members:
     static constexpr udp v4() noexcept;
