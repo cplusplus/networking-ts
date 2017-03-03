@@ -3492,9 +3492,9 @@ The object \tcode{h} of type \tcode{H} is an asynchronous provider with an assoc
 The implementation provides a partial specialization \tcode{template <class Result, class... Args> async_result<T, Result(Args...)>} such that:
 \begin{itemize}
 \item
- the nested typedef \tcode{completion_handler_type} is a type \tcode{H};
+ the nested alias \tcode{completion_handler_type} is a type \tcode{H};
 \item
- the nested typedef \tcode{return_type} is \tcode{future<result_of_t<FD(decay_t<Args>...)>>}; and
+ the nested alias \tcode{return_type} is \tcode{future<result_of_t<FD(decay_t<Args>...)>>}; and
 \item
  when an object \tcode{r1} of type \tcode{async_result<T, Result(Args...)>} is constructed from \tcode{h}, the expression \tcode{r1.get()} returns a future with the same shared state as \tcode{h}.
 \end{itemize}
