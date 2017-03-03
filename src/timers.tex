@@ -6,7 +6,7 @@
 This clause defines components for performing timer operations.
 
 \pnum
-\begin{example} Performing a synchronous wait operation on a timer: 
+\begin{example} Performing a synchronous wait operation on a timer:
 \begin{codeblock}
 io_context c;
 steady_timer t(c);
@@ -16,7 +16,7 @@ t.wait();
  \end{example}
 
 \pnum
-\begin{example} Performing an asynchronous wait operation on a timer: 
+\begin{example} Performing an asynchronous wait operation on a timer:
 \begin{codeblock}
 void handler(error_code ec) { ... }
 ...
@@ -239,7 +239,7 @@ basic_waitable_timer(io_context& ctx, const time_point& t);
 
 \begin{itemdescr}
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == ctx.get_executor()}.
@@ -269,7 +269,7 @@ basic_waitable_timer(basic_waitable_timer&& rhs);
 \effects Move constructs an object of class \tcode{basic_waitable_timer<Clock, WaitTraits>} that refers to the state originally represented by \tcode{rhs}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == rhs.get_executor()}.
@@ -308,7 +308,7 @@ basic_waitable_timer& operator=(basic_waitable_timer&& rhs);
 \effects Cancels any outstanding asynchronous operations associated with \tcode{*this} as if by calling \tcode{cancel()}, then moves into \tcode{*this} the state originally represented by \tcode{rhs}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
 \tcode{get_executor() == rhs.get_executor()}.

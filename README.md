@@ -1,4 +1,4 @@
-https://github.com/cplusplus/networking-ts is the repository for the 
+https://github.com/cplusplus/networking-ts is the repository for the
 C++ Technical Specification "Extensions for Networking".
 
 The draft Technical Specification is found in the `src` directory

@@ -767,7 +767,7 @@ constexpr bool operator==(const address& a, const address& b) noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns 
+\returns
 \begin{itemize}
 \item
  if \tcode{a.is_v4() != b.is_v4()}, \tcode{false};
@@ -795,7 +795,7 @@ constexpr bool operator< (const address& a, const address& b) noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns 
+\returns
 \begin{itemize}
 \item
  if \tcode{a.is_v4() \&\& !b.is_v4()}, \tcode{true};
@@ -854,7 +854,7 @@ address make_address(string_view str, error_code& ec) noexcept;
 
 \begin{itemdescr}
 \pnum
-\effects Converts a textual representation of an address into an object of class \tcode{address}, as if by calling: 
+\effects Converts a textual representation of an address into an object of class \tcode{address}, as if by calling:
 \begin{codeblock}
 address a;
 address_v6 v6a = make_address_v6(str, ec);
@@ -1229,7 +1229,7 @@ constexpr address_v4 make_address_v4(v4_mapped_t, const address_v6& a);
 
 \begin{itemdescr}
 \pnum
-\returns An \tcode{address_v4} object corresponding to the IPv4-mapped IPv6 address, as if computed by the following method: 
+\returns An \tcode{address_v4} object corresponding to the IPv4-mapped IPv6 address, as if computed by the following method:
 \begin{codeblock}
 address_v6::bytes_type v6b = a.to_bytes();
 address_v4::bytes_type v4b(v6b[12], v6b[13], v6b[14], v6b[15]);
@@ -1477,7 +1477,7 @@ constexpr bool is_multicast() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns A boolean indicating whether the \tcode{address_v6} object represents a multicast address, as if computed by the following method: 
+\returns A boolean indicating whether the \tcode{address_v6} object represents a multicast address, as if computed by the following method:
 \begin{codeblock}
 bytes_type b = to_bytes();
 return b[0] == 0xFF;
@@ -1492,7 +1492,7 @@ constexpr bool is_link_local() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns A boolean indicating whether the \tcode{address_v6} object represents a unicast link-local address, as if computed by the following method: 
+\returns A boolean indicating whether the \tcode{address_v6} object represents a unicast link-local address, as if computed by the following method:
 \begin{codeblock}
 bytes_type b = to_bytes();
 return b[0] == 0xFE && (b[1] & 0xC0) == 0x80;
@@ -1507,7 +1507,7 @@ constexpr bool is_site_local() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns A boolean indicating whether the \tcode{address_v6} object represents a unicast site-local address, as if computed by the following method: 
+\returns A boolean indicating whether the \tcode{address_v6} object represents a unicast site-local address, as if computed by the following method:
 \begin{codeblock}
 bytes_type b = to_bytes();
 return b[0] == 0xFE && (b[1] & 0xC0) == 0xC0;
@@ -1522,7 +1522,7 @@ constexpr bool is_v4_mapped() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns A boolean indicating whether the \tcode{address_v6} object represents an IPv4-mapped IPv6 address, as if computed by the following method: 
+\returns A boolean indicating whether the \tcode{address_v6} object represents an IPv4-mapped IPv6 address, as if computed by the following method:
 \begin{codeblock}
 bytes_type b = to_bytes();
 return b[ 0] == 0 && b[ 1] == 0 && b[ 2] == 0    && b[ 3] == 0
@@ -1716,7 +1716,7 @@ constexpr address_v6 make_address_v6(v4_mapped_t, const address_v4& a) noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns An \tcode{address_v6} object containing the IPv4-mapped IPv6 address corresponding to the specified IPv4 address, as if computed by the following method: 
+\returns An \tcode{address_v6} object containing the IPv4-mapped IPv6 address corresponding to the specified IPv4 address, as if computed by the following method:
 \begin{codeblock}
 address_v4::bytes_type v4b = a.to_bytes();
 address_v6::bytes_type v6b(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2715,7 +2715,7 @@ constexpr basic_endpoint(const protocol_type& proto,
 \requires \tcode{proto == protocol_type::v4() || proto == protocol_type::v6()}.
 
 \pnum
-\postconditions 
+\postconditions
 \begin{itemize}
 \item
  If \tcode{proto == protocol_type::v6()}, \tcode{this->address() == ip::address_v6()}; otherwise, \tcode{this->address() == ip::address_v4()}.
@@ -2866,7 +2866,7 @@ template<class CharT, class Traits, class InternetProtocol>
 
 \begin{itemdescr}
 \pnum
-\effects Outputs a representation of the endpoint to the stream, as if it were implemented as follows: 
+\effects Outputs a representation of the endpoint to the stream, as if it were implemented as follows:
 \begin{codeblock}
 basic_ostringstream<CharT, Traits> ss;
 if (ep.protocol() == basic_endpoint<InternetProtocol>::protocol_type::v6())
