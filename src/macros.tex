@@ -535,9 +535,11 @@
 %%--------------------------------------------------
 %% Definitions section
 \newcommand{\nocontentsline}[3]{}
-\newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
 \newcommand{\definitionx}[3]{%
-\tocless{#1[#2]}{\hfill[#3]}\vspace{-.3\onelineskip}\label{#3}\textbf{#2}\\%
+\let\oldcontentsline\addcontentsline%
+\let\addcontentsline\nocontentsline%
+#1[#2]{\hfill[#3]}\vspace{-.3\onelineskip}\label{#3} \textbf{#2}\\*%
+\let\addcontentsline\oldcontentsline%
 }
 % \newcommand{\defncontext}[1]{\textlangle#1\textrangle}
 % usage: \definition{name}{xref}
