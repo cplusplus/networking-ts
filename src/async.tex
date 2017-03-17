@@ -1415,7 +1415,9 @@ using type = @\seebelow@;
 
 \begin{itemdescr}
 \pnum
-\ctype If \tcode{T} has a nested type \tcode{executor_type}, \tcode{typename T::executor_type}. Otherwise \tcode{Executor}.
+\ctype If the \grammarterm{qualified-id} \tcode{T::executor_type}
+is valid and denotes a type~(\CppXref{temp.deduct}), \tcode{T::executor_type}.
+Otherwise \tcode{Executor}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1424,7 +1426,9 @@ type get(const T& t, const Executor& e = Executor()) noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns If \tcode{T} has a nested type \tcode{executor_type}, \tcode{t.get_executor()}. Otherwise \tcode{e}.
+\returns If the \grammarterm{qualified-id} \tcode{T::executor_type}
+is valid and denotes a type~(\CppXref{temp.deduct}), \tcode{t.get_executor()}.
+Otherwise \tcode{e}.
 \end{itemdescr}
 
 
