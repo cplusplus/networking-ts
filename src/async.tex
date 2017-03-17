@@ -1914,7 +1914,9 @@ executor_work_guard(executor_work_guard&& other) noexcept;
 
 \begin{itemdescr}
 \pnum
-\effects Initializes \tcode{ex_} with \tcode{std::move(other.ex_)} and \tcode{owns_} with \tcode{other.owns_}, and sets \tcode{other.owns_} to \tcode{false}.
+\effects Initializes \tcode{ex_} with \tcode{std::move(other.ex_)}
+and initializes \tcode{owns_} with \tcode{other.owns_},
+and sets \tcode{other.owns_} to \tcode{false}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{executor_work_guard}!destructor}%
