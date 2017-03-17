@@ -1484,7 +1484,10 @@ template<class T, class ExecutionContext>
 
 \indexlibrary{\idxcode{executor_binder}}%
 \pnum
-\tcode{executor_binder<T, Executor>} binds an executor of type \tcode{Executor} satisfying Executor requirements~(\ref{async.reqmts.executor}) to an object or function of type \tcode{T}.
+The class template \tcode{executor_binder} binds executors to objects.
+A specialization \tcode{executor_binder<T, Executor>} binds
+an executor of type \tcode{Executor} satisfying the Executor requirements~(\ref{async.reqmts.executor})
+to an object or function of type \tcode{T}.
 
 \begin{codeblock}
 namespace std {
