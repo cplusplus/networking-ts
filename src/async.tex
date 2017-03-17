@@ -650,7 +650,15 @@ Let \tcode{Executor1} be the type of the associated executor. Let \tcode{ex1} be
 \rSec3[async.reqmts.async.handler.exec]{Completion handler executor}
 
 \pnum
-A completion handler object of type \tcode{CompletionHandler} has an associated executor of type \tcode{Executor2} satisfying the Executor requirements~(\ref{async.reqmts.executor}). The type \tcode{Executor2} is \tcode{associated_executor_t<CompletionHandler, Executor1>}. Let \tcode{ex2} be a value of type \tcode{Executor2} obtained by performing \tcode{get_associated_executor(completion_handler, ex1)}.
+A completion handler object of type \tcode{CompletionHandler}
+has an associated executor
+satisfying the Executor requirements~(\ref{async.reqmts.executor}).
+The type of this associated executor is
+\tcode{associated_executor_t<CompletionHandler, Executor1>}.
+Let \tcode{Executor2} be the type
+\tcode{associated_executor_t<CompletionHandler, Executor1>}.
+Let \tcode{ex2} be a value of type \tcode{Executor2}
+obtained by performing \tcode{get_associated_executor(completion_handler, ex1)}.
 
 
 
