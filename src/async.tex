@@ -1338,7 +1338,9 @@ Uses-executor construction with executor \tcode{Executor} refers to the construc
 
 \begin{itemize}
 \item
-if \tcode{uses_executor<T, Executor>::value} is \tcode{true} and \tcode{is_constructible<T, executor_arg_t, Executor, V1, V2, ..., VN>::value} is \tcode{true}, then \tcode{obj} is initialized as \tcode{obj(executor_arg, ex, v1, v2, ..., vN)};
+if \tcode{uses_executor_v<T, Executor>} is \tcode{true}
+and \tcode{is_constructible<T, executor_arg_t, Executor, V1, V2, ..., VN>::value} is \tcode{true},
+then \tcode{obj} is initialized as \tcode{obj(executor_arg, ex, v1, v2, ..., vN)};
 
 \item
 otherwise, \tcode{obj} is initialized as \tcode{obj(v1, v2, ..., vN)}.
@@ -1458,7 +1460,8 @@ template<class T, class Executor>
 \returns \tcode{associated_executor<T, Executor>::get(t, ex)}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless
+\tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1804,7 +1807,8 @@ template<class Executor, class T>
 \returns \tcode{executor_binder<decay_t<T>, Executor>(forward<T>(t), ex)}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless
+\tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{bind_executor}}%
@@ -1970,7 +1974,8 @@ template<class Executor>
 \returns \tcode{executor_work_guard<Executor>(ex)}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless
+\tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{make_work_guard}}%
@@ -2000,7 +2005,9 @@ template<class T>
 \returns \tcode{make_work_guard(get_associated_executor(t))}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_executor<T>::value} is \tcode{false} and \tcode{is_convertible<T\&, execution_context\&>::value} is \tcode{false}.
+\remarks This function shall not participate in overload resolution unless
+\tcode{is_executor_v<T>} is \tcode{false}
+and \tcode{is_convertible<T\&, execution_context\&>::value} is \tcode{false}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{make_work_guard}}%
@@ -2796,7 +2803,8 @@ and where the effect of \tcode{f()} is:
 \returns \tcode{completion.result.get()}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless
+\tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2882,7 +2890,8 @@ and where the effect of \tcode{f()} is:
 \returns \tcode{completion.result.get()}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless
+\tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2968,7 +2977,8 @@ and where the effect of \tcode{f()} is:
 \returns \tcode{completion.result.get()}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_executor<Executor>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless
+\tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
 \begin{itemdecl}
