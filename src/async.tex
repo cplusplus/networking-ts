@@ -875,7 +875,10 @@ explicit async_completion(CompletionToken& t);
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{CompletionToken} and \tcode{completion_handler_type} are the same type, binds \tcode{completion_handler} to \tcode{t}; otherwise, initializes \tcode{completion_handler} with the result of \tcode{forward<CompletionToken>(t)}. Initializes \tcode{result} with \tcode{completion_handler}.
+\effects If \tcode{CompletionToken} and \tcode{completion_handler_type} are the same type,
+binds \tcode{completion_handler} to \tcode{t};
+otherwise, initializes \tcode{completion_handler} with \tcode{forward<CompletionToken>(t)}.
+Initializes \tcode{result} with \tcode{completion_handler}.
 \end{itemdescr}
 
 \begin{itemdecl}
