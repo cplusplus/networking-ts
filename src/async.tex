@@ -1475,7 +1475,8 @@ template<class T, class ExecutionContext>
 \returns \tcode{get_associated_executor(t, ctx.get_executor())}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless
+\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -1826,7 +1827,8 @@ template<class ExecutionContext, class CompletionToken>
 \returns \tcode{bind_executor(ctx.get_executor(), forward<T>(t))}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless
+\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -1995,7 +1997,8 @@ template<class ExecutionContext>
 \returns \tcode{make_work_guard(ctx.get_executor())}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution
+unless \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{make_work_guard}}%
@@ -2825,7 +2828,8 @@ template<class ExecutionContext, class CompletionToken>
 \returns \tcode{std::experimental::net::dispatch(ctx.get_executor(), forward<CompletionToken>(token))}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution
+unless \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -2912,7 +2916,8 @@ template<class ExecutionContext, class CompletionToken>
 \returns \tcode{std::experimental::net::post(ctx.get_executor(), forward<CompletionToken>(token))}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution
+unless \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -2999,7 +3004,8 @@ template<class ExecutionContext, class CompletionToken>
 \returns \tcode{std::experimental::net::defer(ctx.get_executor(), forward<CompletionToken>(token))}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_convertible<ExecutionContext\&, execution_context\&>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution
+unless \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
 \end{itemdescr}
 
 
