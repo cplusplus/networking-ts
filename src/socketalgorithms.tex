@@ -193,7 +193,7 @@ A composed asynchronous operation~(\ref{async.reqmts.async.composed}).
 \completionsig \tcode{void(error_code ec, InputIterator i)}.
 
 \pnum
-\effects Performs \tcode{ec.clear()}, then finds the first iterator \tcode{i} in the range [\tcode{first},\tcode{last}) for which:
+\effects Performs \tcode{ec.clear()}, then finds the first iterator \tcode{i} in the range \range{first}{last} for which:
 \begin{itemize}
 \item
 \tcode{c(ec, *i)} yields \tcode{true};
