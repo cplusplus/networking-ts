@@ -2825,7 +2825,7 @@ template<class ExecutionContext, class CompletionToken>
 \completionsig \tcode{void()}.
 
 \pnum
-\returns \tcode{std::experimental::net::dispatch(ctx.get_executor(), forward<CompletionToken>(token))}.
+\returns \tcode{net::dispatch(ctx.get_executor(), forward<CompletionToken>(token))}.
 
 \pnum
 \remarks This function shall not participate in overload resolution
@@ -2913,7 +2913,7 @@ template<class ExecutionContext, class CompletionToken>
 \completionsig \tcode{void()}.
 
 \pnum
-\returns \tcode{std::experimental::net::post(ctx.get_executor(), forward<CompletionToken>(token))}.
+\returns \tcode{net::post(ctx.get_executor(), forward<CompletionToken>(token))}.
 
 \pnum
 \remarks This function shall not participate in overload resolution
@@ -3001,7 +3001,7 @@ template<class ExecutionContext, class CompletionToken>
 \completionsig \tcode{void()}.
 
 \pnum
-\returns \tcode{std::experimental::net::defer(ctx.get_executor(), forward<CompletionToken>(token))}.
+\returns \tcode{net::defer(ctx.get_executor(), forward<CompletionToken>(token))}.
 
 \pnum
 \remarks This function shall not participate in overload resolution
