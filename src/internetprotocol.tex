@@ -1421,7 +1421,7 @@ constexpr address_v6(const bytes_type& bytes,
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \tcode{[0, 0xFF]}. \begin{note} For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \end{note}
+\remarks \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \crange{0}{0xFF}. \begin{note} For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \end{note}
 
 \pnum
 \postconditions \tcode{to_bytes() == bytes} and \tcode{scope_id() == scope}.
