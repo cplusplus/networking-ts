@@ -437,16 +437,17 @@ The associator's primary template shall be defined. A program may partially spec
  Finally, the associator shall provide the following type alias and function template in the enclosing namespace:
 
 \begin{codeblock}
-template<class S, class C = D> using @\textit{X}@_t = typename X<S, C>::type;
+template<class S, class C = D> using @\placeholder{X}@_t = typename @\placeholder{X}@<S, C>::type;
 
 template<class S, class C = D>
-typename X<S, C>::type get_@\textit{X}@(const S& s, const C& c = d)
+typename @\placeholder{X}@<S, C>::type get_@\placeholder{X}@(const S& s, const C& c = d)
 {
-  return X<S, C>::get(s, c);
+  return @\placeholder{X}@<S, C>::get(s, c);
 }
 \end{codeblock}
 
-where X is replaced with the name of the associator class template. \begin{note} This function template is provided as a convenience, to automatically deduce the source and candidate types. \end{note}
+where \tcode{\placeholder{X}} is replaced with the name of the associator class template.
+\begin{note} This function template is provided as a convenience, to automatically deduce the source and candidate types. \end{note}
 
 
 
