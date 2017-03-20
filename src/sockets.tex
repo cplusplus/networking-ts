@@ -518,7 +518,7 @@ Returns a value suitable for passing as the \tcode{option_len} argument to POSIX
 \rSec2[socket.reqmts.opt.bool]{Boolean socket options}
 
 \pnum
-A type \tcode{X} meets the \tcode{BooleanSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), \tcode{X} is contextually convertible to bool, and \tcode{X} satisfies the additional requirements listed below.
+A type \tcode{X} meets the \tcode{BooleanSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{Settable\-Socket\-Option}~(\ref{socket.reqmts.settablesocketoption}), \tcode{X} is contextually convertible to bool, and \tcode{X} satisfies the additional requirements listed below.
 
 \pnum
 In the table below, \tcode{a} denotes a value of type \tcode{X} or \tcode{const X},
@@ -723,7 +723,7 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 \rSec2[socket.reqmts.opt.int]{Integer socket options}
 
 \pnum
-A type \tcode{X} meets the \tcode{IntegerSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tcode{IntegerSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{Settable\-Socket\-Option}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
 
 \pnum
 In the table below, \tcode{a} denotes a value of type \tcode{X} or \tcode{const X},
