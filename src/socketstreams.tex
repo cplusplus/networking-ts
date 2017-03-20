@@ -485,7 +485,10 @@ basic_socket_streambuf<protocol_type, clock_type, wait_traits_type>* rdbuf() con
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{const_cast<basic_socket_streambuf<protocol_type, clock_type, wait_traits_type>*>(std::addressof(sb_))}.
+Let \tcode{SB} be the type \tcode{basic_socket_streambuf<protocol_type, clock_type, wait_traits_type>}.
+
+\pnum
+\returns \tcode{const_cast<SB*>(addressof(sb_))}.
 \end{itemdescr}
 
 \begin{itemdecl}
