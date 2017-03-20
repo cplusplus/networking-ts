@@ -269,7 +269,7 @@ Shall not exit via an exception. The comparison operators and member functions d
   &
 Shall not exit via an exception. \br\textit{Precondition:} A preceding call \tcode{x2.on_work_started()} where \tcode{x1 == x2}.  \\ \rowsep
 
-\tcode{x1.dispatch(std::move(f),~a)}  &
+\tcode{x1.dispatch(\br\mbox{\ \ }std::move(f),~a)}  &
   &
 \effects Creates an object \tcode{f1} initialized with \tcode{\placeholdernc{DECAY_COPY}(forward<Func>(f))} (\CppXref{thread.decaycopy}) in the current thread of execution. Calls \tcode{f1()} at most once. The executor may block forward progress of the caller until \tcode{f1()} finishes execution. Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \begin{note} Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \end{note} \br
 \sync The invocation of \tcode{dispatch} synchronizes with (\CppXref{intro.multithread}) the invocation of \tcode{f1}.  \\ \rowsep
