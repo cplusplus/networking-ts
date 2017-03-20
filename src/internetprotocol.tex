@@ -340,11 +340,10 @@ A type \tcode{X} meets the \tcode{MulticastGroupSocketOption} requirements if it
 
 \pnum
 In the table below,
-\tcode{a} denotes a value of type \tcode{X} or \tcode{const X},
-\tcode{b} denotes a value of type \tcode{address} or \tcode{const address},
-\tcode{c} and \tcode{d} denote values of type \tcode{address_v4} or \tcode{const address_v4},
-\tcode{e} denotes a value of type \tcode{address_v6} or \tcode{const address_v6},
-\tcode{f} denotes a value of type \tcode{unsigned int} or \tcode{const unsigned int},
+\tcode{a} denotes a value of type \tcode{address} or \tcode{const address},
+\tcode{b} and \tcode{c} denote values of type \tcode{address_v4} or \tcode{const address_v4},
+\tcode{d} denotes a value of type \tcode{address_v6} or \tcode{const address_v6},
+\tcode{e} denotes a value of type \tcode{unsigned int} or \tcode{const unsigned int},
 and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
@@ -362,15 +361,15 @@ and \tcode{u} denotes an identifier.
 \rhdr{assertion/note pre/post-conditions}  \\ \capsep
 \endhead
 
-\tcode{X u(b);}  &
+\tcode{X u(a);}  &
   &
  Constructs a multicast group socket option to join the group with the specified version-independent address.  \\ \rowsep
 
-\tcode{X u(c, d);}  &
+\tcode{X u(b, c);}  &
   &
  Constructs a multicast group socket option to join the specified IPv4 address on a specified network interface.  \\ \rowsep
 
-\tcode{X u(e, f);}  &
+\tcode{X u(d, e);}  &
   &
  Constructs a multicast group socket option to join the specified IPv6 address on a specified network interface.  \\
 
