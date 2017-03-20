@@ -395,7 +395,7 @@ On return, \tcode{ec} contains the \tcode{error_code} value from the most recent
 \returns The total number of bytes transferred in the synchronous read operation.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_mutable_buffer_sequence<MutableBufferSequence>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless \tcode{is_mutable_buffer_sequence_v<MutableBufferSequence>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{read}}%
@@ -440,7 +440,7 @@ On return, \tcode{ec} contains the \tcode{error_code} value from the most recent
 \returns The total number of bytes transferred in the synchronous read operation.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_dynamic_buffer<Dynamic\-Buffer>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless \tcode{is_dynamic_buffer_v<Dynamic\-Buffer>} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -491,7 +491,7 @@ The program shall ensure the \tcode{AsyncReadStream} object \tcode{stream} is va
 On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code} value from the most recent asynchronous read_some operation, and \tcode{n} is the total number of bytes transferred.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_mutable_buffer_sequence<MutableBufferSequence>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless \tcode{is_mutable_buffer_sequence_v<MutableBufferSequence>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{async_read}}%
@@ -538,7 +538,7 @@ On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code
 
 \pnum
 \remarks This function shall not participate in overload resolution unless
-\linebreak\tcode{is_dynamic_buffer<DynamicBuffer>::value} is \tcode{true}.
+\tcode{is_dynamic_buffer_v<DynamicBuffer>} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -636,7 +636,7 @@ On return, \tcode{ec} contains the \tcode{error_code} value from the most recent
 \returns The total number of bytes transferred in the synchronous write operation.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_dynamic_buffer<Dynamic\-Buffer>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless \tcode{is_dynamic_buffer_v<Dynamic\-Buffer>} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -731,7 +731,7 @@ The program must ensure both the \tcode{AsyncWriteStream} object \tcode{stream} 
 On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code} value from the most recent asynchronous write_some operation, and \tcode{n} is the total number of bytes transferred.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_dynamic_buffer<Dynamic\-Buffer>::value} is \tcode{true}.
+\remarks This function shall not participate in overload resolution unless \tcode{is_dynamic_buffer_v<Dynamic\-Buffer>} is \tcode{true}.
 \end{itemdescr}
 
 
