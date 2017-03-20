@@ -79,7 +79,9 @@ The \tcode{basic_waitable_timer} template uses wait traits to allow programs to 
 For a type \tcode{Clock} meeting the \tcode{Clock} requirements (\CppXref{time.clock.req}), a type \tcode{X} meets the \tcode{WaitTraits} requirements if it satisfies the requirements listed below.
 
 \pnum
-In Table~\ref{tab:timer.reqmts.waittraits.requirements}, \tcode{t} denotes a (possibly const) value of type \tcode{Clock::time_point}; and \tcode{d} denotes a (possibly const) value of type \tcode{Clock::duration}.
+In Table~\ref{tab:timer.reqmts.waittraits.requirements},
+\tcode{t} denotes a value of type \tcode{Clock::time_point} or \tcode{const Clock::time_point};
+and \tcode{d} denotes a value of type \tcode{Clock::duration} or \tcode{const Clock::duration}.
 
 \indextext{requirements!\idxcode{WaitTraits}}%
 \begin{libreqtab3}

@@ -315,8 +315,9 @@ A \defn{mutable buffer sequence} represents a set of memory regions that may be 
 A type \tcode{X} meets the \tcode{MutableBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.mutablebuffersequence.requirements}.
 
 \pnum
-In Table~\ref{tab:buffer.reqmts.mutablebuffersequence.requirements}, \tcode{x}
-denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
+In Table~\ref{tab:buffer.reqmts.mutablebuffersequence.requirements},
+\tcode{x} denotes a value of type \tcode{X} or \tcode{const X},
+and \tcode{u} denotes an identifier.
 
 \indextext{requirements!\idxcode{MutableBufferSequence}}%
 \begin{LongTable}
@@ -377,7 +378,9 @@ A \defn{constant buffer sequence} represents a set of memory regions that may be
 A type \tcode{X} meets the \tcode{ConstBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements}.
 
 \pnum
-In Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements}, \tcode{x} denotes a (possibly const) value of type \tcode{X}, and \tcode{u} denotes an identifier.
+In Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements},
+\tcode{x} denotes a value of type \tcode{X} or \tcode{const X},
+and \tcode{u} denotes an identifier.
 
 \indextext{requirements!\idxcode{ConstBufferSequence}}%
 \begin{LongTable}
@@ -441,7 +444,10 @@ A \defn{dynamic buffer} encapsulates memory storage that may be automatically re
 A type \tcode{X} meets the \tcode{DynamicBuffer} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}.
 
 \pnum
-In Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}, \tcode{x} denotes a value of type \tcode{X}, \tcode{x1} denotes a (possibly const) value of type \tcode{X}, and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
+In Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements},
+\tcode{x} denotes a value of type \tcode{X},
+\tcode{x1} denotes a value of type \tcode{X} or \tcode{const X},
+and \tcode{n} denotes a value of type \tcode{size_t} or \tcode{const size_t}.
 
 \indextext{requirements!\idxcode{DynamicBuffer}}%
 \begin{libreqtab3}
