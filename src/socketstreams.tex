@@ -274,7 +274,7 @@ virtual int_type underflow() override;
 \effects Behaves according to the description of \tcode{basic_streambuf<char>::underflow()}, with the specialization that a sequence of characters is read from the input sequence as if by POSIX \tcode{recvmsg}, and \tcode{ec_} is set to reflect the error code produced by the operation. If the operation does not complete before the absolute timeout specified by \tcode{expiry_}, the socket is closed and \tcode{ec_} is set to \tcode{errc::timed_out}.
 
 \pnum
-\effects Returns \tcode{traits_type::eof()} to indicate failure. Otherwise returns \tcode{traits_type::to_int_type(*gptr())}.
+\returns \tcode{traits_type::eof()} to indicate failure. Otherwise returns \tcode{traits_type::to_int_type(*gptr())}.
 \end{itemdescr}
 
 \begin{itemdecl}
