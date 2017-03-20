@@ -202,7 +202,7 @@ inline namespace v1 {
 \rSec2[async.reqmts.proto.allocator]{Proto-allocator requirements}
 
 \pnum
-A type \tcode{A} meets the proto-allocator requirements if \tcode{A} is \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{Destructible} (\CppXref{destructible}), and \tcode{allocator_traits<A>::rebind_alloc<U>} meets the allocator requirements (\CppXref{allocator.requirements}), where \tcode{U} is an object type. \begin{note} For example, \tcode{std::allocator<void>} meets the proto-allocator requirements but not the allocator requirements. \end{note} No constructor, comparison operator, copy operation, move operation, or swap operation on these types shall exit via an exception.
+A type \tcode{A} meets the proto-allocator requirements if \tcode{A} is \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{Destructible} (\CppXref{destructible}), and \tcode{allocator_traits<A>::rebind_alloc<U>} meets the allocator requirements (\CppXref{allocator.requirements}), where \tcode{U} is an object type. \begin{note} For example, \tcode{allocator<void>} meets the proto-allocator requirements but not the allocator requirements. \end{note} No constructor, comparison operator, copy operation, move operation, or swap operation on these types shall exit via an exception.
 
 
 
@@ -698,7 +698,7 @@ an object \tcode{work2} of type \tcode{executor_work_guard<Executor2>}, initiali
 Asynchronous operations may allocate memory. \begin{note} Such as a data structure to store copies of the \tcode{completion_handler} object and the initiating function's arguments. \end{note}
 
 \pnum
-Let \tcode{Alloc1} be a type, satisfying the \tcode{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) requirements, that represents the asynchronous operation's default allocation strategy. \begin{note} Typically \tcode{std::allocator<void>}. \end{note} Let \tcode{alloc1} be a value of type \tcode{Alloc1}.
+Let \tcode{Alloc1} be a type, satisfying the \tcode{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) requirements, that represents the asynchronous operation's default allocation strategy. \begin{note} Typically \tcode{allocator<void>}. \end{note} Let \tcode{alloc1} be a value of type \tcode{Alloc1}.
 
 \pnum
 A completion handler object of type \tcode{CompletionHandler} has an associated allocator object \tcode{alloc2} of type \tcode{Alloc2} satisfying the \tcode{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) requirements. The type \tcode{Alloc2} is \tcode{associated_allocator_t<CompletionHandler, Alloc1>}. Let \tcode{alloc2} be a value of type \tcode{Alloc2} obtained by performing \tcode{get_associated_allocator(completion_handler, alloc1)}.
