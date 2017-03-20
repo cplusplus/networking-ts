@@ -1039,7 +1039,10 @@ explicit constexpr address_v4(address_v4::uint_type val);
 \remarks \tcode{out_of_range} if \tcode{val} is not in the range \tcode{[0, 0xFFFFFFFF]}. \begin{note} For implementations where \tcode{numeric_limits<address_v4::uint_type>::max() == 0xFFFFFFFF}, no out-of-range detection is needed. \end{note}
 
 \pnum
-\postconditions \tcode{to_uint() == val} and \tcode{to_bytes()} is \tcode{\{ (val >> 24) \& 0xFF, (val >> 16) \& 0xFF, (val >> 8) \& 0xFF, val \& 0xFF \}}.
+\postconditions \tcode{to_uint() == val} and \tcode{to_bytes()} is:
+\begin{codeblock}
+{ (val >> 24) & 0xFF, (val >> 16) & 0xFF, (val >> 8) & 0xFF, val & 0xFF }
+\end{codeblock}
 \end{itemdescr}
 
 
