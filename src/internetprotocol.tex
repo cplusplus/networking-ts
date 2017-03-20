@@ -466,7 +466,7 @@ template<class Protocol> const void* data(const Protocol& p) const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{std::addressof(v6_value_)} if \tcode{p.family() == AF_INET6}, otherwise \tcode{std::addressof(v4_value_)}.
+\returns \tcode{addressof(v6_value_)} if \tcode{p.family() == AF_INET6}, otherwise \tcode{addressof(v4_value_)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1905,7 +1905,7 @@ pointer operator->() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{std::addressof(address_)}.
+\returns \tcode{addressof(address_)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2900,7 +2900,7 @@ void* data() noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{std::addressof(data_)}.
+\returns \tcode{addressof(data_)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2909,7 +2909,7 @@ const void* data() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{std::addressof(data_)}.
+\returns \tcode{addressof(data_)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4311,7 +4311,7 @@ template<class Protocol> const void* data(const Protocol& p) const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{std::addressof(v6_value_)} if \tcode{p.family() == AF_INET6}, otherwise \tcode{std::addressof(v4_value_)}.
+\returns \tcode{addressof(v6_value_)} if \tcode{p.family() == AF_INET6}, otherwise \tcode{addressof(v4_value_)}.
 \end{itemdescr}
 
 \begin{itemdecl}
