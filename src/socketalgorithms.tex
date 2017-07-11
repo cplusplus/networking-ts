@@ -124,7 +124,7 @@ template<class Protocol, class EndpointSequence, class CompletionToken>
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class Protocol, class InputIterator,
+template<class Protocol, class EndpointSequence,
   class ConnectCondition, class CompletionToken>
     @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
                           const EndpointSequence& endpoints,
