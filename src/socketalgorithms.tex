@@ -9,7 +9,7 @@
 template<class Protocol, class EndpointSequence>
   typename Protocol::endpoint connect(basic_socket<Protocol>& s,
                                       const EndpointSequence& endpoints);
-template<class Protocol, class InputIterator>
+template<class Protocol, class EndpointSequence>
   typename Protocol::endpoint connect(basic_socket<Protocol>& s,
                                       const EndpointSequence& endpoints,
                                       error_code& ec);
@@ -25,7 +25,7 @@ template<class Protocol, class EndpointSequence, class ConnectCondition>
   typename Protocol::endpoint connect(basic_socket<Protocol>& s,
                                       const EndpointSequence& endpoints,
                                       ConnectCondition c);
-template<class Protocol, class InputIterator, class ConnectCondition>
+template<class Protocol, class EndpointSequence, class ConnectCondition>
   typename Protocol::endpoint connect(basic_socket<Protocol>& s,
                                       const EndpointSequence& endpoints,
                                       ConnectCondition c, error_code& ec);
