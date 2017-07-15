@@ -44,14 +44,14 @@ inline namespace v1 {
 
   // buffer sequence access:
 
-  const mutable_buffer* buffer_sequence_begin(const mutable_buffer& b);
-  const const_buffer* buffer_sequence_begin(const const_buffer& b);
-  const mutable_buffer* buffer_sequence_end(const mutable_buffer& b);
-  const const_buffer* buffer_sequence_end(const const_buffer& b);
-  template<class C> auto buffer_sequence_begin(C& c) -> decltype(c.begin());
-  template<class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin());
-  template<class C> auto buffer_sequence_end(C& c) -> decltype(c.end());
-  template<class C> auto buffer_sequence_end(const C& c) -> decltype(c.end());
+  const mutable_buffer* buffer_sequence_begin(const mutable_buffer& b) noexcept;
+  const const_buffer* buffer_sequence_begin(const const_buffer& b) noexcept;
+  const mutable_buffer* buffer_sequence_end(const mutable_buffer& b) noexcept;
+  const const_buffer* buffer_sequence_end(const const_buffer& b) noexcept;
+  template<class C> auto buffer_sequence_begin(C& c) noexcept -> decltype(c.begin());
+  template<class C> auto buffer_sequence_begin(const C& c) noexcept -> decltype(c.begin());
+  template<class C> auto buffer_sequence_end(C& c) noexcept -> decltype(c.end());
+  template<class C> auto buffer_sequence_end(const C& c) noexcept -> decltype(c.end());
 
   // buffer size:
 
@@ -344,7 +344,8 @@ and \tcode{u} denotes an identifier.
 
 \tcode{net::buffer_sequence_begin(x)}\br
 \tcode{net::buffer_sequence_end(x)}  &
-An iterator type meeting the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) whose value type is convertible to \tcode{mutable_buffer}.  &
+An iterator type meeting the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) whose reference type is convertible to \tcode{mutable_buffer}.  &
+For a dereferenceable iterator, no increment, decrement, or dereference operation, or conversion of the reference type to \tcode{mutable_buffer}, shall exit via an exception.
   \\ \rowsep
 
 \tcode{X u(x);}
@@ -407,7 +408,8 @@ and \tcode{u} denotes an identifier.
 
 \tcode{net::buffer_sequence_begin(x)}\br
 \tcode{net::buffer_sequence_end(x)}  &
-An iterator type meeting the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) whose value type is convertible to \tcode{const_buffer}.  &
+An iterator type meeting the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) whose reference type is convertible to \tcode{const_buffer}.  &
+For a dereferenceable iterator, no increment, decrement, or dereference operation, or conversion of the reference type to \tcode{const_buffer}, shall exit via an exception.
   \\ \rowsep
 
 \tcode{X u(x);}
@@ -828,8 +830,8 @@ This sub-clause contains templates that may be used to query the properties of a
 
 \indexlibrary{\idxcode{buffer_sequence_begin}}%
 \begin{itemdecl}
-const mutable_buffer* buffer_sequence_begin(const mutable_buffer& b);
-const const_buffer* buffer_sequence_begin(const const_buffer& b);
+const mutable_buffer* buffer_sequence_begin(const mutable_buffer& b) noexcept;
+const const_buffer* buffer_sequence_begin(const const_buffer& b) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -839,8 +841,8 @@ const const_buffer* buffer_sequence_begin(const const_buffer& b);
 
 \indexlibrary{\idxcode{buffer_sequence_end}}%
 \begin{itemdecl}
-const mutable_buffer* buffer_sequence_end(const mutable_buffer& b);
-const const_buffer* buffer_sequence_end(const const_buffer& b);
+const mutable_buffer* buffer_sequence_end(const mutable_buffer& b) noexcept;
+const const_buffer* buffer_sequence_end(const const_buffer& b) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -850,8 +852,8 @@ const const_buffer* buffer_sequence_end(const const_buffer& b);
 
 \indexlibrary{\idxcode{buffer_sequence_begin}}%
 \begin{itemdecl}
-template<class C> auto buffer_sequence_begin(C& c) -> decltype(c.begin());
-template<class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin());
+template<class C> auto buffer_sequence_begin(C& c) noexcept -> decltype(c.begin());
+template<class C> auto buffer_sequence_begin(const C& c) noexcept -> decltype(c.begin());
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -861,8 +863,8 @@ template<class C> auto buffer_sequence_begin(const C& c) -> decltype(c.begin());
 
 \indexlibrary{\idxcode{buffer_sequence_end}}%
 \begin{itemdecl}
-template<class C> auto buffer_sequence_end(C& c) -> decltype(c.end());
-template<class C> auto buffer_sequence_end(const C& c) -> decltype(c.end());
+template<class C> auto buffer_sequence_end(C& c) noexcept -> decltype(c.end());
+template<class C> auto buffer_sequence_end(const C& c) noexcept -> decltype(c.end());
 \end{itemdecl}
 
 \begin{itemdescr}
