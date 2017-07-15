@@ -204,6 +204,10 @@ Several classes described in this Technical Specification have a member type \tc
 \impldef{presence and meaning of \tcode{native_handle_type} and \tcode{native_handle}}.
 
 \pnum
+When an operation has its effects specified as if by passing the result of \tcode{native_handle()}
+to a POSIX function the effect is as if \tcode{native_handle_type} is the type \tcode{int}.
+
+\pnum
 \begin{note} These members allow implementations to provide access to their implementation details. Their names are specified to facilitate portable compile-time detection. Actual use of these members is inherently non-portable. For operating systems that are based on POSIX, implementations are encouraged to define the \tcode{native_handle_type} for sockets as \tcode{int}, representing the native file descriptor associated with the socket. \end{note}
 
 
@@ -2356,6 +2360,9 @@ If a program performs a synchronous operation on this socket, other than \tcode{
 \pnum
 When an operation has its effects specified as if by passing the result of \tcode{native_handle()} to a POSIX function, then the operation fails with error condition \tcode{errc::bad_file_descriptor} if \tcode{is_open() == false} at the point in the effects when the POSIX function is called.
 
+\pnum
+If \tcode{native_handle_type} and \tcode{basic_socket<Protocol>::native_handle_type}
+are both defined then they name the same type.
 
 \rSec2[socket.dgram.cons]{\tcode{basic_datagram_socket} constructors}
 
@@ -2979,6 +2986,10 @@ If a program performs a synchronous operation on this socket, other than \tcode{
 
 \pnum
 When an operation has its effects specified as if by passing the result of \tcode{native_handle()} to a POSIX function, then the operation fails with error condition \tcode{errc::bad_file_descriptor} if \tcode{is_open() == false} at the point in the effects when the POSIX function is called.
+
+\pnum
+If \tcode{native_handle_type} and \tcode{basic_socket<Protocol>::native_handle_type}
+are both defined then they name the same type.
 
 
 \rSec2[socket.stream.cons]{\tcode{basic_stream_socket} constructors}
