@@ -200,7 +200,7 @@ When there are multiple outstanding asynchronous write operations~(\ref{buffer.r
 \rSec2[socket.reqmts.native]{Native handles}
 
 \pnum
-Several classes described in this Technical Specification have a member type \tcode{native_handle_type}, a member function \tcode{native_handle}, and member functions that accept arguments of type \tcode{native_handle_type}. The presence of these members and their semantics is
+Several classes described in this Technical Specification have a member type \tcode{native_handle_type}, a member function \tcode{native_handle}, and member functions that return or accept arguments of type \tcode{native_handle_type}. The presence of these members and their semantics is
 \impldef{presence and meaning of \tcode{native_handle_type} and \tcode{native_handle}}.
 
 \pnum
@@ -1460,6 +1460,9 @@ inline namespace v1 {
                 const native_handle_type& native_socket,
                 error_code& ec); // \nativeref
 
+    native_handle_type release(); // \nativeref
+    native_handle_type release(error_code& ec); // \nativeref
+
     bool is_open() const noexcept;
 
     void close();
@@ -1869,6 +1872,31 @@ void assign(const protocol_type& protocol,
 \item
 \tcode{socket_errc::already_open} --- if \tcode{is_open() == true}.
 \end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+native_handle_type release();
+native_handle_type release(error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\requires \tcode{is_open() == true}.
+
+\pnum
+\effects Cancels all outstanding asynchronous operations associated with this socket.
+Completion handlers for canceled asynchronous operations are passed an error code \tcode{ec}
+such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+
+\pnum
+\returns The native representation of this socket.
+
+\pnum
+\postconditions \tcode{is_open() == false}.
+
+\pnum
+\remarks Since the native socket is not closed prior to returning it,
+the caller is responsible for closing it.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3397,6 +3425,9 @@ inline namespace v1 {
                 const native_handle_type& native_acceptor,
                 error_code& ec); // \nativeref
 
+    native_handle_type release(); // \nativeref
+    native_handle_type release(error_code& ec); // \nativeref
+
     bool is_open() const;
 
     void close();
@@ -3825,6 +3856,31 @@ void assign(const protocol_type& protocol,
 \item
 \tcode{socket_errc::already_open} --- if \tcode{is_open()} is \tcode{true}.
 \end{itemize}
+\end{itemdescr}
+
+\begin{itemdecl}
+native_handle_type release();
+native_handle_type release(error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\requires \tcode{is_open() == true}.
+
+\pnum
+\effects Cancels all outstanding asynchronous operations associated with this acceptor.
+Completion handlers for canceled asynchronous operations are passed an error code \tcode{ec}
+such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
+
+\pnum
+\returns The native representation of this acceptor.
+
+\pnum
+\postconditions \tcode{is_open() == false}.
+
+\pnum
+\remarks Since the native acceptor is not closed prior to returning it,
+the caller is responsible for closing it.
 \end{itemdescr}
 
 \begin{itemdecl}
