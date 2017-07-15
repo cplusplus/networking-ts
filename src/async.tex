@@ -215,7 +215,7 @@ The library describes a standard set of requirements for executors. A type meeti
 A type \tcode{X} meets the \tcode{Executor} requirements if it satisfies the requirements of \tcode{CopyConstructible} (\CppXref{copyconstructible}) and \tcode{Destructible} (\CppXref{destructible}), as well as the additional requirements listed below.
 
 \pnum
-No constructor, comparison operator, copy operation, move operation, swap operation, or member functions \tcode{context}, \tcode{on_work_started}, and \tcode{on_work_finished} on these types shall exit via an exception.
+No comparison operator, copy operation, move operation, swap operation, or member functions \tcode{context}, \tcode{on_work_started}, and \tcode{on_work_finished} on these types shall exit via an exception.
 
 \pnum
  The executor copy constructor, comparison operators, and other member functions defined in these requirements shall not introduce data races as a result of concurrent calls to those functions from different threads.
