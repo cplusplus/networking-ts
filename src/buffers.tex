@@ -433,6 +433,19 @@ equal(
 
 \end{LongTable}
 
+\rSec2[buffer.reqmts.size]{Buffer size}
+
+\pnum
+Several places in this Technical Specification make unqualified calls to \tcode{buffer_size}.
+The context in which these calls are evaluated shall ensure that
+a unary non-member function named \tcode{buffer_size}
+is selected via overload resolution (\CppXref{over.match})
+on a candidate set that includes:
+
+\begin{itemize}
+\item the \tcode{buffer_size} function template defined in \tcode{<experimental/buffer>} (\ref{buffer.synop}) and
+\item the lookup set produced by argument-dependent lookup (\CppXref{basic.lookup.argdep}).
+\end{itemize}
 
 
 \rSec2[buffer.reqmts.dynamicbuffer]{Dynamic buffer requirements}
