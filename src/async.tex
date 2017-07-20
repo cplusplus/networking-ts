@@ -219,6 +219,7 @@ No comparison operator, copy operation, move operation, swap operation, or membe
 
 \pnum
  The executor copy constructor, comparison operators, and other member functions defined in these requirements shall not introduce data races as a result of concurrent calls to those functions from different threads.
+The member function \tcode{dispatch} may be recursively reentered.
 
 \pnum
 Let \tcode{ctx} be the execution context returned by the executor's \tcode{context()} member function. An executor becomes invalid when the first call to \tcode{ctx.shutdown()} returns. The effect of calling \tcode{on_work_started}, \tcode{on_work_finished}, \tcode{dispatch}, \tcode{post}, or \tcode{defer} on an invalid executor is undefined. \begin{note} The copy constructor, comparison operators, and \tcode{context()} member function continue to remain valid until \tcode{ctx} is destroyed. \end{note}
