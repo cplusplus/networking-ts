@@ -17,8 +17,8 @@ namespace net {
 inline namespace v1 {
 
   enum class stream_errc {
-    eof = @\textit{an implementation defined non-zero value}@,
-    not_found = @\textit{an implementation defined non-zero value}@
+    eof = @\EXPO{an \impldef{value of \tcode{stream_errc::eof}} non-zero value}@,
+    not_found = @\EXPO{an \impldef{value of \tcode{stream_errc::not_found}} non-zero value}@
   };
 
   const error_category& stream_category() noexcept;
