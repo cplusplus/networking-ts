@@ -263,9 +263,8 @@ namespace ip {
 } // namespace net
 } // namespace experimental
 
-  template<> struct is_error_condition_enum<
-    experimental::net::v1::ip::resolver_errc>
-      : public true_type {};
+  template<> struct is_error_condition_enum<experimental::net::v1::ip::resolver_errc>
+    : public true_type {};
 
   // hash support
   template<class T> struct hash;
