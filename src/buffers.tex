@@ -36,11 +36,11 @@ inline namespace v1 {
   template<class T> struct is_dynamic_buffer;
 
   template<class T>
-      constexpr bool is_mutable_buffer_sequence_v = is_mutable_buffer_sequence<T>::value;
-    template<class T>
-      constexpr bool is_const_buffer_sequence_v = is_const_buffer_sequence<T>::value;
-    template<class T>
-      constexpr bool is_dynamic_buffer_v = is_dynamic_buffer<T>::value;
+    constexpr bool is_mutable_buffer_sequence_v = is_mutable_buffer_sequence<T>::value;
+  template<class T>
+    constexpr bool is_const_buffer_sequence_v = is_const_buffer_sequence<T>::value;
+  template<class T>
+    constexpr bool is_dynamic_buffer_v = is_dynamic_buffer<T>::value;
 
   // buffer sequence access:
 
