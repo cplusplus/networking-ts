@@ -307,7 +307,7 @@ If \tcode{traits_type::eq_int_type(c, traits_type::eof())} returns \tcode{true},
 \returns \tcode{traits_type::eof()} to indicate failure.
 
 \pnum
-Notes: The function does not put back a character directly to the input sequence. If the function can succeed in more than one of these ways, it is unspecified which way is chosen. The function can alter the number of putback positions available as a result of any call.
+\remarks The function does not put back a character directly to the input sequence. If the function can succeed in more than one of these ways, it is unspecified which way is chosen. The function can alter the number of putback positions available as a result of any call.
 \end{itemdescr}
 
 \begin{itemdecl}
