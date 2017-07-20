@@ -107,6 +107,7 @@ If at any time the outstanding work falls to \tcode{0}, the \tcode{io_context} i
 
 \pnum
 The \tcode{io_context} member functions \tcode{get_executor}, \tcode{stop}, and \tcode{stopped}, the run functions, and the \tcode{io_context::executor_type} copy constructors, member functions and comparison operators, do not introduce data races as a result of concurrent calls to those functions from different threads of execution. \begin{note} The \tcode{restart} member function is excluded from these thread safety requirements. \end{note}
+The run functions may be recursively reentered.
 
 
 \rSec2[io_context.io_context.members]{\tcode{io_context} members}
