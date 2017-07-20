@@ -14,8 +14,8 @@ namespace net {
 inline namespace v1 {
 
   enum class socket_errc {
-    already_open = @\textit{an implementation defined non-zero value}@,
-    not_found = @\textit{an implementation defined non-zero value}@
+    already_open = @\EXPO{an \impldef{value of \tcode{socket_errc::already_open}} non-zero value}@,
+    not_found = @\EXPO{an \impldef{value of \tcode{socket_errc::not_found}} non-zero value}@
   };
 
   const error_category& socket_category() noexcept;
