@@ -294,17 +294,23 @@ virtual int_type pbackfail(int_type c = traits_type::eof()) override;
 
 \begin{itemize}
 \item
-If \tcode{traits_type::eq_int_type(c, traits_type::eof())} returns \tcode{false}, and if the function makes a putback position available, and if \tcode{traits_type::eq(traits_type::to_char_type(c), gptr()[-1])} returns \tcode{true}, decrements the next pointer for the input sequence, \tcode{gptr()}. Returns: \tcode{c}.
+If \tcode{traits_type::eq_int_type(c, traits_type::eof())} returns \tcode{false}, and if the function makes a putback position available, and if \tcode{traits_type::eq(traits_type::to_char_type(c), gptr()[-1])} returns \tcode{true}, decrements the next pointer for the input sequence, \tcode{gptr()}.
+
+Returns: \tcode{c}.
 
 \item
-If \tcode{traits_type::eq_int_type(c, traits_type::eof())} returns \tcode{false}, and if the function makes a putback position available, and if the function is permitted to assign to the putback position, decrements the next pointer for the input sequence, and stores \tcode{c} there. Returns: \tcode{c}.
+If \tcode{traits_type::eq_int_type(c, traits_type::eof())} returns \tcode{false}, and if the function makes a putback position available, and if the function is permitted to assign to the putback position, decrements the next pointer for the input sequence, and stores \tcode{c} there.
+
+Returns: \tcode{c}.
 
 \item
-If \tcode{traits_type::eq_int_type(c, traits_type::eof())} returns \tcode{true}, and if either the input sequence has a putback position available or the function makes a putback position available, decrements the next pointer for the input sequence, \tcode{gptr()}. Returns: \tcode{traits_type::not_eof(c)}.
+If \tcode{traits_type::eq_int_type(c, traits_type::eof())} returns \tcode{true}, and if either the input sequence has a putback position available or the function makes a putback position available, decrements the next pointer for the input sequence, \tcode{gptr()}.
+
+Returns: \tcode{traits_type::not_eof(c)}.
 \end{itemize}
 
 \pnum
-\returns \tcode{traits_type::eof()} to indicate failure.
+\returns As specified above, or \tcode{traits_type::eof()} to indicate failure.
 
 \pnum
 \remarks The function does not put back a character directly to the input sequence. If the function can succeed in more than one of these ways, it is unspecified which way is chosen. The function can alter the number of putback positions available as a result of any call.
