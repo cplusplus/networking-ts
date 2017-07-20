@@ -143,9 +143,6 @@ count_type run();
 
 \begin{itemdescr}
 \pnum
-\requires Must not be called from a thread that is currently calling a run function.
-
-\pnum
 \effects Equivalent to:
 \begin{codeblock}
 count_type n = 0;
@@ -154,9 +151,15 @@ while (run_one())
     ++n;
 \end{codeblock}
 
-
 \pnum
 \returns \tcode{n}.
+
+\pnum
+\begin{note}
+Calling \tcode{run} from a thread that is currently calling a run function
+may introduce the potential for deadlock.
+It is the caller's responsibility to avoid such deadlocks.
+\end{note}
 \end{itemdescr}
 
 \indexlibrarymember{run_for}{io_context}%
@@ -202,9 +205,6 @@ count_type run_one();
 
 \begin{itemdescr}
 \pnum
-\requires Must not be called from a thread that is currently calling a run function.
-
-\pnum
 \effects If the \tcode{io_context} object has no outstanding work, performs \tcode{stop()}. Otherwise, blocks while the io_context has outstanding work, or until the \tcode{io_context} is stopped, or until one function object has been executed.
 
 \pnum
@@ -215,6 +215,13 @@ If an executed function object throws an exception, the exception propagates to 
 
 \pnum
 Notes: This function may invoke additional function objects through nested calls to the \tcode{io_context} executor's \tcode{dispatch} member function. These do not count towards the return value.
+
+\pnum
+\begin{note}
+Calling \tcode{run_one} from a thread that is currently calling a run function
+may introduce the potential for deadlock.
+It is the caller's responsibility to avoid such deadlocks.
+\end{note}
 \end{itemdescr}
 
 \indexlibrarymember{run_one_for}{io_context}%
