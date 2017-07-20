@@ -1078,17 +1078,25 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Access to the services of an \tcode{execution_context} is via three function templates, \tcode{use_service<>}, \tcode{make_service<>} and \tcode{has_service<>}.
+Access to the services of an \tcode{execution_context} is via three function templates, \tcode{use_service}, \tcode{make_service} and \tcode{has_service}.
 
 \pnum
-In a call to \tcode{use_service<Service>()}, the type argument chooses a service. If the service is not present in an \tcode{execution_context}, an object of type \tcode{Service} is created and added to the \tcode{execution_context}. A program can check if an \tcode{execution_context} implements a particular service with the function template \tcode{has_service<Service>()}.
+In a call to \tcode{use_service<Service>}, the type argument chooses a service, identified by \tcode{Service::key_type}, from a set of services in an \tcode{execution_context}. If the service is not present in the \tcode{execution_context}, an object of type \tcode{Service} is created and added to the \tcode{execution_context}. A program can check if an \tcode{execution_context} implements a particular service with the function template \tcode{has_service<Service>}.
 
 \pnum
-Service objects may be explicitly added to an \tcode{execution_context} using the function template \tcode{make_service<Service>()}. If the service is already present, \tcode{make_service} exits via an exception of type \tcode{service_already_exists}.
+Service objects may be explicitly added to an \tcode{execution_context} using the function template \tcode{make_service<Service>}. If the service is already present, \tcode{make_service} exits via an exception of type \tcode{service_already_exists}.
 
 \pnum
-Once a service reference is obtained from an \tcode{execution_context} object by calling \tcode{use_service<>}, that reference remains usable until a call to \tcode{destroy()}.
+Once a service reference is obtained from an \tcode{execution_context} object by calling \tcode{use_service}, that reference remains usable until a call to \tcode{destroy()}.
 
+\pnum
+If a call to a specialization of \tcode{use_service} or \tcode{make_service}
+recursively calls another specialization of \tcode{use_service} or \tcode{make_service}
+which would choose the same service (identified by \tcode{key_type}) from the same \tcode{execution_context},
+then the behavior is undefined.
+\begin{note}
+Nested calls to specializations for different service types are well-defined.
+\end{note}
 
 \rSec2[async.exec.ctx.cons]{\tcode{execution_context} constructor}
 
@@ -1180,7 +1188,7 @@ template<class Service> typename Service::key_type&
 \returns A reference to the corresponding service of \tcode{ctx}.
 
 \pnum
-Notes: The reference returned remains valid until a call to \tcode{destroy}.
+\remarks The reference returned remains valid until a call to \tcode{destroy}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{make_service}}%
@@ -1197,10 +1205,10 @@ template<class Service, class... Args> Service&
 \effects Creates an object of type \tcode{Service}, initialized as \tcode{Service(ctx, forward<Args>(args)...)}, and adds it to the \tcode{execution_context} set identified by \tcode{ctx}.
 
 \pnum
-\remarks \tcode{service_already_exists} if a corresponding service object of type \tcode{Key} is already present in the set.
+\throws \tcode{service_already_exists} if a corresponding service object of type \tcode{Service::key_type} is already present in the set.
 
 \pnum
-Notes: The reference returned remains valid until a call to \tcode{destroy}.
+\remarks The reference returned remains valid until a call to \tcode{destroy}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{has_service}}%
