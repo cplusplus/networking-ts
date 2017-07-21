@@ -39,7 +39,7 @@ inline namespace v1 {
   template<class Protocol>
     class basic_socket_acceptor;
 
-  // Socket streams:
+  // \ref{socket.iostreams}, Socket streams:
 
   template<class Protocol, class Clock = chrono::steady_clock,
     class WaitTraits = wait_traits<Clock>>
@@ -49,7 +49,7 @@ inline namespace v1 {
     class WaitTraits = wait_traits<Clock>>
       class basic_socket_iostream;
 
-  // synchronous connect operations:
+  // \ref{socket.algo.connect}, synchronous connect operations:
 
   template<class Protocol, class EndpointSequence>
     typename Protocol::endpoint connect(basic_socket<Protocol>& s,
@@ -85,7 +85,7 @@ inline namespace v1 {
                           ConnectCondition c,
                           error_code& ec);
 
-  // asynchronous connect operations:
+  // \ref{socket.algo.async.connect}, asynchronous connect operations:
 
   template<class Protocol, class EndpointSequence, class CompletionToken>
     @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
@@ -1444,7 +1444,7 @@ inline namespace v1 {
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
-    // basic_socket operations:
+    // \ref{socket.basic.ops}, basic_socket operations:
 
     executor_type get_executor() noexcept;
 
@@ -1525,7 +1525,7 @@ inline namespace v1 {
       @\DEDUCED@ async_wait(wait_type w, CompletionToken&& token);
 
   protected:
-    // construct / copy / destroy:
+    // \ref{socket.basic.cons}, construct / copy / destroy:
 
     explicit basic_socket(io_context& ctx);
     basic_socket(io_context& ctx, const protocol_type& protocol);
@@ -2249,7 +2249,7 @@ inline namespace v1 {
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
-    // construct / copy / destroy:
+    // \ref{socket.dgram.cons}, construct / copy / destroy:
 
     explicit basic_datagram_socket(io_context& ctx);
     basic_datagram_socket(io_context& ctx, const protocol_type& protocol);
@@ -2268,7 +2268,7 @@ inline namespace v1 {
     template<class OtherProtocol>
       basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol>&& rhs);
 
-    // basic_datagram_socket operations:
+    // \ref{socket.dgram.op}, basic_datagram_socket operations:
 
     template<class MutableBufferSequence>
       size_t receive(const MutableBufferSequence& buffers);
@@ -2911,7 +2911,7 @@ inline namespace v1 {
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
-    // construct / copy / destroy:
+    // \ref{socket.stream.cons}, construct / copy / destroy:
 
     explicit basic_stream_socket(io_context& ctx);
     basic_stream_socket(io_context& ctx, const protocol_type& protocol);
@@ -2930,7 +2930,7 @@ inline namespace v1 {
     template<class OtherProtocol>
       basic_stream_socket& operator=(basic_stream_socket<OtherProtocol>&& rhs);
 
-    // basic_stream_socket operations:
+    // \ref{socket.stream.ops}, basic_stream_socket operations:
 
     template<class MutableBufferSequence>
       size_t receive(const MutableBufferSequence& buffers);
@@ -3389,7 +3389,7 @@ inline namespace v1 {
     using endpoint_type = typename protocol_type::endpoint;
     using socket_type = typename protocol_type::socket;
 
-    // construct / copy / destroy:
+    // \ref{socket.acceptor.cons}, construct / copy / destroy:
 
     explicit basic_socket_acceptor(io_context& ctx);
     basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
@@ -3409,7 +3409,7 @@ inline namespace v1 {
     template<class OtherProtocol>
       basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol>&& rhs);
 
-    // basic_socket_acceptor operations:
+    // \ref{socket.acceptor.ops}, basic_socket_acceptor operations:
 
     executor_type get_executor() noexcept;
 
