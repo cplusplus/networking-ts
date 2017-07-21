@@ -108,7 +108,7 @@ Unless otherwise specified, when the behavior of a synchronous or asynchronous o
 If the failure condition is one that is listed by POSIX for that function, the \tcode{error_code} shall compare equal to the error's corresponding \tcode{enum class errc} (\CppXref{syserr}) or \tcode{enum class resolver_errc}~(\ref{internet.resolver.err}) constant.
 
 \item
-Otherwise, the \tcode{error_code} shall be set to an implementation-defined value that reflects the underlying operating system error.
+Otherwise, the \tcode{error_code} shall be set to an \impldef{values of \tcode{error_code} for operating system errors not listed by POSIX} value that reflects the underlying operating system error.
 \end{itemize}
 
 \pnum
