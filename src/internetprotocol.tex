@@ -2614,14 +2614,14 @@ namespace ip {
     // types:
     using protocol_type = InternetProtocol;
 
-    // constructors:
+    // \ref{internet.endpoint.cons}, constructors:
     constexpr basic_endpoint() noexcept;
     constexpr basic_endpoint(const protocol_type& proto,
                              port_type port_num) noexcept;
     constexpr basic_endpoint(const ip::address& addr,
                              port_type port_num) noexcept;
 
-    // members:
+    // \ref{internet.endpoint.members}, members:
     constexpr protocol_type protocol() const noexcept;
     constexpr ip::address address() const noexcept;
     void address(const ip::address& addr) noexcept;
@@ -2629,7 +2629,7 @@ namespace ip {
     void port(port_type port_num) noexcept;
   };
 
-  // basic_endpoint comparisons:
+  // \ref{internet.endpoint.comparisons}, basic_endpoint comparisons:
   template<class InternetProtocol>
     constexpr bool operator==(const basic_endpoint<InternetProtocol>& a,
                               const basic_endpoint<InternetProtocol>& b) noexcept;
@@ -2649,7 +2649,7 @@ namespace ip {
     constexpr bool operator>=(const basic_endpoint<InternetProtocol>& a,
                               const basic_endpoint<InternetProtocol>& b) noexcept;
 
-  // basic_endpoint I/O:
+  // \ref{internet.endpoint.io}, basic_endpoint I/O:
   template<class CharT, class Traits, class InternetProtocol>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>& os,
