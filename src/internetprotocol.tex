@@ -1308,10 +1308,10 @@ namespace ip {
   class address_v6
   {
   public:
-    // types:
+    // \ref{internet.address.v6.bytes}, types:
     struct bytes_type;
 
-    // constructors:
+    // \ref{internet.address.v6.cons}, constructors:
     constexpr address_v6() noexcept;
     constexpr address_v6(const address_v6& a) noexcept;
     constexpr address_v6(const bytes_type& bytes,
@@ -1320,7 +1320,7 @@ namespace ip {
     // assignment:
     address_v6& operator=(const address_v6& a) noexcept;
 
-    // members:
+    // \ref{internet.address.v6.members}, members:
     void scope_id(scope_id_type id) noexcept;
     constexpr scope_id_type scope_id() const noexcept;
     constexpr bool is_unspecified() const noexcept;
@@ -1339,12 +1339,12 @@ namespace ip {
       basic_string<char, char_traits<char>, Allocator>
         to_string(const Allocator& a = Allocator()) const;
 
-    // static members:
+    // \ref{internet.address.v6.static}, static members:
     static constexpr address_v6 any() noexcept;
     static constexpr address_v6 loopback() noexcept;
   };
 
-  // address_v6 comparisons:
+  // \ref{internet.address.v6.comparisons}, address_v6 comparisons:
   constexpr bool operator==(const address_v6& a, const address_v6& b) noexcept;
   constexpr bool operator!=(const address_v6& a, const address_v6& b) noexcept;
   constexpr bool operator< (const address_v6& a, const address_v6& b) noexcept;
@@ -1352,7 +1352,7 @@ namespace ip {
   constexpr bool operator<=(const address_v6& a, const address_v6& b) noexcept;
   constexpr bool operator>=(const address_v6& a, const address_v6& b) noexcept;
 
-  // address_v6 creation:
+  // \ref{internet.address.v6.creation}, address_v6 creation:
   constexpr address_v6 make_address_v6(const address_v6::bytes_type& bytes,
                                        scope_id_type scope_id = 0);
   constexpr address_v6 make_address_v6(v4_mapped_t, const address_v4& a) noexcept;
@@ -1363,7 +1363,7 @@ namespace ip {
   address_v6 make_address_v6(string_view str);
   address_v6 make_address_v6(string_view str, error_code& ec) noexcept;
 
-  // address_v6 I/O:
+  // \ref{internet.address.v6.io}, address_v6 I/O:
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>& os, const address_v6& addr);
