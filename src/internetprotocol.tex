@@ -2965,13 +2965,13 @@ namespace ip {
     using protocol_type = InternetProtocol;
     using endpoint_type = typename InternetProtocol::endpoint;
 
-    // constructors:
+    // \ref{internet.resolver.entry.cons}, constructors:
     basic_resolver_entry();
     basic_resolver_entry(const endpoint_type& ep,
                          string_view h,
                          string_view s);
 
-    // members:
+    // \ref{internet.resolver.entry.members}, members:
     endpoint_type endpoint() const;
     operator endpoint_type() const;
     template<class Allocator = allocator<char>>
@@ -2982,7 +2982,7 @@ namespace ip {
         service_name(const Allocator& a = Allocator()) const;
   };
 
-  // basic_resolver_entry comparisons:
+  // \ref{internet.resolver.entry.comparisons}, basic_resolver_entry comparisons:
   template<class InternetProtocol>
     bool operator==(const basic_resolver_entry<InternetProtocol>& a,
                     const basic_resolver_entry<InternetProtocol>& b);
