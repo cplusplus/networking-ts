@@ -30,7 +30,7 @@ inline namespace v1 {
     using duration = typename clock_type::duration;
     using wait_traits_type = WaitTraits;
 
-    // construct / copy / destroy:
+    // \ref{socket.streambuf.cons}, construct / copy / destroy:
 
     basic_socket_streambuf();
     explicit basic_socket_streambuf(basic_stream_socket<protocol_type> s);
@@ -42,7 +42,7 @@ inline namespace v1 {
     basic_socket_streambuf& operator=(const basic_socket_streambuf&) = delete;
     basic_socket_streambuf& operator=(basic_socket_streambuf&& rhs);
 
-    // members:
+    // \ref{socket.streambuf.members}, members:
 
     basic_socket_streambuf* connect(const endpoint_type& e);
     template<class... Args> basic_socket_streambuf* connect(Args&&... );
