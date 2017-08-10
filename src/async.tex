@@ -1044,20 +1044,20 @@ inline namespace v1 {
   public:
     class service;
 
-    // construct / copy / destroy:
+    // \ref{async.exec.ctx.cons}, construct / copy / destroy:
 
     execution_context();
     execution_context(const execution_context&) = delete;
     execution_context& operator=(const execution_context&) = delete;
     virtual ~execution_context();
 
-    // execution context operations:
+    // \ref{async.exec.ctx.ops}, execution context operations:
 
     void notify_fork(fork_event e);
 
   protected:
 
-    // execution context protected operations:
+    // \ref{async.exec.ctx.protected}, execution context protected operations:
 
     void shutdown() noexcept;
     void destroy() noexcept;
