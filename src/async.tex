@@ -1540,7 +1540,7 @@ inline namespace v1 {
     using target_type = T;
     using executor_type = Executor;
 
-    // construct / copy / destroy:
+    // \ref{async.exec.binder.cons}, construct / copy / destroy:
 
     executor_binder(T t, const Executor& ex);
     executor_binder(const executor_binder& other) = default;
@@ -1558,13 +1558,13 @@ inline namespace v1 {
 
     ~executor_binder();
 
-    // executor binder access:
+    // \ref{async.exec.binder.access}, executor binder access:
 
     T& get() noexcept;
     const T& get() const noexcept;
     executor_type get_executor() const noexcept;
 
-    // executor binder invocation:
+    // \ref{async.exec.binder.invocation}, executor binder invocation:
 
     template<class... Args>
       result_of_t<T&(Args&&...)> operator()(Args&&... args);
