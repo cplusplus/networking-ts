@@ -3065,7 +3065,7 @@ inline namespace v1 {
 
     using inner_executor_type = Executor;
 
-    // construct / copy / destroy:
+    // \ref{async.strand.cons}, construct / copy / destroy:
 
     strand();
     explicit strand(Executor ex);
@@ -3083,7 +3083,7 @@ inline namespace v1 {
 
     ~strand();
 
-    // strand operations:
+    // \ref{async.strand.ops}, strand operations:
 
     inner_executor_type get_inner_executor() const noexcept;
 
