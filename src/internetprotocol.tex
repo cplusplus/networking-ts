@@ -3137,7 +3137,7 @@ namespace ip {
     using difference_type = ptrdiff_t;
     using size_type = size_t;
 
-    // construct / copy / destroy:
+    // \ref{internet.resolver.results.cons}, construct / copy / destroy:
     basic_resolver_results();
     basic_resolver_results(const basic_resolver_results& rhs);
     basic_resolver_results(basic_resolver_results&& rhs) noexcept;
@@ -3145,22 +3145,22 @@ namespace ip {
     basic_resolver_results& operator=(basic_resolver_results&& rhs);
     ~basic_resolver_results();
 
-    // size:
+    // \ref{internet.resolver.results.size}, size:
     size_type size() const noexcept;
     size_type max_size() const noexcept;
     bool empty() const noexcept;
 
-    // element access:
+    // \ref{internet.resolver.results.access}, element access:
     const_iterator begin() const;
     const_iterator end() const;
     const_iterator cbegin() const;
     const_iterator cend() const;
 
-    // swap:
+    // \ref{internet.resolver.results.swap}, swap:
     void swap(basic_resolver_results& that) noexcept;
   };
 
-  // basic_resolver_results comparisons:
+  // \ref{internet.resolver.results.comparisons}, basic_resolver_results comparisons:
   template<class InternetProtocol>
     bool operator==(const basic_resolver_results<InternetProtocol>& a,
                     const basic_resolver_results<InternetProtocol>& b);
