@@ -3445,7 +3445,7 @@ namespace ip {
     using endpoint_type = typename InternetProtocol::endpoint;
     using results_type = basic_resolver_results<InternetProtocol>;
 
-    // construct / copy / destroy:
+    // \ref{internet.resolver.cons}, construct / copy / destroy:
 
     explicit basic_resolver(io_context& ctx);
     basic_resolver(const basic_resolver&) = delete;
@@ -3456,7 +3456,7 @@ namespace ip {
     basic_resolver& operator=(const basic_resolver&) = delete;
     basic_resolver& operator=(basic_resolver&& rhs);
 
-    // basic_resolver operations:
+    // \ref{internet.resolver.ops}, basic_resolver operations:
 
     executor_type get_executor() noexcept;
 
