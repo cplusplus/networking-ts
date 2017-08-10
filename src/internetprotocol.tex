@@ -2373,11 +2373,11 @@ namespace ip {
   class network_v6
   {
   public:
-    // constructors:
+    // \ref{internet.network.v6.cons}, constructors:
     constexpr network_v6() noexcept;
     constexpr network_v6(const address_v6& addr, int prefix_len);
 
-    // members:
+    // \ref{internet.network.v6.members}, members:
     constexpr address_v6 address() const noexcept;
     constexpr int prefix_length() const noexcept;
     constexpr address_v6 network() const noexcept;
@@ -2390,11 +2390,11 @@ namespace ip {
         to_string(const Allocator& a = Allocator()) const;
   };
 
-  // network_v6 comparisons:
+  // \ref{internet.network.v6.comparisons}, network_v6 comparisons:
   constexpr bool operator==(const network_v6& a, const network_v6& b) noexcept;
   constexpr bool operator!=(const network_v6& a, const network_v6& b) noexcept;
 
-  // network_v6 creation:
+  // \ref{internet.network.v6.creation}, network_v6 creation:
   constexpr network_v6 make_network_v6(const address_v6& addr, int prefix_len);
   network_v6 make_network_v6(const char* str);
   network_v6 make_network_v6(const char* str, error_code& ec) noexcept;
@@ -2403,7 +2403,7 @@ namespace ip {
   network_v6 make_network_v6(string_view str);
   network_v6 make_network_v6(string_view str, error_code& ec) noexcept;
 
-  // network_v6 I/O:
+  // \ref{internet.network.v6.io}, network_v6 I/O:
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>& os, const network_v6& net);
