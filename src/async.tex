@@ -2341,7 +2341,7 @@ inline namespace v1 {
   class executor
   {
   public:
-    // construct / copy / destroy:
+    // \ref{async.executor.cons}, construct / copy / destroy:
 
     executor() noexcept;
     executor(nullptr_t) noexcept;
@@ -2358,13 +2358,13 @@ inline namespace v1 {
 
     ~executor();
 
-    // executor modifiers:
+    // \ref{async.executor.modifiers}, executor modifiers:
 
     void swap(executor& other) noexcept;
     template<class Executor, class ProtoAllocator>
       void assign(Executor e, const ProtoAllocator& a);
 
-    // executor operations:
+    // \ref{async.executor.ops}, executor operations:
 
     execution_context& context() const noexcept;
 
@@ -2378,18 +2378,18 @@ inline namespace v1 {
     template<class Func, class ProtoAllocator>
       void defer(Func&& f, const ProtoAllocator& a) const;
 
-    // executor capacity:
+    // \ref{async.executor.capacity}, executor capacity:
 
     explicit operator bool() const noexcept;
 
-    // executor target access:
+    // \ref{async.executor.target}, executor target access:
 
     const type_info& target_type() const noexcept;
     template<class Executor> Executor* target() noexcept;
     template<class Executor> const Executor* target() const noexcept;
   };
 
-  // executor comparisons:
+  // \ref{async.executor.comparisons}, executor comparisons:
 
   bool operator==(const executor& a, const executor& b) noexcept;
   bool operator==(const executor& e, nullptr_t) noexcept;
@@ -2398,7 +2398,7 @@ inline namespace v1 {
   bool operator!=(const executor& e, nullptr_t) noexcept;
   bool operator!=(nullptr_t, const executor& e) noexcept;
 
-  // executor specialized algorithms:
+  // \ref{async.executor.algo}, executor specialized algorithms:
 
   void swap(executor& a, executor& b) noexcept;
 
