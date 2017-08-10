@@ -544,18 +544,18 @@ namespace ip {
   class address
   {
   public:
-    // constructors:
+    // \ref{internet.address.cons}, constructors:
     constexpr address() noexcept;
     constexpr address(const address& a) noexcept;
     constexpr address(const address_v4& a) noexcept;
     constexpr address(const address_v6& a) noexcept;
 
-    // assignment:
+    // \ref{internet.address.assign}, assignment:
     address& operator=(const address& a) noexcept;
     address& operator=(const address_v4& a) noexcept;
     address& operator=(const address_v6& a) noexcept;
 
-    // members:
+    // \ref{internet.address.members}, members:
     constexpr bool is_v4() const noexcept;
     constexpr bool is_v6() const noexcept;
     constexpr address_v4 to_v4() const;
@@ -572,7 +572,7 @@ namespace ip {
     address_v6 v6_; // \expos
   };
 
-  // address comparisons:
+  // \ref{internet.address.comparisons}, address comparisons:
   constexpr bool operator==(const address& a, const address& b) noexcept;
   constexpr bool operator!=(const address& a, const address& b) noexcept;
   constexpr bool operator< (const address& a, const address& b) noexcept;
@@ -580,7 +580,7 @@ namespace ip {
   constexpr bool operator<=(const address& a, const address& b) noexcept;
   constexpr bool operator>=(const address& a, const address& b) noexcept;
 
-  // address creation:
+  // \ref{internet.address.creation}, address creation:
   address make_address(const char* str);
   address make_address(const char* str, error_code& ec) noexcept;
   address make_address(const string& str);
@@ -588,7 +588,7 @@ namespace ip {
   address make_address(string_view str);
   address make_address(string_view str, error_code& ec) noexcept;
 
-  // address I/O:
+  // \ref{internet.address.io}, address I/O:
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>& os, const address& addr);
