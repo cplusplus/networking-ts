@@ -28,7 +28,7 @@ inline namespace v1 {
   template<class T, class ProtoAllocator = allocator<void>>
     using associated_allocator_t = typename associated_allocator<T, ProtoAllocator>::type;
 
-  // get_associated_allocator:
+  // \ref{async.assoc.alloc.get}, get_associated_allocator:
 
   template<class T>
     associated_allocator_t<T> get_associated_allocator(const T& t) noexcept;
@@ -70,7 +70,7 @@ inline namespace v1 {
   template<class T, class Executor = system_executor>
     using associated_executor_t = typename associated_executor<T, Executor>::type;
 
-  // get_associated_executor:
+  // \ref{async.assoc.exec.get}, get_associated_executor:
 
   template<class T>
     associated_executor_t<T> get_associated_executor(const T& t) noexcept;
@@ -93,7 +93,7 @@ inline namespace v1 {
   template<class T, class Executor, class Executor1>
     struct associated_executor<executor_binder<T, Executor>, Executor1>;
 
-  // bind_executor:
+  // \ref{async.bind.executor}, bind_executor:
 
   template<class Executor, class T>
     executor_binder<decay_t<T>, Executor>
@@ -105,7 +105,7 @@ inline namespace v1 {
   template<class Executor>
     class executor_work_guard;
 
-  // make_work_guard:
+  // \ref{async.make.work.guard}, make_work_guard:
 
   template<class Executor>
     executor_work_guard<Executor>
@@ -137,7 +137,7 @@ inline namespace v1 {
   bool operator!=(const executor& e, nullptr_t) noexcept;
   bool operator!=(nullptr_t, const executor& e) noexcept;
 
-  // dispatch:
+  // \ref{async.dispatch}, dispatch:
 
   template<class CompletionToken>
     @\DEDUCED@ dispatch(CompletionToken&& token);
@@ -146,7 +146,7 @@ inline namespace v1 {
   template<class ExecutionContext, class CompletionToken>
     @\DEDUCED@ dispatch(ExecutionContext& ctx, CompletionToken&& token);
 
-  // post:
+  // \ref{async.post}, post:
 
   template<class CompletionToken>
     @\DEDUCED@ post(CompletionToken&& token);
@@ -155,7 +155,7 @@ inline namespace v1 {
   template<class ExecutionContext, class CompletionToken>
     @\DEDUCED@ post(ExecutionContext& ctx, CompletionToken&& token);
 
-  // defer:
+  // \ref{async.defer}, defer:
 
   template<class CompletionToken>
     @\DEDUCED@ defer(CompletionToken&& token);
