@@ -2090,12 +2090,12 @@ namespace ip {
   class network_v4
   {
   public:
-    // constructors:
+    // \ref{internet.network.v4.cons}, constructors:
     constexpr network_v4() noexcept;
     constexpr network_v4(const address_v4& addr, int prefix_len);
     constexpr network_v4(const address_v4& addr, const address_v4& mask);
 
-    // members:
+    // \ref{internet.network.v4.members}, members:
     constexpr address_v4 address() const noexcept;
     constexpr int prefix_length() const noexcept;
     constexpr address_v4 netmask() const noexcept;
@@ -2110,11 +2110,11 @@ namespace ip {
         to_string(const Allocator& a = Allocator()) const;
   };
 
-  // network_v4 comparisons:
+  // \ref{internet.network.v4.comparisons}, network_v4 comparisons:
   constexpr bool operator==(const network_v4& a, const network_v4& b) noexcept;
   constexpr bool operator!=(const network_v4& a, const network_v4& b) noexcept;
 
-  // network_v4 creation:
+  // \ref{internet.network.v4.creation}, network_v4 creation:
   constexpr network_v4 make_network_v4(const address_v4& addr, int prefix_len);
   constexpr network_v4 make_network_v4(const address_v4& addr, const address_v4& mask);
   network_v4 make_network_v4(const char* str);
@@ -2124,7 +2124,7 @@ namespace ip {
   network_v4 make_network_v4(string_view str);
   network_v4 make_network_v4(string_view str, error_code& ec) noexcept;
 
-  // network_v4 I/O:
+  // \ref{internet.network.v4.io}, network_v4 I/O:
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>& os, const network_v4& net);
