@@ -376,7 +376,7 @@ inline namespace v1 {
     using duration = typename clock_type::duration;
     using wait_traits_type = WaitTraits;
 
-    // construct / copy / destroy:
+    // \ref{socket.iostream.cons}, construct / copy / destroy:
 
     basic_socket_iostream();
     explicit basic_socket_iostream(basic_stream_socket<protocol_type> s);
@@ -388,7 +388,7 @@ inline namespace v1 {
     basic_socket_iostream& operator=(const basic_socket_iostream&) = delete;
     basic_socket_iostream& operator=(basic_socket_iostream&& rhs);
 
-    // members:
+    // \ref{socket.iostream.members}, members:
 
     template<class... Args> void connect(Args&&... args);
 
