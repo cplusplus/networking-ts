@@ -896,7 +896,7 @@ explicit async_completion(CompletionToken& t);
 \pnum
 \effects If \tcode{CompletionToken} and \tcode{completion_handler_type} are the same type,
 binds \tcode{completion_handler} to \tcode{t};
-otherwise, initializes \tcode{completion_handler} with \tcode{forward<CompletionToken>(t)}.
+otherwise, initializes \tcode{completion_handler} with \tcode{std::forward<CompletionToken>(t)}.
 Initializes \tcode{result} with \tcode{completion_handler}.
 \end{itemdescr}
 
