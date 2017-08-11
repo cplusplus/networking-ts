@@ -3551,7 +3551,7 @@ template <class F> @\unspec@ operator()(F&& f) const;
 
 \begin{itemdescr}
 \pnum
-Let \tcode{T} be a completion token type. Let \tcode{H} be a completion handler type and let \tcode{h} be an object of type \tcode{H}. Let \tcode{FD} be the type \tcode{decay_t<F>} and let \tcode{fd} be an lvalue of type \tcode{FD} constructed with \tcode{forward<F>(f)}. Let \tcode{R(Args...)} be the completion signature of an asynchronous operation using \tcode{H} and let \placeholder{N} be \tcode{sizeof...(Args)}. Let \placeholder{i} be in the range \range{0}{\placeholder{N}} and let \tcode{A$_i$} be the $i^\text{th}$ type in \tcode{Args}. Let \tcode{a$_i$} be the argument associated with \tcode{A$_i$}.
+Let \tcode{T} be a completion token type. Let \tcode{H} be a completion handler type and let \tcode{h} be an object of type \tcode{H}. Let \tcode{FD} be the type \tcode{decay_t<F>} and let \tcode{fd} be an lvalue of type \tcode{FD} constructed with \tcode{std::forward<F>(f)}. Let \tcode{R(Args...)} be the completion signature of an asynchronous operation using \tcode{H} and let \placeholder{N} be \tcode{sizeof...(Args)}. Let \placeholder{i} be in the range \range{0}{\placeholder{N}} and let \tcode{A$_i$} be the $i^\text{th}$ type in \tcode{Args}. Let \tcode{a$_i$} be the argument associated with \tcode{A$_i$}.
 
 \pnum
 \returns A completion token \tcode{t} of type \tcode{T}.
