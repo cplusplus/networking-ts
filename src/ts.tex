@@ -61,11 +61,12 @@
 \newcommand{\completionsig}{\Fundesc{Completion signature}}
 \newcommand{\DEDUCED}{\placeholdernc{\texttt{DEDUCED}}}
 \newcommand{\nativeref}{see~\ref{socket.reqmts.native}}
-\newcommand{\CppXref}[1]{\texorpdfstring{C\kern-0.05em\protect\raisebox{.35ex}{\textsmaller[2]{+\kern-0.05em+}}Std}{C++Std} [#1]}
+% The base standard:
+\newcommand{\CppStd}{\CppXIV}
+\newcommand{\CppXref}[1]{\CppStd [#1]}
 % Alternative formatting of cross-references, resolving stable name to number.
-% Needs include{cxx} and CppXIV from cplusplus/draft/source/macros.tex.
 % \input{cxx}
-% \newcommand{\CppXref}[1]{\CppXIV \S\cxxref{#1}}
+% \newcommand{\CppXref}[1]{\CppStd, \cxxref{#1}}
 
 % Add an extensible implementation entry to the main and library name indices
 \newcommand{\indexextensible}[1]{%
