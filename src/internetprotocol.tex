@@ -1670,7 +1670,7 @@ constexpr bool operator< (const address_v6& a, const address_v6& b) noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{a.to_bytes() < b.to_bytes() || (!(b.to_bytes() < a.to_bytes()) \&\& a.scope_id() < b.scope_id())}.
+\returns \tcode{tie(a.to_bytes(), a.scope_id()) < tie(b.to_bytes(), b.scope_id())}.
 \end{itemdescr}
 
 \indexlibrarymember{operator>}{address_v6}%
