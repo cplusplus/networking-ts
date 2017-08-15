@@ -983,8 +983,8 @@ using type = @\seebelow@;
 
 \begin{itemdescr}
 \pnum
-\ctype If the \grammarterm{qualified-id} \tcode{T::allocator_type}
-is valid and denotes a type~(\CppXref{temp.deduct}), \tcode{T::allocator_type}.
+\ctype \tcode{T::allocator_type} if the \grammarterm{qualified-id} \tcode{T::allocator_type}
+is valid and denotes a type~(\CppXref{temp.deduct}).
 Otherwise \tcode{ProtoAllocator}.
 \end{itemdescr}
 
@@ -994,8 +994,8 @@ type get(const T& t, const ProtoAllocator& a = ProtoAllocator()) noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns If the \grammarterm{qualified-id} \tcode{T::allocator_type}
-is valid and denotes a type~(\CppXref{temp.deduct}), \tcode{t.get_allocator()}.
+\returns \tcode{t.get_allocator()} if the \grammarterm{qualified-id} \tcode{T::allocator_type}
+is valid and denotes a type~(\CppXref{temp.deduct}).
 Otherwise \tcode{a}.
 \end{itemdescr}
 
