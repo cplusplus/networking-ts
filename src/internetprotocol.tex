@@ -2825,7 +2825,7 @@ template<class InternetProtocol>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{a.address() < b.address() || (!(b.address() < a.address()) \&\& a.port() < b.port())}.
+\returns \tcode{tie(a.address(), a.port()) < tie(b.address(), b.port())}.
 \end{itemdescr}
 
 \begin{itemdecl}
