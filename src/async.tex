@@ -1452,8 +1452,8 @@ using type = @\seebelow@;
 
 \begin{itemdescr}
 \pnum
-\ctype If the \grammarterm{qualified-id} \tcode{T::executor_type}
-is valid and denotes a type~(\CppXref{temp.deduct}), \tcode{T::executor_type}.
+\ctype \tcode{T::executor_type} if the \grammarterm{qualified-id} \tcode{T::executor_type}
+is valid and denotes a type~(\CppXref{temp.deduct}).
 Otherwise \tcode{Executor}.
 \end{itemdescr}
 
@@ -1463,8 +1463,8 @@ type get(const T& t, const Executor& e = Executor()) noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns If the \grammarterm{qualified-id} \tcode{T::executor_type}
-is valid and denotes a type~(\CppXref{temp.deduct}), \tcode{t.get_executor()}.
+\returns \tcode{t.get_executor()} if the \grammarterm{qualified-id} \tcode{T::executor_type}
+is valid and denotes a type~(\CppXref{temp.deduct}).
 Otherwise \tcode{e}.
 \end{itemdescr}
 
