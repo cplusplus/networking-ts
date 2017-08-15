@@ -612,7 +612,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-The \tcode{mutable_buffer} class satisfies requirements of \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
+The \tcode{mutable_buffer} class satisfies the requirements of \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}), \tcode{Default\-Cons\-tr\-uct\-ible} (\CppXref{defaultconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \indexlibrary{\idxcode{mutable_buffer}!constructor}%
 \begin{itemdecl}
@@ -661,7 +661,8 @@ mutable_buffer& operator+=(size_t n) noexcept;
 
 \begin{itemdescr}
 \pnum
-\effects Sets \tcode{data_} to \tcode{static_cast<char*>(data_) + min(n, size_)}, and then \tcode{size_} to \tcode{size_ - min(n, size_)}.
+\effects Sets \tcode{data_} to \tcode{static_cast<char*>(data_) + min(n, size_)},
+and then \tcode{size_} to \tcode{size_ - min(n, size_)}.
 
 \pnum
 \returns \tcode{*this}.
