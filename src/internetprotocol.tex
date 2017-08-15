@@ -2230,7 +2230,7 @@ address_v4_range hosts() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns If \tcode{is_host() == true}, an \tcode{address_v4_range} object representing the single address \tcode{this->address()}. Otherwise, an \tcode{address_v4_range} object representing the range of unique host IP addresses in the network.
+\returns If \tcode{is_host()} is \tcode{true}, an \tcode{address_v4_range} object representing the single address \tcode{this->addr\-ess()}. Otherwise, an \tcode{address_v4_range} object representing the range of unique host IP addresses in the network.
 
 \pnum
 \begin{note} For IPv4, the network address and the broadcast address are not included in the range of host IP addresses. For example, given a network \tcode{192.168.1.0/24}, the range returned by \tcode{hosts()} is from \tcode{192.168.1.1} to \tcode{192.168.1.254} inclusive, and neither \tcode{192.168.1.0} nor the broadcast address \tcode{192.168.1.255} are in the range. \end{note}
