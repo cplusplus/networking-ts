@@ -3414,8 +3414,9 @@ template<class Func, class ProtoAllocator>
 \end{itemdecl}
 
 \begin{itemdescr}
+%% XXX overfull hbox
 \pnum
-\effects If \tcode{running_in_this_thread() == true}, calls \tcode{\placeholdernc{DECAY_COPY}(forward<Func>(f))()} (\CppXref{thread.decaycopy}). \begin{note} If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \end{note} Otherwise, requests invocation of \tcode{f}, as if by forwarding the function object \tcode{f} and allocator \tcode{a} to the executor \tcode{inner_ex_}, such that the guarantees of ordering and non-concurrency are met.
+\effects If \tcode{running_in_this_thread()} is \tcode{true}, calls \tcode{\placeholdernc{DECAY_COPY}(forward<Func>(f))()} (\CppXref{thread.decaycopy}). \begin{note} If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \end{note} Otherwise, requests invocation of \tcode{f}, as if by forwarding the function object \tcode{f} and allocator \tcode{a} to the executor \tcode{inner_ex_}, such that the guarantees of ordering and non-concurrency are met.
 \end{itemdescr}
 
 \indexlibrarymember{post}{strand}%
