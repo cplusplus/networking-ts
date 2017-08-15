@@ -2929,7 +2929,11 @@ void resize(size_t s);
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{length_error} if the condition \tcode{protocol().family() == AF_INET6 \&\& s != sizeof(sock\-addr_in6)} \tcode{||} \tcode{protocol().family() == AF_INET4 \&\& s != sizeof(sockaddr_in)} is \tcode{true}.
+\remarks \tcode{length_error} if either of the following conditions is \tcode{true}:
+\begin{itemize}
+\item \tcode{protocol().family() == AF_INET6 \&\& s != sizeof(sock\-addr_in6)},
+\item \tcode{protocol().family() == AF_INET4 \&\& s != sizeof(sockaddr_in)}.
+\end{itemize}
 \end{itemdescr}
 
 \begin{itemdecl}
