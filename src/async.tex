@@ -202,7 +202,7 @@ inline namespace v1 {
 \rSec2[async.reqmts.proto.allocator]{Proto-allocator requirements}
 
 \pnum
-A type \tcode{A} meets the proto-allocator requirements if \tcode{A} is \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{Destructible} (\CppXref{destructible}), and \tcode{allocator_traits<A>::rebind_alloc<U>} meets the allocator requirements (\CppXref{allocator.requirements}), where \tcode{U} is an object type. \begin{note} For example, \tcode{allocator<void>} meets the proto-allocator requirements but not the allocator requirements. \end{note} No comparison operator, copy operation, move operation, or swap operation on these types shall exit via an exception.
+A type \tcode{A} meets the proto-allocator requirements if \tcode{A} is \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{Destruct\-ible} (\CppXref{destructible}), and \tcode{allocator_traits<A>::rebind_alloc<U>} meets the allocator requirements (\CppXref{allocator.requirements}), where \tcode{U} is an object type. \begin{note} For example, \tcode{allocator<void>} meets the proto-allocator requirements but not the allocator requirements. \end{note} No comparison operator, copy operation, move operation, or swap operation on these types shall exit via an exception.
 
 
 
