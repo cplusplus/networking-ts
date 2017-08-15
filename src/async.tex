@@ -3129,10 +3129,10 @@ inline namespace v1 {
 strand objects \tcode{s1} and \tcode{s2} such that \tcode{s1 == s2}
 
 \item
-a function object \tcode{f1} added to the strand \tcode{s1} using \tcode{post} or \tcode{defer}, or using \tcode{dispatch} when \tcode{s1.running_in_this_thread() == false}
+a function object \tcode{f1} added to the strand \tcode{s1} using \tcode{post} or \tcode{defer}, or using \tcode{dispatch} when \tcode{s1.running_in_this_thread()} is \tcode{false}
 
 \item
-a function object \tcode{f2} added to the strand \tcode{s2} using \tcode{post} or \tcode{defer}, or using \tcode{dispatch} when \tcode{s2.running_in_this_thread() == false}
+a function object \tcode{f2} added to the strand \tcode{s2} using \tcode{post} or \tcode{defer}, or using \tcode{dispatch} when \tcode{s2.running_in_this_thread()} is \tcode{false}
 \end{itemize}
 
 \pnum
