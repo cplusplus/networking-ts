@@ -1440,7 +1440,7 @@ inline namespace v1 {
     // types:
 
     using executor_type = io_context::executor_type;
-    using native_handle_type = @\textit{implementation defined}@; // \nativeref
+    using native_handle_type = @\impdefx{type of \tcode{basic_socket::native_handle_type}}@; // \nativeref
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
@@ -2261,7 +2261,7 @@ inline namespace v1 {
   public:
     // types:
 
-    using native_handle_type = @\textit{implementation defined}@; // \nativeref
+    using native_handle_type = @\impdefx{type of \tcode{basic_datagram_socket::native_handle_type}}@; // \nativeref
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
@@ -2934,7 +2934,7 @@ inline namespace v1 {
   public:
     // types:
 
-    using native_handle_type = @\textit{implementation defined}@; // \nativeref
+    using native_handle_type = @\impdefx{type of \tcode{basic_stream_socket::native_handle_type}}@; // \nativeref
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
@@ -3417,7 +3417,7 @@ inline namespace v1 {
     // types:
 
     using executor_type = io_context::executor_type;
-    using native_handle_type = @\textit{implementation defined}@; // \nativeref
+    using native_handle_type = @\impdefx{type of \tcode{basic_socket_acceptor::native_handle_type}}@; // \nativeref
     using protocol_type = AcceptableProtocol;
     using endpoint_type = typename protocol_type::endpoint;
     using socket_type = typename protocol_type::socket;
