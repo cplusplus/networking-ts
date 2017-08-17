@@ -3832,7 +3832,10 @@ void open(const protocol_type& protocol, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Establishes the postcondition, as if by POSIX \tcode{socket(protocol.family(), protocol.type(), protocol.protocol())}.
+\effects Establishes the postcondition, as if by POSIX:
+\begin{codeblock}
+socket(protocol.family(), protocol.type(), protocol.protocol());
+\end{codeblock}
 
 \pnum
 \postconditions
@@ -3965,7 +3968,11 @@ template<class SettableSocketOption>
 
 \begin{itemdescr}
 \pnum
-\effects Sets an option on this acceptor, as if by POSIX \tcode{setsockopt(native_handle(), option.level(\brk protocol_), option.name(protocol_), option.data(protocol_), option.size(protocol_))}.
+\effects Sets an option on this acceptor, as if by POSIX:
+\begin{codeblock}
+setsockopt(native_handle(), option.level(protocol_), option.name(protocol_),
+           option.data(protocol_), option.size(protocol_));
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3998,7 +4005,10 @@ template<class IoControlCommand>
 
 \begin{itemdescr}
 \pnum
-\effects Executes an I/O control command on this acceptor, as if by POSIX \tcode{ioctl(native_handle(), command.name(), command.data())}.
+\effects Executes an I/O control command on this acceptor, as if by POSIX:
+\begin{codeblock}
+ioctl(native_handle(), command.name(), command.data());
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4086,7 +4096,10 @@ void bind(const endpoint_type& endpoint, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Binds this acceptor to the specified local endpoint, as if by POSIX \tcode{bind(native_handle(), endpoint.data(), endpoint.size())}.
+\effects Binds this acceptor to the specified local endpoint, as if by POSIX:
+\begin{codeblock}
+bind(native_handle(), endpoint.data(), endpoint.size());
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4096,7 +4109,10 @@ void listen(int backlog, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Marks this acceptor as ready to accept connections, as if by POSIX \tcode{listen(native_handle(), backlog)}.
+\effects Marks this acceptor as ready to accept connections, as if by POSIX:
+\begin{codeblock}
+listen(native_handle(), backlog);
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4179,7 +4195,10 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_accept(get_executor().context(), forward<CompletionToken>(token))}.
+\returns
+\begin{codeblock}
+async_accept(get_executor().context(), forward<CompletionToken>(token))
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4240,7 +4259,10 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_accept(get_executor().context(), endpoint, forward<CompletionToken>(token))}.
+\returns
+\begin{codeblock}
+async_accept(get_executor().context(), endpoint, forward<CompletionToken>(token))
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
