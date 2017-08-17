@@ -1819,7 +1819,10 @@ void open(const protocol_type& protocol, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Establishes the postcondition, as if by POSIX \tcode{socket(protocol.family(), protocol.type(), protocol.protocol())}.
+\effects Establishes the postcondition, as if by POSIX:
+\begin{codeblock}
+socket(protocol.family(), protocol.type(), protocol.protocol());
+\end{codeblock}
 
 \pnum
 \postconditions
@@ -1949,7 +1952,11 @@ template<class SettableSocketOption>
 
 \begin{itemdescr}
 \pnum
-\effects Sets an option on this socket, as if by POSIX \tcode{setsockopt(native_handle(), option.level(\brk{}protocol_), option.name(protocol_), option.data(protocol_), option.size(protocol_))}.
+\effects Sets an option on this socket, as if by POSIX:
+\begin{codeblock}
+setsockopt(native_handle(), option.level(protocol_), option.name(protocol_),
+           option.data(protocol_), option.size(protocol_));
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1982,7 +1989,10 @@ template<class IoControlCommand>
 
 \begin{itemdescr}
 \pnum
-\effects Executes an I/O control command on this socket, as if by POSIX \tcode{ioctl(native_handle(), command.name(), command.data())}.
+\effects Executes an I/O control command on this socket, as if by POSIX:
+\begin{codeblock}
+ioctl(native_handle(), command.name(), command.data());
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2100,7 +2110,10 @@ void bind(const endpoint_type& endpoint, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Binds this socket to the specified local endpoint, as if by POSIX \tcode{bind(native_handle(), endpoint.data(), endpoint.size())}.
+\effects Binds this socket to the specified local endpoint, as if by POSIX:
+\begin{codeblock}
+bind(native_handle(), endpoint.data(), endpoint.size());
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2110,7 +2123,10 @@ void shutdown(shutdown_type what, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\effects Shuts down all or part of a full-duplex connection for the socket, as if by POSIX \tcode{shutdown(native_handle(), static_cast<int>(what))}.
+\effects Shuts down all or part of a full-duplex connection for the socket, as if by POSIX:
+\begin{codeblock}
+shutdown(native_handle(), static_cast<int>(what));
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
