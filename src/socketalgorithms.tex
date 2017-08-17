@@ -120,7 +120,10 @@ template<class Protocol, class EndpointSequence, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_connect(s, endpoints, [](auto, auto)\{ return true; \}, forward<Completion\-Token>(token))}.
+\returns
+\begin{codeblock}
+async_connect(s, endpoints, [](auto, auto){ return true; }, forward<CompletionToken>(token))
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -173,7 +176,11 @@ template<class Protocol, class InputIterator, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_connect(s, first, last, [](auto, auto)\{ return true; \}, forward<Completion\-Token>(token))}.
+\returns
+\begin{codeblock}
+async_connect(s, first, last, [](auto, auto){ return true; },
+              forward<CompletionToken>(token))
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
