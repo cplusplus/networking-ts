@@ -2672,7 +2672,11 @@ template<class MutableBufferSequence, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_receive_from(buffers, sender, socket_base::message_flags(), forward<Com\-pletionToken>(token))}.
+\returns
+\begin{codeblock}
+async_receive_from(buffers, sender, socket_base::message_flags(),
+                   forward<CompletionToken>(token))
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2772,7 +2776,10 @@ template<class ConstBufferSequence, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_send(buffers, socket_base::message_flags(), forward<CompletionToken>(token))}.
+\returns
+\begin{codeblock}
+async_send(buffers, socket_base::message_flags(), forward<CompletionToken>(token))
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2865,7 +2872,11 @@ template<class ConstBufferSequence, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_send_to(buffers, recipient, socket_base::message_flags(), forward<Compl\-etionToken>(token))}.
+\returns
+\begin{codeblock}
+async_send_to(buffers, recipient, socket_base::message_flags(),
+              forward<CompletionToken>(token))
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
