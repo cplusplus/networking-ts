@@ -2726,7 +2726,8 @@ constexpr basic_endpoint(const protocol_type& proto,
 \postconditions
 \begin{itemize}
 \item
- If \tcode{proto == protocol_type::v6()}, \tcode{this->address() == ip::address_v6()}; otherwise, \tcode{this->address() == ip::address_v4()}.
+If \tcode{proto == protocol_type::v6()}, \tcode{this->address() == ip::address_v6()}; otherwise,\\
+\tcode{this->address() == ip::address_v4()}.
 \item
 \tcode{port() == port_num}.
 \end{itemize}
