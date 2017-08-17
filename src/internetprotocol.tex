@@ -3647,7 +3647,11 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_resolve(host_name, service_name, resolver_base::flags(), forward<Comp\-l\-et\-ion\-Token>(token))}.
+\returns
+\begin{codeblock}
+async_resolve(host_name, service_name, resolver_base::flags(),
+              forward<CompletionToken>(token))
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3731,7 +3735,11 @@ template<class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{async_resolve(protocol, host_name, service_name, resolver_base::flags(), for\-ward<CompletionToken>(token))}.
+\returns
+\begin{codeblock}
+async_resolve(protocol, host_name, service_name, resolver_base::flags(),
+              forward<CompletionToken>(token))
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
