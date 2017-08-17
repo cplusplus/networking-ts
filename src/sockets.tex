@@ -3030,7 +3030,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_stream_socket} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), \tcode{MoveAssignable} (\CppXref{moveassignable}), \tcode{SyncReadStream}~(\ref{buffer.stream.reqmts.syncreadstream}), \tcode{SyncWriteStream}~(\ref{buffer.stream.reqmts.syncwritestream}), \tcode{AsyncReadStream}~(\ref{buffer.stream.reqmts.asyncreadstream}), and \tcode{AsyncWriteStream}~(\ref{buffer.stream.reqmts.asyncwritestream}).
+Instances of class template \tcode{basic_stream_socket} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), \tcode{MoveAssignable} (\CppXref{moveassignable}), \tcode{SyncRead\-Stream}~(\ref{buffer.stream.reqmts.syncreadstream}), \tcode{SyncWriteStream}~(\ref{buffer.stream.reqmts.syncwritestream}), \tcode{AsyncReadStream}~(\ref{buffer.stream.reqmts.asyncreadstream}), and \tcode{AsyncWriteStream}~(\ref{buffer.stream.reqmts.asyncwritestream}).
 
 \pnum
 If a program performs a synchronous operation on this socket, other than \tcode{close}, \tcode{cancel}, \tcode{shutdown}, or \tcode{send}, while there is an outstanding asynchronous read operation, the behavior is undefined.
