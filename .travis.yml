@@ -41,6 +41,7 @@ addons:
     - texlive-latex-base
     - texlive-latex-extra
     - texlive-latex-recommended
+    - texlive-generic-recommended
     - texlive-binaries
     - graphviz
     - lmodern
