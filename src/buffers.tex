@@ -980,7 +980,7 @@ const_buffer(
 \rSec1[buffer.creation]{Buffer creation functions}
 
 \pnum
-In the functions below, \tcode{T} must be a trivially copyable or standard-layout type (\CppXref{basic.types}).
+In the functions below, \tcode{T} shall be a trivially copyable or standard-layout type (\CppXref{basic.types}).
 
 \pnum
 For the function overloads below that accept an argument of type \tcode{vector<>}, the buffer objects returned are invalidated by any vector operation that also invalidates all references, pointers and iterators referring to the elements in the sequence (\CppXref{vector}).
