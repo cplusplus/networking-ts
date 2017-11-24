@@ -14,6 +14,10 @@
 A type \tcode{X} meets the \tcode{SyncReadStream} requirements if it satisfies the requirements listed in Table~\ref{tab:buffer.stream.reqmts.syncreadstream.requirements}.
 
 \pnum
+An \defn{orderly shutdown} is
+the procedure for shutting down a stream after all work in progress has been completed, without loss of data.
+
+\pnum
 In Table~\ref{tab:buffer.stream.reqmts.syncreadstream.requirements},
 \tcode{a} denotes a value of type \tcode{X},
 \tcode{mb} denotes a (possibly const) value of a type satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements,
