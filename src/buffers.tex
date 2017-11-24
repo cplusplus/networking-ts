@@ -315,7 +315,7 @@ A type \tcode{X} meets the \tcode{MutableBufferSequence} requirements if it sati
 
 \pnum
 In Table~\ref{tab:buffer.reqmts.mutablebuffersequence.requirements},
-\tcode{x} denotes a value of type \tcode{X} or \tcode{const X},
+\tcode{x} denotes a (possibly const) value of type \tcode{X},
 and \tcode{u} denotes an identifier.
 
 \indextext{requirements!\idxcode{MutableBufferSequence}}%
@@ -379,7 +379,7 @@ A type \tcode{X} meets the \tcode{ConstBufferSequence} requirements if it satisf
 
 \pnum
 In Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements},
-\tcode{x} denotes a value of type \tcode{X} or \tcode{const X},
+\tcode{x} denotes a (possibly const) value of type \tcode{X},
 and \tcode{u} denotes an identifier.
 
 \indextext{requirements!\idxcode{ConstBufferSequence}}%
@@ -460,8 +460,8 @@ A type \tcode{X} meets the \tcode{DynamicBuffer} requirements if it satisfies th
 \pnum
 In Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements},
 \tcode{x} denotes a value of type \tcode{X},
-\tcode{x1} denotes a value of type \tcode{X} or \tcode{const X},
-and \tcode{n} denotes a value of type \tcode{size_t} or \tcode{const size_t}.
+\tcode{x1} denotes a (possibly const) value of type \tcode{X},
+and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
 
 \indextext{requirements!\idxcode{DynamicBuffer}}%
 \begin{libreqtab3}

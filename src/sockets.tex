@@ -218,7 +218,7 @@ to a POSIX function the effect is as if \tcode{native_handle_type} is the type \
 A type \tcode{X} meets the \tcode{Endpoint} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}), as well as the additional requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X} or \tcode{const X},
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
 and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
@@ -248,9 +248,9 @@ type meeting \tcode{Protocol}~(\ref{socket.reqmts.protocol}) requirements  &
 
 \indexextensible{Endpoint}%
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X} or \tcode{const X},
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
 \tcode{b} denotes a value of type \tcode{X},
-and \tcode{s} denotes a value of a (possibly const) type
+and \tcode{s} denotes a (possibly const) value of a type
 that is convertible to \tcode{size_t} and denotes a size in bytes.
 
 \begin{libreqtab3}
@@ -301,7 +301,7 @@ Returns a value suitable for passing as the \tcode{address_len} argument to func
 A type \tcode{X} meets the \tcode{EndpointSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
 
 \pnum
-In the table below, \tcode{x} denotes a value of type \tcode{X} or \tcode{const X}.
+In the table below, \tcode{x} denotes a (possibly const) value of type \tcode{X}.
 
 \begin{libreqtab3}
 {EndpointSequence requirements}
@@ -355,7 +355,7 @@ type meeting endpoint~(\ref{socket.reqmts.endpoint}) requirements  &
 
 \indexextensible{Protocol}%
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X} or \tcode{const X}.
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}.
 
 \begin{libreqtab3}
 {Protocol requirements for extensible implementations}
@@ -424,7 +424,7 @@ A type that satisfies the requirements of \tcode{Destructible} (\CppXref{destruc
 A type \tcode{X} meets the \tcode{GettableSocketOption} requirements if it satisfies the requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X} or \tcode{const X},
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
 \tcode{b} denotes a value of type \tcode{X},
 \tcode{p} denotes a value of a (possibly const) type
 that meets the \tcode{Protocol}~(\ref{socket.reqmts.protocol}) requirements,
@@ -477,8 +477,8 @@ post: \tcode{b.size(p) == s}. Passed the value contained in the \tcode{option_le
 A type \tcode{X} meets the \tcode{SettableSocketOption} requirements if it satisfies the requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X} or \tcode{const X},
-\tcode{p} denotes a value or a (possibly const) type
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
+\tcode{p} denotes a (possibly const) value of a type
 that meets the \tcode{Protocol}~(\ref{socket.reqmts.protocol}) requirements,
 and \tcode{u} denotes an identifier.
 
@@ -524,8 +524,8 @@ Returns a value suitable for passing as the \tcode{option_len} argument to POSIX
 A type \tcode{X} meets the \tcode{BooleanSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{Settable\-Socket\-Option}~(\ref{socket.reqmts.settablesocketoption}), \tcode{X} is contextually convertible to bool, and \tcode{X} satisfies the additional requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X} or \tcode{const X},
-\tcode{v} denotes a value of type \tcode{bool} or \tcode{const bool},
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
+\tcode{v} denotes a (possibly const) value of type \tcode{bool},
 and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
@@ -729,8 +729,8 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 A type \tcode{X} meets the \tcode{IntegerSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{Settable\-Socket\-Option}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X} or \tcode{const X},
-\tcode{v} denotes a value of type \tcode{int} or \tcode{const int},
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
+\tcode{v} denotes a (possibly const) value of type \tcode{int},
 and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
@@ -906,7 +906,7 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 A type \tcode{X} meets the \tcode{IoControlCommand} requirements if it satisfies the requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a value of type \tcode{X} or \tcode{const X},
+In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
 and \tcode{b} denotes a value of type \tcode{X}.
 
 \begin{libreqtab3}
@@ -945,8 +945,9 @@ A type \tcode{X} meets the \tcode{ConnectCondition} requirements if it satisfies
 
 \pnum
 In the table below, \tcode{x} denotes a value of type \tcode{X},
-\tcode{ec} denotes a value of type \tcode{error_code} or \tcode{const error_code},
-and \tcode{ep} denotes a value of a type satisfying the endpoint~(\ref{socket.reqmts.endpoint}) requirements.
+\tcode{ec} denotes a (possibly const) value of type \tcode{error_code},
+and \tcode{ep} denotes a (possibly const) value of a type satisfying
+the endpoint~(\ref{socket.reqmts.endpoint}) requirements.
 
 \begin{libreqtab3}
 {ConnectCondition requirements}

@@ -289,7 +289,7 @@ A type \tcode{X} meets the \tcode{InternetProtocol} requirements if it satisfies
 
 \pnum
 In the table below,
-\tcode{a} and \tcode{b} denote values of type \tcode{X} or \tcode{const X}.
+\tcode{a} and \tcode{b} denote (possibly const) values of type \tcode{X}.
 
 \begin{libreqtab3}
 {InternetProtocol requirements}
@@ -339,10 +339,10 @@ A type \tcode{X} meets the \tcode{MulticastGroupSocketOption} requirements if it
 
 \pnum
 In the table below,
-\tcode{a} denotes a value of type \tcode{address} or \tcode{const address},
-\tcode{b} and \tcode{c} denote values of type \tcode{address_v4} or \tcode{const address_v4},
-\tcode{d} denotes a value of type \tcode{address_v6} or \tcode{const address_v6},
-\tcode{e} denotes a value of type \tcode{unsigned int} or \tcode{const unsigned int},
+\tcode{a} denotes a (possibly const) value of type \tcode{address},
+\tcode{b} and \tcode{c} denote (possibly const) values of type \tcode{address_v4},
+\tcode{d} denotes a (possibly const) value of type \tcode{address_v6},
+\tcode{e} denotes a (possibly const) value of type \tcode{unsigned int},
 and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
@@ -4128,7 +4128,7 @@ constexpr bool operator!=(const udp& a, const udp& b) noexcept;
 
 \pnum
 In Table~\ref{tab:internet.socket.opt.requirements}, let \placeholder{C} denote a socket option class; let \placeholder{L} identify the POSIX macro to be passed as the \tcode{level} argument to POSIX \tcode{setsockopt} and getsockopt; let \placeholder{N} identify the POSIX macro to be passed as the \tcode{option_name} argument to POSIX \tcode{setsockopt} and \tcode{getsockopt}; let \placeholder{T} identify the type of the value whose address will be passed as the \tcode{option_value} argument to POSIX \tcode{setsockopt} and \tcode{getsockopt};
-let \tcode{p} denote a value of a (possibly const) type meeting the protocol~(\ref{socket.reqmts.protocol}) requirements,
+let \tcode{p} denote a (possibly const) value of a type meeting the protocol~(\ref{socket.reqmts.protocol}) requirements,
 as passed to the socket option's \tcode{level} and \tcode{name} member functions;
 and let \tcode{F} be the value of \tcode{p.family()}.
 

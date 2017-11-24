@@ -16,7 +16,7 @@ A type \tcode{X} meets the \tcode{SyncReadStream} requirements if it satisfies t
 \pnum
 In Table~\ref{tab:buffer.stream.reqmts.syncreadstream.requirements},
 \tcode{a} denotes a value of type \tcode{X},
-\tcode{mb} denotes a value of a (possibly const) type satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements,
+\tcode{mb} denotes a (possibly const) value of a type satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements,
 and \tcode{ec} denotes an object of type \tcode{error_code}.
 
 \indexlibrary{\idxcode{read_some}}%
@@ -53,7 +53,7 @@ A type \tcode{X} meets the \tcode{AsyncReadStream} requirements if it satisfies 
 
 \pnum
 In the table below, \tcode{a} denotes a value of type \tcode{X},
-\tcode{mb} denotes a value of a (possibly const) type satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements,
+\tcode{mb} denotes a (possibly const) value of a type satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements,
 and \tcode{t} is a completion token.
 
 \indexlibrary{\idxcode{get_executor}}%
@@ -95,7 +95,7 @@ A type \tcode{X} meets the \tcode{SyncWriteStream} requirements if it satisfies 
 \pnum
 In the table below,
 \tcode{a} denotes a value of type \tcode{X},
-\tcode{cb} denotes a value of a (possibly const) type satisfying the \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements,
+\tcode{cb} denotes a (possibly const) value of a type satisfying the \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements,
 and \tcode{ec} denotes an object of type \tcode{error_code}.
 
 \indexlibrary{\idxcode{write_some}}%
@@ -134,7 +134,7 @@ A type \tcode{X} meets the \tcode{AsyncWriteStream} requirements if it satisfies
 \pnum
 In the table below,
 \tcode{a} denotes a value of type \tcode{X},
-\tcode{cb} denotes a value of a (possibly const) type satisfying the \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements,
+\tcode{cb} denotes a (possibly const) value of a type satisfying the \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements,
 and \tcode{t} is a completion token.
 
 \indexlibrary{\idxcode{get_executor}}%
@@ -179,8 +179,8 @@ A type \tcode{X} meets the \tcode{CompletionCondition} requirements if it satisf
 
 \pnum
 In the table below, \tcode{x} denotes a value of type \tcode{X},
-\tcode{ec} denotes a value of type \tcode{error_code} or \tcode{const error_code},
-and \tcode{n} denotes a value of type \tcode{size_t} or \tcode{const size_t}.
+\tcode{ec} denotes a (possibly const) value of type \tcode{error_code},
+and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
 
 \begin{libreqtab3}
 {CompletionCondition requirements}
