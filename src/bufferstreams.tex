@@ -685,7 +685,7 @@ the completion condition returns \tcode{0}.
 \end{itemize}
 
 \pnum
-The program must ensure the \tcode{AsyncWriteStream} object \tcode{stream} is valid until the completion handler for the asynchronous operation is invoked.
+The program shall ensure the \tcode{AsyncWriteStream} object \tcode{stream} is valid until the completion handler for the asynchronous operation is invoked.
 
 \pnum
 On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code} value from the most recent asynchronous write_some operation, and \tcode{n} is the total number of bytes transferred.
@@ -729,7 +729,7 @@ The asynchronous write operation continues until:
 \end{itemize}
 
 \pnum
-The program must ensure both the \tcode{AsyncWriteStream} object \tcode{stream} and the memory associated with the dynamic buffer \tcode{b} are valid until the completion handler for the asynchronous operation is invoked.
+The program shall ensure both the \tcode{AsyncWriteStream} object \tcode{stream} and the memory associated with the dynamic buffer \tcode{b} are valid until the completion handler for the asynchronous operation is invoked.
 
 \pnum
 On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code} value from the most recent asynchronous write_some operation, and \tcode{n} is the total number of bytes transferred.
