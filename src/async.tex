@@ -620,7 +620,7 @@ auto async_xyz(T1 t1, T2 t2, CompletionToken&& token)
 If the parameter has a pointer type or has a type of lvalue reference to non-const, the implementation may assume the validity of the pointee or referent, respectively, until the completion handler is invoked. \begin{note} In other words, the program must guarantee the validity of the argument until the completion handler is invoked. \end{note}
 
 \item
-Otherwise, the implementation must not assume the validity of the argument after the initiating function completes. \begin{note} In other words, the program is not required to guarantee the validity of the argument after the initiating function completes. \end{note} The implementation may make copies of the argument, and all copies shall be destroyed no later than immediately after invocation of the completion handler.
+Otherwise, the implementation does not assume the validity of the argument after the initiating function completes. \begin{note} In other words, the program is not required to guarantee the validity of the argument after the initiating function completes. \end{note} The implementation may make copies of the argument, and all copies shall be destroyed no later than immediately after invocation of the completion handler.
 \end{itemize}
 
 
