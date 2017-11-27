@@ -343,7 +343,13 @@ and \tcode{u} denotes an identifier.
 
 \tcode{net::buffer_sequence_begin(x)}\br
 \tcode{net::buffer_sequence_end(x)}  &
-An iterator type meeting the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) whose reference type is convertible to \tcode{mutable_buffer}.  &
+An iterator type whose \tcode{reference} type is convertible to \tcode{mutable_buffer},
+and which satisfies all the requirements for bidirectional iterators (\CppXref{bidirectional.iterators})
+except that:
+\begin{itemize}
+\item there is no requirement that \tcode{operator->} is provided, and
+\item there is no requirement that \tcode{reference} be a reference type.
+\end{itemize} &
 For a dereferenceable iterator, no increment, decrement, or dereference operation, or conversion of the reference type to \tcode{mutable_buffer}, shall exit via an exception.
   \\ \rowsep
 
@@ -407,7 +413,13 @@ and \tcode{u} denotes an identifier.
 
 \tcode{net::buffer_sequence_begin(x)}\br
 \tcode{net::buffer_sequence_end(x)}  &
-An iterator type meeting the requirements for bidirectional iterators (\CppXref{bidirectional.iterators}) whose reference type is convertible to \tcode{const_buffer}.  &
+An iterator type whose \tcode{reference} type is convertible to \tcode{const_buffer},
+and which satisfies all the requirements for bidirectional iterators (\CppXref{bidirectional.iterators})
+except that:
+\begin{itemize}
+\item there is no requirement that \tcode{operator->} is provided, and
+\item there is no requirement that \tcode{reference} be a reference type.
+\end{itemize} &
 For a dereferenceable iterator, no increment, decrement, or dereference operation, or conversion of the reference type to \tcode{const_buffer}, shall exit via an exception.
   \\ \rowsep
 
