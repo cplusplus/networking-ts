@@ -180,7 +180,7 @@ inline namespace v1 {
   template<class ProtoAllocator, class Result, class... Args>
     class async_result<use_future_t<ProtoAllocator>, Result(Args...)>;
 
-  template<class R, class... Args, class Signature>
+  template<class Result, class... Args, class Signature>
     class async_result<packaged_task<Result(Args...)>, Signature>;
 
 } // inline namespace v1
