@@ -3568,7 +3568,7 @@ basic_resolver& operator=(basic_resolver&& rhs);
 \effects Cancels all outstanding asynchronous operations associated with \tcode{*this} as if by calling \tcode{cancel()}, then moves into \tcode{*this} the state originally represented by \tcode{rhs}.
 
 \pnum
-\postconditions \tcode{get_executor() == ctx.get_executor()}.
+\postconditions \tcode{get_executor() == rhs.get_executor()}.
 
 \pnum
 \returns \tcode{*this}.
