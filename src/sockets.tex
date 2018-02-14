@@ -136,7 +136,7 @@ The figure below illustrates relationships between various types described in th
 \rSec2[socket.reqmts.sync]{Requirements on synchronous socket operations}
 
 \pnum
-In this section, \indextext{socket operations!synchronous}\defn{synchronous socket operations} are those member functions specified as two overloads, with and without an argument of type \tcode{error_code\&}:
+In this subclause, \indextext{socket operations!synchronous}\defn{synchronous socket operations} are those member functions specified as two overloads, with and without an argument of type \tcode{error_code\&}:
 
 \begin{codeblock}
 @\textit{R f}@(@\textit{A1}@ a1, @\textit{A2}@ a2, ..., @\textit{AN}@ aN);
@@ -170,7 +170,7 @@ Otherwise, the synchronous socket operation shall block the calling thread until
 \rSec2[socket.reqmts.async]{Requirements on asynchronous socket operations}
 
 \pnum
-In this section, \indextext{socket operations!asynchronous}\defn{asynchronous socket operations} are those member functions having prefix \tcode{async_}.
+In this subclause, \indextext{socket operations!asynchronous}\defn{asynchronous socket operations} are those member functions having prefix \tcode{async_}.
 
 \pnum
 For an object \tcode{s}, a program may initiate asynchronous socket operations such that there are multiple simultaneously outstanding asynchronous operations.
