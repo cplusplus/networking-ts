@@ -278,17 +278,17 @@ Shall not exit via an exception. \br\textit{Precondition:} A preceding call \tco
 
 \tcode{x1.dispatch(\br\mbox{\ \ }std::move(f),~a)}  &
   &
-\effects Creates an object \tcode{f1} initialized with \tcode{\placeholdernc{DECAY_COPY}(std::forward<Func>(f))} (\CppXref{thread.decaycopy}) in the current thread of execution. Calls \tcode{f1()} at most once. The executor may block forward progress of the caller until \tcode{f1()} finishes execution. Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \begin{note} Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \end{note} \br
+\effects Creates an object \tcode{f1} initialized with \tcode{\placeholdernc{DECAY_COPY}(std::forward<Func>(f))} (\CppXref{thread.decaycopy}) in the current thread of execution. Calls \tcode{f1()} at most once. The executor may block forward progress of the caller until \tcode{f1()} finishes execution. Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \begin{note} Executors defined in this document always use the supplied allocator unless otherwise specified. \end{note} \br
 \sync The invocation of \tcode{dispatch} synchronizes with (\CppXref{intro.multithread}) the invocation of \tcode{f1}.  \\ \rowsep
 
 \tcode{x1.post(std::move(f),~a)}  &
   &
-\effects Creates an object \tcode{f1} initialized with \tcode{\placeholdernc{DECAY_COPY}(std::forward<Func>(f))} in the current thread of execution. Calls \tcode{f1()} at most once. The executor shall not block forward progress of the caller pending completion of \tcode{f1()}. The executor may begin \tcode{f1}'s progress before the call to \tcode{post} completes. Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \begin{note} Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \end{note}\br
+\effects Creates an object \tcode{f1} initialized with \tcode{\placeholdernc{DECAY_COPY}(std::forward<Func>(f))} in the current thread of execution. Calls \tcode{f1()} at most once. The executor shall not block forward progress of the caller pending completion of \tcode{f1()}. The executor may begin \tcode{f1}'s progress before the call to \tcode{post} completes. Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \begin{note} Executors defined in this document always use the supplied allocator unless otherwise specified. \end{note}\br
 \sync The invocation of \tcode{post} synchronizes with (\CppXref{intro.multithread}) the invocation of \tcode{f1}.  \\ \rowsep
 
 \tcode{x1.defer(std::move(f),~a)}  &
   &
-\effects Creates an object \tcode{f1} initialized with \tcode{\placeholdernc{DECAY_COPY}(std::forward<Func>(f))} in the current thread of execution. Calls \tcode{f1()} at most once. The executor shall not block forward progress of the caller pending completion of \tcode{f1()}. The executor should not begin \tcode{f1}'s progress before the call to \tcode{defer} completes. \begin{note} One use of \tcode{defer} is to convey the intention of the caller that \tcode{f1} is a continuation of the current call context. The executor may use this information to optimize or otherwise adjust the way in which \tcode{f1} is invoked. \end{note}  Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \begin{note} Executors defined in this Technical Specification always use the supplied allocator unless otherwise specified. \end{note}\br
+\effects Creates an object \tcode{f1} initialized with \tcode{\placeholdernc{DECAY_COPY}(std::forward<Func>(f))} in the current thread of execution. Calls \tcode{f1()} at most once. The executor shall not block forward progress of the caller pending completion of \tcode{f1()}. The executor should not begin \tcode{f1}'s progress before the call to \tcode{defer} completes. \begin{note} One use of \tcode{defer} is to convey the intention of the caller that \tcode{f1} is a continuation of the current call context. The executor may use this information to optimize or otherwise adjust the way in which \tcode{f1} is invoked. \end{note}  Executor implementations should use the supplied allocator to allocate any memory required to store the function object. Prior to invoking the function object, the executor shall deallocate any memory allocated. \begin{note} Executors defined in this document always use the supplied allocator unless otherwise specified. \end{note}\br
 \sync The invocation of \tcode{defer} synchronizes with (\CppXref{intro.multithread}) the invocation of \tcode{f1}.  \\
 
 \end{libreqtab3}
@@ -501,7 +501,7 @@ Event 3: The completion handler is called with the result of the asynchronous op
 \end{itemize}
 
 \pnum
-In this Technical Specification, all functions with the prefix \tcode{async_} are initiating functions.
+In this document, all functions with the prefix \tcode{async_} are initiating functions.
 
 
 
@@ -537,9 +537,9 @@ The completion handler object \tcode{completion_handler} is initialized with
 The type \tcode{CompletionHandler} shall satisfy the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), and be callable with the specified call signature.
 
 \pnum
-In this Technical Specification, all initiating functions specify a
+In this document, all initiating functions specify a
 \completionsig element that defines the call signature \tcode{Signature}.
-The \completionsig elements in this Technical Specification have named
+The \completionsig elements in this document have named
 parameters, and the results of an asynchronous operation are specified in
 terms of these names.
 
@@ -552,7 +552,7 @@ terms of these names.
 The return type of an initiating function is \tcode{typename async_result<decay_t<CompletionToken>, Sig\-nature>::return_type}.
 
 \pnum
-For the sake of exposition, this Technical Specification sometimes annotates functions with a return type \DEDUCED. For every function declaration that returns \DEDUCED, the meaning is equivalent to specifying the return type as \tcode{typename async_result<decay_t<CompletionToken>, Signature>::return_type}.
+For the sake of exposition, this document sometimes annotates functions with a return type \DEDUCED. For every function declaration that returns \DEDUCED, the meaning is equivalent to specifying the return type as \tcode{typename async_result<decay_t<CompletionToken>, Signature>::return_type}.
 
 
 
@@ -651,7 +651,7 @@ Certain objects that participate in asynchronous operations have an associated e
 An asynchronous operation has an associated executor satisfying the \tcode{Executor}~(\ref{async.reqmts.executor}) requirements. If not otherwise specified by the asynchronous operation, this associated executor is an object of type \tcode{system_executor}.
 
 \pnum
- All asynchronous operations in this Technical Specification have an associated executor object that is determined as follows:
+ All asynchronous operations in this document have an associated executor object that is determined as follows:
 
 \begin{itemize}
 \item
@@ -709,7 +709,7 @@ Let \tcode{Alloc1} be a type, satisfying the \tcode{ProtoAllocator}~(\ref{async.
 A completion handler object of type \tcode{CompletionHandler} has an associated allocator object \tcode{alloc2} of type \tcode{Alloc2} satisfying the \tcode{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) requirements. The type \tcode{Alloc2} is \tcode{associated_allocator_t<CompletionHandler, Alloc1>}. Let \tcode{alloc2} be a value of type \tcode{Alloc2} obtained by performing \tcode{get_associated_allocator(completion_handler, alloc1)}.
 
 \pnum
- The asynchronous operations defined in this Technical Specification:
+ The asynchronous operations defined in this document:
 
 \begin{itemize}
 \item
@@ -747,7 +747,7 @@ If an asynchronous operation completes immediately (that is, within the thread o
 \rSec3[async.reqmts.async.composed]{Composed asynchronous operations}
 
 \pnum
-In this Technical Specification, a \defn{composed asynchronous operation} is an asynchronous operation that is implemented in terms of zero or more intermediate calls to other asynchronous operations. The intermediate asynchronous operations are performed sequentially. \begin{note} That is, the completion handler of an intermediate operation initiates the next operation in the sequence. \end{note}
+In this document, a \defn{composed asynchronous operation} is an asynchronous operation that is implemented in terms of zero or more intermediate calls to other asynchronous operations. The intermediate asynchronous operations are performed sequentially. \begin{note} That is, the completion handler of an intermediate operation initiates the next operation in the sequence. \end{note}
 
 An intermediate operation's completion handler shall have an associated executor that is either:
 

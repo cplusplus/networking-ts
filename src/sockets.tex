@@ -120,7 +120,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-The figure below illustrates relationships between various types described in this Technical Specification. A solid line from \textbf{A} to \textbf{B} that is terminated by an open arrow indicates that \textbf{A} is derived from \textbf{B}. A solid line from \textbf{A} to \textbf{B} that starts with a diamond and is terminated by a solid arrow indicates that \textbf{A} contains an object of type \textbf{B}. A dotted line from \textbf{A} to \textbf{B} indicates that \textbf{A} is a synonym for the class template \textbf{B} with the specified template argument.
+The figure below illustrates relationships between various types described in this document. A solid line from \textbf{A} to \textbf{B} that is terminated by an open arrow indicates that \textbf{A} is derived from \textbf{B}. A solid line from \textbf{A} to \textbf{B} that starts with a diamond and is terminated by a solid arrow indicates that \textbf{A} contains an object of type \textbf{B}. A dotted line from \textbf{A} to \textbf{B} indicates that \textbf{A} is a synonym for the class template \textbf{B} with the specified template argument.
 
 \begin{importgraphic}
 {Socket and socket stream types [non-normative]}
@@ -199,7 +199,7 @@ When there are multiple outstanding asynchronous write operations~(\ref{buffer.r
 \rSec2[socket.reqmts.native]{Native handles}
 
 \pnum
-Several classes described in this Technical Specification have a member type \tcode{native_handle_type}, a member function \tcode{native_handle}, and member functions that return or accept arguments of type \tcode{native_handle_type}. The presence of these members and their semantics is
+Several classes described in this document have a member type \tcode{native_handle_type}, a member function \tcode{native_handle}, and member functions that return or accept arguments of type \tcode{native_handle_type}. The presence of these members and their semantics is
 \impldef{presence and meaning of \tcode{native_handle_type} and \tcode{native_handle}}.
 
 \pnum
@@ -566,7 +566,7 @@ Returns \tcode{!a.value()}.  \\
 \end{libreqtab3}
 
 \pnum
-In this Technical Specification, types that satisfy the \tcode{BooleanSocketOption} requirements are defined as follows.
+In this document, types that satisfy the \tcode{BooleanSocketOption} requirements are defined as follows.
 
 \begin{codeblock}
 class @\placeholder{C}@
@@ -763,7 +763,7 @@ post: \tcode{u.value() == v}.  \\ \rowsep
 \end{libreqtab3}
 
 \pnum
-In this Technical Specification, types that satisfy the \tcode{IntegerSocketOption} requirements are defined as follows.
+In this document, types that satisfy the \tcode{IntegerSocketOption} requirements are defined as follows.
 
 \begin{codeblock}
 class @\placeholder{C}@
