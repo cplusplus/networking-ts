@@ -435,7 +435,7 @@ template<class CompletionToken>
 \effects Initiates an asynchronous wait operation to repeatedly wait for the relative time produced by \tcode{WaitTraits::to_wait_duration(e)}, where \tcode{e} is a value of type \tcode{time_point} such that \tcode{e <= expiry()}. The completion handler is submitted for execution only when the condition \tcode{ec || expiry() <= clock_type::now()} yields \tcode{true}.
 
 \pnum
-\begin{note} To implement \tcode{async_wait}, an \tcode{io_context} object \tcode{ctx} may maintain a priority queue for each specialization of \tcode{basic_waitable_timer<Clock, WaitTraits>} for which a timer object was initialized with \tcode{ctx}. Only the time point \tcode{e} of the earliest outstanding expiry need be passed to \tcode{WaitTraits::to_wait_duration(e)}. \end{note}
+\begin{note} To implement \tcode{async_wait}, an \tcode{io_context} object \tcode{ctx} could maintain a priority queue for each specialization of \tcode{basic_waitable_timer<Clock, WaitTraits>} for which a timer object was initialized with \tcode{ctx}. Only the time point \tcode{e} of the earliest outstanding expiry need be passed to \tcode{WaitTraits::to_wait_duration(e)}. \end{note}
 \end{itemdescr}
 
 
