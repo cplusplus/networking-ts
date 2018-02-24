@@ -779,7 +779,7 @@ an asynchronous read_some operation fails.
 On exit, if the input sequence of \tcode{b} contains the delimiter, \tcode{ec} is set such that \tcode{!ec} is \tcode{true}. Otherwise, if \tcode{b.size() == b.max_size()}, \tcode{ec} is set such that \tcode{ec == stream_errc::not_found}. If \tcode{b.size() < b.max_size()}, \tcode{ec} contains the \tcode{error_code} from the most recent \tcode{read_some} call.
 
 \pnum
-\returns The number of bytes in the input sequence of \tcode{b} up to and including the delimiter, if present. \begin{note} On completion, the buffer may contain additional bytes following the delimiter. \end{note} Otherwise returns \tcode{0}.
+\returns The number of bytes in the input sequence of \tcode{b} up to and including the delimiter, if present. \begin{note} On completion, the buffer can contain additional bytes following the delimiter. \end{note} Otherwise returns \tcode{0}.
 \end{itemdescr}
 
 
