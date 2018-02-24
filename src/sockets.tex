@@ -2081,7 +2081,7 @@ bool at_mark(error_code& ec) const;
 
 \begin{itemdescr}
 \pnum
-\effects Determines if this socket is at the out-of-band data mark, as if by POSIX \tcode{sockatmark(native_handle())}. \begin{note} The \tcode{at_mark()} function must be used in conjunction with the \tcode{socket_base::out_of_band_inline} socket option. \end{note}
+\effects Determines if this socket is at the out-of-band data mark, as if by POSIX \tcode{sockatmark(native_handle())}. \begin{note} The \tcode{at_mark()} function is used in conjunction with the \tcode{socket_base::out_of_band_inline} socket option. \end{note}
 
 \pnum
 \returns A \tcode{bool} indicating whether this socket is at the out-of-band data mark. \tcode{false} if an error occurs.
