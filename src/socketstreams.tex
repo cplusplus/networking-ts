@@ -9,7 +9,7 @@
 The class \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} associates both the input sequence and the output sequence with a socket. The input and output sequences do not support seeking. \begin{note} The input and output sequences are independent as a stream socket provides full duplex I/O. \end{note}
 
 \pnum
- \begin{note} This class is intended for sending and receiving bytes, not characters. The conversion from characters to bytes, and vice versa, must occur elsewhere. \end{note}
+ \begin{note} This class is intended for sending and receiving bytes, not characters. Any conversion from characters to bytes, and vice versa, occurs elsewhere. \end{note}
 
 \begin{codeblock}
 namespace std {
@@ -355,7 +355,7 @@ virtual streambuf* setbuf(char_type* s, streamsize n) override;
 The class template \tcode{basic_socket_iostream<Protocol, Clock, WaitTraits>} supports reading and writing on sockets. It uses a \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} object to control the associated sequences.
 
 \pnum
- \begin{note} This class is intended for sending and receiving bytes, not characters. The conversion from characters to bytes, and vice versa, must occur elsewhere. \end{note}
+ \begin{note} This class is intended for sending and receiving bytes, not characters. Any conversion from characters to bytes, and vice versa, occurs elsewhere. \end{note}
 
 \begin{codeblock}
 namespace std {
