@@ -632,7 +632,7 @@ Otherwise, the implementation does not assume the validity of the argument after
  An initiating function shall not block (\CppXref{defns.block}) the calling thread pending completion of the outstanding operation.
 
 \pnum
- \begin{note} Initiating functions may still block the calling thread for other reasons. For example, an initiating function may lock a mutex in order to synchronize access to shared data. \end{note}
+ \begin{note} Initiating functions can still block the calling thread for other reasons. For example, if an initiating function locks a mutex in order to synchronize access to shared data. \end{note}
 
 
 
