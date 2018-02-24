@@ -73,7 +73,7 @@ The \tcode{basic_waitable_timer} template uses wait traits to allow programs to 
 \item
  Correcting for errors or rounding timeouts to boundaries.
 \item
- Preventing duration overflow. That is, a program may set a timer's expiry \tcode{e} to be \tcode{Clock::max()} (meaning never reached) or \tcode{Clock::min()} (meaning always in the past). As a result, computing the duration until timer expiry as \tcode{e - Clock::now()} may cause overflow. \end{itemize}\end{note}
+ Preventing duration overflow. That is, a program can set a timer's expiry \tcode{e} to be \tcode{Clock::max()} (meaning never reached) or \tcode{Clock::min()} (meaning always in the past). As a result, computing the duration until timer expiry as \tcode{e - Clock::now()} can cause overflow. \end{itemize}\end{note}
 
 \pnum
 For a type \tcode{Clock} meeting the \tcode{Clock} requirements (\CppXref{time.clock.req}), a type \tcode{X} meets the \tcode{WaitTraits} requirements if it satisfies the requirements listed below.
