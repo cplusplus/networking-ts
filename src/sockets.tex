@@ -2556,7 +2556,7 @@ recvmsg(native_handle(), &message, static_cast<int>(flags));
 \returns On success, the number of bytes received. Otherwise \tcode{0}.
 
 \pnum
- \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \end{note}
+ \begin{note} This operation can be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2600,7 +2600,7 @@ recvmsg(native_handle(), &message, static_cast<int>(flags));
 If the operation completes successfully, \tcode{n} is the number of bytes received. Otherwise \tcode{n} is \tcode{0}.
 
 \pnum
- \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \end{note}
+ \begin{note} This operation can be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \end{note}
 
 \pnum
 \errors
@@ -2661,7 +2661,7 @@ if (result >= 0)
 \returns On success, the number of bytes received. Otherwise \tcode{0}.
 
 \pnum
- \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \end{note}
+ \begin{note} This operation can be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2716,7 +2716,7 @@ if (result >= 0)
 If the operation completes successfully, \tcode{n} is the number of bytes received. Otherwise \tcode{n} is \tcode{0}.
 
 \pnum
- \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \end{note}
+ \begin{note} This operation can be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \end{note}
 
 \pnum
 \errors
