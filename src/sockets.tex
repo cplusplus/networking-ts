@@ -207,7 +207,7 @@ When an operation has its effects specified as if by passing the result of \tcod
 to a POSIX function the effect is as if \tcode{native_handle_type} is the type \tcode{int}.
 
 \pnum
-\begin{note} These members allow implementations to provide access to their implementation details. Their names are specified to facilitate portable compile-time detection. Actual use of these members is inherently non-portable. For operating systems that are based on POSIX, implementations are encouraged to define the \tcode{native_handle_type} for sockets as \tcode{int}, representing the native file descriptor associated with the socket. \end{note}
+\begin{note} These members allow implementations to provide access to their implementation details. Their names are specified to facilitate portable compile-time detection. Actual use of these members is inherently non-portable. For operating systems that are based on POSIX, implementations can define the \tcode{native_handle_type} for sockets as \tcode{int}, representing the native file descriptor associated with the socket. \end{note}
 
 
 
