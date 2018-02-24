@@ -720,7 +720,7 @@ Prior to completion handler execution, deallocate any memory allocated using the
 \end{itemize}
 
 \pnum
- \begin{note} The implementation may perform operating system or underlying API calls that perform memory allocations not using the associated allocator. Invocations of the allocator functions may not introduce data races (See \CppXref{res.on.data.races}). \end{note}
+ \begin{note} The implementation can perform operating system or underlying API calls that perform memory allocations not using the associated allocator. Invocations of the allocator functions do not introduce data races (see \CppXref{res.on.data.races}). \end{note}
 
 
 
