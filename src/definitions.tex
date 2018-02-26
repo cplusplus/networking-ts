@@ -26,7 +26,7 @@ defined.
 
 \indexdefn{host byte order}%
 \definition{host byte order}{defs.host.byte.order}
-the natural object representation of integral types in the execution environment
+the arrangement of bytes in any integer type when using a specific machine architecture
 
 \begin{defnote}
 See section 3.193 of POSIX Base Definitions, Host Byte Order.
@@ -34,8 +34,9 @@ See section 3.193 of POSIX Base Definitions, Host Byte Order.
 
 \indexdefn{network byte order}%
 \definition{network byte order}{defs.net.byte.order}
-the object representation with the most significant byte first,
-followed by any other bytes in descending order of significance
+the way of representing any integer type such that, when transmitted over a network via a network endpoint,
+the \tcode{int} type is transmitted as an appropriate number of octets with the most significant octet first,
+followed by any other octets in descending order of significance
 
 \begin{defnote}
 See section 3.237 of POSIX Base Definitions, Network Byte Order.
