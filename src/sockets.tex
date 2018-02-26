@@ -120,7 +120,7 @@ inline namespace v1 {
 \end{codeblock}
 
 \pnum
-The figure below illustrates relationships between various types described in this Technical Specification. A solid line from \textbf{A} to \textbf{B} that is terminated by an open arrow indicates that \textbf{A} is derived from \textbf{B}. A solid line from \textbf{A} to \textbf{B} that starts with a diamond and is terminated by a solid arrow indicates that \textbf{A} contains an object of type \textbf{B}. A dotted line from \textbf{A} to \textbf{B} indicates that \textbf{A} is a synonym for the class template \textbf{B} with the specified template argument.
+The figure below illustrates relationships between various types described in this document. A solid line from \textbf{A} to \textbf{B} that is terminated by an open arrow indicates that \textbf{A} is derived from \textbf{B}. A solid line from \textbf{A} to \textbf{B} that starts with a diamond and is terminated by a solid arrow indicates that \textbf{A} contains an object of type \textbf{B}. A dotted line from \textbf{A} to \textbf{B} indicates that \textbf{A} is a synonym for the class template \textbf{B} with the specified template argument.
 
 \begin{importgraphic}
 {Socket and socket stream types [non-normative]}
@@ -136,7 +136,7 @@ The figure below illustrates relationships between various types described in th
 \rSec2[socket.reqmts.sync]{Requirements on synchronous socket operations}
 
 \pnum
-In this section, \indextext{socket operations!synchronous}\defn{synchronous socket operations} are those member functions specified as two overloads, with and without an argument of type \tcode{error_code\&}:
+In this subclause, \indextext{socket operations!synchronous}\defn{synchronous socket operations} are those member functions specified as two overloads, with and without an argument of type \tcode{error_code\&}:
 
 \begin{codeblock}
 @\textit{R f}@(@\textit{A1}@ a1, @\textit{A2}@ a2, ..., @\textit{AN}@ aN);
@@ -170,7 +170,7 @@ Otherwise, the synchronous socket operation shall block the calling thread until
 \rSec2[socket.reqmts.async]{Requirements on asynchronous socket operations}
 
 \pnum
-In this section, \indextext{socket operations!asynchronous}\defn{asynchronous socket operations} are those member functions having prefix \tcode{async_}.
+In this subclause, \indextext{socket operations!asynchronous}\defn{asynchronous socket operations} are those member functions having prefix \tcode{async_}.
 
 \pnum
 For an object \tcode{s}, a program may initiate asynchronous socket operations such that there are multiple simultaneously outstanding asynchronous operations.
@@ -199,7 +199,7 @@ When there are multiple outstanding asynchronous write operations~(\ref{buffer.r
 \rSec2[socket.reqmts.native]{Native handles}
 
 \pnum
-Several classes described in this Technical Specification have a member type \tcode{native_handle_type}, a member function \tcode{native_handle}, and member functions that return or accept arguments of type \tcode{native_handle_type}. The presence of these members and their semantics is
+Several classes described in this document have a member type \tcode{native_handle_type}, a member function \tcode{native_handle}, and member functions that return or accept arguments of type \tcode{native_handle_type}. The presence of these members and their semantics is
 \impldef{presence and meaning of \tcode{native_handle_type} and \tcode{native_handle}}.
 
 \pnum
@@ -207,7 +207,7 @@ When an operation has its effects specified as if by passing the result of \tcod
 to a POSIX function the effect is as if \tcode{native_handle_type} is the type \tcode{int}.
 
 \pnum
-\begin{note} These members allow implementations to provide access to their implementation details. Their names are specified to facilitate portable compile-time detection. Actual use of these members is inherently non-portable. For operating systems that are based on POSIX, implementations are encouraged to define the \tcode{native_handle_type} for sockets as \tcode{int}, representing the native file descriptor associated with the socket. \end{note}
+\begin{note} These members allow implementations to provide access to their implementation details. Their names are specified to facilitate portable compile-time detection. Actual use of these members is inherently non-portable. For operating systems that are based on POSIX, implementations can define the \tcode{native_handle_type} for sockets as \tcode{int}, representing the native file descriptor associated with the socket. \end{note}
 
 
 
@@ -566,7 +566,7 @@ Returns \tcode{!a.value()}.  \\
 \end{libreqtab3}
 
 \pnum
-In this Technical Specification, types that satisfy the \tcode{BooleanSocketOption} requirements are defined as follows.
+In this document, types that satisfy the \tcode{BooleanSocketOption} requirements are defined as follows.
 
 \begin{codeblock}
 class @\placeholder{C}@
@@ -763,7 +763,7 @@ post: \tcode{u.value() == v}.  \\ \rowsep
 \end{libreqtab3}
 
 \pnum
-In this Technical Specification, types that satisfy the \tcode{IntegerSocketOption} requirements are defined as follows.
+In this document, types that satisfy the \tcode{IntegerSocketOption} requirements are defined as follows.
 
 \begin{codeblock}
 class @\placeholder{C}@
@@ -2081,7 +2081,7 @@ bool at_mark(error_code& ec) const;
 
 \begin{itemdescr}
 \pnum
-\effects Determines if this socket is at the out-of-band data mark, as if by POSIX \tcode{sockatmark(native_handle())}. \begin{note} The \tcode{at_mark()} function must be used in conjunction with the \tcode{socket_base::out_of_band_inline} socket option. \end{note}
+\effects Determines if this socket is at the out-of-band data mark, as if by POSIX \tcode{sockatmark(native_handle())}. \begin{note} The \tcode{at_mark()} function is used in conjunction with the \tcode{socket_base::out_of_band_inline} socket option. \end{note}
 
 \pnum
 \returns A \tcode{bool} indicating whether this socket is at the out-of-band data mark. \tcode{false} if an error occurs.
@@ -2556,7 +2556,7 @@ recvmsg(native_handle(), &message, static_cast<int>(flags));
 \returns On success, the number of bytes received. Otherwise \tcode{0}.
 
 \pnum
- \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \end{note}
+ \begin{note} This operation can be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2600,7 +2600,7 @@ recvmsg(native_handle(), &message, static_cast<int>(flags));
 If the operation completes successfully, \tcode{n} is the number of bytes received. Otherwise \tcode{n} is \tcode{0}.
 
 \pnum
- \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \end{note}
+ \begin{note} This operation can be used with connection-mode or connectionless-mode sockets, but it is normally used with connection-mode sockets because it does not permit the application to retrieve the source endpoint of received data. \end{note}
 
 \pnum
 \errors
@@ -2661,7 +2661,7 @@ if (result >= 0)
 \returns On success, the number of bytes received. Otherwise \tcode{0}.
 
 \pnum
- \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \end{note}
+ \begin{note} This operation can be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2716,7 +2716,7 @@ if (result >= 0)
 If the operation completes successfully, \tcode{n} is the number of bytes received. Otherwise \tcode{n} is \tcode{0}.
 
 \pnum
- \begin{note} This operation may be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \end{note}
+ \begin{note} This operation can be used with connection-mode or connectionless-mode sockets, but it is normally used with connectionless-mode sockets because it permits the application to retrieve the source endpoint of received data. \end{note}
 
 \pnum
 \errors

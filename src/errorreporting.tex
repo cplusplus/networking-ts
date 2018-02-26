@@ -69,7 +69,7 @@ except that the type thrown may differ as specified above. \tcode{S} is an \ntbs
  For both overloads, failure to allocate storage is reported by throwing an exception as described in the \Cpp standard (\CppXref{res.on.exception.handling}).
 
 \pnum
-In this Technical Specification, when a type requirement is specified using two function call expressions \textit{f}, with and without an argument \tcode{ec} of type \tcode{error_code}:
+In this document, when a type requirement is specified using two function call expressions \textit{f}, with and without an argument \tcode{ec} of type \tcode{error_code}:
 
 \begin{codeblock}
 @\textit{f}@(a1, a2, ..., aN)
@@ -83,7 +83,7 @@ then the effects of the first call expression of \textit{f} shall be as describe
 \rSec1[err.report.async]{Asynchronous operations}
 
 \pnum
-Asynchronous network library functions in this Technical Specification are identified by having the prefix \tcode{async_} and take a completion handler (\ref{async.reqmts.async.token}). These asynchronous operations report errors as follows:
+Asynchronous network library functions in this document are identified by having the prefix \tcode{async_} and take a completion handler (\ref{async.reqmts.async.token}). These asynchronous operations report errors as follows:
 
 \begin{itemize}
 \item
@@ -94,7 +94,7 @@ Asynchronous operations shall not fail with an error condition that indicates in
 \end{itemize}
 
 \pnum
-In this Technical Specification, when a type requirement is specified as a call to a function or member function having the prefix \tcode{async_}, then the function shall satisfy the error reporting requirements described above.
+In this document, when a type requirement is specified as a call to a function or member function having the prefix \tcode{async_}, then the function shall satisfy the error reporting requirements described above.
 
 
 
@@ -122,7 +122,7 @@ When the description of a function contains the element Error conditions, this l
 \rSec1[err.report.signal]{Suppression of signals}
 
 \pnum
-Some POSIX functions referred to in this Technical Specification may report errors by raising a \tcode{SIGPIPE} signal. Where a synchronous or asynchronous operation is specified in terms of these POSIX functions, the generation of \tcode{SIGPIPE} is suppressed and an error condition corresponding to POSIX \tcode{EPIPE} is produced instead.
+Some POSIX functions referred to in this document may report errors by raising a \tcode{SIGPIPE} signal. Where a synchronous or asynchronous operation is specified in terms of these POSIX functions, the generation of \tcode{SIGPIPE} is suppressed and an error condition corresponding to POSIX \tcode{EPIPE} is produced instead.
 
 
 

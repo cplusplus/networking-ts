@@ -7,8 +7,7 @@
 For the purposes of this document,
 the terms and definitions
 given in ISO/IEC 14882:2014,
-the terms and definitions
-given in ISO/IEC 2382-1:1993,
+ISO/IEC 2382-1:1993,
 and the following apply.
 
 \pnum
@@ -27,18 +26,21 @@ defined.
 
 \indexdefn{host byte order}%
 \definition{host byte order}{defs.host.byte.order}
-%natural object representation of scalar types in the execution environment
-%
-%Note 1 to entry:
+the arrangement of bytes in any integer type when using a specific machine architecture
+
+\begin{defnote}
 See section 3.193 of POSIX Base Definitions, Host Byte Order.
+\end{defnote}
 
 \indexdefn{network byte order}%
 \definition{network byte order}{defs.net.byte.order}
-%object representation with the most significant byte first,
-%followed by any other octets in descending order of significance
-%
-%Note 1 to entry:
+the way of representing any integer type such that, when transmitted over a network via a network endpoint,
+the \tcode{int} type is transmitted as an appropriate number of octets with the most significant octet first,
+followed by any other octets in descending order of significance
+
+\begin{defnote}
 See section 3.237 of POSIX Base Definitions, Network Byte Order.
+\end{defnote}
 
 \indexdefn{synchronous operation}%
 \definition{synchronous operation}{defs.sync.op}

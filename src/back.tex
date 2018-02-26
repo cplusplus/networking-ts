@@ -10,7 +10,9 @@
 \printindex[libraryindex]
 
 \clearpage
-\renewcommand{\preindexhook}{The entries in this section are rough descriptions; exact
+\makeevenfoot{cpppage}{\leftmark}{}{\thepage}
+\makeoddfoot{cpppage}{\leftmark}{}{\thepage}
+\renewcommand{\preindexhook}{The entries in this index are rough descriptions; exact
 specifications are at the indicated page in the general text.\\}
 % FIXME: There must be a better way to get a one-column index,
 % but makeindex[impldefindex, columns=1] doesn't work.
