@@ -3461,7 +3461,7 @@ inline namespace v1 {
     native_handle_type release(); // \nativeref
     native_handle_type release(error_code& ec); // \nativeref
 
-    bool is_open() const;
+    bool is_open() const noexcept;
 
     void close();
     void close(error_code& ec);
@@ -3920,7 +3920,7 @@ the caller is responsible for closing it.
 \end{itemdescr}
 
 \begin{itemdecl}
-bool is_open() const;
+bool is_open() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
