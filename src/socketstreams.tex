@@ -12,9 +12,7 @@ The class \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} associates
  \begin{note} This class is intended for sending and receiving bytes, not characters. Any conversion from characters to bytes, and vice versa, occurs elsewhere. \end{note}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class Protocol, class Clock, class WaitTraits>
@@ -71,9 +69,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -358,9 +354,7 @@ The class template \tcode{basic_socket_iostream<Protocol, Clock, WaitTraits>} su
  \begin{note} This class is intended for sending and receiving bytes, not characters. Any conversion from characters to bytes, and vice versa, occurs elsewhere. \end{note}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class Protocol, class Clock, class WaitTraits>
@@ -408,9 +402,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum

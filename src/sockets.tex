@@ -9,8 +9,7 @@
 \indexlibrary{\idxcode{socket_errc}}%
 \begin{codeblock}
 namespace std {
-namespace experimental {
-namespace net {
+namespace experimental::net {
 inline namespace v1 {
 
   enum class socket_errc {
@@ -110,8 +109,7 @@ inline namespace v1 {
                           CompletionToken&& token);
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
+} // namespace experimental::net
 
   template<> struct is_error_code_enum<experimental::net::v1::socket_errc>
     : public true_type {};
@@ -1017,9 +1015,7 @@ error_condition make_error_condition(socket_errc e) noexcept;
 \rSec1[socket.base]{Class \tcode{socket_base}}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   class socket_base
@@ -1060,9 +1056,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -1252,9 +1246,7 @@ Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type req
 The \tcode{linger} class represents a socket option for controlling the behavior when a socket is closed and unsent data is present.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   class socket_base::linger
@@ -1273,9 +1265,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -1286,9 +1276,7 @@ inline namespace v1 {
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   class socket_base::linger
@@ -1306,9 +1294,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \begin{itemdecl}
@@ -1429,9 +1415,7 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 Class template \tcode{basic_socket<Protocol>} is used as the base class for the \tcode{basic_datagram_socket<Pro\-t\-o\-col>} and \tcode{basic_stream_socket<Protocol>} class templates. It provides functionality that is common to both types of socket.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class Protocol>
@@ -1550,9 +1534,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -2251,9 +2233,7 @@ When there are multiple outstanding asynchronous wait operations on this socket 
 The class template \tcode{basic_datagram_socket<Protocol>} is used to send and receive discrete messages of fixed maximum length.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class Protocol>
@@ -2387,9 +2367,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -2924,9 +2902,7 @@ If the operation completes successfully, \tcode{n} is the number of bytes sent. 
 The class template \tcode{basic_stream_socket<Protocol>} is used to exchange data with a peer over a sequenced, reliable, bidirectional, connection-mode byte stream.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class Protocol>
@@ -3025,9 +3001,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -3406,9 +3380,7 @@ template<class ConstBufferSequence, class CompletionToken>
 An object of class template \tcode{basic_socket_acceptor<AcceptableProtocol>} is used to listen for, and queue, incoming socket connections. Socket objects that represent the incoming connections are dequeued by calling \tcode{accept} or \tcode{async_accept}.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class AcceptableProtocol>
@@ -3538,9 +3510,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum

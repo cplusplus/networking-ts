@@ -6,12 +6,8 @@
 The components described in this document are experimental and not part of the \Cpp standard library. All components described in this document are declared in namespace \tcode{std::experimental::net::v1} or a sub-namespace thereof unless otherwise specified. The headers described in this document shall import the contents of \tcode{std::experimental::net::v1} into \tcode{std::experimental::net} as if by:
 
 \begin{codeblock}
-namespace std {
-  namespace experimental {
-    namespace net {
+namespace std::experimental::net {
       inline namespace v1 {}
-    }
-  }
 }
 \end{codeblock}
 
