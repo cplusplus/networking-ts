@@ -455,15 +455,16 @@ on a candidate set that includes:
 \rSec2[buffer.reqmts.dynamicbuffer]{Dynamic buffer requirements}
 
 \pnum
-A \defn{dynamic buffer} encapsulates memory storage that may be automatically resized as required, where the memory is divided into two regions: readable bytes followed by writable bytes. These memory regions are internal to the dynamic buffer, but direct access to the elements is provided to permit them to be efficiently used with I/O operations. \begin{note} Such as the \tcode{send} or \tcode{receive} operations of a socket. The readable bytes would be used as the constant buffer sequence for \tcode{send}, and the writable bytes used as the mutable buffer sequence for \tcode{receive}. \end{note} Data written to the writable bytes of a dynamic buffer object is appended to the readable bytes of the same object.
+A \defn{dynamic buffer} encapsulates memory storage that may be automatically resized as required\added{.}\removed{, where the memory is divided into two regions: readable bytes followed by writable bytes. These memory regions are internal to the dynamic buffer, but d}\added{D}irect access to the elements is provided to permit them to be efficiently used with I/O operations. \begin{note} Such as the \tcode{send} or \tcode{receive} operations of a socket.\removed{ The readable bytes would be used as the constant buffer sequence for \tcode{send}, and the writable bytes used as the mutable buffer sequence for \tcode{receive}.} \end{note}\removed{ Data written to the writable bytes of a dynamic buffer object is appended to the readable bytes of the same object.}
 
 \pnum
-A type \tcode{X} meets the \defnnewoldconcept{DynamicBuffer} requirements if it meets the requirements of \oldconcept{Destructible}~(\CppXref{destructible}) and \oldconcept{MoveConstructible}~(\CppXref{moveconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}.
+A type \tcode{X} meets the \defnnewoldconcept{DynamicBuffer} requirements if it meets the requirements of \oldconcept{Destructible} (\CppXref{destructible}) and \removed{\oldconcept{MoveConstructible} (\CppXref{moveconstructible})}\added{\oldconcept{CopyConstructible} (\CppXref{copyconstructible})}, as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}.
 
 \pnum
 In Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements},
 \tcode{x} denotes a value of type \tcode{X},
 \tcode{x1} denotes a (possibly const) value of type \tcode{X},
+\added{\tcode{pos} denotes a (possibly const) value of type \tcode{size_t},}
 and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
 
 \indextext{requirements!\idxnewoldconcept{DynamicBuffer}}%
@@ -484,39 +485,55 @@ and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
 
 \tcode{X::const_buffers_type}  &
 type meeting \newoldconcept{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements.  &
- This type represents the memory associated with the readable bytes.  \\ \rowsep
+ This type represents the \added{underlying} memory \removed{associated with the readable bytes}\added{as non-modifiable bytes}.  \\ \rowsep
 
 \tcode{X::mutable_buffers_type}  &
 type meeting \newoldconcept{MutableBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements.  &
- This type represents the memory associated with the writable bytes.  \\ \rowsep
+ This type represents the \added{underlying} memory \removed{associated with the writable bytes}\added{as modifiable bytes}.  \\ \rowsep
 
 \tcode{x1.size()}  &
 \tcode{size_t}  &
- Returns the number of readable bytes.  \\ \rowsep
+ Returns the number of \removed{readable} bytes.  \\ \rowsep
 
 \tcode{x1.max_size()}  &
 \tcode{size_t}  &
-Returns the maximum number of bytes, both readable and writable, that can be held by \tcode{x1}.  \\ \rowsep
+Returns the maximum number of bytes\removed{, both readable and writable,} that can be held by \tcode{x1}.  \\ \rowsep
 
 \tcode{x1.capacity()}  &
 \tcode{size_t}  &
-Returns the maximum number of bytes, both readable and writable, that can be held by \tcode{x1} without requiring reallocation.  \\ \rowsep
+Returns the maximum number of bytes\removed{, both readable and writable,} that can be held by \tcode{x1} without requiring reallocation.  \\ \rowsep
 
-\tcode{x1.data()}  &
-\tcode{X::const_buffers_type}  &
-Returns a constant buffer sequence \tcode{u} that represents the readable bytes, and where \tcode{buffer_size(u) == size()}.  \\ \rowsep
+\removed{\tcode{x1.data()}}  &
+\removed{\tcode{X::const_buffers_type}}  &
+\removed{Returns a constant buffer sequence \tcode{u} that represents the readable bytes, and where \tcode{buffer_size(u) == size()}.}  \\ \rowsep
 
-\tcode{x.prepare(n)}  &
-\tcode{X::mutable_buffers_type}  &
-Returns a mutable buffer sequence \tcode{u} representing the writable bytes, and where \tcode{buffer_size(u) == n}. The dynamic buffer reallocates memory as required. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.\br \throws\ \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.  \\ \rowsep
+\removed{\tcode{x.prepare(n)}}  &
+\removed{\tcode{X::mutable_buffers_type}}  &
+\removed{Returns a mutable buffer sequence \tcode{u} representing the writable bytes, and where \tcode{buffer_size(u) == n}. The dynamic buffer reallocates memory as required. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.\br \throws\ \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.}  \\ \rowsep
 
-\tcode{x.commit(n)}  &
+\removed{\tcode{x.commit(n)}}  &
   &
-Appends \tcode{n} bytes from the start of the writable bytes to the end of the readable bytes. The remainder of the writable bytes are discarded. If \tcode{n} is greater than the number of writable bytes, all writable bytes are appended to the readable bytes. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.  \\ \rowsep
+\removed{Appends \tcode{n} bytes from the start of the writable bytes to the end of the readable bytes. The remainder of the writable bytes are discarded. If \tcode{n} is greater than the number of writable bytes, all writable bytes are appended to the readable bytes. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.}  \\ \rowsep
+
+\added{\tcode{x1.data(pos, n)}}  &
+\added{\tcode{X::const_buffers_type}}  &
+\added{Returns a constant buffer sequence \tcode{u} that represents the region of underlying memory at offset \tcode{pos} and length \tcode{n}.}  \\ \rowsep
+
+\added{\tcode{x.data(pos, n)}}  &
+\added{\tcode{X::mutable_buffers_type}}  &
+\added{Returns a mutable buffer sequence \tcode{u} that represents the region of underlying memory at offset \tcode{pos} and length \tcode{n}.}  \\ \rowsep
+
+\added{\tcode{x.grow(n)}}  &
+  &
+\added{Adds \tcode{n} bytes of space at the end of the underlying memory. All constant or mutable buffer sequences previously obtained using \tcode{data()} are invalidated.}  \\ \rowsep
+
+\added{\tcode{x.shrink(n)}}  &
+  &
+\added{Removes \tcode{n} bytes of space from the end of the underlying memory. If \tcode{n} is greater than the number of bytes, all bytes are discarded. All constant or mutable buffer sequences previously obtained using \tcode{data()} are invalidated.}  \\ \rowsep
 
 \tcode{x.consume(n)}  &
   &
-Removes \tcode{n} bytes from beginning of the readable bytes. If \tcode{n} is greater than the number of readable bytes, all readable bytes are removed. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.  \\
+Removes \tcode{n} bytes from beginning of the \removed{readable} bytes. If \tcode{n} is greater than the number of \removed{readable} bytes, all \removed{readable} bytes are removed. All constant or mutable buffer sequences previously obtained using \tcode{data()} \removed{or \tcode{prepare()} }are invalidated.  \\
 
 \end{libreqtab3}
 
