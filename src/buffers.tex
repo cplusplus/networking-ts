@@ -174,14 +174,14 @@ namespace std::experimental::net::inline @\namespacever@ {
                   error_code& ec);
 
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read(SyncReadStream& stream, DynamicBuffer&& b);
+    size_t read(SyncReadStream& stream, DynamicBuffer@\removedcode{\&\&}@ b);
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read(SyncReadStream& stream, DynamicBuffer&& b, error_code& ec);
+    size_t read(SyncReadStream& stream, DynamicBuffer@\removedcode{\&\&}@ b, error_code& ec);
   template<class SyncReadStream, class DynamicBuffer, class CompletionCondition>
-    size_t read(SyncReadStream& stream, DynamicBuffer&& b,
+    size_t read(SyncReadStream& stream, DynamicBuffer@\removedcode{\&\&}@ b,
                 CompletionCondition completion_condition);
   template<class SyncReadStream, class DynamicBuffer, class CompletionCondition>
-    size_t read(SyncReadStream& stream, DynamicBuffer&& b,
+    size_t read(SyncReadStream& stream, DynamicBuffer@\removedcode{\&\&}@ b,
                 CompletionCondition completion_condition, error_code& ec);
 
   // \ref{buffer.async.read}, asynchronous read operations
@@ -200,11 +200,11 @@ namespace std::experimental::net::inline @\namespacever@ {
 
   template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
     @\DEDUCED@ async_read(AsyncReadStream& stream,
-                       DynamicBuffer&& b, CompletionToken&& token);
+                       DynamicBuffer@\removedcode{\&\&}@ b, CompletionToken&& token);
   template<class AsyncReadStream, class DynamicBuffer,
     class CompletionCondition, class CompletionToken>
       @\DEDUCED@ async_read(AsyncReadStream& stream,
-                         DynamicBuffer&& b,
+                         DynamicBuffer@\removedcode{\&\&}@ b,
                          CompletionCondition completion_condition,
                          CompletionToken&& token);
 
@@ -229,14 +229,14 @@ namespace std::experimental::net::inline @\namespacever@ {
                    error_code& ec);
 
   template<class SyncWriteStream, class DynamicBuffer>
-    size_t write(SyncWriteStream& stream, DynamicBuffer&& b);
+    size_t write(SyncWriteStream& stream, DynamicBuffer@\removedcode{\&\&}@ b);
   template<class SyncWriteStream, class DynamicBuffer>
-    size_t write(SyncWriteStream& stream, DynamicBuffer&& b, error_code& ec);
+    size_t write(SyncWriteStream& stream, DynamicBuffer@\removedcode{\&\&}@ b, error_code& ec);
   template<class SyncWriteStream, class DynamicBuffer, class CompletionCondition>
-    size_t write(SyncWriteStream& stream, DynamicBuffer&& b,
+    size_t write(SyncWriteStream& stream, DynamicBuffer@\removedcode{\&\&}@ b,
                  CompletionCondition completion_condition);
   template<class SyncWriteStream, class DynamicBuffer, class CompletionCondition>
-    size_t write(SyncWriteStream& stream, DynamicBuffer&& b,
+    size_t write(SyncWriteStream& stream, DynamicBuffer@\removedcode{\&\&}@ b,
                  CompletionCondition completion_condition, error_code& ec);
 
   // \ref{buffer.async.write}, asynchronous write operations
@@ -255,36 +255,36 @@ namespace std::experimental::net::inline @\namespacever@ {
 
   template<class AsyncWriteStream, class DynamicBuffer, class CompletionToken>
     @\DEDUCED@ async_write(AsyncWriteStream& stream,
-                     DynamicBuffer&& b, CompletionToken&& token);
+                     DynamicBuffer@\removedcode{\&\&}@ b, CompletionToken&& token);
   template<class AsyncWriteStream, class DynamicBuffer,
     class CompletionCondition, class CompletionToken>
       @\DEDUCED@ async_write(AsyncWriteStream& stream,
-                          DynamicBuffer&& b,
+                          DynamicBuffer@\removedcode{\&\&}@ b,
                           CompletionCondition completion_condition,
                           CompletionToken&& token);
 
   // \ref{buffer.read.until}, synchronous delimited read operations
 
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read_until(SyncReadStream& s, DynamicBuffer&& b, char delim);
+    size_t read_until(SyncReadStream& s, DynamicBuffer@\removedcode{\&\&}@ b, char delim);
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read_until(SyncReadStream& s, DynamicBuffer&& b,
+    size_t read_until(SyncReadStream& s, DynamicBuffer@\removedcode{\&\&}@ b,
                       char delim, error_code& ec);
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read_until(SyncReadStream& s, DynamicBuffer&& b, string_view delim);
+    size_t read_until(SyncReadStream& s, DynamicBuffer@\removedcode{\&\&}@ b, string_view delim);
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read_until(SyncReadStream& s, DynamicBuffer&& b,
+    size_t read_until(SyncReadStream& s, DynamicBuffer@\removedcode{\&\&}@ b,
                       string_view delim, error_code& ec);
 
   // \ref{buffer.async.read.until}, asynchronous delimited read operations
 
   template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
     @\DEDUCED@ async_read_until(AsyncReadStream& s,
-                             DynamicBuffer&& b, char delim,
+                             DynamicBuffer@\removedcode{\&\&}@ b, char delim,
                              CompletionToken&& token);
   template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
     @\DEDUCED@ async_read_until(AsyncReadStream& s,
-                             DynamicBuffer&& b, string_view delim,
+                             DynamicBuffer@\removedcode{\&\&}@ b, string_view delim,
                              CompletionToken&& token);
 
 } // inline namespace experimental::net::\namespacever
@@ -1237,7 +1237,7 @@ size_t capacity() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
+\addedpnum
 \added{\returns \tcode{buffer(buffer(vec_, max_size_) + pos, n)}.}
 \end{itemdescr}
 
@@ -1278,10 +1278,10 @@ size_t capacity() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
+\addedpnum
 \added{\effects Performs \addedcode{vec_.resize(size() + n);}.}
 
-\pnum
+\addedpnum
 \added{\throws \tcode{length_error} if \addedcode{size() > max_size() || max_size() - size() < n}.}
 \end{itemdescr}
 
@@ -1291,7 +1291,7 @@ size_t capacity() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
+\addedpnum
 \added{\effects Performs \addedcode{vec_.resize(n > size() ? 0 : size() - n);}.}
 \end{itemdescr}
 
@@ -1435,7 +1435,7 @@ size_t capacity() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
+\addedpnum
 \added{\returns \tcode{buffer(buffer(str_, max_size_) + pos, n)}.}
 \end{itemdescr}
 
@@ -1476,10 +1476,10 @@ size_t capacity() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
+\addedpnum
 \added{\effects Performs \addedcode{str_.resize(size() + n);}.}
 
-\pnum
+\addedpnum
 \added{\throws \tcode{length_error} if \addedcode{size() > max_size() || max_size() - size() < n}.}
 \end{itemdescr}
 
@@ -1489,7 +1489,7 @@ size_t capacity() const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
+\addedpnum
 \added{\effects Performs \addedcode{str_.resize(n > size() ? 0 : size() - n);}.}
 \end{itemdescr}
 

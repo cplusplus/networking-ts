@@ -384,16 +384,16 @@ On return, \tcode{ec} contains the \tcode{error_code} value from the most recent
 \indexlibrary{\idxcode{read}}%
 \begin{itemdecl}
 template<class SyncReadStream, class DynamicBuffer>
-  size_t read(SyncReadStream& stream, DynamicBuffer&& b);
+  size_t read(SyncReadStream& stream, DynamicBuffer@\removedcode{\&\&}@ b);
 template<class SyncReadStream, class DynamicBuffer>
-  size_t read(SyncReadStream& stream, DynamicBuffer&& b, error_code& ec);
+  size_t read(SyncReadStream& stream, DynamicBuffer@\removedcode{\&\&}@ b, error_code& ec);
 template<class SyncReadStream, class DynamicBuffer,
   class CompletionCondition>
-    size_t read(SyncReadStream& stream, DynamicBuffer&& b,
+    size_t read(SyncReadStream& stream, DynamicBuffer@\removedcode{\&\&}@ b,
                 CompletionCondition completion_condition);
 template<class SyncReadStream, class DynamicBuffer,
   class CompletionCondition>
-    size_t read(SyncReadStream& stream, DynamicBuffer&& b,
+    size_t read(SyncReadStream& stream, DynamicBuffer@\removedcode{\&\&}@ b,
                 CompletionCondition completion_condition,
                 error_code& ec);
 \end{itemdecl}
@@ -407,7 +407,15 @@ template<class SyncReadStream, class DynamicBuffer,
 \effects Clears \tcode{ec}, then reads data from the synchronous read stream~(\ref{buffer.stream.reqmts.syncreadstream}) object \tcode{stream} by performing zero or more calls to the stream's \tcode{read_some} member function.
 
 \pnum
-Data is placed into the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) is obtained prior to each \tcode{read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value less than or equal to \tcode{b.max_size() - b.size()}. \begin{note} Implementations can use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of \tcode{read_some} calls performed on the stream. \end{note} After each \tcode{read_some} call, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the return value from \tcode{read_some}.
+Data is placed into the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) \added{\tcode{x} }is obtained prior to each \tcode{read_some} call \removed{using \tcode{b.prepare(N)},}\added{by performing:}
+
+\begin{codeblock}
+@\addedcode{auto orig_size = b.size();}@
+@\addedcode{b.grow(N);}@
+@\addedcode{auto x = b.data(orig_size, N);}@
+\end{codeblock}
+
+where \tcode{N} is an unspecified value less than or equal to \tcode{b.max_size() - b.size()}. \begin{note} Implementations can use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of \tcode{read_some} calls performed on the stream. \end{note} After each \tcode{read_some} call, the implementation performs \removed{\tcode{b.commit(n)}}\added{\tcode{b.shrink(N - n)}}, where \tcode{n} is the return value from \tcode{read_some}.
 
 \pnum
 The \tcode{completion_condition} parameter specifies a completion condition to be called prior to each call to the stream's \tcode{read_some} member function. The completion condition is passed the \tcode{error_code} value from the most recent \tcode{read_some} call, and the total number of bytes transferred in the synchronous read operation so far. The completion condition return value specifies the maximum number of bytes to be read on the subsequent \tcode{read_some} call. Overloads where a completion condition is not specified behave as if called with an object of class \tcode{transfer_all}.
@@ -483,11 +491,11 @@ On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code
 \begin{itemdecl}
 template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
     @\DEDUCED@ async_read(AsyncReadStream& stream,
-                       DynamicBuffer&& b, CompletionToken&& token);
+                       DynamicBuffer@\removedcode{\&\&}@ b, CompletionToken&& token);
 template<class AsyncReadStream, class DynamicBuffer, class CompletionCondition,
          class CompletionToken>
     @\DEDUCED@ async_read(AsyncReadStream& stream,
-                       DynamicBuffer&& b,
+                       DynamicBuffer@\removedcode{\&\&}@ b,
                        CompletionCondition completion_condition,
                        CompletionToken&& token);
 \end{itemdecl}
@@ -504,7 +512,15 @@ template<class AsyncReadStream, class DynamicBuffer, class CompletionCondition,
 \effects Initiates an asynchronous operation to read data from the buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream}) object \tcode{stream} by performing one or more asynchronous read_some operations on the stream.
 
 \pnum
-Data is placed into the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) is obtained prior to each \tcode{async_read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value such that \tcode{N} is less than or equal to \tcode{b.max_size() - b.size()}. \begin{note} Implementations can use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of asynchronous read_some operations performed on the stream. \end{note} After the completion of each asynchronous read_some operation, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the value passed to the asynchronous read_some operation's completion handler.
+Data is placed into the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) \added{\tcode{x} }is obtained prior to each \tcode{async_read_some} call \removed{using \tcode{b.prepare(N)},}\added{by performing:}
+
+\begin{codeblock}
+@\addedcode{auto orig_size = b.size();}@
+@\addedcode{b.grow(N);}@
+@\addedcode{auto x = b.data(orig_size, N);}@
+\end{codeblock}
+
+where \tcode{N} is an unspecified value such that \tcode{N} is less than or equal to \tcode{b.max_size() - b.size()}. \begin{note} Implementations can use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of asynchronous read_some operations performed on the stream. \end{note} After the completion of each asynchronous read_some operation, the implementation performs \removed{\tcode{b.commit(n)}}\added{\tcode{b.shrink(N - n)}}, where \tcode{n} is the value passed to the asynchronous read_some operation's completion handler.
 
 \pnum
 The \tcode{completion_condition} parameter specifies a completion condition to be called prior to each asynchronous read_some operation. The completion condition is passed the \tcode{error_code} value from the most recent asynchronous read_some operation, and the total number of bytes transferred in the asynchronous read operation so far. The completion condition return value specifies the maximum number of bytes to be read on the subsequent asynchronous read_some operation. Overloads where a completion condition is not specified behave as if called with an object of class \tcode{transfer_all}.
@@ -585,14 +601,14 @@ On return, \tcode{ec} contains the \tcode{error_code} value from the most recent
 \indexlibrary{\idxcode{write}}%
 \begin{itemdecl}
 template<class SyncWriteStream, class DynamicBuffer>
-  size_t write(SyncWriteStream& stream, DynamicBuffer&& b);
+  size_t write(SyncWriteStream& stream, DynamicBuffer@\removedcode{\&\&}@ b);
 template<class SyncWriteStream, class DynamicBuffer>
-  size_t write(SyncWriteStream& stream, DynamicBuffer&& b, error_code& ec);
+  size_t write(SyncWriteStream& stream, DynamicBuffer@\removedcode{\&\&}@ b, error_code& ec);
 template<class SyncWriteStream, class DynamicBuffer, class CompletionCondition>
-  size_t write(SyncWriteStream& stream, DynamicBuffer&& b,
+  size_t write(SyncWriteStream& stream, DynamicBuffer@\removedcode{\&\&}@ b,
                CompletionCondition completion_condition);
 template<class SyncWriteStream, class DynamicBuffer, class CompletionCondition>
-  size_t write(SyncWriteStream& stream, DynamicBuffer&& b,
+  size_t write(SyncWriteStream& stream, DynamicBuffer@\removedcode{\&\&}@ b,
                CompletionCondition completion_condition,
                error_code& ec);
 \end{itemdecl}
@@ -683,11 +699,11 @@ On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code
 \begin{itemdecl}
 template<class AsyncWriteStream, class DynamicBuffer, class CompletionToken>
   @\DEDUCED@ async_write(AsyncWriteStream& stream,
-                      DynamicBuffer&& b, CompletionToken&& token);
+                      DynamicBuffer@\removedcode{\&\&}@ b, CompletionToken&& token);
 template<class AsyncWriteStream, class DynamicBuffer, class CompletionCondition,
          class CompletionToken>
     @\DEDUCED@ async_write(AsyncWriteStream& stream,
-                        DynamicBuffer&& b,
+                        DynamicBuffer@\removedcode{\&\&}@ b,
                         CompletionCondition completion_condition,
                         CompletionToken&& token);
 \end{itemdecl}
@@ -731,30 +747,38 @@ On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code
 \indexlibrary{\idxcode{read_until}}%
 \begin{itemdecl}
 template<class SyncReadStream, class DynamicBuffer>
-  size_t read_until(SyncReadStream& s, DynamicBuffer&& b, char delim);
+  size_t read_until(SyncReadStream& s, DynamicBuffer@\removedcode{\&\&}@ b, char delim);
 template<class SyncReadStream, class DynamicBuffer>
-  size_t read_until(SyncReadStream& s, DynamicBuffer&& b,
+  size_t read_until(SyncReadStream& s, DynamicBuffer@\removedcode{\&\&}@ b,
                     char delim, error_code& ec);
 template<class SyncReadStream, class DynamicBuffer>
-  size_t read_until(SyncReadStream& s, DynamicBuffer&& b, string_view delim);
+  size_t read_until(SyncReadStream& s, DynamicBuffer@\removedcode{\&\&}@ b, string_view delim);
 template<class SyncReadStream, class DynamicBuffer>
-  size_t read_until(SyncReadStream& s, DynamicBuffer&& b,
+  size_t read_until(SyncReadStream& s, DynamicBuffer@\removedcode{\&\&}@ b,
                     string_view delim, error_code& ec);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Reads data from the buffer-oriented synchronous read stream~(\ref{buffer.stream.reqmts.syncreadstream}) object \tcode{stream} by performing zero or more calls to the stream's \tcode{read_some} member function, until the readable bytes of the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b} contains the specified delimiter \tcode{delim}.
+\effects Reads data from the buffer-oriented synchronous read stream~(\ref{buffer.stream.reqmts.syncreadstream}) object \tcode{stream} by performing zero or more calls to the stream's \tcode{read_some} member function, until \removed{the readable bytes of }the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b} contains the specified delimiter \tcode{delim}.
 
 \pnum
-Data is placed into the dynamic buffer object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) is obtained prior to each \tcode{read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value such that \tcode{N <= max_size() - size()}. \begin{note} Implementations can use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of \tcode{read_some} calls performed on the stream. \end{note} After each \tcode{read_some} call, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the return value from \tcode{read_some}.
+Data is placed into the dynamic buffer object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) \added{\tcode{x} }is obtained prior to each \tcode{read_some} call \removed{using \tcode{b.prepare(N)},}\added{by performing:}
+
+\begin{codeblock}
+@\addedcode{auto orig_size = b.size();}@
+@\addedcode{b.grow(N);}@
+@\addedcode{auto x = b.data(orig_size, N);}@
+\end{codeblock}
+
+where \tcode{N} is an unspecified value such that \tcode{N <= max_size() - size()}. \begin{note} Implementations can use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of \tcode{read_some} calls performed on the stream. \end{note} After each \tcode{read_some} call, the implementation performs \removed{\tcode{b.commit(n)}}\added{\tcode{b.shrink(N - n)}}, where \tcode{n} is the return value from \tcode{read_some}.
 
 \pnum
 The synchronous read_until operation continues until:
 
 \begin{itemize}
 \item
-the readable bytes of \tcode{b} contains the delimiter \tcode{delim}; or
+\removed{the readable bytes of }\tcode{b} contains the delimiter \tcode{delim}; or
 \item
 \tcode{b.size() == b.max_size()}; or
 \item
@@ -762,10 +786,10 @@ an asynchronous read_some operation fails.
 \end{itemize}
 
 \pnum
-On exit, if the readable bytes of \tcode{b} contains the delimiter, \tcode{ec} is set such that \tcode{!ec} is \tcode{true}. Otherwise, if \tcode{b.size() == b.max_size()}, \tcode{ec} is set such that \tcode{ec == stream_errc::not_found}. If \tcode{b.size() < b.max_size()}, \tcode{ec} contains the \tcode{error_code} from the most recent \tcode{read_some} call.
+On exit, if \removed{the readable bytes of }tcode{b} contains the delimiter, \tcode{ec} is set such that \tcode{!ec} is \tcode{true}. Otherwise, if \tcode{b.size() == b.max_size()}, \tcode{ec} is set such that \tcode{ec == stream_errc::not_found}. If \tcode{b.size() < b.max_size()}, \tcode{ec} contains the \tcode{error_code} from the most recent \tcode{read_some} call.
 
 \pnum
-\returns The number of bytes in the readable bytes of \tcode{b} up to and including the delimiter, if present. \begin{note} On completion, the buffer can contain additional bytes following the delimiter. \end{note} Otherwise returns \tcode{0}.
+\returns The number of bytes in \removed{the readable bytes of }\tcode{b} up to and including the delimiter, if present. \begin{note} On completion, the buffer can contain additional bytes following the delimiter. \end{note} Otherwise returns \tcode{0}.
 \end{itemdescr}
 
 
@@ -776,11 +800,11 @@ On exit, if the readable bytes of \tcode{b} contains the delimiter, \tcode{ec} i
 \begin{itemdecl}
 template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
   @\DEDUCED@ async_read_until(AsyncReadStream& s,
-                           DynamicBuffer&& b, char delim,
+                           DynamicBuffer@\removedcode{\&\&}@ b, char delim,
                            CompletionToken&& token);
 template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
   @\DEDUCED@ async_read_until(AsyncReadStream& s,
-                           DynamicBuffer&& b, string_view delim,
+                           DynamicBuffer@\removedcode{\&\&}@ b, string_view delim,
                            CompletionToken&& token);
 \end{itemdecl}
 
@@ -792,17 +816,25 @@ A composed asynchronous operation~(\ref{async.reqmts.async.composed}).
 \completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
-\effects Initiates an asynchronous operation to read data from the buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream}) object \tcode{stream} by performing zero or more asynchronous read_some operations on the stream, until the readable bytes of the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b} contain the specified delimiter \tcode{delim}.
+\effects Initiates an asynchronous operation to read data from the buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream}) object \tcode{stream} by performing zero or more asynchronous read_some operations on the stream, until \removed{the readable bytes of }the dynamic buffer~(\ref{buffer.reqmts.dynamicbuffer}) object \tcode{b} contain\added{s} the specified delimiter \tcode{delim}.
 
 \pnum
-Data is placed into the dynamic buffer object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) is obtained prior to each \tcode{async_read_some} call using \tcode{b.prepare(N)}, where \tcode{N} is an unspecified value such that \tcode{N <= max_size() - size()}. \begin{note} Implementations can use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of asynchronous read_some operations performed on the stream. \end{note} After the completion of each asynchronous read_some operation, the implementation performs \tcode{b.commit(n)}, where \tcode{n} is the value passed to the asynchronous read_some operation's completion handler.
+Data is placed into the dynamic buffer object \tcode{b}. A mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence}) \added{\tcode{x} }is obtained prior to each \tcode{async_read_some} call \removed{using \tcode{b.prepare(N)},}\added{by performing:}
+
+\begin{codeblock}
+@\addedcode{auto orig_size = b.size();}@
+@\addedcode{b.grow(N);}@
+@\addedcode{auto x = b.data(orig_size, N);}@
+\end{codeblock}
+
+where \tcode{N} is an unspecified value such that \tcode{N <= max_size() - size()}. \begin{note} Implementations can use \tcode{b.capacity()} when determining \tcode{N}, to minimize the number of asynchronous read_some operations performed on the stream. \end{note} After the completion of each asynchronous read_some operation, the implementation performs \removed{\tcode{b.commit(n)}}\added{\tcode{b.shrink(N - n)}}, where \tcode{n} is the value passed to the asynchronous read_some operation's completion handler.
 
 \pnum
 The asynchronous read_until operation continues until:
 
 \begin{itemize}
 \item
-the readable bytes of \tcode{b} contain the delimiter \tcode{delim}; or
+\removed{the readable bytes of }\tcode{b} contain\added{s} the delimiter \tcode{delim}; or
 \item
 \tcode{b.size() == b.max_size()}; or
 \item
@@ -816,7 +848,7 @@ The program shall ensure the \tcode{AsyncReadStream} object \tcode{stream} is va
 If \tcode{delim} is of type \tcode{string_view}, the implementation copies the underlying sequence of characters prior to initiating an asynchronous read_some operation on the stream. \begin{note} This means that the caller is not required to guarantee the validity of the delimiter string after the call to \tcode{async_read_until} returns. \end{note}
 
 \pnum
-On completion of the asynchronous operation, if the readable bytes of \tcode{b} contain the delimiter, \tcode{ec} is set such that \tcode{!ec} is \tcode{true}. Otherwise, if \tcode{b.size() == b.max_size()}, \tcode{ec} is set such that \tcode{ec == stream_errc::not_found}. If \tcode{b.size() < b.max_size()}, \tcode{ec} is the \tcode{error_code} from the most recent asynchronous read_some operation. \tcode{n} is the number of readable bytes in \tcode{b} up to and including the delimiter, if present, otherwise \tcode{0}.
+On completion of the asynchronous operation, if \removed{the readable bytes of }\tcode{b} contain\added{s} the delimiter, \tcode{ec} is set such that \tcode{!ec} is \tcode{true}. Otherwise, if \tcode{b.size() == b.max_size()}, \tcode{ec} is set such that \tcode{ec == stream_errc::not_found}. If \tcode{b.size() < b.max_size()}, \tcode{ec} is the \tcode{error_code} from the most recent asynchronous read_some operation. \tcode{n} is the number of readable bytes in \tcode{b} up to and including the delimiter, if present, otherwise \tcode{0}.
 \end{itemdescr}
 
 
