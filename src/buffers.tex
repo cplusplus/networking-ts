@@ -1137,20 +1137,24 @@ namespace std::experimental::net::inline @\namespacever@ {
     explicit dynamic_vector_buffer(vector<T, Allocator>& vec) noexcept;
     dynamic_vector_buffer(vector<T, Allocator>& vec,
                           size_t maximum_size) noexcept;
-    dynamic_vector_buffer(dynamic_vector_buffer&&) = default;
+    @\removedcode{dynamic_vector_buffer(dynamic_vector_buffer\&\&) = default;}@
 
     // members:
     size_t size() const noexcept;
     size_t max_size() const noexcept;
     size_t capacity() const noexcept;
-    const_buffers_type data() const noexcept;
-    mutable_buffers_type prepare(size_t n);
-    void commit(size_t n);
+    @\removedcode{const_buffers_type data() const noexcept;}@
+    @\addedcode{mutable_buffers_type data(size_t pos, size_t n) noexcept;}@
+    @\addedcode{const_buffers_type data(size_t pos, size_t n) const noexcept;}@
+    @\removedcode{mutable_buffers_type prepare(size_t n);}@
+    @\removedcode{void commit(size_t n) noexcept;}@
+    @\addedcode{void grow(size_t n);}@
+    @\addedcode{void shrink(size_t n);}@
     void consume(size_t n);
 
   private:
     vector<T, Allocator>& vec_; // \expos
-    size_t size_; // \expos
+    @\removedcode{size_t size_; // \expos}@
     const size_t max_size_; // \expos
   };
 
@@ -1170,7 +1174,7 @@ explicit dynamic_vector_buffer(vector<T, Allocator>& vec) noexcept;
 
 \begin{itemdescr}
 \pnum
-\effects Initializes \tcode{vec_} with \tcode{vec}, \tcode{size_} with \tcode{vec.size()}, and \tcode{max_size_} with \tcode{vec.max_size()}.
+\effects Initializes \tcode{vec_} with \tcode{vec}\removed{, \tcode{size_} with \tcode{vec.size()},} and \tcode{max_size_} with \tcode{vec.max_size()}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{dynamic_vector_buffer}!constructor}%
@@ -1184,7 +1188,7 @@ dynamic_vector_buffer(vector<T, Allocator>& vec,
 \expects \tcode{vec.size() <= maximum_size}.
 
 \pnum
-\effects Initializes \tcode{vec_} with \tcode{vec}, \tcode{size_} with \tcode{vec.size()}, and \tcode{max_size_} with \tcode{maximum_size}.
+\effects Initializes \tcode{vec_} with \tcode{vec}\removed{, \tcode{size_} with \tcode{vec.size()},} and \tcode{max_size_} with \tcode{maximum_size}.
 \end{itemdescr}
 
 \indexlibrarymember{size}{dynamic_vector_buffer}%
@@ -1194,7 +1198,7 @@ size_t size() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{size_}.
+\returns \removed{\tcode{size_}}\added{\tcode{min(vec_.size(), max_size_)}}.
 \end{itemdescr}
 
 \indexlibrarymember{max_size}{dynamic_vector_buffer}%
@@ -1214,48 +1218,81 @@ size_t capacity() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{vec_.capacity()}.
+\returns \removed{\tcode{vec_.capacity()}}\added{\tcode{min(vec_.capacity(), max_size_)}}.
 \end{itemdescr}
 
 \indexlibrarymember{data}{dynamic_vector_buffer}%
 \begin{itemdecl}
-const_buffers_type data() const noexcept;
+@\removedcode{const_buffers_type data() const noexcept;}@
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{buffer(vec_, size_)}.
+\removed{\returns \tcode{buffer(vec_, size_)}.}
+\end{itemdescr}
+
+\begin{itemdecl}
+@\addedcode{mutable_buffers_type data(size_t pos, size_t n) noexcept;}@
+@\addedcode{const_buffers_type data(size_t pos, size_t n) const noexcept;}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\added{\returns \tcode{buffer(buffer(vec_, max_size_) + pos, n)}.}
 \end{itemdescr}
 
 \indexlibrarymember{prepare}{dynamic_vector_buffer}%
 \begin{itemdecl}
-mutable_buffers_type prepare(size_t n);
+@\removedcode{mutable_buffers_type prepare(size_t n);}@
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Performs \tcode{vec_.resize(size_ + n)}.
+\removed{\effects Performs \tcode{vec_.resize(size_ + n)}.}
 
 \pnum
-\returns \tcode{buffer(buffer(vec_) + size_, n)}.
+\removed{\returns \tcode{buffer(buffer(vec_) + size_, n)}.}
 
 \pnum
-\throws \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
+\removed{\throws \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.}
 \end{itemdescr}
 
 \indexlibrarymember{commit}{dynamic_vector_buffer}%
 \begin{itemdecl}
-void commit(size_t n);
+@\removedcode{void commit(size_t n);}@
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Performs:
+\removed{\effects Performs:}
 \begin{codeblock}
-size_ += min(n, vec_.size() - size_);
-vec_.resize(size_);
+@\removedcode{size_ += min(n, vec_.size() - size_);}@
+@\removedcode{vec_.resize(size_);}@
 \end{codeblock}
 
+\end{itemdescr}
+
+\indexlibrarymember{grow}{dynamic_vector_buffer}%
+\begin{itemdecl}
+@\addedcode{void grow(size_t n);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\added{\effects Performs \addedcode{vec_.resize(size() + n);}.}
+
+\pnum
+\added{\throws \tcode{length_error} if \addedcode{size() > max_size() || max_size() - size() < n}.}
+\end{itemdescr}
+
+\indexlibrarymember{shrink}{dynamic_vector_buffer}%
+\begin{itemdecl}
+@\addedcode{void shrink(size_t n);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\added{\effects Performs \addedcode{vec_.resize(n > size() ? 0 : size() - n);}.}
 \end{itemdescr}
 
 \indexlibrarymember{consume}{dynamic_vector_buffer}%
@@ -1267,9 +1304,10 @@ void consume(size_t n);
 \pnum
 \effects Performs:
 \begin{codeblock}
-size_t m = min(n, size_);
-vec_.erase(vec_.begin(), vec_.begin() + m);
-size_ -= m;
+@\removedcode{size_t m = min(n, size_);}@
+@\removedcode{vec_.erase(vec_.begin(), vec_.begin() + m);}@
+@\removedcode{size_ -= m;}@
+@\addedcode{vec_.erase(vec_.begin(), vec_.begin() + min(n, size()));}@
 \end{codeblock}
 
 \end{itemdescr}
@@ -1297,20 +1335,24 @@ namespace std::experimental::net::inline @\namespacever@ {
     explicit dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str) noexcept;
     dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str,
                           size_t maximum_size) noexcept;
-    dynamic_string_buffer(dynamic_string_buffer&&) = default;
+    @\removedcode{dynamic_string_buffer(dynamic_string_buffer\&\&) = default;}@
 
     // members:
     size_t size() const noexcept;
     size_t max_size() const noexcept;
     size_t capacity() const noexcept;
-    const_buffers_type data() const noexcept;
-    mutable_buffers_type prepare(size_t n);
-    void commit(size_t n) noexcept;
+    @\removedcode{const_buffers_type data() const noexcept;}@
+    @\addedcode{mutable_buffers_type data(size_t pos, size_t n) noexcept;}@
+    @\addedcode{const_buffers_type data(size_t pos, size_t n) const noexcept;}@
+    @\removedcode{mutable_buffers_type prepare(size_t n);}@
+    @\removedcode{void commit(size_t n) noexcept;}@
+    @\addedcode{void grow(size_t n);}@
+    @\addedcode{void shrink(size_t n);}@
     void consume(size_t n);
 
   private:
     basic_string<CharT, Traits, Allocator>& str_; // \expos
-    size_t size_; // \expos
+    @\removedcode{size_t size_; // \expos}@
     const size_t max_size_; // \expos
   };
 
@@ -1330,7 +1372,7 @@ explicit dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str) noex
 
 \begin{itemdescr}
 \pnum
-\effects Initializes \tcode{str_} with \tcode{str}, \tcode{size_} with \tcode{str.size()}, and \tcode{max_size_} with \tcode{str.max_size()}.
+\effects Initializes \tcode{str_} with \tcode{str}\removed{, \tcode{size_} with \tcode{str.size()},} and \tcode{max_size_} with \tcode{str.max_size()}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{dynamic_string_buffer}!constructor}%
@@ -1344,7 +1386,7 @@ dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str,
 \expects \tcode{str.size() <= maximum_size}.
 
 \pnum
-\effects Initializes \tcode{str_} with \tcode{str}, \tcode{size_} with \tcode{str.size()}, and \tcode{max_size_} with \tcode{maximum_size}.
+\effects Initializes \tcode{str_} with \tcode{str}\removed{, \tcode{size_} with \tcode{str.size()},} and \tcode{max_size_} with \tcode{maximum_size}.
 \end{itemdescr}
 
 \indexlibrarymember{size}{dynamic_string_buffer}%
@@ -1354,7 +1396,7 @@ size_t size() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{size_}.
+\returns \removed{\tcode{size_}}\added{\tcode{min(str_.size(), max_size_)}}.
 \end{itemdescr}
 
 \indexlibrarymember{max_size}{dynamic_string_buffer}%
@@ -1374,48 +1416,81 @@ size_t capacity() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{str_.capacity()}.
+\returns \removed{\tcode{vec_.capacity()}}\added{\tcode{min(str_.capacity(), max_size_)}}.
 \end{itemdescr}
 
 \indexlibrarymember{data}{dynamic_string_buffer}%
 \begin{itemdecl}
-const_buffers_type data() const noexcept;
+@\removedcode{const_buffers_type data() const noexcept;}@
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{buffer(str_, size_)}.
+\removed{\returns \tcode{buffer(str_, size_)}.}
+\end{itemdescr}
+
+\begin{itemdecl}
+@\addedcode{mutable_buffers_type data(size_t pos, size_t n) noexcept;}@
+@\addedcode{const_buffers_type data(size_t pos, size_t n) const noexcept;}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\added{\returns \tcode{buffer(buffer(str_, max_size_) + pos, n)}.}
 \end{itemdescr}
 
 \indexlibrarymember{prepare}{dynamic_string_buffer}%
 \begin{itemdecl}
-mutable_buffers_type prepare(size_t n);
+@\removedcode{mutable_buffers_type prepare(size_t n);}@
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Performs \tcode{str_.resize(size_ + n)}.
+\removed{\effects Performs \tcode{str_.resize(size_ + n)}.}
 
 \pnum
-\returns \tcode{buffer(buffer(str_) + size_, n)}.
+\removed{\returns \tcode{buffer(buffer(str_) + size_, n)}.}
 
 \pnum
-\throws \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
+\removed{\throws \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.}
 \end{itemdescr}
 
 \indexlibrarymember{commit}{dynamic_string_buffer}%
 \begin{itemdecl}
-void commit(size_t n) noexcept;
+@\removedcode{void commit(size_t n) noexcept;}@
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Performs:
+\removed{\effects Performs:}
 \begin{codeblock}
-size_ += min(n, str_.size() - size_);
-str_.resize(size_);
+@\removedcode{size_ += min(n, str_.size() - size_);}@
+@\removedcode{str_.resize(size_);}@
 \end{codeblock}
 
+\end{itemdescr}
+
+\indexlibrarymember{grow}{dynamic_string_buffer}%
+\begin{itemdecl}
+@\addedcode{void grow(size_t n);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\added{\effects Performs \addedcode{str_.resize(size() + n);}.}
+
+\pnum
+\added{\throws \tcode{length_error} if \addedcode{size() > max_size() || max_size() - size() < n}.}
+\end{itemdescr}
+
+\indexlibrarymember{shrink}{dynamic_string_buffer}%
+\begin{itemdecl}
+@\addedcode{void shrink(size_t n);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\added{\effects Performs \addedcode{str_.resize(n > size() ? 0 : size() - n);}.}
 \end{itemdescr}
 
 \indexlibrarymember{consume}{dynamic_string_buffer}%
@@ -1427,9 +1502,10 @@ void consume(size_t n);
 \pnum
 \effects Performs:
 \begin{codeblock}
-size_t m = min(n, size_);
-str_.erase(0, m);
-size_ -= m;
+@\removedcode{size_t m = min(n, size_);}@
+@\removedcode{str_.erase(0, m);}@
+@\removedcode{size_ -= m;}@
+@\addedcode{str_.erase(0, min(n, size()));}@
 \end{codeblock}
 
 \end{itemdescr}
