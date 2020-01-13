@@ -1053,13 +1053,13 @@ namespace std::experimental::net::inline @\namespacever@ {
 \item
 socket option classes \tcode{broadcast}, \tcode{debug}, \tcode{do_not_route}, \tcode{keep_alive}, \tcode{linger}, \tcode{out_of_band_inline}, \tcode{receive_buffer_size}, \tcode{receive_low_watermark}, \tcode{reuse_address}, \tcode{send_buffer_size}, and \tcode{send_low_watermark};
 \item
-an enumerated type, \tcode{shutdown_type}, for use with the \tcode{basic_socket<Protocol>} class's \tcode{shutdown} member function.
+an enumerated type, \tcode{shutdown_type}, for use with the \tcode{basic_socket<Protocol\added{, Executor}>} class's \tcode{shutdown} member function.
 \item
-an enumerated type, \tcode{wait_type}, for use with the \tcode{basic_socket<Protocol>} and \tcode{basic_socket_acceptor<Protocol>} classes' \tcode{wait} and \tcode{async_wait} member functions,
+an enumerated type, \tcode{wait_type}, for use with the \tcode{basic_socket<Protocol\added{, Executor}>} and \tcode{basic_socket_acceptor<Protocol\added{, Executor}>} classes' \tcode{wait} and \tcode{async_wait} member functions,
 \item
-a bitmask type, \tcode{message_flags}, for use with the \tcode{basic_stream_socket<Protocol>} class's \tcode{send}, \tcode{async_send}, \tcode{receive}, and \tcode{async_receive} member functions, and the \tcode{basic_datagram_socket<Pro\-t\-o\-col>} class's \tcode{send}, \tcode{async_send}, \tcode{send_to}, \tcode{async_send_to}, \tcode{receive}, \tcode{async_receive}, \tcode{receive_from}, and \tcode{async_receive_from} member functions.
+a bitmask type, \tcode{message_flags}, for use with the \tcode{basic_stream_socket<Protocol\added{, Executor}>} class's \tcode{send}, \tcode{async_send}, \tcode{receive}, and \tcode{async_receive} member functions, and the \tcode{basic_datagram_socket<Pro\-t\-o\-col>} class's \tcode{send}, \tcode{async_send}, \tcode{send_to}, \tcode{async_send_to}, \tcode{receive}, \tcode{async_receive}, \tcode{receive_from}, and \tcode{async_receive_from} member functions.
 \item
-a constant, \tcode{max_listen_connections}, for use with the \tcode{basic_socket_acceptor<Protocol>} class's \tcode{listen} member function.
+a constant, \tcode{max_listen_connections}, for use with the \tcode{basic_socket_acceptor<Protocol\added{, Executor}>} class's \tcode{listen} member function.
 \end{itemize}
 
 \begin{libreqtab3}
