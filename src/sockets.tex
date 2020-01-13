@@ -3383,42 +3383,58 @@ template<class ConstBufferSequence, class CompletionToken>
 \rSec1[socket.acceptor]{Class template \tcode{basic_socket_acceptor}}
 
 \pnum
-An object of class template \tcode{basic_socket_acceptor<AcceptableProtocol>} is used to listen for, and queue, incoming socket connections. Socket objects that represent the incoming connections are dequeued by calling \tcode{accept} or \tcode{async_accept}.
+An object of class template \tcode{basic_socket_acceptor<AcceptableProtocol\added{, Executor}>} is used to listen for, and queue, incoming socket connections. Socket objects that represent the incoming connections are dequeued by calling \tcode{accept} or \tcode{async_accept}.
 
 \begin{codeblock}
 namespace std::experimental::net::inline @\namespacever@ {
 
-  template<class AcceptableProtocol>
+  template<class AcceptableProtocol@\addedcode{, class Executor}@>
   class basic_socket_acceptor : public socket_base
   {
   public:
     // types:
 
-    using executor_type = io_context::executor_type;
+    using executor_type = @\removedcode{io_context::executor_type}\addedcode{Executor}@;
     using native_handle_type = @\impdefx{type of \tcode{basic_socket_acceptor::native_handle_type}}@; // \nativeref
     using protocol_type = AcceptableProtocol;
     using endpoint_type = typename protocol_type::endpoint;
-    using socket_type = typename protocol_type::socket;
+    @\removedcode{using socket_type = typename protocol_type::socket;}@
+
+    @\addedcode{template<class OtherExecutor>}@
+    @\addedcode{struct rebind_executor}@
+    @\addedcode{\{}@
+    @\addedcode{  using other = basic_socket_acceptor<AcceptableProtocol, OtherExecutor>;}@
+    @\addedcode{\};}@
 
     // \ref{socket.acceptor.cons}, construct / copy / destroy
 
-    explicit basic_socket_acceptor(io_context& ctx);
-    basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
-    basic_socket_acceptor(io_context& ctx, const endpoint_type& endpoint,
+    explicit basic_socket_acceptor(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  explicit basic_socket_acceptor(ExecutionContext\& ctx);}@
+    basic_socket_acceptor(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const protocol_type& protocol);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  basic_socket_acceptor(ExecutionContext\& ctx, const protocol_type\& protocol);}@
+    basic_socket_acceptor(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const endpoint_type& endpoint,
                           bool reuse_addr = true);
-    basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
-                          const native_handle_type& native_acceptor);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  basic_socket_acceptor(ExecutionContext\& ctx, const endpoint_type\& endpoint,}@
+    @\addedcode{                        bool reuse_addr = true);}@
+    basic_socket_acceptor(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const protocol_type& protocol,
+                          const native_handle_type& native_socket);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  basic_socket_acceptor(ExecutionContext\& ctx, const protocol_type\& protocol,}@
+    @\addedcode{                        const native_handle_type\& native_socket);}@
     basic_socket_acceptor(const basic_socket_acceptor&) = delete;
     basic_socket_acceptor(basic_socket_acceptor&& rhs);
-    template<class OtherProtocol>
-      basic_socket_acceptor(basic_socket_acceptor<OtherProtocol>&& rhs);
+    template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
+      basic_socket_acceptor(basic_socket_acceptor<OtherProtocol@\addedcode{, OtherExecutor}@>&& rhs);
 
     ~basic_socket_acceptor();
 
     basic_socket_acceptor& operator=(const basic_socket_acceptor&) = delete;
     basic_socket_acceptor& operator=(basic_socket_acceptor&& rhs);
-    template<class OtherProtocol>
-      basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol>&& rhs);
+    template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
+      basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol@\addedcode{, OtherExecutor}@>&& rhs);
 
     // \ref{socket.acceptor.ops}, basic_socket_acceptor operations
 
@@ -3481,28 +3497,62 @@ namespace std::experimental::net::inline @\namespacever@ {
     void enable_connection_aborted(bool mode);
     bool enable_connection_aborted() const;
 
-    socket_type accept();
-    socket_type accept(error_code& ec);
-    socket_type accept(io_context& ctx);
-    socket_type accept(io_context& ctx, error_code& ec);
+    @\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept();
+    @\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(error_code& ec);
+    @\removedcode{socket_type accept(io_context\& ctx);}@
+    @\removedcode{socket_type accept(io_context\& ctx, error_code\& ec);}@
+    @\addedcode{template<class OtherExecutor>}@
+    @\addedcode{  typename Protocol::socket::template rebind_executor<OtherExecutor>::other}@
+    @\addedcode{    accept(const OtherExecutor\& ex);}@
+    @\addedcode{template<class OtherExecutor>}@
+    @\addedcode{  typename Protocol::socket::template rebind_executor<OtherExecutor>::other}@
+    @\addedcode{    accept(const OtherExecutor\& ex, error_code\& ec);}@
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  typename Protocol::socket::template rebind_executor<typename ExecutionContext::executor_type>::other}@
+    @\addedcode{    accept(ExecutionContext\& ctx);}@
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  typename Protocol::socket::template rebind_executor<typename ExecutionContext::executor_type>::other}@
+    @\addedcode{    accept(ExecutionContext\& ctx, error_code\& ec);}@
 
     template<class CompletionToken>
       @\DEDUCED@ async_accept(CompletionToken&& token);
-    template<class CompletionToken>
-      @\DEDUCED@ async_accept(io_context& ctx, CompletionToken&& token);
+    @\removedcode{template<class CompletionToken>}@
+    @\removedcode{  \DEDUCED\ async_accept(io_context\& ctx, CompletionToken\&\& token);}@
+    @\addedcode{template<class OtherExecutor, class CompletionToken>}@
+    @\addedcode{  \DEDUCED\ async_accept(const OtherExecutor\& ex, CompletionToken\&\& token);}@
+    @\addedcode{template<class ExecutionContext, class CompletionToken>}@
+    @\addedcode{  \DEDUCED\ async_accept(ExecutionContext\& ctx, CompletionToken\&\& token);}@
 
-    socket_type accept(endpoint_type& endpoint);
-    socket_type accept(endpoint_type& endpoint, error_code& ec);
-    socket_type accept(io_context& ctx, endpoint_type& endpoint);
-    socket_type accept(io_context& ctx, endpoint_type& endpoint,
-                       error_code& ec);
+    @\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(endpoint_type& endpoint);
+    @\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(endpoint_type& endpoint, error_code& ec);
+    @\removedcode{socket_type accept(io_context\& ctx, endpoint_type\& endpoint);}@
+    @\removedcode{socket_type accept(io_context\& ctx, endpoint_type\& endpoint,}@
+    @\removedcode{                   error_code\& ec);}@
+    @\addedcode{template<class OtherExecutor>}@
+    @\addedcode{  typename Protocol::socket::template rebind_executor<OtherExecutor>::other}@
+    @\addedcode{    accept(const OtherExecutor\& ex, endpoint_type\& endpoint);}@
+    @\addedcode{template<class OtherExecutor>}@
+    @\addedcode{  typename Protocol::socket::template rebind_executor<OtherExecutor>::other}@
+    @\addedcode{    accept(const OtherExecutor\& ex, endpoint_type\& endpoint, error_code\& ec);}@
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  typename Protocol::socket::template rebind_executor<typename ExecutionContext::executor_type>::other}@
+    @\addedcode{    accept(ExecutionContext\& ctx, endpoint_type\& endpoint);}@
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  typename Protocol::socket::template rebind_executor<typename ExecutionContext::executor_type>::other}@
+    @\addedcode{    accept(ExecutionContext\& ctx, endpoint_type\& endpoint, error_code\& ec);}@
 
     template<class CompletionToken>
       @\DEDUCED@ async_accept(endpoint_type& endpoint,
                            CompletionToken&& token);
-    template<class CompletionToken>
-      @\DEDUCED@ async_accept(io_context& ctx, endpoint_type& endpoint,
-                           CompletionToken&& token);
+    @\removedcode{template<class CompletionToken>}@
+    @\removedcode{  \DEDUCED\ async_accept(io_context\& ctx, endpoint_type\& endpoint,}@
+    @\removedcode{                       CompletionToken\&\& token);}@
+    @\addedcode{template<class OtherExecutor, class CompletionToken>}@
+    @\addedcode{  \DEDUCED\ async_accept(const OtherExecutor\& ex, endpoint_type\& endpoint,}@
+    @\addedcode{                       CompletionToken\&\& token);}@
+    @\addedcode{template<class ExecutionContext, class CompletionToken>}@
+    @\addedcode{  \DEDUCED\ async_accept(ExecutionContext\& ctx, endpoint_type\& endpoint,}@
+    @\addedcode{                       CompletionToken\&\& token);}@
 
     void wait(wait_type w);
     void wait(wait_type w, error_code& ec);
