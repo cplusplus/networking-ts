@@ -4450,18 +4450,24 @@ bool enable_connection_aborted() const;
 \end{itemdescr}
 
 \begin{itemdecl}
-socket_type accept();
-socket_type accept(error_code& ec);
+@\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept();
+@\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(error_code& ec);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{accept(get_executor().context(), ec)}.
+\returns \tcode{accept(get_executor()\removed{.context()}, ec)}.
 \end{itemdescr}
 
 \begin{itemdecl}
-socket_type accept(io_context& ctx);
-socket_type accept(io_context& ctx, error_code& ec);
+@\removedcode{socket_type accept(io_context\& ctx);}@
+@\removedcode{socket_type accept(io_context\& ctx, error_code\& ec);}@
+@\addedcode{template<class OtherExecutor>}@
+@\addedcode{  typename Protocol::socket::template rebind_executor<OtherExecutor>::other}@
+@\addedcode{    accept(const OtherExecutor\& ex);}@
+@\addedcode{template<class OtherExecutor>}@
+@\addedcode{  typename Protocol::socket::template rebind_executor<OtherExecutor>::other}@
+@\addedcode{    accept(const OtherExecutor\& ex, error_code\& ec);}@
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -4473,7 +4479,22 @@ native_handle_type h = accept(native_handle(), nullptr, 0);
 
 
 \pnum
-\returns On success, \tcode{socket_type(ctx, protocol_, h)}. Otherwise \tcode{socket_type(ctx)}.
+\removed{\returns On success, \tcode{socket_type(ctx, protocol_, h)}. Otherwise \tcode{socket_type(ctx)}.}
+\added{\returns On success, \tcode{\{ex, protocol_, h\}}. Otherwise \tcode{\{ex\}}.}
+\end{itemdescr}
+
+\begin{itemdecl}
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  typename Protocol::socket::template rebind_executor<typename ExecutionContext::executor_type>::other}@
+@\addedcode{    accept(ExecutionContext\& ctx);}@
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  typename Protocol::socket::template rebind_executor<typename ExecutionContext::executor_type>::other}@
+@\addedcode{    accept(ExecutionContext\& ctx, error_code\& ec);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\returns \tcode{accept(ctx.get_executor(), ec)}.}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4485,41 +4506,66 @@ template<class CompletionToken>
 \pnum
 \returns
 \begin{codeblock}
-async_accept(get_executor().context(), forward<CompletionToken>(token))
+async_accept(get_executor()@\removedcode{.context()}@, forward<CompletionToken>(token))
 \end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class CompletionToken>
-  @\DEDUCED@ async_accept(io_context& ctx, CompletionToken&& token);
+@\removedcode{template<class CompletionToken>}@
+@\removedcode{  \DEDUCED\ async_accept(io_context\& ctx, CompletionToken\&\& token);}@
+@\addedcode{template<class OtherExecutor, class CompletionToken>}@
+@\addedcode{  \DEDUCED\ async_accept(const OtherExecutor\& ex, CompletionToken\&\& token);}@
 \end{itemdecl}
 
 \begin{itemdescr}
+\addedpnum
+\added{Let \tcode{S} be the type \tcode{typename Protocol::socket::template rebind_executor<OtherExecutor>::other}.}
+
 \pnum
-\completionsig \tcode{void(error_code ec, socket_type s)}.
+\completionsig \tcode{void(error_code ec, \removed{socket_type}\added{S} s)}.
 
 \pnum
 \effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX:
 \begin{codeblock}
 native_handle_type h = accept(native_handle(), nullptr, 0);
 \end{codeblock}
- On success, \tcode{s} is \tcode{socket_type(ctx, protocol_, h)}. Otherwise, \tcode{s} is \tcode{socket_type(ctx)}.
+\removed{On success, \tcode{s} is \tcode{socket_type(ctx, protocol_, h)}. Otherwise,  \tcode{s} is  \tcode{socket_type(ctx)}.}
+\added{On success, \tcode{s} is \tcode{S(ex, protocol_, h)}. Otherwise,  \tcode{s} is  \tcode{S(ex)}.}
 \end{itemdescr}
 
 \begin{itemdecl}
-socket_type accept(endpoint_type& endpoint);
-socket_type accept(endpoint_type& endpoint, error_code& ec);
+@\addedcode{template<class ExecutionContext, class CompletionToken>}@
+@\addedcode{  \DEDUCED\ async_accept(ExecutionContext\& ctx, CompletionToken\&\& token);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\returns}
+\begin{codeblock}
+@\addedcode{async_accept(ctx.get_executor(), forward<CompletionToken>(token))}@
+\end{codeblock}
+\end{itemdescr}
+
+\begin{itemdecl}
+@\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(endpoint_type& endpoint);
+@\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(endpoint_type& endpoint, error_code& ec);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{accept(get_executor().context(), endpoint, ec)}.
+\returns \tcode{accept(get_executor()\removed{.context()}, endpoint, ec)}.
 \end{itemdescr}
 
 \begin{itemdecl}
-socket_type accept(io_context& ctx, endpoint_type& endpoint);
-socket_type accept(io_context& ctx, endpoint_type& endpoint,
-                   error_code& ec);
+@\removedcode{socket_type accept(io_context\& ctx, endpoint_type\& endpoint);}@
+@\removedcode{socket_type accept(io_context\& ctx, endpoint_type\& endpoint,}@
+@\removedcode{                   error_code\& ec);}@
+@\addedcode{template<class OtherExecutor>}@
+@\addedcode{  typename Protocol::socket::template rebind_executor<OtherExecutor>::other}@
+@\addedcode{    accept(const OtherExecutor\& ex, endpoint_type\& endpoint);}@
+@\addedcode{template<class OtherExecutor>}@
+@\addedcode{  typename Protocol::socket::template rebind_executor<OtherExecutor>::other}@
+@\addedcode{    accept(const OtherExecutor\& ex, endpoint_type\& endpoint, error_code\& ec);}@
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -4536,7 +4582,22 @@ if (h >= 0)
 
 
 \pnum
-\returns On success, \tcode{socket_type(ctx, protocol_, h)}. Otherwise \tcode{socket_type(ctx)}.
+\removed{\returns On success, \tcode{socket_type(ctx, protocol_, h)}. Otherwise \tcode{socket_type(ctx)}.}
+\added{\returns On success, \tcode{\{ex, protocol_, h\}}. Otherwise \tcode{\{ex\}}.}
+\end{itemdescr}
+
+\begin{itemdecl}
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  typename Protocol::socket::template rebind_executor<typename ExecutionContext::executor_type>::other}@
+@\addedcode{    accept(ExecutionContext\& ctx, endpoint_type\& endpoint);}@
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  typename Protocol::socket::template rebind_executor<typename ExecutionContext::executor_type>::other}@
+@\addedcode{    accept(ExecutionContext\& ctx, endpoint_type\& endpoint, error_code\& ec);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\returns \tcode{accept(ctx.get_executor(), endpoint, ec)}.}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4549,19 +4610,25 @@ template<class CompletionToken>
 \pnum
 \returns
 \begin{codeblock}
-async_accept(get_executor().context(), endpoint, forward<CompletionToken>(token))
+async_accept(get_executor()@\removedcode{.context()}@, endpoint, forward<CompletionToken>(token))
 \end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class CompletionToken>
-  @\DEDUCED@ async_accept(io_context& ctx, endpoint_type& endpoint,
-                       CompletionToken&& token);
+@\removedcode{template<class CompletionToken>}@
+@\removedcode{  \DEDUCED\ async_accept(io_context\& ctx, endpoint_type\& endpoint,}@
+@\removedcode{                       CompletionToken\&\& token);}@
+@\addedcode{template<class OtherExecutor, class CompletionToken>}@
+@\addedcode{  \DEDUCED\ async_accept(const OtherExecutor\& ex, endpoint_type\& endpoint,}@
+@\addedcode{                       CompletionToken\&\& token);}@
 \end{itemdecl}
 
 \begin{itemdescr}
+\addedpnum
+\added{Let \tcode{S} be the type \tcode{typename Protocol::socket::template rebind_executor<OtherExecutor>::other}.}
+
 \pnum
-\completionsig \tcode{void(error_code ec, socket_type s)}.
+\completionsig \tcode{void(error_code ec, \removed{socket_type}\added{S} s)}.
 
 \pnum
 \effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX:
@@ -4573,7 +4640,22 @@ native_handle_type h = accept(native_handle(),
 if (h >= 0)
   endpoint.resize(endpoint_len);
 \end{codeblock}
-On success, \tcode{s} is \tcode{socket_type(ctx, protocol_, h)}. Otherwise,  \tcode{s} is  \tcode{socket_type(ctx)}.
+\removed{On success, \tcode{s} is \tcode{socket_type(ctx, protocol_, h)}. Otherwise,  \tcode{s} is  \tcode{socket_type(ctx)}.}
+\added{On success, \tcode{s} is \tcode{S(ex, protocol_, h)}. Otherwise,  \tcode{s} is  \tcode{S(ex)}.}
+\end{itemdescr}
+
+\begin{itemdecl}
+@\addedcode{template<class ExecutionContext, class CompletionToken>}@
+@\addedcode{  \DEDUCED\ async_accept(ExecutionContext\& ctx, endpoint_type\& endpoint,}@
+@\addedcode{                       CompletionToken\&\& token);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\returns}
+\begin{codeblock}
+@\addedcode{async_accept(ctx.get_executor(), forward<CompletionToken>(token))}@
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
