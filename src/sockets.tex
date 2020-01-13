@@ -2454,36 +2454,81 @@ If a program performs a synchronous operation on this socket, other than \tcode{
 When an operation has its effects specified as if by passing the result of \tcode{native_handle()} to a POSIX function, then the operation fails with error condition \tcode{errc::bad_file_descriptor} if \tcode{is_open() == false} at the point in the effects when the POSIX function is called.
 
 \pnum
-If \tcode{native_handle_type} and \tcode{basic_socket<Protocol>::native_handle_type}
+If \tcode{native_handle_type} and \tcode{basic_socket<Protocol\added{, Executor}>::native_handle_type}
 are both defined then they name the same type.
 
 \rSec2[socket.dgram.cons]{\tcode{basic_datagram_socket} constructors}
 
 \begin{itemdecl}
-explicit basic_datagram_socket(io_context& ctx);
+explicit basic_datagram_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx)}.
+\effects Initializes the base class with \tcode{basic_socket<Protocol\added{, Executor}>(\removed{ctx}\added{ex})}.
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_datagram_socket(io_context& ctx, const protocol_type& protocol);
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  explicit basic_datagram_socket(ExecutionContext\& ctx);}@
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, protocol)}.
+\addedpnum
+\added{\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor())}.}
+
+\addedpnum
+\added{\remarks This function shall not participate in overload resolution unless
+\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
+and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.}
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_datagram_socket(io_context& ctx, const endpoint_type& endpoint);
+basic_datagram_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const protocol_type& protocol);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, endpoint)}.
+\effects Initializes the base class with \tcode{basic_socket<Protocol\added{, Executor}>(ctx, protocol)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  explicit basic_datagram_socket(ExecutionContext\& ctx, const protocol_type\& protocol);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), protocol)}.}
+
+\addedpnum
+\added{\remarks This function shall not participate in overload resolution unless
+\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
+and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_datagram_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const endpoint_type& endpoint);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol\added{, Executor}>(ctx, endpoint)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  explicit basic_datagram_socket(ExecutionContext\& ctx, const endpoint_type\& endpoint);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), endpoint)}.}
+
+\addedpnum
+\added{\remarks This function shall not participate in overload resolution unless
+\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
+and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2493,7 +2538,23 @@ basic_datagram_socket(io_context& ctx, const protocol_type& protocol,
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, protocol, native_socket)}.
+\effects Initializes the base class with \tcode{basic_socket<Protocol\added{, Executor}>(ctx, protocol, native_socket)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  basic_datagram_socket(ExecutionContext\& ctx, const protocol_type\& protocol,}@
+@\addedcode{                        const native_handle_type\& native_socket);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), protocol, native_socket)}.}
+
+\addedpnum
+\added{\remarks This function shall not participate in overload resolution unless
+\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
+and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2502,20 +2563,23 @@ basic_datagram_socket(basic_datagram_socket&& rhs);
 
 \begin{itemdescr}
 \pnum
-\effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
+\effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol\added{, Executor}>}, initializing the base class with \tcode{basic_socket<Protocol\added{, Executor}>(std::move(rhs))}.
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_datagram_socket(basic_datagram_socket<OtherProtocol>&& rhs);
+template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
+  basic_datagram_socket(basic_datagram_socket<OtherProtocol@\addedcode{, OtherExecutor}@>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}\added{ and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}}.
 
 \pnum
-\effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
+\effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol\added{, Executor}>}, initializing the base class with \tcode{basic_socket<Protocol\added{, Executor}>(std::move(rhs))}.
+
+\pnum
+\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}\added{ and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}}.
 \end{itemdescr}
 
 
@@ -2528,26 +2592,29 @@ basic_datagram_socket& operator=(basic_datagram_socket&& rhs);
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
+\effects Equivalent to \tcode{basic_socket<Protocol\added{, Executor}>::operator=(std::move(rhs))}.
 
 \pnum
 \returns \tcode{*this}.
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol>&& rhs);
+template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
+  basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol@\addedcode{, OtherExecutor}@>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}\added{ and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}}.
 
 \pnum
-\effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
+\effects Equivalent to \tcode{basic_socket<Protocol\added{, Executor}>::operator=(std::move(rhs))}.
 
 \pnum
 \returns \tcode{*this}.
+
+\pnum
+\remarks This assignment operator not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}\added{ and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}}.
 \end{itemdescr}
 
 
