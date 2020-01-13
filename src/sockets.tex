@@ -2321,10 +2321,10 @@ namespace std::experimental::net::inline @\namespacever@ {
     @\addedcode{template<class ExecutionContext>}@
     @\addedcode{  basic_datagram_socket(ExecutionContext\& ctx, const endpoint_type\& endpoint);}@
     basic_datagram_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const protocol_type& protocol,
-                 const native_handle_type& native_socket);
+                          const native_handle_type& native_socket);
     @\addedcode{template<class ExecutionContext>}@
-    @\addedcode{  basic_datagram_socket(ExecutionContext\& ctx, const protocol_type\& protocol);}@
-    @\addedcode{               const native_handle_type\& native_socket);}@
+    @\addedcode{  basic_datagram_socket(ExecutionContext\& ctx, const protocol_type\& protocol,}@
+    @\addedcode{                        const native_handle_type\& native_socket);}@
     basic_datagram_socket(const basic_datagram_socket&) = delete;
     basic_datagram_socket(basic_datagram_socket&& rhs);
     template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
@@ -2998,10 +2998,10 @@ namespace std::experimental::net::inline @\namespacever@ {
     @\addedcode{template<class ExecutionContext>}@
     @\addedcode{  basic_stream_socket(ExecutionContext\& ctx, const endpoint_type\& endpoint);}@
     basic_stream_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const protocol_type& protocol,
-                 const native_handle_type& native_socket);
+                        const native_handle_type& native_socket);
     @\addedcode{template<class ExecutionContext>}@
-    @\addedcode{  basic_stream_socket(ExecutionContext\& ctx, const protocol_type\& protocol);}@
-    @\addedcode{               const native_handle_type\& native_socket);}@
+    @\addedcode{  basic_stream_socket(ExecutionContext\& ctx, const protocol_type\& protocol,}@
+    @\addedcode{                      const native_handle_type\& native_socket);}@
     basic_stream_socket(const basic_stream_socket&) = delete;
     basic_stream_socket(basic_stream_socket&& rhs);
     template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
