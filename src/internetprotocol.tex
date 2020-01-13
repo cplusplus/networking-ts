@@ -180,7 +180,7 @@ namespace ip {
 
   class resolver_base;
 
-  template<class InternetProtocol>
+  template<class InternetProtocol@\addedcode{, class Executor = executor}@>
     class basic_resolver;
 
   string host_name();
@@ -3060,26 +3060,33 @@ If used with \tcode{v4_mapped}, return all matching IPv6 and IPv4 addresses.  \\
 \rSec1[internet.resolver]{Class template \tcode{ip::basic_resolver}}
 
 \pnum
-Objects of type \tcode{basic_resolver<InternetProtocol>} are used to perform name resolution. Name resolution is the translation of a host name and service name into a sequence of endpoints, or the translation of an endpoint into its corresponding host name and service name.
+Objects of type \tcode{basic_resolver<InternetProtocol, Executor>} are used to perform name resolution. Name resolution is the translation of a host name and service name into a sequence of endpoints, or the translation of an endpoint into its corresponding host name and service name.
 
 \begin{codeblock}
 namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
-  template<class InternetProtocol>
+  template<class InternetProtocol@\addedcode{, class Executor = executor}@>
   class basic_resolver : public resolver_base
   {
   public:
     // types:
 
-    using executor_type = io_context::executor_type;
+    using executor_type = @\removedcode{io_context::executor_type}\addedcode{Executor}@;
     using protocol_type = InternetProtocol;
     using endpoint_type = typename InternetProtocol::endpoint;
     using results_type = basic_resolver_results<InternetProtocol>;
 
+    @\addedcode{template<class OtherExecutor>}@
+    @\addedcode{struct rebind_executor}@
+    @\addedcode{\{}@
+    @\addedcode{  using other = basic_resolver<InternetProtocol, OtherExecutor>;}@
+    @\addedcode{\};}@
+
     // \ref{internet.resolver.cons}, construct / copy / destroy
 
-    explicit basic_resolver(io_context& ctx);
+    explicit basic_resolver(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@);
+    @\addedcode{template<class ExecutionContext> explicit basic_resolver(ExecutionContext\& ctx);}@
     basic_resolver(const basic_resolver&) = delete;
     basic_resolver(basic_resolver&& rhs) noexcept;
 
@@ -3146,12 +3153,26 @@ namespace ip {
 \rSec2[internet.resolver.cons]{\tcode{ip::basic_resolver} constructors}
 
 \begin{itemdecl}
-explicit basic_resolver(io_context& ctx);
+explicit basic_resolver(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\postconditions \tcode{get_executor() == ctx.get_executor()}.
+\postconditions \tcode{get_executor() == \removed{ctx.get_executor()}\added{ex}}.
+\end{itemdescr}
+
+\begin{itemdecl}
+@\addedcode{template<class ExecutionContext> explicit basic_resolver(ExecutionContext\& ctx);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\postconditions \tcode{get_executor() == ctx.get_executor()}.}
+
+\addedpnum
+\added{\remarks This function shall not participate in overload resolution unless
+\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
+and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.}
 \end{itemdescr}
 
 \begin{itemdecl}
