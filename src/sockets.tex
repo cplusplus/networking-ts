@@ -2220,39 +2220,55 @@ When there are multiple outstanding asynchronous wait operations on this socket 
 \rSec1[socket.dgram]{Class template \tcode{basic_datagram_socket}}
 
 \pnum
-The class template \tcode{basic_datagram_socket<Protocol>} is used to send and receive discrete messages of fixed maximum length.
+The class template \tcode{basic_datagram_socket<Protocol\added{, Executor}>} is used to send and receive discrete messages of fixed maximum length.
 
 \begin{codeblock}
 namespace std::experimental::net::inline @\namespacever@ {
 
-  template<class Protocol>
-  class basic_datagram_socket : public basic_socket<Protocol>
+  template<class Protocol@\addedcode{, class Executor}@>
+  class basic_datagram_socket : public basic_socket<Protocol@\addedcode{, Executor}@>
   {
   public:
     // types:
 
+    @\addedcode{using executor_type = Executor;}@
     using native_handle_type = @\impdefx{type of \tcode{basic_datagram_socket::native_handle_type}}@; // \nativeref
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
+    @\addedcode{template<class OtherExecutor>}@
+    @\addedcode{struct rebind_executor}@
+    @\addedcode{\{}@
+    @\addedcode{  using other = basic_datagram_socket<Protocol, OtherExecutor>;}@
+    @\addedcode{\};}@
+
     // \ref{socket.dgram.cons}, construct / copy / destroy
 
-    explicit basic_datagram_socket(io_context& ctx);
-    basic_datagram_socket(io_context& ctx, const protocol_type& protocol);
-    basic_datagram_socket(io_context& ctx, const endpoint_type& endpoint);
-    basic_datagram_socket(io_context& ctx, const protocol_type& protocol,
-                          const native_handle_type& native_socket);
+    explicit basic_datagram_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  explicit basic_datagram_socket(ExecutionContext\& ctx);}@
+    basic_datagram_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const protocol_type& protocol);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  basic_datagram_socket(ExecutionContext\& ctx, const protocol_type\& protocol);}@
+    basic_datagram_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const endpoint_type& endpoint);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  basic_datagram_socket(ExecutionContext\& ctx, const endpoint_type\& endpoint);}@
+    basic_datagram_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const protocol_type& protocol,
+                 const native_handle_type& native_socket);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  basic_datagram_socket(ExecutionContext\& ctx, const protocol_type\& protocol);}@
+    @\addedcode{               const native_handle_type\& native_socket);}@
     basic_datagram_socket(const basic_datagram_socket&) = delete;
     basic_datagram_socket(basic_datagram_socket&& rhs);
-    template<class OtherProtocol>
-      basic_datagram_socket(basic_datagram_socket<OtherProtocol>&& rhs);
+    template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
+      basic_datagram_socket(basic_datagram_socket<OtherProtocol@\addedcode{, OtherExecutor}@>&& rhs);
 
     ~basic_datagram_socket();
 
     basic_datagram_socket& operator=(const basic_datagram_socket&) = delete;
     basic_datagram_socket& operator=(basic_datagram_socket&& rhs);
-    template<class OtherProtocol>
-      basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol>&& rhs);
+    template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
+      basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol@\addedcode{, OtherExecutor}@>&& rhs);
 
     // \ref{socket.dgram.op}, basic_datagram_socket operations
 
@@ -2881,39 +2897,55 @@ If the operation completes successfully, \tcode{n} is the number of bytes sent. 
 \rSec1[socket.stream]{Class template \tcode{basic_stream_socket}}
 
 \pnum
-The class template \tcode{basic_stream_socket<Protocol>} is used to exchange data with a peer over a sequenced, reliable, bidirectional, connection-mode byte stream.
+The class template \tcode{basic_stream_socket<Protocol\added{, Executor}>} is used to exchange data with a peer over a sequenced, reliable, bidirectional, connection-mode byte stream.
 
 \begin{codeblock}
 namespace std::experimental::net::inline @\namespacever@ {
 
-  template<class Protocol>
-  class basic_stream_socket : public basic_socket<Protocol>
+  template<class Protocol@\addedcode{, class Executor}@>
+  class basic_stream_socket : public basic_socket<Protocol@\addedcode{, Executor}@>
   {
   public:
     // types:
 
+    @\addedcode{using executor_type = Executor;}@
     using native_handle_type = @\impdefx{type of \tcode{basic_stream_socket::native_handle_type}}@; // \nativeref
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
+    @\addedcode{template<class OtherExecutor>}@
+    @\addedcode{struct rebind_executor}@
+    @\addedcode{\{}@
+    @\addedcode{  using other = basic_stream_socket<Protocol, OtherExecutor>;}@
+    @\addedcode{\};}@
+
     // \ref{socket.stream.cons}, construct / copy / destroy
 
-    explicit basic_stream_socket(io_context& ctx);
-    basic_stream_socket(io_context& ctx, const protocol_type& protocol);
-    basic_stream_socket(io_context& ctx, const endpoint_type& endpoint);
-    basic_stream_socket(io_context& ctx, const protocol_type& protocol,
-                        const native_handle_type& native_socket);
+    explicit basic_stream_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  explicit basic_stream_socket(ExecutionContext\& ctx);}@
+    basic_stream_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const protocol_type& protocol);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  basic_stream_socket(ExecutionContext\& ctx, const protocol_type\& protocol);}@
+    basic_stream_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const endpoint_type& endpoint);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  basic_stream_socket(ExecutionContext\& ctx, const endpoint_type\& endpoint);}@
+    basic_stream_socket(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const protocol_type& protocol,
+                 const native_handle_type& native_socket);
+    @\addedcode{template<class ExecutionContext>}@
+    @\addedcode{  basic_stream_socket(ExecutionContext\& ctx, const protocol_type\& protocol);}@
+    @\addedcode{               const native_handle_type\& native_socket);}@
     basic_stream_socket(const basic_stream_socket&) = delete;
     basic_stream_socket(basic_stream_socket&& rhs);
-    template<class OtherProtocol>
-      basic_stream_socket(basic_stream_socket<OtherProtocol>&& rhs);
+    template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
+      basic_stream_socket(basic_stream_socket<OtherProtocol@\addedcode{, OtherExecutor}@>&& rhs);
 
     ~basic_stream_socket();
 
     basic_stream_socket& operator=(const basic_stream_socket&) = delete;
     basic_stream_socket& operator=(basic_stream_socket&& rhs);
-    template<class OtherProtocol>
-      basic_stream_socket& operator=(basic_stream_socket<OtherProtocol>&& rhs);
+    template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
+      basic_stream_socket& operator=(basic_stream_socket<OtherProtocol@\addedcode{, OtherExecutor}@>&& rhs);
 
     // \ref{socket.stream.ops}, basic_stream_socket operations
 
