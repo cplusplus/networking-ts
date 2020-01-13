@@ -3781,7 +3781,7 @@ When an operation has its effects specified as if by passing the result of \tcod
 \rSec2[socket.acceptor.cons]{\tcode{basic_socket_acceptor} constructors}
 
 \begin{itemdecl}
-explicit basic_socket_acceptor(io_context& ctx);
+explicit basic_socket_acceptor(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3789,14 +3789,29 @@ explicit basic_socket_acceptor(io_context& ctx);
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == \removed{ctx.get_executor()}\added{ex}}.
 \item
 \tcode{is_open() == false}.
 \end{itemize}
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  explicit basic_socket_acceptor(ExecutionContext\& ctx);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor())}.}
+
+\addedpnum
+\added{\remarks This function shall not participate in overload resolution unless
+\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
+and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_acceptor(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const protocol_type& protocol);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3807,7 +3822,7 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == \removed{ctx.get_executor()}\added{ex}}.
 \item
 \tcode{is_open() == true}.
 \item
@@ -3820,7 +3835,22 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket_acceptor(io_context& ctx, const endpoint_type& endpoint,
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  explicit basic_socket_acceptor(ExecutionContext\& ctx, const protocol_type\& protocol);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), protocol)}.}
+
+\addedpnum
+\added{\remarks This function shall not participate in overload resolution unless
+\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
+and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_acceptor(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const endpoint_type& endpoint,
                       bool reuse_addr = true);
 \end{itemdecl}
 
@@ -3840,7 +3870,7 @@ listen();
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == \removed{ctx.get_executor()}\added{ex}}.
 \item
 \tcode{is_open() == true}.
 \item
@@ -3853,7 +3883,23 @@ listen();
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  explicit basic_socket_acceptor(ExecutionContext\& ctx, const endpoint_type\& endpoint,}@
+@\addedcode{                                 bool reuse_addr = true);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), endpoint, reuse_addr)}.}
+
+\addedpnum
+\added{\remarks This function shall not participate in overload resolution unless
+\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
+and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.}
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_acceptor(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@, const protocol_type& protocol,
                       const native_handle_type& native_acceptor);
 \end{itemdecl}
 
@@ -3868,7 +3914,7 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == \removed{ctx.get_executor()}\added{ex}}.
 \item
 \tcode{is_open() == true}.
 \item
@@ -3881,12 +3927,28 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
 \end{itemdescr}
 
 \begin{itemdecl}
+@\addedcode{template<class ExecutionContext>}@
+@\addedcode{  basic_socket_acceptor(ExecutionContext\& ctx, const protocol_type\& protocol,}@
+@\addedcode{                        const native_handle_type\& native_socket);}@
+\end{itemdecl}
+
+\begin{itemdescr}
+\addedpnum
+\added{\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), protocol, native_socket)}.}
+
+\addedpnum
+\added{\remarks This function shall not participate in overload resolution unless
+\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
+and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.}
+\end{itemdescr}
+
+\begin{itemdecl}
 basic_socket_acceptor(basic_socket_acceptor&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol>} that refers to the state originally represented by \tcode{rhs}.
+\effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol\added{, Executor}>} that refers to the state originally represented by \tcode{rhs}.
 
 \pnum
 \postconditions
@@ -3909,16 +3971,16 @@ basic_socket_acceptor(basic_socket_acceptor&& rhs);
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_socket_acceptor(basic_socket_acceptor<OtherProtocol>&& rhs);
+template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
+  basic_socket_acceptor(basic_socket_acceptor<OtherProtocol@\addedcode{, OtherExecutor}@>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}\added{ and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}}.
 
 \pnum
-\effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol>} that refers to the state originally represented by \tcode{rhs}.
+\effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol\added{, Executor}>} that refers to the state originally represented by \tcode{rhs}.
 
 \pnum
 \postconditions
@@ -3938,6 +4000,9 @@ template<class OtherProtocol>
 \item
 \tcode{rhs.is_open() == false}.
 \end{itemize}
+
+\pnum
+\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}\added{ and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}}.
 \end{itemdescr}
 
 
@@ -3989,13 +4054,13 @@ basic_socket_acceptor& operator=(basic_socket_acceptor&& rhs);
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol>&& rhs);
+template<class OtherProtocol@\addedcode{, class OtherExecutor}@>
+  basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol@\addedcode{, OtherExecutor}@>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}\added{ and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}}.
 
 \pnum
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this acceptor, and releases acceptor resources as if by POSIX \tcode{close(native_handle())}. Then moves into \tcode{*this} the state originally represented by \tcode{rhs}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
@@ -4021,6 +4086,9 @@ template<class OtherProtocol>
 
 \pnum
 \returns \tcode{*this}.
+
+\pnum
+\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}\added{ and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}}.
 \end{itemdescr}
 
 
