@@ -1,6 +1,22 @@
 %!TEX root = ts.tex
-\input{cover-wd}
-% \input{cover-reg}
+\begingroup
+\def\hd{\begin{tabular}{ll}
+          \textbf{Document Number:} & {\larger\docno}             \\
+          \textbf{Date:}            & \reldate                    \\
+          \textbf{Reply to:}        & Jonathan Wakely             \\
+                                    & cxx@kayari.org
+          \end{tabular}
+}
+\newlength{\hdwidth}
+\settowidth{\hdwidth}{\hd}
+\hfill\begin{minipage}{\hdwidth}\hd\end{minipage}
+\endgroup
+
+\vspace{2.5cm}
+\begin{center}
+\textbf{\Huge
+\doctitle}
+\end{center}
 
 %%--------------------------------------------------
 %% The table of contents
