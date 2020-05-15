@@ -3493,7 +3493,7 @@ inline namespace v1 {
     template<class OtherProtoAllocator> use_future_t<OtherProtoAllocator>
       rebind(const OtherProtoAllocator& a) const noexcept;
     allocator_type get_allocator() const noexcept;
-    template <class F> @\unspec@ operator()(F&& f) const;
+    template<class F> @\unspec@ operator()(F&& f) const;
   };
 
 } // inline namespace v1
@@ -3551,7 +3551,7 @@ allocator_type get_allocator() const noexcept;
 
 \indexlibrarymember{operator()}{use_future_t}%
 \begin{itemdecl}
-template <class F> @\unspec@ operator()(F&& f) const;
+template<class F> @\unspec@ operator()(F&& f) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3568,7 +3568,7 @@ Let \tcode{T} be a completion token type. Let \tcode{H} be a completion handler 
 The object \tcode{h} of type \tcode{H} is an asynchronous provider with an associated shared state (\CppXref{futures.state}). The effect of \tcode{h(a$_0$, ..., a$_{N-1}$)} is to atomically store the result of \tcode{\placeholdernc{INVOKE}(fd, forward<A$_0$>(a$_0$), ..., forward<A$_{N-1}$>(a$_{N-1}$))} (\CppXref{func.require}) in the shared state and make the shared state ready. If \tcode{fd} exits via an exception then that exception is atomically stored in the shared state and the shared state is made ready.
 
 \pnum
-The implementation provides a partial specialization \tcode{template <class Result, class... Args> async_result<T, Result(Args...)>} such that:
+The implementation provides a partial specialization \tcode{template<class Result, class... Args> async_result<T, Result(Args...)>} such that:
 \begin{itemize}
 \item
  the nested type \tcode{completion_handler_type} is a type \tcode{H};
