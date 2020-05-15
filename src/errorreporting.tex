@@ -115,7 +115,11 @@ Otherwise, the \tcode{error_code} shall be set to an \impldef{values of \tcode{e
 \begin{example} The POSIX specification for \tcode{shutdown} lists \tcode{EBADF} as one of its possible errors. If a function that is specified ``as if'' implemented by \tcode{shutdown} fails with \tcode{EBADF} then the following condition holds for the \tcode{error_code} value \tcode{ec}: \tcode{ec == errc::bad_file_descriptor} \end{example}
 
 \pnum
-When the description of a function contains the element Error conditions, this lists conditions where the operation may fail. The conditions are listed, together with a suitable explanation, as \tcode{enum class} constants. Unless otherwise specified, this list is a subset of the failure conditions associated with the function.
+When the description of a function contains the element
+\changed{Error conditions}{\errors{}},
+this lists conditions where the operation may fail.
+The conditions are listed, together with a suitable explanation, as \tcode{enum class} constants.
+Unless otherwise specified, this list is a subset of the failure conditions associated with the function.
 
 
 

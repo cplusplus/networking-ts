@@ -62,17 +62,26 @@
 \newcommand{\DEDUCED}{\placeholdernc{\texttt{DEDUCED}}}
 \newcommand{\nativeref}{see~\ref{socket.reqmts.native}}
 % The base standard:
-\newcommand{\CppStd}{\CppXIV}
-\newcommand{\CppXref}[1]{\CppStd [#1]}
+%\newcommand{\CppStd}{\CppXX}
+%
+\newcommand{\CppStd}{\Cpp \added{2020}\xspace}
+\newcommand{\CppXref}[1]{\CppStd\ [#1]}
 % Alternative formatting of cross-references, resolving stable name to number.
 % \input{cxx}
 % \newcommand{\CppXref}[1]{\CppStd, \cxxref{#1}}
 
 % Add an extensible implementation entry to the main and library name indices
 \newcommand{\indexextensible}[1]{%
-\indextext{extensible implementation!\idxcode{#1}}%
-\indextext{\idxcode{#1}!extensible implementation}%
+\indextext{extensible implementation!\idxnewoldconcept{#1}}%
+\indextext{\idxnewoldconcept{#1}!extensible implementation}%
 }
+
+\newcommand{\namespaceverN}{v2}
+\newcommand{\namespacever}{\changed{v1}{\namespaceverN}}
+
+\newcommand{\tmpoldconcept}[1]{\changed{\tcode{#1}\hspace{0pt}}{\oldconcept{#1}}}
+\newcommand{\tmpnewoldconcept}[1]{\changed{\tcode{#1}\hspace{0pt}}{\newoldconcept{#1}}}
+\newcommand{\tmpdefnnewoldconcept}[1]{\indexdefn{\idxnewoldconcept{#1}}\changed{\tcode{#1}}{\newoldconcept{#1}}}
 
 %%--------------------------------------------------
 %% fix interaction between hyperref and other

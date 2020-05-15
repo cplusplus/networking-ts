@@ -3,6 +3,7 @@
 \def\hd{\begin{tabular}{ll}
           \textbf{Document Number:} & {\larger\docno}             \\
           \textbf{Date:}            & \reldate                    \\
+          \textbf{Audience:}        & LWG                         \\
           \textbf{Reply to:}        & Jonathan Wakely             \\
                                     & cxx@kayari.org
           \end{tabular}
@@ -17,6 +18,42 @@
 \textbf{\Huge
 \doctitle}
 \end{center}
+\vspace{2.5cm}
+
+This paper updates the Networking TS working draft (N4771)
+to use \Cpp{}20 as its base document, rather than \Cpp{}14.
+
+The main changes proposed are:
+\begin{itemize}
+\item Conform to current LWG conventions
+  such as using the \mandates and \constraints elements.
+\item Replace type requirements like \tcode{MoveConstructible} with
+  \oldconcept{MoveConstructible} and use preferred terminology (``meets'').
+\item Use consistent formatting for type requirements, to distinguish them
+  from template parameters and other identifiers.
+\item Remove redundant \tcode{operator==} and \tcode{operator!=} overloads
+  which can be synthesized by the compiler.
+  Replace \tcode{operator<} etc. with \tcode{operator<=>}.
+\item Use \tcode{_v} variable templates for traits.
+\item Remove reference to Library Fundamentals TS, as \tcode{string_view}
+  is in the IS now.
+\end{itemize}
+
+The changes are presented as \added{additions} and \removed{removals}
+with the entire paper as context, even the parts with no changes.
+Updated cross-references of the form \CppXIV{}[structure.specifications] 
+are shown as \CppXref{structure.specifications} without repeating
+\removed{2014} every time.
+
+\vspace{1.5cm}
+
+Open questions:
+\begin{itemize}
+\item Should most uses of \tcode{decay_t} be changed to \tcode{remove_cvref_t}?
+\item Should most non-member operators be specified as hidden friends?
+\end{itemize}
+
+\newpage
 
 %%--------------------------------------------------
 %% The table of contents

@@ -8,10 +8,10 @@
 
 \indexlibrary{\idxcode{socket_errc}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   enum class socket_errc {
     already_open = @\EXPO{an \impldef{value of \tcode{socket_errc::already_open}} non-zero value}@,
@@ -109,11 +109,11 @@ inline namespace v1 {
                           ConnectCondition c,
                           CompletionToken&& token);
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
 
-  template<> struct is_error_code_enum<experimental::net::v1::socket_errc>
+  template<> struct is_error_code_enum<experimental::net::@\namespacever@::socket_errc>
     : public true_type {};
 
 } // namespace std
@@ -211,18 +211,17 @@ to a POSIX function the effect is as if \tcode{native_handle_type} is the type \
 
 
 
-\indextext{\idxcode{Endpoint}}%
 \rSec2[socket.reqmts.endpoint]{Endpoint requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{Endpoint} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tmpdefnnewoldconcept{Endpoint} requirements if it \changed{satisfies}{meets} the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{DefaultConstructible} (\CppXref{defaultconstructible}), \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), and \tmpoldconcept{CopyAssignable} (\CppXref{copyassignable}), as well as the additional requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
+In the table below, \tcode{a} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{X},
 and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
-{Endpoint requirements}
+{\tmpnewoldconcept{Endpoint} requirements}
 {tab:socket.reqmts.endpoint.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -237,7 +236,7 @@ and \tcode{u} denotes an identifier.
 \endhead
 
 \tcode{X::protocol_type}  &
-type meeting \tcode{Protocol}~(\ref{socket.reqmts.protocol}) requirements  &
+type meeting \tmpnewoldconcept{Protocol}~(\ref{socket.reqmts.protocol}) requirements  &
   \\ \rowsep
 
 \tcode{a.protocol()}  &
@@ -248,13 +247,13 @@ type meeting \tcode{Protocol}~(\ref{socket.reqmts.protocol}) requirements  &
 
 \indexextensible{Endpoint}%
 \pnum
-In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
+In the table below, \tcode{a} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{X},
 \tcode{b} denotes a value of type \tcode{X},
-and \tcode{s} denotes a (possibly const) value of a type
+and \tcode{s} denotes a \removed{(possibly const)} value \removed{of a type}
 that is convertible to \tcode{size_t} and denotes a size in bytes.
 
 \begin{libreqtab3}
-{Endpoint requirements for extensible implementations}
+{\tmpnewoldconcept{Endpoint} requirements for extensible implementations}
 {tab:socket.reqmts.endpoint.requirements.ext}
 \\ \topline
 \lhdr{expression}  &
@@ -270,11 +269,11 @@ that is convertible to \tcode{size_t} and denotes a size in bytes.
 
 \tcode{a.data()}  &
 \tcode{const void*}  &
-Returns a pointer suitable for passing as the \tcode{address} argument to functions such as POSIX \tcode{connect}, or as the \tcode{dest_addr} argument to functions such as POSIX \tcode{sendto}. The implementation shall perform a \tcode{static_cast} on the pointer to convert it to \tcode{const sockaddr*}.  \\ \rowsep
+Returns a pointer suitable for passing as the \tcode{address} argument to functions such as POSIX \tcode{connect}, or as the \tcode{dest_addr} argument to functions such as POSIX \tcode{sendto}. The implementation \changed{shall perform}{performs} a \tcode{static_cast} on the pointer to convert it to \tcode{const sockaddr*}.  \\ \rowsep
 
 \tcode{b.data()}  &
 \tcode{void*}  &
-Returns a pointer suitable for passing as the \tcode{address} argument to functions such as POSIX \tcode{accept}, \tcode{getpeername}, \tcode{getsockname} and \tcode{recvfrom}. The implementation shall perform a \tcode{static_cast} on the pointer to convert it to \tcode{sockaddr*}.  \\ \rowsep
+Returns a pointer suitable for passing as the \tcode{address} argument to functions such as POSIX \tcode{accept}, \tcode{getpeername}, \tcode{getsockname} and \tcode{recvfrom}. The implementation \changed{shall perform}{performs} a \tcode{static_cast} on the pointer to convert it to \tcode{sockaddr*}.  \\ \rowsep
 
 \tcode{a.size()}  &
 \tcode{size_t}  &
@@ -282,8 +281,8 @@ Returns a value suitable for passing as the \tcode{address_len} argument to func
 
 \tcode{b.resize(s)}  &
   &
-pre: \tcode{s >= 0}\br
-post: \tcode{a.size() == s}\br
+\changed{pre:}{\expects} \tcode{s >= 0}\br
+\changed{post:}{\postconditions} \tcode{a.size() == s}\br
 Passed the value contained in the \tcode{address_len} argument to functions such as POSIX \tcode{accept}, \tcode{getpeername}, \tcode{getsockname}, and \tcode{recvfrom}, after successful completion of the function. Permitted to throw an exception if the protocol associated with the endpoint object \tcode{a} does not support the specified size.  \\ \rowsep
 
 \tcode{a.capacity()}  &
@@ -294,17 +293,16 @@ Returns a value suitable for passing as the \tcode{address_len} argument to func
 
 
 
-\indextext{\idxcode{EndpointSequence}}%
 \rSec2[socket.reqmts.endpointsequence]{Endpoint sequence requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{EndpointSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tmpdefnnewoldconcept{EndpointSequence} requirements if it \changed{satisfies}{meets} the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}) and \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
 
 \pnum
-In the table below, \tcode{x} denotes a (possibly const) value of type \tcode{X}.
+In the table below, \tcode{x} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{X}.
 
 \begin{libreqtab3}
-{EndpointSequence requirements}
+{\tmpnewoldconcept{EndpointSequence} requirements}
 {tab:socket.reqmts.endpointsequence.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -319,21 +317,20 @@ In the table below, \tcode{x} denotes a (possibly const) value of type \tcode{X}
 \endhead
 
 \tcode{x.begin()}\br\tcode{x.end()}  &
-A type meeting the requirements for forward iterators (\CppXref{forward.iterators}) whose value type is convertible to a type satisfying the \tcode{Endpoint}~(\ref{socket.reqmts.endpoint}) requirements.  &
+A type meeting the requirements for forward iterators (\CppXref{forward.iterators}) whose value type is convertible to a type \changed{satisfying}{meeting} the \tmpnewoldconcept{Endpoint}~(\ref{socket.reqmts.endpoint}) requirements.  &
 \range{x.begin()}{x.end()}\ is a valid range.  \\
 
 \end{libreqtab3}
 
 
 
-\indextext{\idxcode{Protocol}}%
 \rSec2[socket.reqmts.protocol]{Protocol requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{Protocol} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tmpdefnnewoldconcept{Protocol} requirements if it \changed{satisfies}{meets} the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), and \tmpoldconcept{CopyAssignable} (\CppXref{copyassignable}), as well as the additional requirements listed below.
 
 \begin{libreqtab3}
-{Protocol requirements}
+{\tmpnewoldconcept{Protocol} requirements}
 {tab:socket.reqmts.protocol.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -348,17 +345,17 @@ A type \tcode{X} meets the \tcode{Protocol} requirements if it satisfies the req
 \endhead
 
 \tcode{X::endpoint}  &
-type meeting endpoint~(\ref{socket.reqmts.endpoint}) requirements  &
+type meeting \changed{endpoint}{the \newoldconcept{Endpoint}}~(\ref{socket.reqmts.endpoint}) requirements  &
   \\
 
 \end{libreqtab3}
 
 \indexextensible{Protocol}%
 \pnum
-In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X}.
+In the table below, \tcode{a} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{X}.
 
 \begin{libreqtab3}
-{Protocol requirements for extensible implementations}
+{\tmpnewoldconcept{Protocol} requirements for extensible implementations}
 {tab:socket.reqmts.protocol.requirements.ext}
 \\ \topline
 \lhdr{expression}  &
@@ -388,14 +385,13 @@ Returns a value suitable for passing as the protocol argument to POSIX \tcode{so
 
 
 
-\indextext{\idxcode{Acceptable}}%
 \rSec2[socket.reqmts.acceptableprotocol]{Acceptable protocol requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{AcceptableProtocol} requirements if it satisfies the requirements of \tcode{Protocol}~(\ref{socket.reqmts.protocol}) as well as the additional requirements listed below.
+A type \tcode{X} meets the \tmpdefnnewoldconcept{AcceptableProtocol} requirements if it \changed{satisfies}{meets} the requirements of \tmpnewoldconcept{Protocol}~(\ref{socket.reqmts.protocol}) as well as the additional requirements listed below.
 
 \begin{libreqtab3}
-{AcceptableProtocol requirements}
+{\tmpnewoldconcept{AcceptableProtocol} requirements}
 {tab:socket.reqmts.acceptableprotocol.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -410,29 +406,28 @@ A type \tcode{X} meets the \tcode{AcceptableProtocol} requirements if it satisfi
 \endhead
 
 \tcode{X::socket}  &
-A type that satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), and that is publicly and unambiguously derived from \tcode{basic_socket<X>}.  &
+A type that \changed{satisfies}{meets} the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}) and \tmpoldconcept{MoveConstructible} (\CppXref{moveconstructible}), and that is publicly and unambiguously derived from \tcode{basic_socket<X>}.  &
   \\
 
 \end{libreqtab3}
 
 
 
-\indextext{\idxcode{GettableSocketOption}}%
 \rSec2[socket.reqmts.gettablesocketoption]{Gettable socket option requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{GettableSocketOption} requirements if it satisfies the requirements listed below.
+A type \tcode{X} meets the \tmpdefnnewoldconcept{GettableSocketOption} requirements if it \changed{satisfies}{meets} the requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
+In the table below, \tcode{a} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{X},
 \tcode{b} denotes a value of type \tcode{X},
 \tcode{p} denotes a value of a (possibly const) type
-that meets the \tcode{Protocol}~(\ref{socket.reqmts.protocol}) requirements,
+that meets the \tmpnewoldconcept{Protocol}~(\ref{socket.reqmts.protocol}) requirements,
 and \tcode{s} denotes a value of a (possibly const) type
 that is convertible to \tcode{size_t} and denotes a size in bytes.
 
 \begin{libreqtab3}
-{GettableSocketOption requirements for extensible implementations}
+{\tmpnewoldconcept{GettableSocketOption} requirements for extensible implementations}
 {tab:socket.reqmts.gettablesocketoption.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -464,26 +459,25 @@ Returns a value suitable for passing as the \tcode{option_len} argument to POSIX
 
 \tcode{b.resize(p,s)}  &
   &
-post: \tcode{b.size(p) == s}. Passed the value contained in the \tcode{option_len} argument to POSIX \tcode{getsockopt} (or equivalent) after successful completion of the function. Permitted to throw an exception if the socket option object \tcode{b} does not support the specified size.  \\
+\changed{post:}{\postconditions} \tcode{b.size(p) == s}. Passed the value contained in the \tcode{option_len} argument to POSIX \tcode{getsockopt} (or equivalent) after successful completion of the function. Permitted to throw an exception if the socket option object \tcode{b} does not support the specified size.  \\
 
 \end{libreqtab3}
 
 
 
-\indextext{\idxcode{SettableSocketOption}}%
 \rSec2[socket.reqmts.settablesocketoption]{Settable socket option requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{SettableSocketOption} requirements if it satisfies the requirements listed below.
+A type \tcode{X} meets the \tmpdefnnewoldconcept{SettableSocketOption} requirements if it \changed{satisfies}{meets} the requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
-\tcode{p} denotes a (possibly const) value of a type
+In the table below, \tcode{a} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{X},
+\tcode{p} denotes a \removed{(possibly const)} value of a {(possibly const)} type
 that meets the \tcode{Protocol}~(\ref{socket.reqmts.protocol}) requirements,
 and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
-{SettableSocketOption requirements for extensible implementations}
+{\tmpnewoldconcept{SettableSocketOption} requirements for extensible implementations}
 {tab:socket.reqmts.settablesocketoption.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -517,19 +511,18 @@ Returns a value suitable for passing as the \tcode{option_len} argument to POSIX
 
 
 
-\indextext{\idxcode{BooleanSocketOption}}%
 \rSec2[socket.reqmts.opt.bool]{Boolean socket options}
 
 \pnum
-A type \tcode{X} meets the \tcode{BooleanSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{Settable\-Socket\-Option}~(\ref{socket.reqmts.settablesocketoption}), \tcode{X} is contextually convertible to bool, and \tcode{X} satisfies the additional requirements listed below.
+A type \tcode{X} meets the \tmpdefnnewoldconcept{BooleanSocketOption} requirements if it \changed{satisfies}{meets} the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{DefaultConstructible} (\CppXref{defaultconstructible}), \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), \tmpoldconcept{CopyAssignable} (\CppXref{copyassignable}), \tmpnewoldconcept{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tmpnewoldconcept{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), \tcode{X} is contextually convertible to bool, and \tcode{X} \changed{satisfies}{meets} the additional requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
-\tcode{v} denotes a (possibly const) value of type \tcode{bool},
+In the table below, \tcode{a} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{X},
+\tcode{v} denotes a \removed{(possibly const)} value of type {(possibly const)} \tcode{bool},
 and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
-{BooleanSocketOption requirements}
+{\tmpnewoldconcept{BooleanSocketOption} requirements}
 {tab:socket.reqmts.opt.bool.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -545,11 +538,11 @@ and \tcode{u} denotes an identifier.
 
 \tcode{X u;}  &
   &
-post: \tcode{!u.value()}.  \\ \rowsep
+\changed{post:}{\postconditions} \tcode{!u.value()}.  \\ \rowsep
 
 \tcode{X u(v);}  &
   &
-post: \tcode{u.value() == v}.  \\ \rowsep
+\changed{post:}{\postconditions} \tcode{u.value() == v}.  \\ \rowsep
 
 \tcode{a.value()}  &
 \tcode{bool}  &
@@ -566,7 +559,7 @@ Returns \tcode{!a.value()}.  \\
 \end{libreqtab3}
 
 \pnum
-In this document, types that satisfy the \tcode{BooleanSocketOption} requirements are defined as follows.
+In this document, types that \changed{satisfy}{meet} the \tmpnewoldconcept{BooleanSocketOption} requirements are defined as follows.
 
 \begin{codeblock}
 class @\placeholder{C}@
@@ -717,24 +710,23 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{length_error} if \tcode{s} is not a valid data size for the protocol specified by \tcode{p}.
+\changed{\remarks}{\throws} \tcode{length_error} if \tcode{s} is not a valid data size for the protocol specified by \tcode{p}.
 \end{itemdescr}
 
 
 
-\indextext{\idxcode{IntegerSocketOption}}%
 \rSec2[socket.reqmts.opt.int]{Integer socket options}
 
 \pnum
-A type \tcode{X} meets the \tcode{IntegerSocketOption} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{Settable\-Socket\-Option}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tmpdefnnewoldconcept{IntegerSocketOption} requirements if it \changed{satisfies}{meets} the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{DefaultConstructible} (\CppXref{defaultconstructible}), \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), \tmpoldconcept{CopyAssignable} (\CppXref{copyassignable}), \tmpnewoldconcept{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tmpnewoldconcept{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
-\tcode{v} denotes a (possibly const) value of type \tcode{int},
+In the table below, \tcode{a} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{X},
+\tcode{v} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{int},
 and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
-{IntegerSocketOption requirements}
+{\tmpnewoldconcept{IntegerSocketOption} requirements}
 {tab:socket.reqmts.opt.int.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -750,11 +742,11 @@ and \tcode{u} denotes an identifier.
 
 \tcode{X u;}  &
   &
-post: \tcode{u.value() == 0}.  \\ \rowsep
+\changed{post:}{\postconditions} \tcode{u.value() == 0}.  \\ \rowsep
 
 \tcode{X u(v);}  &
   &
-post: \tcode{u.value() == v}.  \\ \rowsep
+\changed{post:}{\postconditions} \tcode{u.value() == v}.  \\ \rowsep
 
 \tcode{a.value()}  &
 \tcode{int}  &
@@ -763,7 +755,7 @@ post: \tcode{u.value() == v}.  \\ \rowsep
 \end{libreqtab3}
 
 \pnum
-In this document, types that satisfy the \tcode{IntegerSocketOption} requirements are defined as follows.
+In this document, types that \changed{satisfy}{meet} the \tmpnewoldconcept{IntegerSocketOption} requirements are defined as follows.
 
 \begin{codeblock}
 class @\placeholder{C}@
@@ -893,24 +885,23 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{length_error} if \tcode{s} is not a valid data size for the protocol specified by \tcode{p}.
+\changed{\remarks}{\throws} \tcode{length_error} if \tcode{s} is not a valid data size for the protocol specified by \tcode{p}.
 \end{itemdescr}
 
 
 
-\indextext{requirements!\idxcode{IoControlCommand}}%
-\indextext{\idxcode{IoControlCommand}}%
+\indextext{requirements!\idxnewoldconcept{IoControlCommand}}%
 \rSec2[socket.reqmts.iocontrolcommand]{I/O control command requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{IoControlCommand} requirements if it satisfies the requirements listed below.
+A type \tcode{X} meets the \tmpdefnnewoldconcept{IoControlCommand} requirements if it \changed{satisfies}{meets} the requirements listed below.
 
 \pnum
-In the table below, \tcode{a} denotes a (possibly const) value of type \tcode{X},
+In the table below, \tcode{a} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{X},
 and \tcode{b} denotes a value of type \tcode{X}.
 
 \begin{libreqtab3}
-{IoControlCommand requirements for extensible implementations}
+{\tmpnewoldconcept{IoControlCommand} requirements for extensible implementations}
 {tab:socket.reqmts.iocontrolcommand.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -936,21 +927,20 @@ Returns a value suitable for passing as the request argument to POSIX \tcode{ioc
 
 
 
-\indextext{requirements!\idxcode{ConnectCondition}}%
-\indextext{\idxcode{ConnectCondition}}%
+\indextext{requirements!\idxnewoldconcept{ConnectCondition}}%
 \rSec2[socket.reqmts.connectcondition]{Connect condition requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{ConnectCondition} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tmpdefnnewoldconcept{ConnectCondition} requirements if it \changed{satisfies}{meets} the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}) and \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
 
 \pnum
 In the table below, \tcode{x} denotes a value of type \tcode{X},
-\tcode{ec} denotes a (possibly const) value of type \tcode{error_code},
-and \tcode{ep} denotes a (possibly const) value of a type satisfying
+\tcode{ec} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{error_code},
+and \tcode{ep} denotes a \removed{(possibly const)} value of a \added{(possibly const)} type \changed{satisfying}{meeting}
 the endpoint~(\ref{socket.reqmts.endpoint}) requirements.
 
 \begin{libreqtab3}
-{ConnectCondition requirements}
+{\tmpnewoldconcept{ConnectCondition} requirements}
 {tab:socket.reqmts.connectcondition.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -1017,10 +1007,10 @@ error_condition make_error_condition(socket_errc e) noexcept;
 \rSec1[socket.base]{Class \tcode{socket_base}}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class socket_base
   {
@@ -1059,10 +1049,10 @@ inline namespace v1 {
     ~socket_base();
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -1170,28 +1160,28 @@ In the table below, let \placeholder{C} denote a socket option class; let \place
 \tcode{SOL_SOCKET}  &
 \tcode{SO_BROADCAST}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket permits sending of broadcast messages, if supported by the protocol.  \\ \rowsep
+\changed{Satisfies}{Meets} the \tmpnewoldconcept{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket permits sending of broadcast messages, if supported by the protocol.  \\ \rowsep
 
 \tcode{socket_base::}
 \tcode{debug}  &
 \tcode{SOL_SOCKET}  &
 \tcode{SO_DEBUG}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether debugging information is recorded by the underlying protocol.  \\ \rowsep
+\changed{Satisfies}{Meets} the \tmpnewoldconcept{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether debugging information is recorded by the underlying protocol.  \\ \rowsep
 
 \tcode{socket_base::}
 \tcode{do_not_route}  &
 \tcode{SOL_SOCKET}  &
 \tcode{SO_DONTROUTE}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether outgoing messages bypass standard routing facilities.  \\ \rowsep
+\changed{Satisfies}{Meets} the \tmpnewoldconcept{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether outgoing messages bypass standard routing facilities.  \\ \rowsep
 
 \tcode{socket_base::}
 \tcode{keep_alive}  &
 \tcode{SOL_SOCKET}  &
 \tcode{SO_KEEPALIVE}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket permits sending of keep_alive messages, if supported by the protocol.  \\ \rowsep
+\changed{Satisfies}{Meets} the \tmpnewoldconcept{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket permits sending of keep_alive messages, if supported by the protocol.  \\ \rowsep
 
 \tcode{socket_base::}
 \tcode{linger}~(\ref{socket.opt.linger})  &
@@ -1205,42 +1195,42 @@ Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type re
 \tcode{SOL_SOCKET}  &
 \tcode{SO_OOBINLINE}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether out-of-band data (also known as urgent data) is received inline.  \\ \rowsep
+\changed{Satisfies}{Meets} the \tmpnewoldconcept{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether out-of-band data (also known as urgent data) is received inline.  \\ \rowsep
 
 \tcode{socket_base::}
 \tcode{receive_buffer_size}  &
 \tcode{SOL_SOCKET}  &
 \tcode{SO_RCVBUF}  &
 \tcode{int}  &
-Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the size of the receive buffer associated with a socket.  \\ \rowsep
+\changed{Satisfies}{Meets} the \tmpnewoldconcept{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the size of the receive buffer associated with a socket.  \\ \rowsep
 
 \tcode{socket_base::}
 \tcode{receive_low_watermark}  &
 \tcode{SOL_SOCKET}  &
 \tcode{SO_RCVLOWAT}  &
 \tcode{int}  &
-Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the minimum number of bytes to process for socket input operations.  \\ \rowsep
+\changed{Satisfies}{Meets} the \tmpnewoldconcept{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the minimum number of bytes to process for socket input operations.  \\ \rowsep
 
 \tcode{socket_base::}
 \tcode{reuse_address}  &
 \tcode{SOL_SOCKET}  &
 \tcode{SO_REUSEADDR}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether the validation of endpoints used for binding a socket should allow the reuse of local endpoints, if supported by the protocol.  \\ \rowsep
+\changed{Satisfies}{Meets} the \tmpnewoldconcept{BooleanSocketOption}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether the validation of endpoints used for binding a socket should allow the reuse of local endpoints, if supported by the protocol.  \\ \rowsep
 
 \tcode{socket_base::}
 \tcode{send_buffer_size}  &
 \tcode{SOL_SOCKET}  &
 \tcode{SO_SNDBUF}  &
 \tcode{int}  &
-Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the size of the send buffer associated with a socket.  \\ \rowsep
+\changed{Satisfies}{Meets} the \tmpnewoldconcept{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the size of the send buffer associated with a socket.  \\ \rowsep
 
 \tcode{socket_base::}
 \tcode{send_low_watermark}  &
 \tcode{SOL_SOCKET}  &
 \tcode{SO_SNDLOWAT}  &
 \tcode{int}  &
-Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the minimum number of bytes to process for socket output operations.  \\
+\changed{Satisfies}{Meets} the \tmpnewoldconcept{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the minimum number of bytes to process for socket output operations.  \\
 
 \end{LongTable}
 
@@ -1252,10 +1242,10 @@ Satisfies the \tcode{IntegerSocketOption}~(\ref{socket.reqmts.opt.int}) type req
 The \tcode{linger} class represents a socket option for controlling the behavior when a socket is closed and unsent data is present.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class socket_base::linger
   {
@@ -1272,24 +1262,24 @@ inline namespace v1 {
     void timeout(chrono::seconds t) noexcept;
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
-\tcode{linger} satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), \tcode{Gettable\-Socket\-Option}~(\ref{socket.reqmts.gettablesocketoption}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
+\tcode{linger} \changed{satisfies}{meets} the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{DefaultConstructible} (\CppXref{defaultconstructible}), \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), \tmpoldconcept{CopyAssignable} (\CppXref{copyassignable}), \tmpnewoldconcept{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tmpnewoldconcept{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
 
 \indexextensible{linger}%
 \pnum
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class socket_base::linger
   {
@@ -1305,10 +1295,10 @@ inline namespace v1 {
     ::linger value_;  // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \begin{itemdecl}
@@ -1429,10 +1419,10 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 Class template \tcode{basic_socket<Protocol>} is used as the base class for the \tcode{basic_datagram_socket<Pro\-t\-o\-col>} and \tcode{basic_stream_socket<Protocol>} class templates. It provides functionality that is common to both types of socket.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Protocol>
   class basic_socket : public socket_base
@@ -1549,14 +1539,14 @@ inline namespace v1 {
     protocol_type protocol_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_socket} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), and \tcode{MoveAssignable} (\CppXref{moveassignable}).
+\changed{Instances}{Specializations} of class template \tcode{basic_socket} meet the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{MoveConstructible} (\CppXref{moveconstructible}), and \tmpoldconcept{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
 When an operation has its effects specified as if by passing the result of \tcode{native_handle()} to a POSIX function, then the operation fails with error condition \tcode{errc::bad_file_descriptor} if \tcode{is_open() == false} at the point in the effects when the POSIX function is called.
@@ -1635,7 +1625,7 @@ basic_socket(io_context& ctx, const protocol_type& protocol,
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{native_socket} is a native handle to an open socket.
+\changed{\requires}{\expects} \tcode{native_socket} is a native handle to an open socket.
 
 \pnum
 \effects Assigns the existing native socket into this socket as if by calling \tcode{assign(protocol, native_socket)}.
@@ -1686,8 +1676,10 @@ template<class OtherProtocol>
 \end{itemdecl}
 
 \begin{itemdescr}
+\begin{removedblock}
 \pnum
 \requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{removedblock}
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_socket<Protocol>} that refers to the state originally represented by \tcode{rhs}.
@@ -1710,7 +1702,11 @@ template<class OtherProtocol>
 \end{itemize}
 
 \pnum
-\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\changed{\remarks This constructor shall not participate in overload resolution unless
+\tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.}
+{%
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+}
 \end{itemdescr}
 
 
@@ -1763,8 +1759,10 @@ template<class OtherProtocol>
 \end{itemdecl}
 
 \begin{itemdescr}
+\begin{removedblock}
 \pnum
 \requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{removedblock}
 
 \pnum
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this socket. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}. Disables the linger socket option to prevent the assignment from blocking, and releases socket resources as if by POSIX \tcode{close(native_handle())}. Moves into \tcode{*this} the state originally represented by \tcode{rhs}.
@@ -1788,7 +1786,11 @@ template<class OtherProtocol>
 \returns \tcode{*this}.
 
 \pnum
-\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\changed{\remarks This assignment operator shall not participate in overload resolution unless
+\tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.}
+{%
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+}
 \end{itemdescr}
 
 
@@ -1853,7 +1855,7 @@ void assign(const protocol_type& protocol,
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{native_socket} is a native handle to an open socket.
+\changed{\requires}{\expects} \tcode{native_socket} is a native handle to an open socket.
 
 \pnum
 \effects Assigns the native socket handle to this socket object.
@@ -1884,7 +1886,7 @@ native_handle_type release(error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{is_open() == true}.
+\changed{\requires}{\expects} \tcode{is_open() == true}.
 
 \pnum
 \effects Cancels all outstanding asynchronous operations associated with this socket.
@@ -2251,10 +2253,10 @@ When there are multiple outstanding asynchronous wait operations on this socket 
 The class template \tcode{basic_datagram_socket<Protocol>} is used to send and receive discrete messages of fixed maximum length.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Protocol>
   class basic_datagram_socket : public basic_socket<Protocol>
@@ -2386,14 +2388,14 @@ inline namespace v1 {
                             CompletionToken&& token);
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_datagram_socket} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), and \tcode{MoveAssignable} (\CppXref{moveassignable}).
+\changed{Instances}{Specializations} of class template \tcode{basic_datagram_socket} meet the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{MoveConstructible} (\CppXref{moveconstructible}), and \tmpoldconcept{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
 If a program performs a synchronous operation on this socket, other than \tcode{close}, \tcode{cancel}, \tcode{shutdown}, \tcode{send}, or \tcode{send_to}, while there is an outstanding asynchronous read operation, the behavior is undefined.
@@ -2462,14 +2464,20 @@ template<class OtherProtocol>
 \end{itemdecl}
 
 \begin{itemdescr}
+\begin{removedblock}
 \pnum
 \requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{removedblock}
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
 
 \pnum
-\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\changed{\remarks This constructor shall not participate in overload resolution unless
+\tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.}
+{%
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+}
 \end{itemdescr}
 
 
@@ -2494,8 +2502,10 @@ template<class OtherProtocol>
 \end{itemdecl}
 
 \begin{itemdescr}
+\begin{removedblock}
 \pnum
 \requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{removedblock}
 
 \pnum
 \effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
@@ -2504,7 +2514,11 @@ template<class OtherProtocol>
 \returns \tcode{*this}.
 
 \pnum
-\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\changed{\remarks This assignment operator shall not participate in overload resolution unless
+\tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.}
+{%
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+}
 \end{itemdescr}
 
 
@@ -2924,10 +2938,10 @@ If the operation completes successfully, \tcode{n} is the number of bytes sent. 
 The class template \tcode{basic_stream_socket<Protocol>} is used to exchange data with a peer over a sequenced, reliable, bidirectional, connection-mode byte stream.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Protocol>
   class basic_stream_socket : public basic_socket<Protocol>
@@ -3024,14 +3038,14 @@ inline namespace v1 {
                                CompletionToken&& token);
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_stream_socket} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), \tcode{MoveAssignable} (\CppXref{moveassignable}), \tcode{SyncRead\-Stream}~(\ref{buffer.stream.reqmts.syncreadstream}), \tcode{SyncWriteStream}~(\ref{buffer.stream.reqmts.syncwritestream}), \tcode{AsyncReadStream}~(\ref{buffer.stream.reqmts.asyncreadstream}), and \tcode{AsyncWriteStream}~(\ref{buffer.stream.reqmts.asyncwritestream}).
+\changed{Instances}{Specializations} of class template \tcode{basic_stream_socket} meet the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{MoveConstructible} (\CppXref{moveconstructible}), \tmpoldconcept{MoveAssignable} (\CppXref{moveassignable}), \tmpnewoldconcept{SyncReadStream}~(\ref{buffer.stream.reqmts.syncreadstream}), \tmpnewoldconcept{SyncWriteStream}~(\ref{buffer.stream.reqmts.syncwritestream}), \tmpnewoldconcept{AsyncReadStream}~(\ref{buffer.stream.reqmts.asyncreadstream}), and \tmpnewoldconcept{AsyncWriteStream}~(\ref{buffer.stream.reqmts.asyncwritestream}).
 
 \pnum
 If a program performs a synchronous operation on this socket, other than \tcode{close}, \tcode{cancel}, \tcode{shutdown}, or \tcode{send}, while there is an outstanding asynchronous read operation, the behavior is undefined.
@@ -3101,14 +3115,20 @@ template<class OtherProtocol>
 \end{itemdecl}
 
 \begin{itemdescr}
+\begin{removedblock}
 \pnum
 \requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{removedblock}
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_stream_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
 
 \pnum
-\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\changed{\remarks This constructor shall not participate in overload resolution unless
+\tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.}
+{%
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+}
 \end{itemdescr}
 
 
@@ -3133,8 +3153,10 @@ template<class OtherProtocol>
 \end{itemdecl}
 
 \begin{itemdescr}
+\begin{removedblock}
 \pnum
 \requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{removedblock}
 
 \pnum
 \effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
@@ -3143,7 +3165,11 @@ template<class OtherProtocol>
 \returns \tcode{*this}.
 
 \pnum
-\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\changed{\remarks This assignment operator shall not participate in overload resolution unless
+\tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.}
+{%
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+}
 \end{itemdescr}
 
 
@@ -3406,10 +3432,10 @@ template<class ConstBufferSequence, class CompletionToken>
 An object of class template \tcode{basic_socket_acceptor<AcceptableProtocol>} is used to listen for, and queue, incoming socket connections. Socket objects that represent the incoming connections are dequeued by calling \tcode{accept} or \tcode{async_accept}.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class AcceptableProtocol>
   class basic_socket_acceptor : public socket_base
@@ -3537,14 +3563,14 @@ inline namespace v1 {
     protocol_type protocol_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_socket_acceptor} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), and \tcode{MoveAssignable} (\CppXref{moveassignable}).
+\changed{Instances}{Specializations} of class template \tcode{basic_socket_acceptor} meet the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{MoveConstructible} (\CppXref{moveconstructible}), and \tmpoldconcept{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
  When there are multiple outstanding asynchronous accept operations the order in which the incoming connections are dequeued, and the order of invocation of the completion handlers for these operations, is unspecified.
@@ -3634,7 +3660,7 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{native_acceptor} is a native handle to an open acceptor.
+\changed{\requires}{\expects} \tcode{native_acceptor} is a native handle to an open acceptor.
 
 \pnum
 \effects Assigns the existing native acceptor into this acceptor as if by calling \tcode{assign(protocol, native_acceptor)}.
@@ -3689,8 +3715,10 @@ template<class OtherProtocol>
 \end{itemdecl}
 
 \begin{itemdescr}
+\begin{removedblock}
 \pnum
 \requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{removedblock}
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol>} that refers to the state originally represented by \tcode{rhs}.
@@ -3715,7 +3743,9 @@ template<class OtherProtocol>
 \end{itemize}
 
 \pnum
-\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\changed{\remarks This constructor shall not participate in overload resolution unless
+\tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.}
+{\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.}
 \end{itemdescr}
 
 
@@ -3772,8 +3802,10 @@ template<class OtherProtocol>
 \end{itemdecl}
 
 \begin{itemdescr}
+\begin{removedblock}
 \pnum
 \requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\end{removedblock}
 
 \pnum
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this acceptor, and releases acceptor resources as if by POSIX \tcode{close(native_handle())}. Then moves into \tcode{*this} the state originally represented by \tcode{rhs}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
@@ -3801,7 +3833,11 @@ template<class OtherProtocol>
 \returns \tcode{*this}.
 
 \pnum
-\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.
+\changed{\remarks This assignment operator shall not participate in overload resolution unless
+\tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol}.}
+{%
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+}
 \end{itemdescr}
 
 
@@ -3868,7 +3904,7 @@ void assign(const protocol_type& protocol,
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{native_acceptor} is a native handle to an open acceptor.
+\changed{\requires}{\expects} \tcode{native_acceptor} is a native handle to an open acceptor.
 
 \pnum
 \effects Assigns the native acceptor handle to this acceptor object.
@@ -3901,7 +3937,7 @@ native_handle_type release(error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{is_open() == true}.
+\changed{\requires}{\expects} \tcode{is_open() == true}.
 
 \pnum
 \effects Cancels all outstanding asynchronous operations associated with this acceptor.

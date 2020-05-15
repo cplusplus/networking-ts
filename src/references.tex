@@ -5,10 +5,20 @@
 \pnum
 The following referenced documents are indispensable for the application of this document. For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
 
+\ednote{The document number for the Library Fundamentals TS was wrong,
+\underline{\ref{namespaces}} referred to \tcode{fundamentals_v2},
+so it should have been ISO/IEC TS 19568:2017.
+but rebasing on \CppXX means we don't need it now anyway.}
+
+\ednote{The correct ISO document number for POSIX includes "/IEEE"
+according to the ISO webstore: https://www.iso.org/standard/50516.html{}.
+There is a newer version of POSIX, IEEE Std 1003.1-2017,
+but it doesn't appear to have been adopted as an ISO standard.}
+
 \begin{itemize}
 \item ISO/IEC 14882:2014, \doccite{Programming languages --- C++}
-\item ISO/IEC TS 19568:2015, \doccite{C++ Extensions for Library Fundamentals}
-\item ISO/IEC 9945:2009, \doccite{Information Technology --- Portable
+\item \removed{ISO/IEC TS 19568:2015, \doccite{C++ Extensions for Library Fundamentals}}
+\item ISO/IEC\added{/IEEE} 9945:2009, \doccite{Information Technology --- Portable
 Operating System Interface (POSIX)}
 \item ISO/IEC 2382-1:1993, \doccite{Information technology --- Vocabulary}
 \end{itemize}
@@ -16,7 +26,7 @@ Operating System Interface (POSIX)}
 \pnum
 The programming language and library described in ISO/IEC 14882 is herein called the \Cpp Standard.
 References to clauses within the \Cpp Standard are written as ``\CppXref{library}''.
-The operating system interface described in ISO/IEC 9945 is herein called POSIX.
+The operating system interface described in ISO/IEC\added{/IEEE} 9945 is herein called POSIX.
 
 \pnum
 This document mentions commercially available operating systems for purposes of exposition.  POSIX\textregistered\ is a registered trademark of The IEEE. Windows\textregistered\ is a registered trademark of Microsoft Corporation. This information is given for the convenience of users of this document and does not constitute an endorsement by ISO or IEC of these products.

@@ -30,7 +30,7 @@ Implementations are encouraged to provide such behavior as it is defined by POSI
 \rSec2[conformance.conditional]{Conditionally-supported features}
 
 \pnum
-This document defines conditionally-supported features, in the form of additional member functions on types that satisfy \tcode{Protocol}~(\ref{socket.reqmts.protocol}), \tcode{Endpoint}~(\ref{socket.reqmts.endpoint}), \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), \tcode{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}) or \tcode{IoControlCommand}~(\ref{socket.reqmts.iocontrolcommand}) requirements.
+This document defines conditionally-supported features, in the form of additional member functions on types that \changed{satisfy}{meet the} \newoldconcept{Protocol}~(\ref{socket.reqmts.protocol}), \newoldconcept{Endpoint}~(\ref{socket.reqmts.endpoint}), \newoldconcept{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), \newoldconcept{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}) or \newoldconcept{IoControlCommand}~(\ref{socket.reqmts.iocontrolcommand}) requirements.
 
 \pnum
  \begin{note} This is so that, when the additional member functions are available, \Cpp programs can extend the library to add support for other protocols and socket options. \end{note}

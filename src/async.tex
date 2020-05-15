@@ -11,10 +11,10 @@
 \indexlibrary{\idxcode{associated_allocator_t}}%
 \indexlibrary{\idxcode{associated_executor_t}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class CompletionToken, class Signature>
     class async_result;
@@ -54,15 +54,15 @@ inline namespace v1 {
   template<class T> struct is_executor;
 
   template<class T>
-    constexpr bool is_executor_v = is_executor<T>::value;
+    @\added{inline}@ constexpr bool is_executor_v = is_executor<T>::value;
 
   struct executor_arg_t { };
-  constexpr executor_arg_t executor_arg = executor_arg_t();
+  @\added{inline}@ constexpr executor_arg_t executor_arg = executor_arg_t();
 
   template<class T, class Executor> struct uses_executor;
 
   template<class T, class Executor>
-    constexpr bool uses_executor_v = uses_executor<T, Executor>::value;
+    @\added{inline}@ constexpr bool uses_executor_v = uses_executor<T, Executor>::value;
 
   template<class T, class Executor = system_executor>
     struct associated_executor;
@@ -124,7 +124,7 @@ inline namespace v1 {
   class system_context;
 
   bool operator==(const system_executor&, const system_executor&);
-  bool operator!=(const system_executor&, const system_executor&);
+  @\removed{bool operator!=(const system_executor\&, const system_executor\&);}@
 
   class bad_executor;
 
@@ -132,10 +132,10 @@ inline namespace v1 {
 
   bool operator==(const executor& a, const executor& b) noexcept;
   bool operator==(const executor& e, nullptr_t) noexcept;
-  bool operator==(nullptr_t, const executor& e) noexcept;
-  bool operator!=(const executor& a, const executor& b) noexcept;
-  bool operator!=(const executor& e, nullptr_t) noexcept;
-  bool operator!=(nullptr_t, const executor& e) noexcept;
+  @\removed{bool operator==(nullptr_t, const executor\& e) noexcept;}@
+  @\removed{bool operator!=(const executor\& a, const executor\& b) noexcept;}@
+  @\removed{bool operator!=(const executor\& e, nullptr_t) noexcept;}@
+  @\removed{bool operator!=(nullptr_t, const executor\& e) noexcept;}@
 
   // \ref{async.dispatch}, dispatch:
 
@@ -169,8 +169,8 @@ inline namespace v1 {
 
   template<class Executor>
     bool operator==(const strand<Executor>& a, const strand<Executor>& b);
-  template<class Executor>
-    bool operator!=(const strand<Executor>& a, const strand<Executor>& b);
+  @\removed{template<class Executor>}@
+    @\removed{bool operator!=(const strand<Executor>\& a, const strand<Executor>\& b);}@
 
   template<class ProtoAllocator = allocator<void>>
     class use_future_t;
@@ -183,12 +183,12 @@ inline namespace v1 {
   template<class Result, class... Args, class Signature>
     class async_result<packaged_task<Result(Args...)>, Signature>;
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
+} // inline namespace \added{experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
 
   template<class Allocator>
-    struct uses_allocator<experimental::net::v1::executor, Allocator>
+    struct uses_allocator<experimental::net::@\namespacever@::executor, Allocator>
       : true_type {};
 
 } // namespace std
@@ -202,23 +202,23 @@ inline namespace v1 {
 \rSec2[async.reqmts.proto.allocator]{Proto-allocator requirements}
 
 \pnum
-A type \tcode{A} meets the proto-allocator requirements if \tcode{A} is \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{Destruct\-ible} (\CppXref{destructible}), and \tcode{allocator_traits<A>::rebind_alloc<U>} meets the allocator requirements (\CppXref{allocator.requirements}), where \tcode{U} is an object type. \begin{note} For example, \tcode{allocator<void>} meets the proto-allocator requirements but not the allocator requirements. \end{note} No comparison operator, copy operation, move operation, or swap operation on these types shall exit via an exception.
+A type \tcode{A} meets the \changed{proto-allocator}{\defnnewoldconcept{ProtoAllocator}} requirements if \tcode{A} \changed{is}{meets the requirements of} \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), \tmpoldconcept{Destructible} (\CppXref{destructible}), and \tcode{allocator_traits<A>::rebind_alloc<U>} meets the \changed{allocator}{\oldconcept{Allocator}} requirements (\CppXref{allocator.requirements}), where \tcode{U} is \changed{an}{a \cv-unqualified} object type. \begin{note} For example, \tcode{allocator<void>} meets the proto-allocator requirements but not the allocator requirements. \end{note} No comparison operator, copy operation, move operation, or swap operation on these types \changed{shall exit}{exits} via an exception.
 
 
 
 \rSec2[async.reqmts.executor]{Executor requirements}
 
 \pnum
-The library describes a standard set of requirements for executors. A type meeting the \tcode{Executor} requirements embodies a set of rules for determining how submitted function objects are to be executed.
+The library describes a standard set of requirements for executors. A type meeting the \tmpdefnnewoldconcept{Executor} requirements embodies a set of rules for determining how submitted function objects are to be executed.
 
 \pnum
-A type \tcode{X} meets the \tcode{Executor} requirements if it satisfies the requirements of \tcode{CopyConstructible} (\CppXref{copyconstructible}) and \tcode{Destructible} (\CppXref{destructible}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \tmpnewoldconcept{Executor} requirements if it \changed{satisfies}{meets} the requirements of \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}) and \tmpoldconcept{Destructible} (\CppXref{destructible}), as well as the additional requirements listed below.
 
 \pnum
-No comparison operator, copy operation, move operation, swap operation, or member functions \tcode{context}, \tcode{on_work_started}, and \tcode{on_work_finished} on these types shall exit via an exception.
+No comparison operator, copy operation, move operation, swap operation, or member functions \tcode{context}, \tcode{on_work_started}, and \tcode{on_work_finished} on these types \changed{shall exit}{exits} via an exception.
 
 \pnum
- The executor copy constructor, comparison operators, and other member functions defined in these requirements shall not introduce data races as a result of concurrent calls to those functions from different threads.
+ The executor copy constructor, comparison operators, and other member functions defined in these requirements \changed{shall}{do} not introduce data races as a result of concurrent calls to those functions from different threads.
 The member function \tcode{dispatch} may be recursively reentered.
 
 \pnum
@@ -226,15 +226,15 @@ Let \tcode{ctx} be the execution context returned by the executor's \tcode{conte
 
 \pnum
 In Table~\ref{tab:async.reqmts.executor.requirements},
-\tcode{x1} and \tcode{x2} denote (possibly const) values of type \tcode{X},
+\tcode{x1} and \tcode{x2} denote \removed{(possibly const)} values of type \added{(possibly const)} \tcode{X},
 \tcode{mx1} denotes an xvalue of type \tcode{X},
-\tcode{f} denotes a function object of \tcode{MoveConstructible} (\CppXref{moveconstructible}) type \tcode{Func} such that \tcode{f()} is a valid expression,
-\tcode{a} denotes a (possibly const) value of type \tcode{A}
-where \tcode{A} is a type meeting the \tcode{ProtoAllocator} requirements (\ref{async.reqmts.proto.allocator}),
+\tcode{f} denotes a function object of \tmpoldconcept{MoveConstructible} (\CppXref{moveconstructible}) type \tcode{Func} such that \tcode{f()} is a valid expression,
+\tcode{a} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{A}
+where \tcode{A} is a type meeting the \tmpnewoldconcept{ProtoAllocator} requirements (\ref{async.reqmts.proto.allocator}),
 and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
-{Executor requirements}
+{\tmpnewoldconcept{Executor} requirements}
 {tab:async.reqmts.executor.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -250,11 +250,11 @@ and \tcode{u} denotes an identifier.
 
 \tcode{X u(x1);}  &
   &
-Shall not exit via an exception.\br\textit{post:} \tcode{u == x1} and \tcode{std::addressof(u.context()) == std::addressof(x1.context()).}  \\ \rowsep
+Shall not exit via an exception.\br\changed{\textit{post:}}{\postconditions} \tcode{u == x1} and \tcode{\removed{std::}addressof(u.context()) == \removed{std::}addressof(x1.context()).}  \\ \rowsep
 
 \tcode{X u(mx1);}  &
   &
-Shall not exit via an exception.\br\textit{post:} \tcode{u} equals the prior value of \tcode{mx1} and \tcode{std::addressof(u.context())} equals the prior value of \tcode{std::addressof(mx1.context())}.  \\ \rowsep
+Shall not exit via an exception.\br\changed{\textit{post:}}{\postconditions} \tcode{u} equals the prior value of \tcode{mx1} and \tcode{\removed{std::}addressof(u.context())} equals the prior value of \tcode{\removed{std::}addressof(mx1.context())}.  \\ \rowsep
 
 \tcode{x1 == x2}  &
 \tcode{bool}  &
@@ -265,7 +265,7 @@ Returns \tcode{true} only if \tcode{x1} and \tcode{x2} can be interchanged with 
 Same as \tcode{!(x1 == x2)}.  \\ \rowsep
 
 \tcode{x1.context()}  &
-\tcode{execution_context\&}, or \tcode{E\&} where \tcode{E} is a type that satisfies the \tcode{ExecutionContext} ~(\ref{async.reqmts.executioncontext}) requirements.  &
+\tcode{execution_context\&}, or \tcode{E\&} where \tcode{E} is a type that \changed{satisfies}{meets} the \tmpnewoldconcept{ExecutionContext} ~(\ref{async.reqmts.executioncontext}) requirements.  &
 Shall not exit via an exception. The comparison operators and member functions defined in these requirements shall not alter the reference returned by this function.  \\ \rowsep
 
 \tcode{x1.on_work_started()}  &
@@ -274,7 +274,7 @@ Shall not exit via an exception. The comparison operators and member functions d
 
 \tcode{x1.on_work_finished()}  &
   &
-Shall not exit via an exception. \br\textit{Precondition:} A preceding call \tcode{x2.on_work_started()} where \tcode{x1 == x2}.  \\ \rowsep
+Shall not exit via an exception. \br\changed{\textit{Precondition:}}{\expects} A preceding call \tcode{x2.on_work_started()} where \tcode{x1 == x2}.  \\ \rowsep
 
 \tcode{x1.dispatch(\br\mbox{\ \ }std::move(f),~a)}  &
   &
@@ -299,15 +299,15 @@ Shall not exit via an exception. \br\textit{Precondition:} A preceding call \tco
 
 \indexlibrary{\idxcode{execution_context}}%
 \pnum
-A type \tcode{X} meets the \tcode{ExecutionContext} requirements if it is publicly and unambiguously derived from \tcode{execution_context}, and satisfies the additional requirements listed below.
+A type \tcode{X} meets the \tmpdefnnewoldconcept{ExecutionContext} requirements if it is publicly and unambiguously derived from \tcode{execution_context}, and \changed{satisfies}{meets} the additional requirements listed below.
 
 \pnum
 In Table~\ref{tab:async.reqmts.executioncontext.requirements}, \tcode{x} denotes a value of type \tcode{X}.
 
-\indextext{requirements!\idxcode{ExecutionContext}}%
-\indextext{\idxcode{ExecutionContext}}%
+\indextext{requirements!\idxnewoldconcept{ExecutionContext}}%
+\indextext{\idxnewoldconcept{ExecutionContext}}%
 \begin{libreqtab3}
-{ExecutionContext requirements}
+{\tmpnewoldconcept{ExecutionContext} requirements}
 {tab:async.reqmts.executioncontext.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -322,7 +322,7 @@ In Table~\ref{tab:async.reqmts.executioncontext.requirements}, \tcode{x} denotes
 \endhead
 
 \tcode{X::executor_type}  &
-type meeting \tcode{Executor}~(\ref{async.reqmts.executor}) requirements  &
+type meeting \tmpnewoldconcept{Executor}~(\ref{async.reqmts.executor}) requirements  &
   \\ \rowsep
 
 \tcode{x.\~X()}  &
@@ -342,7 +342,9 @@ type meeting \tcode{Executor}~(\ref{async.reqmts.executor}) requirements  &
 \indextext{service}
 \indexlibrary{\idxcode{execution_context::service}}%
 \pnum
-A class is a service if it is publicly and unambiguously derived from \tcode{execution_context::service}, or if it is publicly and unambiguously derived from another service. For a service \tcode{S}, \tcode{S::key_type} shall be valid and denote a type (\CppXref{temp.deduct}), \tcode{is_base_of_v<typename S::key_type, S>} shall be \tcode{true}, and \tcode{S} shall satisfy the \tcode{Destructible} requirements (\CppXref{destructible}).
+\changed{A class is a service}{A \defn{service} is a class type that meets the \newoldconcept{Service} requirements. A type meets the \defnnewoldconcept{Service} requirements}
+if it is publicly and unambiguously derived from \tcode{execution_context::service}, or if it is publicly and unambiguously derived from another service.
+For a service \tcode{S}, \tcode{S::key_type} shall be valid and denote a type (\CppXref{temp.deduct}), \tcode{is_base_of_v<typename S::key_type, S>} shall be \tcode{true}, and \tcode{S} shall \changed{satisfy}{meet} the \tmpoldconcept{Destructible} requirements (\CppXref{destructible}).
 
 \pnum
 The first parameter of all service constructors shall be an lvalue reference to \tcode{execution_context}. This parameter denotes the \tcode{execution_context} object that represents a set of services, of which the service object will be a member. \begin{note} These constructors can be called by the \tcode{make_service} function. \end{note}
@@ -378,7 +380,7 @@ A service's \tcode{shutdown} member function shall destroy all copies of functio
 \indextext{requirements!signature}%
 \indextext{signature requirements}%
 \pnum
-A type satisfies the signature requirements if it is a call signature (\CppXref{func.def}).
+A type \changed{satisfies}{meets} the \changed{signature}{\defnnewoldconcept{Signature}} requirements if it is a call signature (\CppXref{func.def}).
 
 
 
@@ -387,7 +389,7 @@ A type satisfies the signature requirements if it is a call signature (\CppXref{
 \indextext{requirements!associator}%
 \indextext{associator}%
 \pnum
-An associator defines a relationship between different types and objects where, given:
+An \changed{associator}{\defn{associator}} defines a relationship between different types and objects where, given:
 
 \begin{itemize}
 \item
@@ -403,20 +405,21 @@ a candidate object \tcode{c} of type \tcode{C} meeting the type requirements \tc
 an associated type \tcode{A} meeting the type requirements \tcode{R} may be computed, and an associated object \tcode{a} of type \tcode{A} may be obtained.
 
 \pnum
-An associator shall be a class template that takes two template type arguments. The first template argument is the source type \tcode{S}. The second template argument is the candidate type \tcode{C}. The second template argument shall be defaulted to some default candidate type \tcode{D} that satisfies the type requirements \tcode{R}.
+An associator shall be a class template that takes two template type arguments. The first template argument is the source type \tcode{S}. The second template argument is the candidate type \tcode{C}. The second template argument shall be defaulted to some default candidate type \tcode{D} that \changed{satisfies}{meets} the type requirements \tcode{R}.
 
 \pnum
-An associator shall additionally satisfy the requirements in Table~\ref{tab:async.reqmts.associator.requirements}.
+An associator shall additionally \changed{satisfy}{meet} the requirements in Table~\ref{tab:async.reqmts.associator.requirements}.
 In this table, \tcode{X} is a class template that meets the associator requirements,
 \tcode{S} is the source type,
 \tcode{s} is a value of type \tcode{S} or \tcode{const S},
 \tcode{C} is the candidate type,
-\tcode{c} is a (possibly const) value of type \tcode{C},
+\tcode{c} is a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{C},
 \tcode{D} is the default candidate type,
 and \tcode{d} is a (possibly const) value of type \tcode{D} that is the default candidate object.
+and \tcode{d} is a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{D} that is the default candidate object.
 
 \begin{libreqtab3}
-{Associator requirements}
+{\tmpnewoldconcept{Associator} requirements}
 {tab:async.reqmts.associator.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -449,7 +452,7 @@ Returns \tcode{X<S>::get(S, d)}.  \\ \rowsep
 \end{libreqtab3}
 
 \pnum
-The associator's primary template shall be defined. A program may partially specialize the associator class template for some user-defined type \tcode{S}.
+The associator's primary template shall be defined. A program may partially specialize the associator class template for some \changed{user}{program}-defined type \tcode{S}.
 
 \pnum
  Finally, the associator shall provide the following type alias and function template in the enclosing namespace:
@@ -534,7 +537,7 @@ The completion handler object \tcode{completion_handler} is initialized with
 \begin{note} No other requirements are placed on the type \tcode{CompletionToken}. \end{note}
 
 \pnum
-The type \tcode{CompletionHandler} shall satisfy the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), and be callable with the specified call signature.
+The type \tcode{CompletionHandler} shall \changed{satisfy}{meet} the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}) and \tmpoldconcept{MoveConstructible} (\CppXref{moveconstructible}), and be callable with the specified call signature.
 
 \pnum
 In this document, all initiating functions specify a
@@ -613,14 +616,14 @@ auto async_xyz(T1 t1, T2 t2, CompletionToken&& token)
 
 \indextext{initiating function!lifetime of arguments}%
 \pnum
- Unless otherwise specified, the lifetime of arguments to initiating functions shall be treated as follows:
+ Unless otherwise specified, the lifetime of arguments to initiating functions \changed{shall be}{is} treated as follows:
 
 \begin{itemize}
 \item
 If the parameter has a pointer type or has a type of lvalue reference to non-const, the implementation may assume the validity of the pointee or referent, respectively, until the completion handler is invoked. \begin{note} In other words, the program is responsible for guaranteeing the validity of the argument until the completion handler is invoked. \end{note}
 
 \item
-Otherwise, the implementation does not assume the validity of the argument after the initiating function completes. \begin{note} In other words, the program is not required to guarantee the validity of the argument after the initiating function completes. \end{note} The implementation may make copies of the argument, and all copies shall be destroyed no later than immediately after invocation of the completion handler.
+Otherwise, the implementation does not assume the validity of the argument after the initiating function completes. \begin{note} In other words, the program is not required to guarantee the validity of the argument after the initiating function completes. \end{note} The implementation may make copies of the argument, and all copies \changed{shall be}{are} destroyed no later than immediately after invocation of the completion handler.
 \end{itemize}
 
 
@@ -629,7 +632,7 @@ Otherwise, the implementation does not assume the validity of the argument after
 
 \indextext{initiating function!non-blocking requirements}%
 \pnum
- An initiating function shall not block (\CppXref{defns.block}) the calling thread pending completion of the outstanding operation.
+ An initiating function \changed{shall}{does} not block (\CppXref{defns.block}) the calling thread pending completion of the outstanding operation.
 
 \pnum
  \begin{note} Initiating functions can still block the calling thread for other reasons. For example, if an initiating function locks a mutex in order to synchronize access to shared data. \end{note}
@@ -648,7 +651,7 @@ Certain objects that participate in asynchronous operations have an associated e
 
 \indexlibrary{\idxcode{system_executor}}%
 \pnum
-An asynchronous operation has an associated executor satisfying the \tcode{Executor}~(\ref{async.reqmts.executor}) requirements. If not otherwise specified by the asynchronous operation, this associated executor is an object of type \tcode{system_executor}.
+An asynchronous operation has an associated executor \changed{satisfying}{meeting} the \tmpnewoldconcept{Executor}~(\ref{async.reqmts.executor}) requirements. If not otherwise specified by the asynchronous operation, this associated executor is an object of type \tcode{system_executor}.
 
 \pnum
  All asynchronous operations in this document have an associated executor object that is determined as follows:
@@ -671,7 +674,7 @@ Let \tcode{Executor1} be the type of the associated executor. Let \tcode{ex1} be
 \pnum
 A completion handler object of type \tcode{CompletionHandler}
 has an associated executor
-satisfying the Executor requirements~(\ref{async.reqmts.executor}).
+\changed{satisfying}{meeting} the \changed{Executor}{\newoldconcept{Executor}} requirements~(\ref{async.reqmts.executor}).
 The type of this associated executor is
 \tcode{associated_executor_t<CompletionHandler, Executor1>}.
 Let \tcode{Executor2} be the type
@@ -685,7 +688,7 @@ obtained by performing \tcode{get_associated_executor(completion_handler, ex1)}.
 
 \indextext{outstanding work}%
 \pnum
-Until the asynchronous operation has completed, the asynchronous operation shall maintain:
+Until the asynchronous operation has completed, the asynchronous operation \changed{shall maintain}{maintains}:
 
 \begin{itemize}
 \item
@@ -703,10 +706,10 @@ an object \tcode{work2} of type \tcode{executor_work_guard<Executor2>}, initiali
 Asynchronous operations may allocate memory. \begin{note} Such as a data structure to store copies of the \tcode{completion_handler} object and the initiating function's arguments. \end{note}
 
 \pnum
-Let \tcode{Alloc1} be a type, satisfying the \tcode{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) requirements, that represents the asynchronous operation's default allocation strategy. \begin{note} Typically \tcode{allocator<void>}. \end{note} Let \tcode{alloc1} be a value of type \tcode{Alloc1}.
+Let \tcode{Alloc1} be a type, \changed{satisfying}{meeting} the \tmpnewoldconcept{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) requirements, that represents the asynchronous operation's default allocation strategy. \begin{note} Typically \tcode{allocator<void>}. \end{note} Let \tcode{alloc1} be a value of type \tcode{Alloc1}.
 
 \pnum
-A completion handler object of type \tcode{CompletionHandler} has an associated allocator object \tcode{alloc2} of type \tcode{Alloc2} satisfying the \tcode{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) requirements. The type \tcode{Alloc2} is \tcode{associated_allocator_t<CompletionHandler, Alloc1>}. Let \tcode{alloc2} be a value of type \tcode{Alloc2} obtained by performing \tcode{get_associated_allocator(completion_handler, alloc1)}.
+A completion handler object of type \tcode{CompletionHandler} has an associated allocator object \tcode{alloc2} of type \tcode{Alloc2} \changed{satisfying}{meeting} the \tmpnewoldconcept{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) requirements. The type \tcode{Alloc2} is \tcode{associated_allocator_t<CompletionHandler, Alloc1>}. Let \tcode{alloc2} be a value of type \tcode{Alloc2} obtained by performing \tcode{get_associated_allocator(completion_handler, alloc1)}.
 
 \pnum
  The asynchronous operations defined in this document:
@@ -733,7 +736,7 @@ Let \tcode{Args...} be the argument types of the completion signature \tcode{Sig
 Let \tcode{f} be a function object, callable as \tcode{f()}, that invokes \tcode{completion_handler} as if by \tcode{completion_handler(forward<T$_0$>(t$_0$), ..., forward<T$_{N-1}$>(t$_{N-1}$))}.
 
 \pnum
-If an asynchronous operation completes immediately (that is, within the thread of execution calling the initiating function, and before the initiating function returns), the completion handler shall be submitted for execution as if by performing \tcode{ex2.post(std::move(f), alloc2)}. Otherwise, the completion handler shall be submitted for execution as if by performing \tcode{ex2.dispatch(std::move(f), alloc2)}.
+If an asynchronous operation completes immediately (that is, within the thread of execution calling the initiating function, and before the initiating function returns), the completion handler \changed{shall be}{is} submitted for execution as if by performing \tcode{ex2.post(std::move(f), alloc2)}. Otherwise, the completion handler \changed{shall be}{is} submitted for execution as if by performing \tcode{ex2.dispatch(std::move(f), alloc2)}.
 
 
 
@@ -749,24 +752,24 @@ If an asynchronous operation completes immediately (that is, within the thread o
 \pnum
 In this document, a \defn{composed asynchronous operation} is an asynchronous operation that is implemented in terms of zero or more intermediate calls to other asynchronous operations. The intermediate asynchronous operations are performed sequentially. \begin{note} That is, the completion handler of an intermediate operation initiates the next operation in the sequence. \end{note}
 
-An intermediate operation's completion handler shall have an associated executor that is either:
+An intermediate operation's completion handler \changed{shall have}{has} an associated executor that is either:
 
 \begin{itemize}
 \item
 the type \tcode{Executor2} and object \tcode{ex2} obtained from the completion handler type \tcode{CompletionHandler} and object \tcode{completion_handler}; or
 
 \item
-an object of an unspecified type satisfying the Executor requirements~(\ref{async.reqmts.executor}), that delegates executor operations to the type \tcode{Executor2} and object \tcode{ex2}.
+an object of an unspecified type \changed{satisfying}{meeting} the changed{Executor}{\newoldconcept{Executor}} requirements~(\ref{async.reqmts.executor}), that delegates executor operations to the type \tcode{Executor2} and object \tcode{ex2}.
 \end{itemize}
 
-An intermediate operation's completion handler shall have an associated allocator that is either:
+An intermediate operation's completion handler \changed{shall have}{has} an associated allocator that is either:
 
 \begin{itemize}
 \item
 the type \tcode{Alloc2} and object \tcode{alloc2} obtained from the completion handler type \tcode{CompletionHandler} and object \tcode{completion_handler}; or
 
 \item
-an object of an unspecified type satisfying the ProtoAllocator requirements~(\ref{async.reqmts.proto.allocator}), that delegates allocator operations to the type \tcode{Alloc2} and object \tcode{alloc2}.
+an object of an unspecified type \changed{satisfying}{meeting} the \changed{ProtoAllocator}{\newoldconcept{ProtoAllocator}} requirements~(\ref{async.reqmts.proto.allocator}), that delegates allocator operations to the type \tcode{Alloc2} and object \tcode{alloc2}.
 \end{itemize}
 
 
@@ -786,10 +789,10 @@ determines the return type and return value of an asynchronous operation's initi
 \end{itemize}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class CompletionToken, class Signature>
   class async_result
@@ -805,17 +808,17 @@ inline namespace v1 {
     return_type get() {}
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
 The template parameter \tcode{CompletionToken} shall be an object type. The template parameter \tcode{Signature} shall be a call signature (\CppXref{func.def}).
 
 \pnum
-Specializations of \tcode{async_result} shall satisfy the \tcode{Destructible} requirements (\CppXref{destructible}) in addition to the requirements in Table~\ref{tab:async.async.result.requirements}. In this table, \tcode{R} is a specialization of \tcode{async_result}; \tcode{r} is a modifiable lvalue of type \tcode{R}; and \tcode{h} is a modifiable lvalue of type \tcode{R::completion_handler_type}.
+Specializations of \tcode{async_result} shall \changed{satisfy}{meet} the \tmpoldconcept{Destructible} requirements (\CppXref{destructible}) in addition to the requirements in Table~\ref{tab:async.async.result.requirements}. In this table, \tcode{R} is a specialization of \tcode{async_result}; \tcode{r} is a modifiable lvalue of type \tcode{R}; and \tcode{h} is a modifiable lvalue of type \tcode{R::completion_handler_type}.
 
 \indextext{requirements!\idxcode{async_result} specializations}%
 \begin{libreqtab3}
@@ -835,11 +838,11 @@ Specializations of \tcode{async_result} shall satisfy the \tcode{Destructible} r
 
 \tcode{R::completion_handler_type}  &
   &
-A type satisfying \tcode{MoveConstructible} requirements (\CppXref{moveconstructible}), An object of type \tcode{completion_handler_type} shall be a function object with call signature \tcode{Signature}, and \tcode{completion_handler_type} shall be constructible with an rvalue of type \tcode{CompletionToken}.  \\ \rowsep
+A type \changed{satisfying}{meeting} \tmpoldconcept{MoveConstructible} requirements (\CppXref{moveconstructible}). An object of type \tcode{completion_handler_type} shall be a function object with call signature \tcode{Signature}, and \tcode{completion_handler_type} shall be constructible with an rvalue of type \tcode{CompletionToken}.  \\ \rowsep
 
 \tcode{R::return_type}  &
   &
-\tcode{void}; or a type satisfying \tcode{MoveConstructible} requirements (\CppXref{moveconstructible})  \\ \rowsep
+\tcode{void}; or a type \changed{satisfying}{meeting} \tmpoldconcept{MoveConstructible} requirements (\CppXref{moveconstructible})  \\ \rowsep
 
 \tcode{R r(h);}  &
   &
@@ -860,10 +863,10 @@ A type satisfying \tcode{MoveConstructible} requirements (\CppXref{moveconstruct
 Class template \tcode{async_completion} is provided as a convenience, to simplify the implementation of asynchronous operations that use \tcode{async_result}.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class CompletionToken, class Signature>
   struct async_completion
@@ -879,10 +882,10 @@ inline namespace v1 {
     async_result<decay_t<CompletionToken>, Signature> result;
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -918,10 +921,10 @@ Initializes \tcode{result} with \tcode{completion_handler}.
 Class template \tcode{associated_allocator} is an associator~(\ref{async.reqmts.associator}) for the \tcode{ProtoAllocator}~(\ref{async.reqmts.proto.allocator}) type requirements, with default candidate type \tcode{allocator<void>} and default candidate object \tcode{allocator<void>()}.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class ProtoAllocator = allocator<void>>
   struct associated_allocator
@@ -931,19 +934,19 @@ inline namespace v1 {
     static type get(const T& t, const ProtoAllocator& a = ProtoAllocator()) noexcept;
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \indextext{requirements!\idxcode{associated_allocator} specializations}%
 \pnum
-Specializations of \tcode{associated_allocator} shall satisfy the requirements in Table~\ref{tab:async.assoc.alloc.requirements}.
+Specializations of \tcode{associated_allocator} shall \changed{satisfy}{meet} the requirements in Table~\ref{tab:async.assoc.alloc.requirements}.
 In this table, \tcode{X} is a specialization of \tcode{associated_allocator}
 for the template parameters \tcode{T} and \tcode{ProtoAllocator};
-\tcode{t} is a (possibly const) value of type \tcode{T};
-and \tcode{a} is an object of type \tcode{ProtoAllocator}.
+\tcode{t} is a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{T};
+and \tcode{a} is an object of type \tmpnewoldconcept{ProtoAllocator}.
 
 \begin{libreqtab3}
 {\tcode{associated_allocator} specialization requirements}
@@ -1034,10 +1037,10 @@ template<class T, class ProtoAllocator>
 Class \tcode{execution_context} implements an extensible, type-safe, polymorphic set of services, indexed by service type.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class execution_context
   {
@@ -1071,10 +1074,10 @@ inline namespace v1 {
   template<class Service> bool has_service(const execution_context& ctx) noexcept;
   class service_already_exists : public logic_error { };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -1198,8 +1201,10 @@ template<class Service, class... Args> Service&
 \end{itemdecl}
 
 \begin{itemdescr}
+\ednote{This is not a precondition, because the \throws paragraph defines it.}
+
 \pnum
-\requires A service object of type \tcode{Service::key_type} does not already exist in the \tcode{execution_context} set identified by \tcode{ctx}.
+\removed{\requires A service object of type \tcode{Service::key_type} does not already exist in the \tcode{execution_context} set identified by \tcode{ctx}.}
 
 \pnum
 \effects Creates an object of type \tcode{Service}, initialized as \tcode{Service(ctx, forward<Args>(args)...)}, and adds it to the \tcode{execution_context} set identified by \tcode{ctx}.
@@ -1228,10 +1233,10 @@ template<class Service> bool has_service(const execution_context& ctx) noexcept;
 
 \indexlibrary{\idxcode{execution_context::service}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class execution_context::service
   {
@@ -1256,10 +1261,10 @@ inline namespace v1 {
     execution_context& context_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \indexlibrary{\idxcode{execution_context::service}!constructor}%
@@ -1288,27 +1293,27 @@ execution_context& context() noexcept;
 
 \indexlibrary{\idxcode{is_executor}}%
 \pnum
-The class template \tcode{is_executor} can be used to detect executor types satisfying the \tcode{Executor}~(\ref{async.reqmts.executor}) type requirements.
+The class template \tcode{is_executor} can be used to detect executor types \changed{satisfying}{meeting} the \tmpnewoldconcept{Executor}~(\ref{async.reqmts.executor}) type requirements.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T> struct is_executor;
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
-\tcode{T} shall be a complete type.
+\added{The template argument} \tcode{T} shall be a complete type.
 
 \pnum
-Class template \tcode{is_executor} is a UnaryTypeTrait (\CppXref{meta.rqmts}) with a BaseCharacteristic of \tcode{true_type} if the type \tcode{T} meets the syntactic requirements for \tcode{Executor}~(\ref{async.reqmts.executor}), otherwise \tcode{false_type}.
+Class template \tcode{is_executor} is a \changed{UnaryTypeTrait}{\oldconcept{UnaryTypeTrait}} (\CppXref{meta.rqmts}) with a \changed{BaseCharacteristic}{base characteristic} of \tcode{true_type} if the type \tcode{T} meets the syntactic requirements for \tmpnewoldconcept{Executor}~(\ref{async.reqmts.executor}), otherwise \tcode{false_type}.
 
 
 
@@ -1317,22 +1322,22 @@ Class template \tcode{is_executor} is a UnaryTypeTrait (\CppXref{meta.rqmts}) wi
 \indexlibrary{\idxcode{executor_arg_t}}%
 \indexlibrary{\idxcode{executor_arg}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   struct executor_arg_t { };
   constexpr executor_arg_t executor_arg = executor_arg_t();
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
-The \tcode{executor_arg_t} struct is an empty structure type used as a unique type to disambiguate constructor and function overloading. Specifically, types may have constructors with \tcode{executor_arg_t} as the first argument, immediately followed by an argument of a type that satisfies the Executor requirements~(\ref{async.reqmts.executor}).
+The \tcode{executor_arg_t} struct is an empty structure type used as a unique type to disambiguate constructor and function overloading. Specifically, types may have constructors with \tcode{executor_arg_t} as the first argument, immediately followed by an argument of a type that \changed{satisfies}{meets} the \changed{Executor}{\newoldconcept{Executor}} requirements~(\ref{async.reqmts.executor}).
 
 
 
@@ -1343,21 +1348,21 @@ The \tcode{executor_arg_t} struct is an empty structure type used as a unique ty
 
 \indexlibrary{\idxcode{uses_executor}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor> struct uses_executor;
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
-Remark: Detects whether \tcode{T} has a nested \tcode{executor_type} that is convertible from \tcode{Executor}. Meets the \tcode{BinaryTypeTrait} requirements (\CppXref{meta.rqmts}). The implementation provides a definition that is derived from \tcode{true_type} if the \grammarterm{qualified-id} \tcode{T::executor_type} is valid and denotes a type and \tcode{is_convertible<Executor, T::executor_type>::value != false}, otherwise it is derived from \tcode{false_type}. A program may specialize this template to derive from \tcode{true_type} for a user-defined type \tcode{T} that does not have a nested \tcode{executor_type} but nonetheless can be constructed with an executor if the first argument of a constructor has type \tcode{executor_arg_t} and the second argument has type \tcode{Executor}.
+\changed{Remark:}{\remarks} Detects whether \tcode{T} has a nested \tcode{executor_type} that is convertible from \tcode{Executor}. Meets the \tmpoldconcept{BinaryTypeTrait} requirements (\CppXref{meta.rqmts}). The implementation provides a definition that \changed{is derived from}{has a base characteristic of} \tcode{true_type} if the \grammarterm{qualified-id} \tcode{T::executor_type} is valid and denotes a type and \tcode{is_convertible\added{_v}<Executor, T::executor_type>\removed{::value} != false}, otherwise it \changed{is derived from}{has a base characteristic of} \tcode{false_type}. A program may specialize this template to derive from \tcode{true_type} for a \changed{user}{program}-defined type \tcode{T} that does not have a nested \tcode{executor_type} but nonetheless can be constructed with an executor if the first argument of a constructor has type \tcode{executor_arg_t} and the second argument has type \tcode{Executor}.
 
 
 
@@ -1370,7 +1375,7 @@ Uses-executor construction with executor \tcode{Executor} refers to the construc
 \begin{itemize}
 \item
 if \tcode{uses_executor_v<T, Executor>} is \tcode{true}
-and \tcode{is_constructible<T, executor_arg_t, Executor, V1, V2, ..., VN>::value} is \tcode{true},
+and \tcode{is_constructible\added{_v}<T, executor_arg_t, Executor, V1, V2, ..., VN>\removed{::value}} is \tcode{true},
 then \tcode{obj} is initialized as \tcode{obj(executor_arg, ex, v1, v2, ..., vN)};
 
 \item
@@ -1384,13 +1389,13 @@ otherwise, \tcode{obj} is initialized as \tcode{obj(v1, v2, ..., vN)}.
 
 \indexlibrary{\idxcode{associated_executor}}%
 \pnum
-Class template \tcode{associated_executor} is an associator~(\ref{async.reqmts.associator}) for the \tcode{Executor}~(\ref{async.reqmts.executor}) type requirements, with default candidate type \tcode{system_executor} and default candidate object \tcode{system_executor()}.
+Class template \tcode{associated_executor} is an associator~(\ref{async.reqmts.associator}) for the \tmpnewoldconcept{Executor}~(\ref{async.reqmts.executor}) type requirements, with default candidate type \tcode{system_executor} and default candidate object \tcode{system_executor()}.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor = system_executor>
   struct associated_executor
@@ -1400,18 +1405,18 @@ inline namespace v1 {
     static type get(const T& t, const Executor& e = Executor()) noexcept;
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \indextext{requirements!\idxcode{associated_executor} specializations}%
 \pnum
-Specializations of \tcode{associated_executor} shall satisfy the requirements in Table~\ref{tab:async.assoc.exec.requirements}.
+Specializations of \tcode{associated_executor} shall \changed{satisfy}{meet} the requirements in Table~\ref{tab:async.assoc.exec.requirements}.
 In this table, \tcode{X} is a specialization of \tcode{associated_executor}
 for the template parameters \tcode{T} and \tcode{Executor};
-\tcode{t} is a (possible const) value of \tcode{T};
+\tcode{t} is a \removed{(possible const)} value of \added{type (possibly const)} \tcode{T};
 and \tcode{e} is an object of type \tcode{Executor}.
 
 \begin{libreqtab3}
@@ -1495,7 +1500,7 @@ template<class T, class Executor>
 \returns \tcode{associated_executor<T, Executor>::get(t, ex)}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
+\changed{\remarks This function shall not participate in overload resolution unless}{\constraints{}}
 \tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
@@ -1510,8 +1515,9 @@ template<class T, class ExecutionContext>
 \returns \tcode{get_associated_executor(t, ctx.get_executor())}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
+\changed{\remarks This function shall not participate in overload resolution unless}
+{\constraints{}}
+\tcode{is_convertible\added{_v}<Exec\-ution\-Context\&, execution_context\&>\removed{::value}} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -1522,14 +1528,14 @@ template<class T, class ExecutionContext>
 \pnum
 The class template \tcode{executor_binder} binds executors to objects.
 A specialization \tcode{executor_binder<T, Executor>} binds
-an executor of type \tcode{Executor} satisfying the Executor requirements~(\ref{async.reqmts.executor})
+an executor of type \tcode{Executor} \changed{satisfying}{meeting} the \changed{Executor}{\newoldconcept{Executor}} requirements~(\ref{async.reqmts.executor})
 to an object or function of type \tcode{T}.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor>
   class executor_binder
@@ -1567,9 +1573,9 @@ inline namespace v1 {
     // \ref{async.exec.binder.invocation}, executor binder invocation:
 
     template<class... Args>
-      result_of_t<T&(Args&&...)> operator()(Args&&... args);
+      @\changed{result_of_t<T\&(Args\&\&...)>}{invoke_result_t<T\&, Args...>}@ operator()(Args&&... args);
     template<class... Args>
-      result_of_t<const T&(Args&&...)> operator()(Args&&... args) const;
+      @\changed{result_of_t<const T\&(Args\&\&...)>}{invoke_result_t<const T\&, Args...>}@ operator()(Args&&... args) const;
 
   private:
     Executor ex_; // \expos
@@ -1585,10 +1591,10 @@ inline namespace v1 {
   template<class T, class Executor, class Executor1>
     struct associated_executor<executor_binder<T, Executor>, Executor1>;
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 
@@ -1611,7 +1617,12 @@ template<class U, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
+\changed{
 \requires If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
+}{
+\mandates \tcode{is_convertible_v<U, T>} is \tcode{true}
+and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
+}
 
 \pnum
 \effects Initializes \tcode{ex_} with \tcode{other.get_executor()}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{other.get()} and the executor \tcode{ex_}.
@@ -1624,7 +1635,12 @@ template<class U, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
+\changed{
 \requires If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
+}{
+\mandates \tcode{is_convertible_v<U, T>} is \tcode{true}
+and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
+}
 
 \pnum
 \effects Initializes \tcode{ex_} with \tcode{other.get_executor()}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{std::move(other.get())} and the executor \tcode{ex_}.
@@ -1638,7 +1654,11 @@ template<class U, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
+\changed{
 \requires If \tcode{U} is not convertible to \tcode{T} the program is ill-formed.
+}{
+\mandates \tcode{is_convertible_v<U, T>} is \tcode{true}.
+}
 
 \pnum
 \effects Initializes \tcode{ex_} with \tcode{ex}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{other.get()} and the executor \tcode{ex_}.
@@ -1651,8 +1671,15 @@ template<class U, class OtherExecutor>
 \end{itemdecl}
 
 \begin{itemdescr}
+\ednote{Failing to meet this \requires was undefined, not ill-formed, but I'm changing it to \mandates because that seems right.}
+
 \pnum
+\changed{
 \requires \tcode{U} is \tcode{T} or convertible to \tcode{T}.
+}{
+\mandates \tcode{is_same_v<U, T>} is \tcode{true}
+or \tcode{is_convertible_v<U, T>} is \tcode{true}.
+}
 
 \pnum
 \effects Initializes \tcode{ex_} with \tcode{ex}. Initializes \tcode{target_} by performing uses-executor construction, using the constructor argument \tcode{std::move(other.get())} and the executor \tcode{ex_}.
@@ -1690,9 +1717,9 @@ executor_type get_executor() const noexcept;
 \indexlibrarymember{operator()}{executor_binder}%
 \begin{itemdecl}
 template<class... Args>
-  result_of_t<T&(Args&&...)> operator()(Args&&... args);
+  @\changed{result_of_t<T\&(Args\&\&...)>}{invoke_result_t<T\&, Args...>}@ operator()(Args&&... args);
 template<class... Args>
-  result_of_t<const T&(Args&&...)> operator()(Args&&... args) const;
+  @\changed{result_of_t<const T\&(Args\&\&...)>}{invoke_result_t<const T\&, Args...>}@ operator()(Args&&... args) const;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1707,10 +1734,10 @@ template<class... Args>
 \indextext{\idxcode{async_result}!specialization for \tcode{executor_binder}}%
 \indexlibrary{\idxcode{async_result}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor, class Signature>
   class async_result<executor_binder<T, Executor>, Signature>
@@ -1731,10 +1758,10 @@ inline namespace v1 {
     async_result<T, Signature> target_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \begin{itemdecl}
@@ -1762,10 +1789,10 @@ return_type get();
 \indextext{\idxcode{associated_allocator}!specialization for \tcode{executor_binder}}%
 \indexlibrary{\idxcode{associated_allocator}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor, class ProtoAllocator>
     struct associated_allocator<executor_binder<T, Executor>, ProtoAllocator>
@@ -1776,10 +1803,10 @@ inline namespace v1 {
                     const ProtoAllocator& a = ProtoAllocator()) noexcept;
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \begin{itemdecl}
@@ -1799,10 +1826,10 @@ static type get(const executor_binder<T, Executor>& b,
 \indextext{\idxcode{associated_executor}!specialization for \tcode{executor_binder}}%
 \indexlibrary{\idxcode{associated_executor}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor, class Executor1>
     struct associated_executor<executor_binder<T, Executor>, Executor1>
@@ -1813,10 +1840,10 @@ inline namespace v1 {
                     const Executor1& e = Executor1()) noexcept;
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \begin{itemdecl}
@@ -1834,6 +1861,8 @@ static type get(const executor_binder<T, Executor>& b,
 
 \rSec1[async.bind.executor]{Function \tcode{bind_executor}}
 
+\ednote{Should these functions use \tcode{remove_cvref_t} instead of \tcode{decay_t}?}
+
 \indexlibrary{\idxcode{bind_executor}}%
 \begin{itemdecl}
 template<class Executor, class T>
@@ -1846,7 +1875,7 @@ template<class Executor, class T>
 \returns \tcode{executor_binder<decay_t<T>, Executor>(forward<T>(t), ex)}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
+\changed{\remarks This function shall not participate in overload resolution unless}{\constraints{}}
 \tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
@@ -1862,8 +1891,8 @@ template<class ExecutionContext, class CompletionToken>
 \returns \tcode{bind_executor(ctx.get_executor(), forward<T>(t))}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
+\changed{\remarks This function shall not participate in overload resolution unless}{\constraints{}}
+\tcode{is_convertible\added{_v}<Exec\-ution\-Context\&, execution_context\&>\removed{::value}} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -1872,10 +1901,10 @@ template<class ExecutionContext, class CompletionToken>
 
 \indexlibrary{\idxcode{executor_work_guard}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Executor>
   class executor_work_guard
@@ -1909,10 +1938,10 @@ inline namespace v1 {
     bool owns_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 
@@ -2016,7 +2045,7 @@ template<class Executor>
 \returns \tcode{executor_work_guard<Executor>(ex)}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
+\changed{\remarks This function shall not participate in overload resolution unless}{\constraints{}}
 \tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
@@ -2032,8 +2061,8 @@ template<class ExecutionContext>
 \returns \tcode{make_work_guard(ctx.get_executor())}.
 
 \pnum
-\remarks This function shall not participate in overload resolution
-unless \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
+\changed{\remarks This function shall not participate in overload resolution unless}{\constraints{}}
+\tcode{is_convertible\added{_v}<Exec\-ution\-Context\&, execution_context\&>\removed{::value}} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{make_work_guard}}%
@@ -2048,9 +2077,9 @@ template<class T>
 \returns \tcode{make_work_guard(get_associated_executor(t))}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
+\changed{\remarks This function shall not participate in overload resolution unless}{\constraints{}}
 \tcode{is_executor_v<T>} is \tcode{false}
-and \tcode{is_convertible<T\&, execution_context\&>::value} is \tcode{false}.
+and \tcode{is_convertible\added{_v}<T\&, execution_context\&>\removed{::value}} is \tcode{false}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{make_work_guard}}%
@@ -2074,10 +2103,10 @@ template<class T, class U>
 Class \tcode{system_executor} represents a set of rules where function objects are permitted to execute on any thread.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class system_executor
   {
@@ -2102,19 +2131,19 @@ inline namespace v1 {
   };
 
   bool operator==(const system_executor&, const system_executor&) noexcept;
-  bool operator!=(const system_executor&, const system_executor&) noexcept;
+  @\removed{bool operator!=(const system_executor\&, const system_executor\&) noexcept;}@
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
-Class \tcode{system_executor} satisfies the \tcode{Destructible} (\CppXref{destructible}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), and \tcode{Executor}~(\ref{async.reqmts.executor}) type requirements.
+Class \tcode{system_executor} \changed{satisfies}{meets} the \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{DefaultConstructible} (\CppXref{defaultconstructible}), and \tmpnewoldconcept{Executor}~(\ref{async.reqmts.executor}) type requirements.
 
 \pnum
-To satisfy the \tcode{Executor} requirements for the \tcode{post} and \tcode{defer} member functions, the system executor may create \tcode{thread} objects to run the submitted function objects. These \tcode{thread} objects are collectively referred to as system threads.
+To \changed{satisfy}{meet} the \tmpnewoldconcept{Executor} requirements for the \tcode{post} and \tcode{defer} member functions, the system executor may create \tcode{thread} objects to run the submitted function objects. These \tcode{thread} objects are collectively referred to as system threads.
 
 
 \rSec2[async.system.exec.ops]{\tcode{system_executor} operations}
@@ -2154,7 +2183,8 @@ template<class Func, class ProtoAllocator>
 \effects If \tcode{context().stopped()} is \tcode{false},
 creates an object \tcode{f1} initialized with \tcode{\placeholdernc{DECAY_COPY}(forw\-ard<Func>(f))},
 and calls \tcode{f1()} as if in a thread of execution represented by a \tcode{thread} object.
-Any exception propagated from the execution of \tcode{\placeholdernc{DECAY_COPY}(forward<Func>(f))()}
+Any exception propagated from the \changed{execution of \tcode{\placeholdernc{DECAY_COPY}(forward<Func>(f))()}}{initialization of \tcode{f1} or the call
+\tcode{f1()}}
 results in a call to \tcode{std::terminate}.
 \end{itemdescr}
 
@@ -2172,6 +2202,7 @@ bool operator==(const system_executor&, const system_executor&) noexcept;
 \returns \tcode{true}.
 \end{itemdescr}
 
+\begin{removedblock}
 \indexlibrarymember{operator"!=}{system_executor}%
 \begin{itemdecl}
 bool operator!=(const system_executor&, const system_executor&) noexcept;
@@ -2181,6 +2212,7 @@ bool operator!=(const system_executor&, const system_executor&) noexcept;
 \pnum
 \returns \tcode{false}.
 \end{itemdescr}
+\end{removedblock}
 
 
 
@@ -2192,10 +2224,10 @@ bool operator!=(const system_executor&, const system_executor&) noexcept;
 Class \tcode{system_context} implements the execution context associated with \tcode{system_executor} objects.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class system_context : public execution_context
   {
@@ -2220,14 +2252,14 @@ inline namespace v1 {
     void join();
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
-The class \tcode{system_context} satisfies the \tcode{ExecutionContext}~(\ref{async.reqmts.executioncontext}) type requirements.
+The class \tcode{system_context} \changed{satisfies}{meets} the \tmpnewoldconcept{ExecutionContext}~(\ref{async.reqmts.executioncontext}) type requirements.
 
 \pnum
 The \tcode{system_context} member functions \tcode{get_executor}, \tcode{stop}, and \tcode{stopped}, and the \tcode{system_executor} copy constructors, member functions and comparison operators, do not introduce data races as a result of concurrent calls to those functions from different threads of execution.
@@ -2297,10 +2329,10 @@ void join();
 An exception of type \tcode{bad_executor} is thrown by \tcode{executor} member functions \tcode{dispatch}, \tcode{post}, and \tcode{defer} when the executor object has no target.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class bad_executor : public exception
   {
@@ -2309,10 +2341,10 @@ inline namespace v1 {
     bad_executor() noexcept;
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \begin{itemdecl}
@@ -2334,13 +2366,13 @@ bad_executor() noexcept;
 
 \indexlibrary{\idxcode{executor}}%
 \pnum
-The \tcode{executor} class provides a polymorphic wrapper for types that satisfy the Executor requirements~(\ref{async.reqmts.executor}).
+The \tcode{executor} class provides a polymorphic wrapper for types that \changed{satisfy}{meet} the \changed{Executor}{\newoldconcept{Executor}} requirements~(\ref{async.reqmts.executor}).
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class executor
   {
@@ -2397,28 +2429,28 @@ inline namespace v1 {
 
   bool operator==(const executor& a, const executor& b) noexcept;
   bool operator==(const executor& e, nullptr_t) noexcept;
-  bool operator==(nullptr_t, const executor& e) noexcept;
-  bool operator!=(const executor& a, const executor& b) noexcept;
-  bool operator!=(const executor& e, nullptr_t) noexcept;
-  bool operator!=(nullptr_t, const executor& e) noexcept;
+  @\removed{bool operator==(nullptr_t, const executor\& e) noexcept;}@
+  @\removed{bool operator!=(const executor\& a, const executor\& b) noexcept;}@
+  @\removed{bool operator!=(const executor\& e, nullptr_t) noexcept;}@
+  @\removed{bool operator!=(nullptr_t, const executor\& e) noexcept;}@
 
   // \ref{async.executor.algo}, executor specialized algorithms:
 
   void swap(executor& a, executor& b) noexcept;
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
+} // inline namespace \added{experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
 
   template<class Allocator>
-    struct uses_allocator<experimental::net::v1::executor, Allocator>
+    struct uses_allocator<experimental::net::\namespacever::executor, Allocator>
       : true_type {};
 
 } // namespace std
 \end{codeblock}
 
 \pnum
-Class \tcode{executor} meets the requirements of \tcode{Executor}~(\ref{async.reqmts.executor}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
+Class \tcode{executor} meets the requirements of \tmpnewoldconcept{Executor}~(\ref{async.reqmts.executor}), \tmpoldconcept{DefaultConstructible} (\CppXref{defaultconstructible}), and \tmpoldconcept{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
 \begin{note} To meet the \tcode{noexcept} requirements for executor copy constructors and move constructors, implementations can share a target between two or more \tcode{executor} objects. \end{note}
@@ -2599,7 +2631,7 @@ execution_context& context() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{*this != nullptr}.
+\changed{\requires}{\expects} \tcode{*this != nullptr}.
 
 \pnum
 \returns \tcode{e.context()}, where \tcode{e} is the target object of \tcode{*this}.
@@ -2612,7 +2644,7 @@ void on_work_started() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{*this != nullptr}.
+\changed{\requires}{\expects} \tcode{*this != nullptr}.
 
 \pnum
 \effects \tcode{e.on_work_started()}, where \tcode{e} is the target object of \tcode{*this}.
@@ -2625,7 +2657,7 @@ void on_work_finished() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{*this != nullptr}.
+\changed{\requires}{\expects} \tcode{*this != nullptr}.
 
 \pnum
 \effects \tcode{e.on_work_finished()}, where \tcode{e} is the target object of \tcode{*this}.
@@ -2739,7 +2771,7 @@ bool operator==(const executor& a, const executor& b) noexcept;
 \indexlibrarymember{operator==}{executor}%
 \begin{itemdecl}
 bool operator==(const executor& e, nullptr_t) noexcept;
-bool operator==(nullptr_t, const executor& e) noexcept;
+@\removed{bool operator==(nullptr_t, const executor\& e) noexcept;}@
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2747,6 +2779,7 @@ bool operator==(nullptr_t, const executor& e) noexcept;
 \returns \tcode{!e}.
 \end{itemdescr}
 
+\begin{removedblock}
 \indexlibrarymember{operator"!=}{executor}%
 \begin{itemdecl}
 bool operator!=(const executor& a, const executor& b) noexcept;
@@ -2767,6 +2800,7 @@ bool operator!=(nullptr_t, const executor& e) noexcept;
 \pnum
 \returns \tcode{(bool) e}.
 \end{itemdescr}
+\end{removedblock}
 
 
 
@@ -2789,7 +2823,7 @@ void swap(executor& a, executor& b) noexcept;
 
 \indexlibrary{\idxcode{dispatch}}%
 \pnum
-\begin{note} The function \tcode{dispatch} satisfies the requirements for an asynchronous operation~(\ref{async.reqmts.async}), except for the requirement that the operation uses \tcode{post} if it completes immediately. \end{note}
+\begin{note} The function \tcode{dispatch} \changed{satisfies}{meets} the requirements for an asynchronous operation~(\ref{async.reqmts.async}), except for the requirement that the operation uses \tcode{post} if it completes immediately. \end{note}
 
 \begin{itemdecl}
 template<class CompletionToken>
@@ -2850,7 +2884,7 @@ and where the effect of \tcode{f()} is:
 \returns \tcode{completion.result.get()}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
+\changed{\remarks This function shall not participate in overload resolution unless}{\constraints{}}
 \tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
@@ -2867,8 +2901,8 @@ template<class ExecutionContext, class CompletionToken>
 \returns \tcode{net::dispatch(ctx.get_executor(), forward<CompletionToken>(token))}.
 
 \pnum
-\remarks This function shall not participate in overload resolution
-unless \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
+\changed{\remarks This function shall not participate in overload resolution unless}{\constraints{}}
+\tcode{is_convertible\added{_v}<Exec\-ution\-Context\&, execution_context\&>\removed{::value}} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -2877,7 +2911,7 @@ unless \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value
 
 \indexlibrary{\idxcode{post}}%
 \pnum
-\begin{note} The function \tcode{post} satisfies the requirements for an asynchronous operation~(\ref{async.reqmts.async}). \end{note}
+\begin{note} The function \tcode{post} \changed{satisfies}{meets} the requirements for an asynchronous operation~(\ref{async.reqmts.async}). \end{note}
 
 \begin{itemdecl}
 template<class CompletionToken>
@@ -2938,7 +2972,7 @@ and where the effect of \tcode{f()} is:
 \returns \tcode{completion.result.get()}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
+\changed{\remarks This function shall not participate in overload resolution unless }{\constraints{}}
 \tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
@@ -2955,8 +2989,8 @@ template<class ExecutionContext, class CompletionToken>
 \returns \tcode{net::post(ctx.get_executor(), forward<CompletionToken>(token))}.
 
 \pnum
-\remarks This function shall not participate in overload resolution
-unless \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
+\changed{\remarks This function shall not participate in overload resolution unless }{\constraints{}}
+\tcode{is_convertible\added{_v}<Exec\-ution\-Context\&, execution_context\&>\removed{::value}} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -2965,7 +2999,7 @@ unless \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value
 
 \indexlibrary{\idxcode{defer}}%
 \pnum
-\begin{note} The function \tcode{defer} satisfies the requirements for an asynchronous operation~(\ref{async.reqmts.async}), except for the requirement that the operation uses \tcode{post} if it completes immediately. \end{note}
+\begin{note} The function \tcode{defer} \changed{satisfies}{meets} the requirements for an asynchronous operation~(\ref{async.reqmts.async}), except for the requirement that the operation uses \tcode{post} if it completes immediately. \end{note}
 
 \begin{itemdecl}
 template<class CompletionToken>
@@ -3026,7 +3060,7 @@ and where the effect of \tcode{f()} is:
 \returns \tcode{completion.result.get()}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
+\changed{\remarks This function shall not participate in overload resolution unless }{\constraints{}}
 \tcode{is_executor_v<Executor>} is \tcode{true}.
 \end{itemdescr}
 
@@ -3043,8 +3077,8 @@ template<class ExecutionContext, class CompletionToken>
 \returns \tcode{net::defer(ctx.get_executor(), forward<CompletionToken>(token))}.
 
 \pnum
-\remarks This function shall not participate in overload resolution
-unless \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}.
+\changed{\remarks This function shall not participate in overload resolution unless }{\constraints{}}
+\tcode{is_convertible\added{_v}<Exec\-ution\-Context\&, execution_context\&>\removed{::value}} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -3053,13 +3087,13 @@ unless \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value
 
 \indexlibrary{\idxcode{strand}}%
 \pnum
-The class template \tcode{strand} is a wrapper around an object of type \tcode{Executor} satisfying the Executor requirements~(\ref{async.reqmts.executor}).
+The class template \tcode{strand} is a wrapper around an object of type \tcode{Executor} \changed{satisfying}{meeting} the \changed{Executor}{\newoldconcept{Executor}} requirements~(\ref{async.reqmts.executor}).
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Executor>
   class strand
@@ -3110,16 +3144,16 @@ inline namespace v1 {
   };
 
   bool operator==(const strand<Executor>& a, const strand<Executor>& b);
-  bool operator!=(const strand<Executor>& a, const strand<Executor>& b);
+  @\removed{bool operator!=(const strand<Executor>\& a, const strand<Executor>\& b);}@
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 \pnum
-\tcode{strand<Executor>} satisfies the \tcode{Executor}~(\ref{async.reqmts.executor}) requirements.
+\tcode{strand<Executor>} \changed{satisfies}{meets} the \tmpnewoldconcept{Executor}~(\ref{async.reqmts.executor}) requirements.
 
 \pnum
  A strand provides guarantees of ordering and non-concurrency. Given:
@@ -3168,7 +3202,12 @@ strand();
 \effects Constructs an object of class \tcode{strand<Executor>} that represents a unique ordered, non-concurrent state. Initializes \tcode{inner_ex_} as \tcode{inner_ex_()}.
 
 \pnum
-\remarks This overload shall not participate in overload resolution unless \tcode{Executor} satisfies the \tcode{DefaultConstructible} requirements (\CppXref{defaultconstructible}).
+\removed{\remarks This overload shall not participate in overload resolution unless
+\tcode{Executor} satisfies the \tcode{DefaultConstructible} requirements (\CppXref{defaultconstructible}).}
+
+\added{%
+\constraints \tcode{is_default_constructible_v<Executor>} is \tcode{true}.
+}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3230,9 +3269,16 @@ strand(strand&& other) noexcept;
 template<class OtherExecutor> strand(const strand<OtherExecutor>& other) noexcept;
 \end{itemdecl}
 
+\ednote{The next two constructors are changed to be constrained,
+so that \tcode{is_constructible} gives the right answer.}
+
 \begin{itemdescr}
 \pnum
+\changed{
 \requires \tcode{OtherExecutor} is convertible to \tcode{Executor}.
+}{%
+\constraints \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
+}
 
 \pnum
 \effects Initializes \tcode{inner_ex_} as \tcode{inner_ex_(other.inner_ex_)}.
@@ -3247,7 +3293,11 @@ template<class OtherExecutor> strand(strand<OtherExecutor>&& other) noexcept;
 
 \begin{itemdescr}
 \pnum
+\changed{
 \requires \tcode{OtherExecutor} is convertible to \tcode{Executor}.
+}{
+\constraints \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
+}
 
 \pnum
 \effects Initializes \tcode{inner_ex_} as \tcode{inner_ex_(std::move(other.inner_ex_))}.
@@ -3267,7 +3317,11 @@ strand& operator=(const strand& other) noexcept;
 
 \begin{itemdescr}
 \pnum
+\changed{
 \requires \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
+}{
+\mandates \tcode{is_copy_assignable_v<Executor>} is \tcode{true}.
+}
 
 \pnum
 \postconditions
@@ -3288,7 +3342,7 @@ strand& operator=(strand&& other) noexcept;
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).
+\changed{\requires \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).}{\mandates \tcode{is_move_assignable_v<Executor>} is \tcode{true}.}
 
 \pnum
 \postconditions
@@ -3309,7 +3363,9 @@ template<class OtherExecutor> strand& operator=(const strand<OtherExecutor>& oth
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
+\changed{\requires \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).}{
+\mandates \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}
+and \tcode{is_copy_assignable_v<Executor>} is \tcode{true}.}
 
 \pnum
 \effects Assigns \tcode{other.inner_ex_} to \tcode{inner_ex_}.
@@ -3327,7 +3383,9 @@ template<class OtherExecutor> strand& operator=(strand<OtherExecutor>&& other) n
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).
+\changed{\requires \tcode{OtherExecutor} is convertible to \tcode{Executor}. \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).}{
+\mandates \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}
+and \tcode{is_move_assignable_v<Executor>} is \tcode{true}.}
 
 \pnum
 \effects Assigns \tcode{std::move(other.inner_ex_)} to \tcode{inner_ex_}.
@@ -3350,7 +3408,8 @@ template<class OtherExecutor> strand& operator=(strand<OtherExecutor>&& other) n
 
 \begin{itemdescr}
 \pnum
-\effects Destroys an object of class \tcode{strand<Executor>}. After this destructor completes, objects that were added to the strand but have not yet been executed will be executed in a way that meets the guarantees of ordering and non-concurrency.
+\effects \removed{Destroys an object of class \tcode{strand<Executor>}.}
+After this destructor completes, objects that were added to the strand but have not yet been executed will be executed in a way that meets the guarantees of ordering and non-concurrency.
 \end{itemdescr}
 
 
@@ -3455,6 +3514,7 @@ bool operator==(const strand<Executor>& a, const strand<Executor>& b);
 \returns \tcode{true}, if the strand objects share the same ordered, non-concurrent state; otherwise \tcode{false}.
 \end{itemdescr}
 
+\begin{removedblock}
 \indexlibrarymember{operator"!=}{strand}%
 \begin{itemdecl}
 bool operator!=(const strand<Executor>& a, const strand<Executor>& b);
@@ -3464,7 +3524,7 @@ bool operator!=(const strand<Executor>& a, const strand<Executor>& b);
 \pnum
 \returns \tcode{!(a == b)}.
 \end{itemdescr}
-
+\end{removedblock}
 
 
 
@@ -3472,13 +3532,13 @@ bool operator!=(const strand<Executor>& a, const strand<Executor>& b);
 
 \indexlibrary{\idxcode{use_future_t}}%
 \pnum
-The class template \tcode{use_future_t} defines a set of types that, when passed as a completion token~(\ref{async.reqmts.async.token}) to an asynchronous operation's initiating function, cause the result of the asynchronous operation to be delivered via a future (\CppXref{futures.uniquefuture}).
+The class template \tcode{use_future_t} defines a set of types that, when passed as a completion token~(\ref{async.reqmts.async.token}) to an asynchronous operation's initiating function, cause the result of the asynchronous operation to be delivered via a \changed{future}{\tcode{future}}~(\CppXref{futures.uniquefuture}).
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class ProtoAllocator = allocator<void>>
   class use_future_t
@@ -3488,7 +3548,7 @@ inline namespace v1 {
     using allocator_type = ProtoAllocator;
 
     // use_future_t members:
-    constexpr use_future_t() noexcept(noexcept(allocator_type()));
+    constexpr use_future_t() noexcept(@\changed{noexcept(allocator_type())}{is_nothrow_default_constructible_v<allocator_type>}@);
     explicit use_future_t(const allocator_type& a) noexcept;
     template<class OtherProtoAllocator> use_future_t<OtherProtoAllocator>
       rebind(const OtherProtoAllocator& a) const noexcept;
@@ -3496,10 +3556,10 @@ inline namespace v1 {
     template<class F> @\unspec@ operator()(F&& f) const;
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 \end{codeblock}
 
 
@@ -3507,10 +3567,17 @@ inline namespace v1 {
 
 \indexlibrary{\idxcode{use_future_t}!constructor}%
 \begin{itemdecl}
-constexpr use_future_t() noexcept(noexcept(allocator_type()));
+constexpr use_future_t() noexcept(@\changed{noexcept(allocator_type())}{is_nothrow_default_constructible_v<allocator_type>}@);
 \end{itemdecl}
 
 \begin{itemdescr}
+\ednote{Allocators don't have to be default constructible.}
+
+\begin{addedblock}
+\pnum
+\mandates \tcode{is_default_constructible_v<allocator_type>} is \tcode{true}.
+\end{addedblock}
+
 \pnum
 \effects Constructs a \tcode{use_future_t} with a default-constructed allocator.
 \end{itemdescr}
@@ -3562,7 +3629,7 @@ Let \tcode{T} be a completion token type. Let \tcode{H} be a completion handler 
 \returns A completion token \tcode{t} of type \tcode{T}.
 
 \pnum
-\remarks The return type \tcode{T} satisfies the \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}) requirements.
+\remarks The return type \tcode{T} \changed{satisfies}{meets} the \tmpoldconcept{Destructible} (\CppXref{destructible}) and \tmpoldconcept{MoveConstructible} (\CppXref{moveconstructible}) requirements.
 
 \pnum
 The object \tcode{h} of type \tcode{H} is an asynchronous provider with an associated shared state (\CppXref{futures.state}). The effect of \tcode{h(a$_0$, ..., a$_{N-1}$)} is to atomically store the result of \tcode{\placeholdernc{INVOKE}(fd, forward<A$_0$>(a$_0$), ..., forward<A$_{N-1}$>(a$_{N-1}$))} (\CppXref{func.require}) in the shared state and make the shared state ready. If \tcode{fd} exits via an exception then that exception is atomically stored in the shared state and the shared state is made ready.
@@ -3573,7 +3640,7 @@ The implementation provides a partial specialization \tcode{template<class Resul
 \item
  the nested type \tcode{completion_handler_type} is a type \tcode{H};
 \item
- the nested type \tcode{return_type} is \tcode{future<result_of_t<FD(decay_t<Args>...)>>}; and
+ the nested type \tcode{return_type} is \tcode{future<\changed{result_of_t<FD(decay_t<Args>...)>}{invoke_result_t<FD\&, Args...>}>}; and
 \item
  when an object \tcode{r1} of type \tcode{async_result<T, Result(Args...)>} is constructed from \tcode{h}, the expression \tcode{r1.get()} returns a future with the same shared state as \tcode{h}.
 \end{itemize}
@@ -3698,10 +3765,10 @@ Atomically stores \tcode{forward_as_tuple(\br{}forward<A$_0$>(a$_0$), $\dotsc$, 
 \indexlibrary{\idxcode{async_result}}%
 \indextext{\idxcode{async_result}!specialization for \tcode{packaged_task}}%
 \begin{itemdecl}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+@\removed{namespace std \{}@
+@\removed{namespace experimental \{ }@
+@\removed{namespace net \{ }@
+@\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Result, class... Args, class Signature>
   class async_result<packaged_task<Result(Args...)>, Signature>
@@ -3720,10 +3787,10 @@ inline namespace v1 {
     return_type future_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace \added{std::experimental::net::}\namespacever
+@\removed{ \} // namespace net}@
+@\removed{ \} // namespace experimental}@
+@\removed{ \} // namespace std}@
 
 explicit async_result(completion_handler_type& h);
 \end{itemdecl}

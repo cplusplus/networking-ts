@@ -48,7 +48,15 @@ Internet protocol~(\ref{internet})  &
 \end{libreqtab2}
 
 \pnum
-Throughout this document, the names of the template parameters are used to express type requirements, as listed in Table~\ref{tab:summary.requirements}.
+Throughout this document, \added{where template parameters are not constrained,}
+the names of the template parameters are used to express type requirements,
+as listed in Table~\ref{tab:summary.requirements}.
+\added{If a template parameter's name is a name in the first column,
+the template argument shall meet the corresponding type requirements
+in the second column.}
+
+\ednote{Many of these type requirements should be replaced by concepts,
+but that will be proposed separately.}
 
 \begin{libreqtab2}
 {Template parameters and type requirements}
@@ -67,7 +75,7 @@ Throughout this document, the names of the template parameters are used to expre
 acceptable protocol~(\ref{socket.reqmts.acceptableprotocol})  \\ \rowsep
 
 \tcode{Allocator}  &
- \CppXref{allocator.requirements}  \\ \rowsep
+ \added{\oldconcept{Allocator} (}\CppXref{allocator.requirements}\added{)}  \\ \rowsep
 
 \tcode{AsyncReadStream}  &
 buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream})  \\ \rowsep
@@ -76,7 +84,7 @@ buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstr
 buffer-oriented asynchronous write stream~(\ref{buffer.stream.reqmts.asyncwritestream})  \\ \rowsep
 
 \tcode{Clock}  &
- \CppXref{time.clock.req}  \\ \rowsep
+ \added{\oldconcept{Clock} (}\CppXref{time.clock.req}\added{)}  \\ \rowsep
 
 \tcode{CompletionCondition}  &
 completion condition~(\ref{buffer.stream.reqmts.completioncondition})  \\ \rowsep
@@ -100,7 +108,7 @@ endpoint sequence~(\ref{socket.reqmts.endpointsequence})  \\ \rowsep
 execution context~(\ref{async.reqmts.executioncontext})  \\ \rowsep
 
 \tcode{Executor}  &
-executor~(\ref{async.reqmts.executor})  \\ \rowsep
+\removed{executor}\added{\newoldconcept{Executor}}~(\ref{async.reqmts.executor})  \\ \rowsep
 
 \tcode{GettableSocketOption}  &
 gettable socket option~(\ref{socket.reqmts.gettablesocketoption})  \\ \rowsep
@@ -115,7 +123,7 @@ I/O control command~(\ref{socket.reqmts.iocontrolcommand})  \\ \rowsep
 mutable buffer sequence~(\ref{buffer.reqmts.mutablebuffersequence})  \\ \rowsep
 
 \tcode{ProtoAllocator}  &
-proto-allocator~(\ref{async.reqmts.proto.allocator})  \\ \rowsep
+\changed{proto-allocator}{\newoldconcept{ProtoAllocator}}~(\ref{async.reqmts.proto.allocator})  \\ \rowsep
 
 \tcode{Protocol}  &
 protocol~(\ref{socket.reqmts.protocol})  \\ \rowsep
@@ -127,7 +135,7 @@ service~(\ref{async.reqmts.service})  \\ \rowsep
 settable socket option~(\ref{socket.reqmts.settablesocketoption})  \\ \rowsep
 
 \tcode{Signature}  &
-signature~(\ref{async.reqmts.signature})  \\ \rowsep
+\changed{signature}{\newoldconcept{Signature}}~(\ref{async.reqmts.signature})  \\ \rowsep
 
 \tcode{SyncReadStream}  &
 buffer-oriented synchronous read stream~(\ref{buffer.stream.reqmts.syncreadstream})  \\ \rowsep
