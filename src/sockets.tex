@@ -245,7 +245,7 @@ type meeting \tmpnewoldconcept{Protocol}~(\ref{socket.reqmts.protocol}) requirem
 
 \end{libreqtab3}
 
-\indexextensible{Endpoint}%
+\indexextensiblereq{Endpoint}%
 \pnum
 In the table below, \tcode{a} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{X},
 \tcode{b} denotes a value of type \tcode{X},
@@ -350,7 +350,7 @@ type meeting \changed{endpoint}{the \newoldconcept{Endpoint}}~(\ref{socket.reqmt
 
 \end{libreqtab3}
 
-\indexextensible{Protocol}%
+\indexextensiblereq{Protocol}%
 \pnum
 In the table below, \tcode{a} denotes a \removed{(possibly const)} value of type \added{(possibly const)} \tcode{X}.
 
@@ -413,6 +413,7 @@ A type that \changed{satisfies}{meets} the requirements of \tmpoldconcept{Destru
 
 
 
+\indexextensiblereq{GettableSocketOption}%
 \rSec2[socket.reqmts.gettablesocketoption]{Gettable socket option requirements}
 
 \pnum
@@ -465,6 +466,7 @@ Returns a value suitable for passing as the \tcode{option_len} argument to POSIX
 
 
 
+\indexextensiblereq{SettableSocketOption}%
 \rSec2[socket.reqmts.settablesocketoption]{Settable socket option requirements}
 
 \pnum
@@ -579,7 +581,7 @@ public:
 };
 \end{codeblock}
 
-\indexextensible{BooleanSocketOption}%
+\indexextensiblereq{BooleanSocketOption}%
 \pnum
 Extensible implementations provide the following member functions:
 
@@ -772,7 +774,7 @@ public:
 };
 \end{codeblock}
 
-\indexextensible{BooleanSocketOption}%
+\indexextensiblereq{BooleanSocketOption}%
 \pnum
 Extensible implementations provide the following member functions:
 
@@ -1271,7 +1273,7 @@ The \tcode{linger} class represents a socket option for controlling the behavior
 \pnum
 \tcode{linger} \changed{satisfies}{meets} the requirements of \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{DefaultConstructible} (\CppXref{defaultconstructible}), \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), \tmpoldconcept{CopyAssignable} (\CppXref{copyassignable}), \tmpnewoldconcept{GettableSocketOption}~(\ref{socket.reqmts.gettablesocketoption}), and \tmpnewoldconcept{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
 
-\indexextensible{linger}%
+\indexextensibletype{linger}%
 \pnum
  Extensible implementations provide the following member functions:
 

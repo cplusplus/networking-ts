@@ -396,7 +396,7 @@ public:
 };
 \end{codeblock}
 
-\indexextensible{MulticastGroupSocketOption}%
+\indexextensiblereq{MulticastGroupSocketOption}%
 \pnum
 Extensible implementations provide the following member functions:
 
@@ -2733,7 +2733,7 @@ namespace ip {
 \pnum
 \changed{Instances}{Specializations} of the \tcode{basic_endpoint} class template meet the requirements for an \tmpnewoldconcept{Endpoint}~(\ref{socket.reqmts.endpoint}).
 
-\indexextensible{basic_endpoint}%
+\indexextensibletype{basic_endpoint}%
 \pnum
  Extensible implementations provide the following member functions:
 
@@ -4001,7 +4001,7 @@ namespace ip {
 \pnum
 The \tcode{tcp} class meets the requirements for an \tmpnewoldconcept{InternetProtocol}~(\ref{internet.reqmts.protocol}).
 
-\indexextensible{tcp}%
+\indexextensibletype{tcp}%
 \pnum
  Extensible implementations provide the following member functions:
 
@@ -4130,7 +4130,7 @@ namespace ip {
 \pnum
 The \tcode{udp} class meets the requirements for an \tmpnewoldconcept{InternetProtocol}~(\ref{internet.reqmts.protocol}).
 
-\indexextensible{udp}%
+\indexextensibletype{udp}%
 \pnum
  Extensible implementations provide the following member functions:
 
@@ -4347,7 +4347,7 @@ namespace multicast {
 \pnum
 \tcode{outbound_interface} \changed{satisfies}{meets} the requirements for \tmpoldconcept{Destructible} (\CppXref{destructible}), \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), \tmpoldconcept{CopyAssignable} (\CppXref{copyassignable}), and \tmpnewoldconcept{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
 
-\indexextensible{outbound_interface}%
+\indexextensibletype{outbound_interface}%
 \pnum
  Extensible implementations provide the following member functions:
 

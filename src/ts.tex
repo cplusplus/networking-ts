@@ -72,9 +72,13 @@
 
 % Add an extensible implementation entry to the main and library name indices
 \newcommand{\indexextensible}[1]{%
-\indextext{extensible implementation!\idxnewoldconcept{#1}}%
-\indextext{\idxnewoldconcept{#1}!extensible implementation}%
+\indextext{extensible implementation!#1}%
+\indextext{#1!extensible implementation}%
 }
+% Index extry for requirements on extensible implementations.
+\newcommand{\indexextensiblereq}[1]{\indexextensible{\idxnewoldconcept{#1}}}
+% Index extry for type properties on extensible implementations.
+\newcommand{\indexextensibletype}[1]{\indexextensible{\idxcode{#1}}}
 
 \newcommand{\namespaceverN}{v2}
 \newcommand{\namespacever}{\changed{v1}{\namespaceverN}}
