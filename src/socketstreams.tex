@@ -426,11 +426,11 @@ The class template \tcode{basic_socket_iostream<Protocol, Clock, WaitTraits>} su
 basic_socket_iostream();
 \end{itemdecl}
 
-\ednote{Using \tcode{addressof} here resolves LWG issue 344x.}
+\ednote{Using \tcode{addressof} here resolves LWG issue 3443.}
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class as \tcode{basic_iostream<char>(\changed{\&sb_}{address(sb_)}))}, value-initializes \tcode{sb_}, and performs \tcode{setf(std::ios_base::unitbuf)}.
+\effects Initializes the base class as \tcode{basic_iostream<char>(\changed{\&sb_}{addressof(sb_)}))}, value-initializes \tcode{sb_}, and performs \tcode{setf(std::ios_base::unitbuf)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -439,7 +439,7 @@ explicit basic_socket_iostream(basic_stream_socket<protocol_type> s);
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class as \tcode{basic_iostream<char>(\changed{\&sb_}{address(sb_)}))}, initializes \tcode{sb_} with \tcode{std::move(s)}, and performs \tcode{setf(std::ios_base::unitbuf)}.
+\effects Initializes the base class as \tcode{basic_iostream<char>(\changed{\&sb_}{addressof(sb_)}))}, initializes \tcode{sb_} with \tcode{std::move(s)}, and performs \tcode{setf(std::ios_base::unitbuf)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -448,7 +448,7 @@ basic_socket_iostream(basic_socket_iostream&& rhs);
 
 \begin{itemdescr}
 \pnum
-\effects Move constructs from the rvalue \tcode{rhs}. This is accomplished by move constructing the base class, and the contained \tcode{basic_socket_streambuf}. Next \tcode{basic_iostream<char>::set_rdbuf(\changed{\&sb_}{address(sb_)}))} is called to install the contained \tcode{basic_socket_streambuf}.
+\effects Move constructs from the rvalue \tcode{rhs}. This is accomplished by move constructing the base class, and the contained \tcode{basic_socket_streambuf}. Next \tcode{basic_iostream<char>::set_rdbuf(\changed{\&sb_}{addressof(sb_)}))} is called to install the contained \tcode{basic_socket_streambuf}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -460,7 +460,7 @@ template<class... Args>
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class as \tcode{basic_iostream<char>(\changed{\&sb_}{address(sb_)}))}, value-initializes \tcode{sb_}, and performs \tcode{setf(std::ios_base::unitbuf)}. Then calls \tcode{rdbuf()->connect(forward<Args>(args)...)}. If that function returns a null pointer, calls \tcode{setstate(failbit)}.
+\effects Initializes the base class as \tcode{basic_iostream<char>(\changed{\&sb_}{addressof(sb_)}))}, value-initializes \tcode{sb_}, and performs \tcode{setf(std::ios_base::unitbuf)}. Then calls \tcode{rdbuf()->connect(forward<Args>(args)...)}. If that function returns a null pointer, calls \tcode{setstate(failbit)}.
 \end{itemdescr}
 
 \begin{itemdecl}
