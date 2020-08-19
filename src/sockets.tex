@@ -3599,7 +3599,7 @@ namespace std::experimental::net::inline @\namespacever@ {
     using native_handle_type = @\impdefx{type of \tcode{basic_socket_acceptor::native_handle_type}}@; // \nativeref
     using protocol_type = AcceptableProtocol;
     using endpoint_type = typename protocol_type::endpoint;
-    @\removedcode{using socket_type = typename protocol_type::socket;}@
+    using socket_type = typename protocol_type::socket;
 
     @\addedcode{template<class OtherExecutor>}@
     @\addedcode{struct rebind_executor}@
@@ -3698,8 +3698,8 @@ namespace std::experimental::net::inline @\namespacever@ {
     void enable_connection_aborted(bool mode);
     bool enable_connection_aborted() const;
 
-    @\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept();
-    @\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(error_code& ec);
+    socket_type accept();
+    socket_type accept(error_code& ec);
     @\removedcode{socket_type accept(io_context\& ctx);}@
     @\removedcode{socket_type accept(io_context\& ctx, error_code\& ec);}@
     @\addedcode{template<class OtherExecutor>}@
@@ -3724,8 +3724,8 @@ namespace std::experimental::net::inline @\namespacever@ {
     @\addedcode{template<class ExecutionContext, class CompletionToken>}@
     @\addedcode{  \DEDUCED\ async_accept(ExecutionContext\& ctx, CompletionToken\&\& token);}@
 
-    @\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(endpoint_type& endpoint);
-    @\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(endpoint_type& endpoint, error_code& ec);
+    socket_type accept(endpoint_type& endpoint);
+    socket_type accept(endpoint_type& endpoint, error_code& ec);
     @\removedcode{socket_type accept(io_context\& ctx, endpoint_type\& endpoint);}@
     @\removedcode{socket_type accept(io_context\& ctx, endpoint_type\& endpoint,}@
     @\removedcode{                   error_code\& ec);}@
@@ -4450,8 +4450,8 @@ bool enable_connection_aborted() const;
 \end{itemdescr}
 
 \begin{itemdecl}
-@\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept();
-@\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(error_code& ec);
+socket_type accept();
+socket_type accept(error_code& ec);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -4479,8 +4479,7 @@ native_handle_type h = accept(native_handle(), nullptr, 0);
 
 
 \pnum
-\removed{\returns On success, \tcode{socket_type(ctx, protocol_, h)}. Otherwise \tcode{socket_type(ctx)}.}
-\added{\returns On success, \tcode{\{ex, protocol_, h\}}. Otherwise \tcode{\{ex\}}.}
+\returns On success, \tcode{socket_type(\removed{ctx}\added{ex}, protocol_, h)}. Otherwise \tcode{socket_type(\removed{ctx}\added{ex})}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4547,8 +4546,8 @@ native_handle_type h = accept(native_handle(), nullptr, 0);
 \end{itemdescr}
 
 \begin{itemdecl}
-@\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(endpoint_type& endpoint);
-@\removedcode{socket_type}\addedcode{typename Protocol::socket}@ accept(endpoint_type& endpoint, error_code& ec);
+socket_type accept(endpoint_type& endpoint);
+socket_type accept(endpoint_type& endpoint, error_code& ec);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -4582,8 +4581,7 @@ if (h >= 0)
 
 
 \pnum
-\removed{\returns On success, \tcode{socket_type(ctx, protocol_, h)}. Otherwise \tcode{socket_type(ctx)}.}
-\added{\returns On success, \tcode{\{ex, protocol_, h\}}. Otherwise \tcode{\{ex\}}.}
+\returns On success, \tcode{socket_type(\removed{ctx}\added{ex}, protocol_, h)}. Otherwise \tcode{socket_type(\removed{ctx}\added{ex})}.
 \end{itemdescr}
 
 \begin{itemdecl}
