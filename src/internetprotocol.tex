@@ -3078,10 +3078,8 @@ namespace ip {
     using results_type = basic_resolver_results<InternetProtocol>;
 
     @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{struct rebind_executor}@
-    @\addedcode{\{}@
-    @\addedcode{  using other = basic_resolver<InternetProtocol, OtherExecutor>;}@
-    @\addedcode{\};}@
+    @\addedcode{using rebind_executor =}@
+    @\addedcode{  basic_resolver<InternetProtocol, OtherExecutor>;}@
 
     // \ref{internet.resolver.cons}, construct / copy / destroy
 

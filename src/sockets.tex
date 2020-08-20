@@ -1412,10 +1412,8 @@ namespace std::experimental::net::inline @\namespacever@ {
     using endpoint_type = typename protocol_type::endpoint;
 
     @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{struct rebind_executor}@
-    @\addedcode{\{}@
-    @\addedcode{  using other = basic_socket<Protocol, OtherExecutor>;}@
-    @\addedcode{\};}@
+    @\addedcode{using rebind_executor =}@
+    @\addedcode{  basic_socket<Protocol, OtherExecutor>;}@
 
     // \ref{socket.basic.ops}, basic_socket operations
 
@@ -2304,10 +2302,8 @@ namespace std::experimental::net::inline @\namespacever@ {
     using endpoint_type = typename protocol_type::endpoint;
 
     @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{struct rebind_executor}@
-    @\addedcode{\{}@
-    @\addedcode{  using other = basic_datagram_socket<Protocol, OtherExecutor>;}@
-    @\addedcode{\};}@
+    @\addedcode{using rebind_executor =}@
+    @\addedcode{  basic_datagram_socket<Protocol, OtherExecutor>;}@
 
     // \ref{socket.dgram.cons}, construct / copy / destroy
 
@@ -3048,10 +3044,8 @@ namespace std::experimental::net::inline @\namespacever@ {
     using endpoint_type = typename protocol_type::endpoint;
 
     @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{struct rebind_executor}@
-    @\addedcode{\{}@
-    @\addedcode{  using other = basic_stream_socket<Protocol, OtherExecutor>;}@
-    @\addedcode{\};}@
+    @\addedcode{using rebind_executor =}@
+    @\addedcode{  basic_stream_socket<Protocol, OtherExecutor>;}@
 
     // \ref{socket.stream.cons}, construct / copy / destroy
 
@@ -3602,14 +3596,12 @@ namespace std::experimental::net::inline @\namespacever@ {
     using socket_type = typename protocol_type::socket;
 
     @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{struct rebind_executor}@
-    @\addedcode{\{}@
-    @\addedcode{  using other = basic_socket_acceptor<AcceptableProtocol, OtherExecutor>;}@
-    @\addedcode{\};}@
+    @\addedcode{using rebind_executor =}@
+    @\addedcode{  basic_socket_acceptor<AcceptableProtocol, OtherExecutor>;}@
 
     @\addedcode{template<class OtherExecutor>}@
     @\addedcode{using rebind_socket_executor}@
-    @\addedcode{  = typename AcceptableProtocol::socket::template rebind_executor<OtherExecutor>::other;}@
+    @\addedcode{  = typename AcceptableProtocol::socket::template rebind_executor<OtherExecutor>;}@
 
     // \ref{socket.acceptor.cons}, construct / copy / destroy
 

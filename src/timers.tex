@@ -168,10 +168,8 @@ namespace std::experimental::net::inline @\namespacever@ {
     using traits_type = WaitTraits;
 
     @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{struct rebind_executor}@
-    @\addedcode{\{}@
-    @\addedcode{  using other = basic_waitable_timer<Clock, WaitTraits, OtherExecutor>;}@
-    @\addedcode{\};}@
+    @\addedcode{using rebind_executor =}@
+    @\addedcode{  basic_waitable_timer<Clock, WaitTraits, OtherExecutor>;}@
 
     // \ref{timer.waitable.cons}, construct / copy / destroy
 
