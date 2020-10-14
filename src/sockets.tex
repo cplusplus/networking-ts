@@ -385,6 +385,8 @@ Returns a value suitable for passing as the protocol argument to POSIX \tcode{so
 \pnum
 A type \tcode{X} meets the \defnnewoldconcept{AcceptableProtocol} requirements if it meets the requirements of \newoldconcept{Protocol}~(\ref{socket.reqmts.protocol}) as well as the additional requirements listed below.
 
+\added{In the table below, \tcode{E} is a type that satisfies the Executor requirements~(\ref{async.reqmts.executor}).}
+
 \begin{libreqtab3}
 {\newoldconcept{AcceptableProtocol} requirements}
 {tab:socket.reqmts.acceptableprotocol.requirements}
@@ -402,6 +404,10 @@ A type \tcode{X} meets the \defnnewoldconcept{AcceptableProtocol} requirements i
 
 \tcode{X::socket}  &
 A type that meets the requirements of \oldconcept{Destructible} (\CppXref{destructible}) and \oldconcept{MoveConstructible} (\CppXref{moveconstructible}), and that is publicly and unambiguously derived from \tcode{basic_socket<X>}.  &
+  \\
+
+\added{\tcode{X::socket_for<E>}}  &
+\added{A type that satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), and that is publicly and unambiguously derived from \tcode{basic_socket<X, E>}.}  &
   \\
 
 \end{libreqtab3}
@@ -3594,14 +3600,13 @@ namespace std::experimental::net::inline @\namespacever@ {
     using protocol_type = AcceptableProtocol;
     using endpoint_type = typename protocol_type::endpoint;
     using socket_type = typename protocol_type::socket;
+    @\addedcode{template<class OtherExecutor>}@
+    @\addedcode{using socket_type_for}@
+    @\addedcode{  = typename protocol_type::socket_for<OtherExecutor>;}@
 
     @\addedcode{template<class OtherExecutor>}@
     @\addedcode{using rebind_executor =}@
     @\addedcode{  basic_socket_acceptor<AcceptableProtocol, OtherExecutor>;}@
-
-    @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{using rebind_socket_executor}@
-    @\addedcode{  = typename AcceptableProtocol::socket::template rebind_executor<OtherExecutor>;}@
 
     // \ref{socket.acceptor.cons}, construct / copy / destroy
 
@@ -3699,16 +3704,16 @@ namespace std::experimental::net::inline @\namespacever@ {
     @\removedcode{socket_type accept(io_context\& ctx);}@
     @\removedcode{socket_type accept(io_context\& ctx, error_code\& ec);}@
     @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{  rebind_socket_executor<OtherExecutor>}@
+    @\addedcode{  socket_type_for<OtherExecutor>}@
     @\addedcode{    accept(const OtherExecutor\& ex);}@
     @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{  rebind_socket_executor<OtherExecutor>}@
+    @\addedcode{  socket_type_for<OtherExecutor>}@
     @\addedcode{    accept(const OtherExecutor\& ex, error_code\& ec);}@
     @\addedcode{template<class ExecutionContext>}@
-    @\addedcode{  rebind_socket_executor<typename ExecutionContext::executor_type>}@
+    @\addedcode{  socket_type_for<typename ExecutionContext::executor_type>}@
     @\addedcode{    accept(ExecutionContext\& ctx);}@
     @\addedcode{template<class ExecutionContext>}@
-    @\addedcode{  rebind_socket_executor<typename ExecutionContext::executor_type>}@
+    @\addedcode{  socket_type_for<typename ExecutionContext::executor_type>}@
     @\addedcode{    accept(ExecutionContext\& ctx, error_code\& ec);}@
 
     template<class CompletionToken>
@@ -3726,16 +3731,16 @@ namespace std::experimental::net::inline @\namespacever@ {
     @\removedcode{socket_type accept(io_context\& ctx, endpoint_type\& endpoint,}@
     @\removedcode{                   error_code\& ec);}@
     @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{  rebind_socket_executor<OtherExecutor>}@
+    @\addedcode{  socket_type_for<OtherExecutor>}@
     @\addedcode{    accept(const OtherExecutor\& ex, endpoint_type\& endpoint);}@
     @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{  rebind_socket_executor<OtherExecutor>}@
+    @\addedcode{  socket_type_for<OtherExecutor>}@
     @\addedcode{    accept(const OtherExecutor\& ex, endpoint_type\& endpoint, error_code\& ec);}@
     @\addedcode{template<class ExecutionContext>}@
-    @\addedcode{  rebind_socket_executor<typename ExecutionContext::executor_type>}@
+    @\addedcode{  socket_type_for<typename ExecutionContext::executor_type>}@
     @\addedcode{    accept(ExecutionContext\& ctx, endpoint_type\& endpoint);}@
     @\addedcode{template<class ExecutionContext>}@
-    @\addedcode{  rebind_socket_executor<typename ExecutionContext::executor_type>}@
+    @\addedcode{  socket_type_for<typename ExecutionContext::executor_type>}@
     @\addedcode{    accept(ExecutionContext\& ctx, endpoint_type\& endpoint, error_code\& ec);}@
 
     template<class CompletionToken>
@@ -4459,10 +4464,10 @@ socket_type accept(error_code& ec);
 @\removedcode{socket_type accept(io_context\& ctx);}@
 @\removedcode{socket_type accept(io_context\& ctx, error_code\& ec);}@
 @\addedcode{template<class OtherExecutor>}@
-@\addedcode{  rebind_socket_executor<OtherExecutor>}@
+@\addedcode{  socket_type_for<OtherExecutor>}@
 @\addedcode{    accept(const OtherExecutor\& ex);}@
 @\addedcode{template<class OtherExecutor>}@
-@\addedcode{  rebind_socket_executor<OtherExecutor>}@
+@\addedcode{  socket_type_for<OtherExecutor>}@
 @\addedcode{    accept(const OtherExecutor\& ex, error_code\& ec);}@
 \end{itemdecl}
 
@@ -4475,15 +4480,15 @@ native_handle_type h = accept(native_handle(), nullptr, 0);
 
 
 \pnum
-\returns On success, \tcode{socket_type(\removed{ctx}\added{ex}, protocol_, h)}. Otherwise \tcode{socket_type(\removed{ctx}\added{ex})}.
+\returns On success, \tcode{socket_type\added{_for<OtherExecutor>}(\removed{ctx}\added{ex}, protocol_, h)}. Otherwise \tcode{socket_type\added{_for<OtherExecutor>}(\removed{ctx}\added{ex})}.
 \end{itemdescr}
 
 \begin{itemdecl}
 @\addedcode{template<class ExecutionContext>}@
-@\addedcode{  rebind_socket_executor<typename ExecutionContext::executor_type>}@
+@\addedcode{  socket_type_for<typename ExecutionContext::executor_type>}@
 @\addedcode{    accept(ExecutionContext\& ctx);}@
 @\addedcode{template<class ExecutionContext>}@
-@\addedcode{  rebind_socket_executor<typename ExecutionContext::executor_type>}@
+@\addedcode{  socket_type_for<typename ExecutionContext::executor_type>}@
 @\addedcode{    accept(ExecutionContext\& ctx, error_code\& ec);}@
 \end{itemdecl}
 
@@ -4514,7 +4519,7 @@ async_accept(get_executor()@\removedcode{.context()}@, forward<CompletionToken>(
 
 \begin{itemdescr}
 \addedpnum
-\added{Let \tcode{S} be the type \tcode{rebind_socket_executor<OtherExecutor>}.}
+\added{Let \tcode{S} be the type \tcode{socket_type_for<OtherExecutor>}.}
 
 \pnum
 \completionsig \tcode{void(error_code ec, \removed{socket_type}\added{S} s)}.
@@ -4556,10 +4561,10 @@ socket_type accept(endpoint_type& endpoint, error_code& ec);
 @\removedcode{socket_type accept(io_context\& ctx, endpoint_type\& endpoint,}@
 @\removedcode{                   error_code\& ec);}@
 @\addedcode{template<class OtherExecutor>}@
-@\addedcode{  rebind_socket_executor<OtherExecutor>}@
+@\addedcode{  socket_type_for<OtherExecutor>}@
 @\addedcode{    accept(const OtherExecutor\& ex, endpoint_type\& endpoint);}@
 @\addedcode{template<class OtherExecutor>}@
-@\addedcode{  rebind_socket_executor<OtherExecutor>}@
+@\addedcode{  socket_type_for<OtherExecutor>}@
 @\addedcode{    accept(const OtherExecutor\& ex, endpoint_type\& endpoint, error_code\& ec);}@
 \end{itemdecl}
 
@@ -4582,10 +4587,10 @@ if (h >= 0)
 
 \begin{itemdecl}
 @\addedcode{template<class ExecutionContext>}@
-@\addedcode{  rebind_socket_executor<typename ExecutionContext::executor_type>}@
+@\addedcode{  socket_type_for<typename ExecutionContext::executor_type>}@
 @\addedcode{    accept(ExecutionContext\& ctx, endpoint_type\& endpoint);}@
 @\addedcode{template<class ExecutionContext>}@
-@\addedcode{  rebind_socket_executor<typename ExecutionContext::executor_type>}@
+@\addedcode{  socket_type_for<typename ExecutionContext::executor_type>}@
 @\addedcode{    accept(ExecutionContext\& ctx, endpoint_type\& endpoint, error_code\& ec);}@
 \end{itemdecl}
 
@@ -4619,7 +4624,7 @@ async_accept(get_executor()@\removedcode{.context()}@, endpoint, forward<Complet
 
 \begin{itemdescr}
 \addedpnum
-\added{Let \tcode{S} be the type \tcode{rebind_socket_executor<OtherExecutor>}.}
+\added{Let \tcode{S} be the type \tcode{socket_type_for<OtherExecutor>}.}
 
 \pnum
 \completionsig \tcode{void(error_code ec, \removed{socket_type}\added{S} s)}.
