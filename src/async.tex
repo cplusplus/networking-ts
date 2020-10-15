@@ -1901,8 +1901,6 @@ static type get(const executor_binder<T, Executor>& b,
 
 \rSec1[async.bind.executor]{Function \tcode{bind_executor}}
 
-\ednote{Should these functions use \tcode{remove_cvref_t} instead of \tcode{decay_t}?}
-
 \indexlibrary{\idxcode{bind_executor}}%
 \begin{itemdecl}
 template<class Executor, class T>
@@ -1928,11 +1926,19 @@ template<class ExecutionContext, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
+\removed{
 \returns \tcode{bind_executor(ctx.get_executor(), forward<T>(t))}.
+}
+
+\added{
+\effects Equivalent to: \tcode{return executor_binder<decay_t<T>, Executor>(forward<T>(t), ex)}.
+}
 
 \pnum
-\changed{\remarks This function shall not participate in overload resolution unless}{\constraints{}}
+\removed{
+\remarks This function shall not participate in overload resolution unless
 \tcode{is_convertible\added{_v}<Exec\-ution\-Context\&, execution_context\&>\removed{::value}} is \tcode{true}.
+}
 \end{itemdescr}
 
 
