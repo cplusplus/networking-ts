@@ -527,6 +527,21 @@ accept, as the final parameter, a completion token object \tcode{token} of type 
 specify a completion signature, which is a call signature (\CppXref{func.def}) \tcode{Signature} that determines the arguments to the completion handler.
 \end{itemize}
 
+\ednote{This subclause doesn't actually define any requirements for
+\tcode{CompletionToken}. I experimented with introducing an exposition-only
+alias template \exposid{completion-handler-type} to obtain the
+\tcode{CompletionHandler} type
+from \tcode{CompletionToken} and \tcode{Signature},
+but it's tricky to specify clearly.
+A type cannot be a \tcode{CompletionToken} by itself,
+it can only be a completion token \textit{for a given call signature}.
+The requirement is that a type \tcode{CompletionHandler} can be obtained from
+\exposid{completion-handler-type}\tcode{<CompletionToken, Signature>}
+and that \tcode{CompletionHandler} is
+destructible, move constructible, constructible from \tcode{CompletionToken},
+and callable with the call signature \tcode{Signature}.
+}
+
 \indextext{completion handler}%
 \pnum
 An initiating function determines the type \tcode{CompletionHandler} of its
