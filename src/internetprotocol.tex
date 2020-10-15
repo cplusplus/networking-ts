@@ -15,8 +15,8 @@
 @\added{\#include <compare>}@
 
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 namespace ip {
 
@@ -126,6 +126,22 @@ namespace ip {
   using address_v4_range = basic_address_range<address_v4>;
   template<> class basic_address_range<address_v6>;
   using address_v6_range = basic_address_range<address_v6>;
+
+@\added{\}\}}@
+
+@\added{namespace std::ranges \{}@
+
+  @\added{template<>}@
+    @\added{constexpr bool}@
+      @\added{enable_view<experimental::net::\namespaceverN::ip::address_v4_range> = true;}@
+  @\added{template<>}@
+    @\added{constexpr bool}@
+      @\added{enable_borrowed_range<experimental::net::\namespaceverN::ip::address_v6_range> = true;}@
+
+@\added{\}}@
+
+@\added{namespace std::experimental::net::inline \namespaceverN{} \{}@
+@\added{namespace ip \{}@
 
   class network_v4;
   class network_v6;
