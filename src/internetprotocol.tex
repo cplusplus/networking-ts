@@ -863,12 +863,15 @@ constexpr partial_ordering operator<=>(const address& a, const address& b) noexc
 \returns
 \begin{itemize}
 \item
- if \tcode{a.is_v4() \&\& b.is_v4()}, the result of \tcode{a.v4_ <=> b.v4_};
+ if \tcode{a.is_v4() != b.is_v4()}, the result of \tcode{b.is_v4() <=> a.is_v4()};
 \item
- if \tcode{a.is_v6() \&\& b.is_v6()}, the result of \tcode{a.v6_ <=> b.v6_};
+ otherwise, if \tcode{a.is_v4()} is \tcode{true}, the result of \tcode{a.v4_ <=> b.v4_};
 \item
- otherwise, \tcode{partial_ordering::unordered}.
+ otherwise, the result of \tcode{a.v6_ <=> b.v6_}.
 \end{itemize}
+
+\ednote{Restored specified ordering between v4 and v6 addresses}
+
 \end{itemdescr}
 \end{addedblock}
 
