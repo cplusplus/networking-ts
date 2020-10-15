@@ -28,7 +28,7 @@ inline namespace v1 {
   template<class T, class ProtoAllocator = allocator<void>>
     using associated_allocator_t = typename associated_allocator<T, ProtoAllocator>::type;
 
-  // \ref{async.assoc.alloc.get}, get_associated_allocator:
+  // \ref{async.assoc.alloc.get}, get_associated_allocator
 
   template<class T>
     associated_allocator_t<T> get_associated_allocator(const T& t) noexcept;
@@ -70,7 +70,7 @@ inline namespace v1 {
   template<class T, class Executor = system_executor>
     using associated_executor_t = typename associated_executor<T, Executor>::type;
 
-  // \ref{async.assoc.exec.get}, get_associated_executor:
+  // \ref{async.assoc.exec.get}, get_associated_executor
 
   template<class T>
     associated_executor_t<T> get_associated_executor(const T& t) noexcept;
@@ -93,7 +93,7 @@ inline namespace v1 {
   template<class T, class Executor, class Executor1>
     struct associated_executor<executor_binder<T, Executor>, Executor1>;
 
-  // \ref{async.bind.executor}, bind_executor:
+  // \ref{async.bind.executor}, bind_executor
 
   template<class Executor, class T>
     executor_binder<decay_t<T>, Executor>
@@ -105,7 +105,7 @@ inline namespace v1 {
   template<class Executor>
     class executor_work_guard;
 
-  // \ref{async.make.work.guard}, make_work_guard:
+  // \ref{async.make.work.guard}, make_work_guard
 
   template<class Executor>
     executor_work_guard<Executor>
@@ -137,7 +137,7 @@ inline namespace v1 {
   bool operator!=(const executor& e, nullptr_t) noexcept;
   bool operator!=(nullptr_t, const executor& e) noexcept;
 
-  // \ref{async.dispatch}, dispatch:
+  // \ref{async.dispatch}, dispatch
 
   template<class CompletionToken>
     @\DEDUCED@ dispatch(CompletionToken&& token);
@@ -146,7 +146,7 @@ inline namespace v1 {
   template<class ExecutionContext, class CompletionToken>
     @\DEDUCED@ dispatch(ExecutionContext& ctx, CompletionToken&& token);
 
-  // \ref{async.post}, post:
+  // \ref{async.post}, post
 
   template<class CompletionToken>
     @\DEDUCED@ post(CompletionToken&& token);
@@ -155,7 +155,7 @@ inline namespace v1 {
   template<class ExecutionContext, class CompletionToken>
     @\DEDUCED@ post(ExecutionContext& ctx, CompletionToken&& token);
 
-  // \ref{async.defer}, defer:
+  // \ref{async.defer}, defer
 
   template<class CompletionToken>
     @\DEDUCED@ defer(CompletionToken&& token);
@@ -1044,20 +1044,20 @@ inline namespace v1 {
   public:
     class service;
 
-    // \ref{async.exec.ctx.cons}, construct / copy / destroy:
+    // \ref{async.exec.ctx.cons}, construct / copy / destroy
 
     execution_context();
     execution_context(const execution_context&) = delete;
     execution_context& operator=(const execution_context&) = delete;
     virtual ~execution_context();
 
-    // \ref{async.exec.ctx.ops}, execution context operations:
+    // \ref{async.exec.ctx.ops}, execution context operations
 
     void notify_fork(fork_event e);
 
   protected:
 
-    // \ref{async.exec.ctx.protected}, execution context protected operations:
+    // \ref{async.exec.ctx.protected}, execution context protected operations
 
     void shutdown() noexcept;
     void destroy() noexcept;
@@ -1540,7 +1540,7 @@ inline namespace v1 {
     using target_type = T;
     using executor_type = Executor;
 
-    // \ref{async.exec.binder.cons}, construct / copy / destroy:
+    // \ref{async.exec.binder.cons}, construct / copy / destroy
 
     executor_binder(T t, const Executor& ex);
     executor_binder(const executor_binder& other) = default;
@@ -1558,13 +1558,13 @@ inline namespace v1 {
 
     ~executor_binder();
 
-    // \ref{async.exec.binder.access}, executor binder access:
+    // \ref{async.exec.binder.access}, executor binder access
 
     T& get() noexcept;
     const T& get() const noexcept;
     executor_type get_executor() const noexcept;
 
-    // \ref{async.exec.binder.invocation}, executor binder invocation:
+    // \ref{async.exec.binder.invocation}, executor binder invocation
 
     template<class... Args>
       result_of_t<T&(Args&&...)> operator()(Args&&... args);
@@ -2086,7 +2086,7 @@ inline namespace v1 {
 
     system_executor() {}
 
-    // \ref{async.system.exec.ops}, executor operations:
+    // \ref{async.system.exec.ops}, executor operations
 
     system_context& context() const noexcept;
 
@@ -2345,7 +2345,7 @@ inline namespace v1 {
   class executor
   {
   public:
-    // \ref{async.executor.cons}, construct / copy / destroy:
+    // \ref{async.executor.cons}, construct / copy / destroy
 
     executor() noexcept;
     executor(nullptr_t) noexcept;
@@ -2362,13 +2362,13 @@ inline namespace v1 {
 
     ~executor();
 
-    // \ref{async.executor.modifiers}, executor modifiers:
+    // \ref{async.executor.modifiers}, executor modifiers
 
     void swap(executor& other) noexcept;
     template<class Executor, class ProtoAllocator>
       void assign(Executor e, const ProtoAllocator& a);
 
-    // \ref{async.executor.ops}, executor operations:
+    // \ref{async.executor.ops}, executor operations
 
     execution_context& context() const noexcept;
 
@@ -2382,18 +2382,18 @@ inline namespace v1 {
     template<class Func, class ProtoAllocator>
       void defer(Func&& f, const ProtoAllocator& a) const;
 
-    // \ref{async.executor.capacity}, executor capacity:
+    // \ref{async.executor.capacity}, executor capacity
 
     explicit operator bool() const noexcept;
 
-    // \ref{async.executor.target}, executor target access:
+    // \ref{async.executor.target}, executor target access
 
     const type_info& target_type() const noexcept;
     template<class Executor> Executor* target() noexcept;
     template<class Executor> const Executor* target() const noexcept;
   };
 
-  // \ref{async.executor.comparisons}, executor comparisons:
+  // \ref{async.executor.comparisons}, executor comparisons
 
   bool operator==(const executor& a, const executor& b) noexcept;
   bool operator==(const executor& e, nullptr_t) noexcept;
@@ -2402,7 +2402,7 @@ inline namespace v1 {
   bool operator!=(const executor& e, nullptr_t) noexcept;
   bool operator!=(nullptr_t, const executor& e) noexcept;
 
-  // \ref{async.executor.algo}, executor specialized algorithms:
+  // \ref{async.executor.algo}, executor specialized algorithms
 
   void swap(executor& a, executor& b) noexcept;
 
@@ -3069,7 +3069,7 @@ inline namespace v1 {
 
     using inner_executor_type = Executor;
 
-    // \ref{async.strand.cons}, construct / copy / destroy:
+    // \ref{async.strand.cons}, construct / copy / destroy
 
     strand();
     explicit strand(Executor ex);
@@ -3087,7 +3087,7 @@ inline namespace v1 {
 
     ~strand();
 
-    // \ref{async.strand.ops}, strand operations:
+    // \ref{async.strand.ops}, strand operations
 
     inner_executor_type get_inner_executor() const noexcept;
 

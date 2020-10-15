@@ -29,7 +29,7 @@ inline namespace v1 {
   class mutable_buffer;
   class const_buffer;
 
-  // \ref{buffer.traits}, buffer type traits:
+  // \ref{buffer.traits}, buffer type traits
 
   template<class T> struct is_mutable_buffer_sequence;
   template<class T> struct is_const_buffer_sequence;
@@ -42,7 +42,7 @@ inline namespace v1 {
   template<class T>
     constexpr bool is_dynamic_buffer_v = is_dynamic_buffer<T>::value;
 
-  // \ref{buffer.seq.access}, buffer sequence access:
+  // \ref{buffer.seq.access}, buffer sequence access
 
   const mutable_buffer* buffer_sequence_begin(const mutable_buffer& b) noexcept;
   const const_buffer* buffer_sequence_begin(const const_buffer& b) noexcept;
@@ -53,12 +53,12 @@ inline namespace v1 {
   template<class C> auto buffer_sequence_end(C& c) noexcept -> decltype(c.end());
   template<class C> auto buffer_sequence_end(const C& c) noexcept -> decltype(c.end());
 
-  // \ref{buffer.size}, buffer size:
+  // \ref{buffer.size}, buffer size
 
   template<class ConstBufferSequence>
     size_t buffer_size(const ConstBufferSequence& buffers) noexcept;
 
-  // \ref{buffer.copy}, buffer copy:
+  // \ref{buffer.copy}, buffer copy
 
   template<class MutableBufferSequence, class ConstBufferSequence>
     size_t buffer_copy(const MutableBufferSequence& dest,
@@ -68,14 +68,14 @@ inline namespace v1 {
                        const ConstBufferSequence& source,
                        size_t max_size) noexcept;
 
-  // \ref{buffer.arithmetic}, buffer arithmetic:
+  // \ref{buffer.arithmetic}, buffer arithmetic
 
   mutable_buffer operator+(const mutable_buffer& b, size_t n) noexcept;
   mutable_buffer operator+(size_t n, const mutable_buffer& b) noexcept;
   const_buffer operator+(const const_buffer&, size_t n) noexcept;
   const_buffer operator+(size_t, const const_buffer&) noexcept;
 
-  // \ref{buffer.creation}, buffer creation:
+  // \ref{buffer.creation}, buffer creation
 
   mutable_buffer buffer(void* p, size_t n) noexcept;
   const_buffer buffer(const void* p, size_t n) noexcept;
@@ -136,7 +136,7 @@ inline namespace v1 {
   template<class CharT, class Traits, class Allocator>
     class dynamic_string_buffer;
 
-  // \ref{buffer.dynamic.creation}, dynamic buffer creation:
+  // \ref{buffer.dynamic.creation}, dynamic buffer creation
 
   template<class T, class Allocator>
     dynamic_vector_buffer<T, Allocator>
@@ -156,7 +156,7 @@ inline namespace v1 {
   class transfer_at_least;
   class transfer_exactly;
 
-  // \ref{buffer.read}, synchronous read operations:
+  // \ref{buffer.read}, synchronous read operations
 
   template<class SyncReadStream, class MutableBufferSequence>
     size_t read(SyncReadStream& stream,
@@ -187,7 +187,7 @@ inline namespace v1 {
     size_t read(SyncReadStream& stream, DynamicBuffer&& b,
                 CompletionCondition completion_condition, error_code& ec);
 
-  // \ref{buffer.async.read}, asynchronous read operations:
+  // \ref{buffer.async.read}, asynchronous read operations
 
   template<class AsyncReadStream, class MutableBufferSequence,
     class CompletionToken>
@@ -211,7 +211,7 @@ inline namespace v1 {
                          CompletionCondition completion_condition,
                          CompletionToken&& token);
 
-  // \ref{buffer.write}, synchronous write operations:
+  // \ref{buffer.write}, synchronous write operations
 
   template<class SyncWriteStream, class ConstBufferSequence>
     size_t write(SyncWriteStream& stream,
@@ -242,7 +242,7 @@ inline namespace v1 {
     size_t write(SyncWriteStream& stream, DynamicBuffer&& b,
                  CompletionCondition completion_condition, error_code& ec);
 
-  // \ref{buffer.async.write}, asynchronous write operations:
+  // \ref{buffer.async.write}, asynchronous write operations
 
   template<class AsyncWriteStream, class ConstBufferSequence,
     class CompletionToken>
@@ -266,7 +266,7 @@ inline namespace v1 {
                           CompletionCondition completion_condition,
                           CompletionToken&& token);
 
-  // \ref{buffer.read.until}, synchronous delimited read operations:
+  // \ref{buffer.read.until}, synchronous delimited read operations
 
   template<class SyncReadStream, class DynamicBuffer>
     size_t read_until(SyncReadStream& s, DynamicBuffer&& b, char delim);
@@ -279,7 +279,7 @@ inline namespace v1 {
     size_t read_until(SyncReadStream& s, DynamicBuffer&& b,
                       string_view delim, error_code& ec);
 
-  // \ref{buffer.async.read.until}, asynchronous delimited read operations:
+  // \ref{buffer.async.read.until}, asynchronous delimited read operations
 
   template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
     @\DEDUCED@ async_read_until(AsyncReadStream& s,
