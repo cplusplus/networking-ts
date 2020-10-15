@@ -202,8 +202,9 @@
 \rSec2[async.reqmts.proto.allocator]{Proto-allocator requirements}
 
 \pnum
-A type \tcode{A} meets the \changed{proto-allocator}{\defnnewoldconcept{ProtoAllocator}} requirements if \tcode{A} \changed{is}{meets the requirements of} \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), \tmpoldconcept{Destructible} (\CppXref{destructible}), and \tcode{allocator_traits<A>::rebind_alloc<U>} meets the \changed{allocator}{\oldconcept{Allocator}} requirements (\CppXref{allocator.requirements}), where \tcode{U} is \changed{an}{a \cv-unqualified} object type. \begin{note} For example, \tcode{allocator<void>} meets the proto-allocator requirements but not the allocator requirements. \end{note} No comparison operator, copy operation, move operation, or swap operation on these types \changed{shall exit}{exits} via an exception.
+A type \tcode{A} meets the \changed{proto-allocator}{\defnnewoldconcept{ProtoAllocator}} requirements if \tcode{A} \changed{is}{meets the requirements of} \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}), \tmpoldconcept{Destructible} (\CppXref{destructible}), and \tcode{allocator_traits<A>::rebind_alloc<U>} meets the \changed{allocator}{\oldconcept{Allocator}} requirements (\CppXref{allocator.requirements}), where \tcode{U} is \changed{an}{a \cv-unqualified} object type. \begin{note} For example, \tcode{allocator<void>} meets the proto-allocator requirements but not the allocator requirements. \end{note} No comparison operator, copy operation, move operation, or swap operation on these types shall exit via an exception.
 
+\ednote{Restored "shall exit" above.}
 
 
 \rSec2[async.reqmts.executor]{Executor requirements}
@@ -215,11 +216,13 @@ The library describes a standard set of requirements for executors. A type meeti
 A type \tcode{X} meets the \tmpnewoldconcept{Executor} requirements if it \changed{satisfies}{meets} the requirements of \tmpoldconcept{CopyConstructible} (\CppXref{copyconstructible}) and \tmpoldconcept{Destructible} (\CppXref{destructible}), as well as the additional requirements listed below.
 
 \pnum
-No comparison operator, copy operation, move operation, swap operation, or member functions \tcode{context}, \tcode{on_work_started}, and \tcode{on_work_finished} on these types \changed{shall exit}{exits} via an exception.
+No comparison operator, copy operation, move operation, swap operation, or member functions \tcode{context}, \tcode{on_work_started}, and \tcode{on_work_finished} on these types shall exit via an exception.
 
 \pnum
- The executor copy constructor, comparison operators, and other member functions defined in these requirements \changed{shall}{do} not introduce data races as a result of concurrent calls to those functions from different threads.
+ The executor copy constructor, comparison operators, and other member functions defined in these requirements shall not introduce data races as a result of concurrent calls to those functions from different threads.
 The member function \tcode{dispatch} may be recursively reentered.
+
+\ednote{Restored "shall exit" and "shall not" above.}
 
 \pnum
 Let \tcode{ctx} be the execution context returned by the executor's \tcode{context()} member function. An executor becomes invalid when the first call to \tcode{ctx.shutdown()} returns. The effect of calling \tcode{on_work_started}, \tcode{on_work_finished}, \tcode{dispatch}, \tcode{post}, or \tcode{defer} on an invalid executor is undefined. \begin{note} The copy constructor, comparison operators, and \tcode{context()} member function continue to remain valid until \tcode{ctx} is destroyed. \end{note}
