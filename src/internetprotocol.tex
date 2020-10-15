@@ -43,7 +43,7 @@ namespace ip {
 
   class bad_address_cast;
 
-  // \ref{internet.address.comparisons}, address comparisons:
+  // \ref{internet.address.comparisons}, address comparisons
   constexpr bool operator==(const address&, const address&) noexcept;
   @\removed{constexpr bool operator!=(const address\&, const address\&) noexcept;}@
   @\removed{constexpr bool operator< (const address\&, const address\&) noexcept;}@
@@ -52,7 +52,7 @@ namespace ip {
   @\removed{constexpr bool operator>=(const address\&, const address\&) noexcept;}@
   @\added{constexpr partial_ordering operator<=>(const address\&, const address\&) noexcept;}@
 
-  // \ref{internet.address.v4.comparisons}, address_v4 comparisons:
+  // \ref{internet.address.v4.comparisons}, address_v4 comparisons
   constexpr bool operator==(const address_v4&, const address_v4&) noexcept;
   @\removed{constexpr bool operator!=(const address_v4\&, const address_v4\&) noexcept;}@
   @\removed{constexpr bool operator< (const address_v4\&, const address_v4\&) noexcept;}@
@@ -61,7 +61,7 @@ namespace ip {
   @\removed{constexpr bool operator>=(const address_v4\&, const address_v4\&) noexcept;}@
   @\added{constexpr strong_ordering operator<=>(const address_v4\&, const address_v4\&) noexcept;}@
 
-  // \ref{internet.address.v6.comparisons}, address_v6 comparisons:
+  // \ref{internet.address.v6.comparisons}, address_v6 comparisons
   constexpr bool operator==(const address_v6&, const address_v6&) noexcept;
   @\removed{constexpr bool operator!=(const address_v6\&, const address_v6\&) noexcept;}@
   @\removed{constexpr bool operator< (const address_v6\&, const address_v6\&) noexcept;}@
@@ -70,7 +70,7 @@ namespace ip {
   @\removed{constexpr bool operator>=(const address_v6\&, const address_v6\&) noexcept;}@
   @\added{constexpr strong_ordering operator<=>(const address_v6\&, const address_v6\&) noexcept;}@
 
-  // \ref{internet.address.creation}, address creation:
+  // \ref{internet.address.creation}, address creation
   address make_address(const char*);
   address make_address(const char*, error_code&) noexcept;
   address make_address(const string&);
@@ -78,7 +78,7 @@ namespace ip {
   address make_address(string_view);
   address make_address(string_view, error_code&) noexcept;
 
-  // \ref{internet.address.v4.creation}, address_v4 creation:
+  // \ref{internet.address.v4.creation}, address_v4 creation
   constexpr address_v4 make_address_v4(const address_v4::bytes_type&);
   constexpr address_v4 make_address_v4(address_v4::uint_type);
   constexpr address_v4 make_address_v4(v4_mapped_t, const address_v6&);
@@ -89,7 +89,7 @@ namespace ip {
   address_v4 make_address_v4(string_view);
   address_v4 make_address_v4(string_view, error_code&) noexcept;
 
-  // \ref{internet.address.v6.creation}, address_v6 creation:
+  // \ref{internet.address.v6.creation}, address_v6 creation
   constexpr address_v6 make_address_v6(const address_v6::bytes_type&,
                                        scope_id_type = 0);
   constexpr address_v6 make_address_v6(v4_mapped_t, const address_v4&) noexcept;
@@ -100,17 +100,17 @@ namespace ip {
   address_v6 make_address_v6(string_view);
   address_v6 make_address_v6(string_view, error_code&) noexcept;
 
-  // \ref{internet.address.io}, address I/O:
+  // \ref{internet.address.io}, address I/O
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>&, const address&);
 
-  // \ref{internet.address.v4.io}, address_v4 I/O:
+  // \ref{internet.address.v4.io}, address_v4 I/O
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>&, const address_v4&);
 
-  // \ref{internet.address.v6.io}, address_v6 I/O:
+  // \ref{internet.address.v6.io}, address_v6 I/O
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>&, const address_v6&);
@@ -130,15 +130,15 @@ namespace ip {
   class network_v4;
   class network_v6;
 
-  // \ref{internet.network.v4.comparisons}, network_v4 comparisons:
+  // \ref{internet.network.v4.comparisons}, network_v4 comparisons
   bool operator==(const network_v4&, const network_v4&) noexcept;
   @\removed{bool operator!=(const network_v4\&, const network_v4\&) noexcept;}@
 
-  // \ref{internet.network.v6.comparisons}, network_v6 comparisons:
+  // \ref{internet.network.v6.comparisons}, network_v6 comparisons
   bool operator==(const network_v6&, const network_v6&) noexcept;
   @\removed{bool operator!=(const network_v6\&, const network_v6\&) noexcept;}@
 
-  // \ref{internet.network.v4.creation}, network_v4 creation:
+  // \ref{internet.network.v4.creation}, network_v4 creation
   network_v4 make_network_v4(const address_v4&, int);
   network_v4 make_network_v4(const address_v4&, const address_v4&);
   network_v4 make_network_v4(const char*);
@@ -148,7 +148,7 @@ namespace ip {
   network_v4 make_network_v4(string_view);
   network_v4 make_network_v4(string_view, error_code&) noexcept;
 
-  // \ref{internet.network.v6.creation}, network_v6 creation:
+  // \ref{internet.network.v6.creation}, network_v6 creation
   network_v6 make_network_v6(const address_v6&, int);
   network_v6 make_network_v6(const char*);
   network_v6 make_network_v6(const char*, error_code&) noexcept;
@@ -157,12 +157,12 @@ namespace ip {
   network_v6 make_network_v6(string_view);
   network_v6 make_network_v6(string_view, error_code&) noexcept;
 
-  // \ref{internet.network.v4.io}, network_v4 I/O:
+  // \ref{internet.network.v4.io}, network_v4 I/O
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>&, const network_v4&);
 
-  // \ref{internet.network.v6.io}, network_v6 I/O:
+  // \ref{internet.network.v6.io}, network_v6 I/O
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>&, const network_v6&);
@@ -170,7 +170,7 @@ namespace ip {
   template<class InternetProtocol>
     class basic_endpoint;
 
-  // \ref{internet.endpoint.comparisons}, basic_endpoint comparisons:
+  // \ref{internet.endpoint.comparisons}, basic_endpoint comparisons
   template<class InternetProtocol>
     bool operator==(const basic_endpoint<InternetProtocol>&,
                     const basic_endpoint<InternetProtocol>&);
@@ -193,7 +193,7 @@ namespace ip {
     @\added{partial_ordering operator<=>(const basic_endpoint<InternetProtocol>\&,}@
                                  @\added{const basic_endpoint<InternetProtocol>\&);}@
 
-  // \ref{internet.endpoint.io}, basic_endpoint I/O:
+  // \ref{internet.endpoint.io}, basic_endpoint I/O
   template<class CharT, class Traits, class InternetProtocol>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>&,
@@ -235,13 +235,13 @@ namespace ip {
 
   class tcp;
 
-  // \ref{internet.tcp.comparisons}, tcp comparisons:
+  // \ref{internet.tcp.comparisons}, tcp comparisons
   bool operator==(const tcp& a, const tcp& b);
   @\removed{bool operator!=(const tcp\& a, const tcp\& b)}@
 
   class udp;
 
-  // \ref{internet.udp.comparisons}, udp comparisons:
+  // \ref{internet.udp.comparisons}, udp comparisons
   bool operator==(const udp& a, const udp& b);
   @\removed{bool operator!=(const udp\& a, const udp\& b);}@
 
@@ -550,18 +550,18 @@ namespace ip {
   class address
   {
   public:
-    // \ref{internet.address.cons}, constructors:
+    // \ref{internet.address.cons}, constructors
     constexpr address() noexcept;
     constexpr address(const address& a) noexcept;
     constexpr address(const address_v4& a) noexcept;
     constexpr address(const address_v6& a) noexcept;
 
-    // \ref{internet.address.assign}, assignment:
+    // \ref{internet.address.assign}, assignment
     address& operator=(const address& a) noexcept;
     address& operator=(const address_v4& a) noexcept;
     address& operator=(const address_v6& a) noexcept;
 
-    // \ref{internet.address.members}, members:
+    // \ref{internet.address.members}, members
     constexpr bool is_v4() const noexcept;
     constexpr bool is_v6() const noexcept;
     constexpr address_v4 to_v4() const;
@@ -578,7 +578,7 @@ namespace ip {
     address_v6 v6_; // \expos
   };
 
-  // \ref{internet.address.comparisons}, address comparisons:
+  // \ref{internet.address.comparisons}, address comparisons
   constexpr bool operator==(const address& a, const address& b) noexcept;
   @\removed{constexpr bool operator!=(const address\& a, const address\& b) noexcept;}@
   @\removed{constexpr bool operator< (const address\& a, const address\& b) noexcept;}@
@@ -587,7 +587,7 @@ namespace ip {
   @\removed{constexpr bool operator>=(const address\& a, const address\& b) noexcept;}@
   @\added{constexpr partial_ordering operator<=>(const address\&, const address\&) noexcept;}@
 
-  // \ref{internet.address.creation}, address creation:
+  // \ref{internet.address.creation}, address creation
   address make_address(const char* str);
   address make_address(const char* str, error_code& ec) noexcept;
   address make_address(const string& str);
@@ -595,7 +595,7 @@ namespace ip {
   address make_address(string_view str);
   address make_address(string_view str, error_code& ec) noexcept;
 
-  // \ref{internet.address.io}, address I/O:
+  // \ref{internet.address.io}, address I/O
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>& os, const address& addr);
@@ -942,11 +942,11 @@ namespace ip {
   class address_v4
   {
   public:
-    // \ref{internet.address.v4.bytes}, types:
+    // \ref{internet.address.v4.bytes}, types
     using uint_type = uint_least32_t;
     struct bytes_type;
 
-    // \ref{internet.address.v4.cons}, constructors:
+    // \ref{internet.address.v4.cons}, constructors
     constexpr address_v4() noexcept;
     constexpr address_v4(const address_v4& a) noexcept;
     constexpr address_v4(const bytes_type& bytes);
@@ -955,7 +955,7 @@ namespace ip {
     // assignment:
     address_v4& operator=(const address_v4& a) noexcept;
 
-    // \ref{internet.address.v4.members}, members:
+    // \ref{internet.address.v4.members}, members
     constexpr bool is_unspecified() const noexcept;
     constexpr bool is_loopback() const noexcept;
     constexpr bool is_multicast() const noexcept;
@@ -965,13 +965,13 @@ namespace ip {
       basic_string<char, char_traits<char>, Allocator>
         to_string(const Allocator& a = Allocator()) const;
 
-    // \ref{internet.address.v4.static}, static members:
+    // \ref{internet.address.v4.static}, static members
     static constexpr address_v4 any() noexcept;
     static constexpr address_v4 loopback() noexcept;
     static constexpr address_v4 broadcast() noexcept;
   };
 
-  // \ref{internet.address.v4.comparisons}, address_v4 comparisons:
+  // \ref{internet.address.v4.comparisons}, address_v4 comparisons
   constexpr bool operator==(const address_v4& a, const address_v4& b) noexcept;
   @\removed{constexpr bool operator!=(const address_v4\& a, const address_v4\& b) noexcept;}@
   @\removed{constexpr bool operator< (const address_v4\& a, const address_v4\& b) noexcept;}@
@@ -980,7 +980,7 @@ namespace ip {
   @\removed{constexpr bool operator>=(const address_v4\& a, const address_v4\& b) noexcept;}@
   @\added{constexpr strong_ordering operator<=>(const address_v4\& a, const address_v4\& b) noexcept;}@
 
-  // \ref{internet.address.v4.creation}, address_v4 creation:
+  // \ref{internet.address.v4.creation}, address_v4 creation
   constexpr address_v4 make_address_v4(const address_v4::bytes_type& bytes);
   constexpr address_v4 make_address_v4(address_v4::uint_type val);
   constexpr address_v4 make_address_v4(v4_mapped_t, const address_v6& a);
@@ -991,7 +991,7 @@ namespace ip {
   address_v4 make_address_v4(string_view str);
   address_v4 make_address_v4(string_view str, error_code& ec) noexcept;
 
-  // \ref{internet.address.v4.io}, address_v4 I/O:
+  // \ref{internet.address.v4.io}, address_v4 I/O
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>& os, const address_v4& addr);
@@ -1351,10 +1351,10 @@ namespace ip {
   class address_v6
   {
   public:
-    // \ref{internet.address.v6.bytes}, types:
+    // \ref{internet.address.v6.bytes}, types
     struct bytes_type;
 
-    // \ref{internet.address.v6.cons}, constructors:
+    // \ref{internet.address.v6.cons}, constructors
     constexpr address_v6() noexcept;
     constexpr address_v6(const address_v6& a) noexcept;
     constexpr address_v6(const bytes_type& bytes,
@@ -1363,7 +1363,7 @@ namespace ip {
     // assignment:
     address_v6& operator=(const address_v6& a) noexcept;
 
-    // \ref{internet.address.v6.members}, members:
+    // \ref{internet.address.v6.members}, members
     void scope_id(scope_id_type id) noexcept;
     constexpr scope_id_type scope_id() const noexcept;
     constexpr bool is_unspecified() const noexcept;
@@ -1382,12 +1382,12 @@ namespace ip {
       basic_string<char, char_traits<char>, Allocator>
         to_string(const Allocator& a = Allocator()) const;
 
-    // \ref{internet.address.v6.static}, static members:
+    // \ref{internet.address.v6.static}, static members
     static constexpr address_v6 any() noexcept;
     static constexpr address_v6 loopback() noexcept;
   };
 
-  // \ref{internet.address.v6.comparisons}, address_v6 comparisons:
+  // \ref{internet.address.v6.comparisons}, address_v6 comparisons
   constexpr bool operator==(const address_v6& a, const address_v6& b) noexcept;
   @\removed{constexpr bool operator!=(const address_v6\& a, const address_v6\& b) noexcept;}@
   @\removed{constexpr bool operator< (const address_v6\& a, const address_v6\& b) noexcept;}@
@@ -1396,7 +1396,7 @@ namespace ip {
   @\removed{constexpr bool operator>=(const address_v6\& a, const address_v6\& b) noexcept;}@
   @\added{constexpr strong_ordering operator<=>(const address_v6\& a, const address_v6\& b) noexcept;}@
 
-  // \ref{internet.address.v6.creation}, address_v6 creation:
+  // \ref{internet.address.v6.creation}, address_v6 creation
   constexpr address_v6 make_address_v6(const address_v6::bytes_type& bytes,
                                        scope_id_type scope_id = 0);
   constexpr address_v6 make_address_v6(v4_mapped_t, const address_v4& a) noexcept;
@@ -1407,7 +1407,7 @@ namespace ip {
   address_v6 make_address_v6(string_view str);
   address_v6 make_address_v6(string_view str, error_code& ec) noexcept;
 
-  // \ref{internet.address.v6.io}, address_v6 I/O:
+  // \ref{internet.address.v6.io}, address_v6 I/O
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>& os, const address_v6& addr);
@@ -2151,12 +2151,12 @@ namespace ip {
   class network_v4
   {
   public:
-    // \ref{internet.network.v4.cons}, constructors:
+    // \ref{internet.network.v4.cons}, constructors
     constexpr network_v4() noexcept;
     constexpr network_v4(const address_v4& addr, int prefix_len);
     constexpr network_v4(const address_v4& addr, const address_v4& mask);
 
-    // \ref{internet.network.v4.members}, members:
+    // \ref{internet.network.v4.members}, members
     constexpr address_v4 address() const noexcept;
     constexpr int prefix_length() const noexcept;
     constexpr address_v4 netmask() const noexcept;
@@ -2171,11 +2171,11 @@ namespace ip {
         to_string(const Allocator& a = Allocator()) const;
   };
 
-  // \ref{internet.network.v4.comparisons}, network_v4 comparisons:
+  // \ref{internet.network.v4.comparisons}, network_v4 comparisons
   constexpr bool operator==(const network_v4& a, const network_v4& b) noexcept;
   @\removed{constexpr bool operator!=(const network_v4\& a, const network_v4\& b) noexcept;}@
 
-  // \ref{internet.network.v4.creation}, network_v4 creation:
+  // \ref{internet.network.v4.creation}, network_v4 creation
   constexpr network_v4 make_network_v4(const address_v4& addr, int prefix_len);
   constexpr network_v4 make_network_v4(const address_v4& addr, const address_v4& mask);
   network_v4 make_network_v4(const char* str);
@@ -2185,7 +2185,7 @@ namespace ip {
   network_v4 make_network_v4(string_view str);
   network_v4 make_network_v4(string_view str, error_code& ec) noexcept;
 
-  // \ref{internet.network.v4.io}, network_v4 I/O:
+  // \ref{internet.network.v4.io}, network_v4 I/O
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>& os, const network_v4& net);
@@ -2436,11 +2436,11 @@ namespace ip {
   class network_v6
   {
   public:
-    // \ref{internet.network.v6.cons}, constructors:
+    // \ref{internet.network.v6.cons}, constructors
     constexpr network_v6() noexcept;
     constexpr network_v6(const address_v6& addr, int prefix_len);
 
-    // \ref{internet.network.v6.members}, members:
+    // \ref{internet.network.v6.members}, members
     constexpr address_v6 address() const noexcept;
     constexpr int prefix_length() const noexcept;
     constexpr address_v6 network() const noexcept;
@@ -2453,11 +2453,11 @@ namespace ip {
         to_string(const Allocator& a = Allocator()) const;
   };
 
-  // \ref{internet.network.v6.comparisons}, network_v6 comparisons:
+  // \ref{internet.network.v6.comparisons}, network_v6 comparisons
   constexpr bool operator==(const network_v6& a, const network_v6& b) noexcept;
   @\removed{constexpr bool operator!=(const network_v6\& a, const network_v6\& b) noexcept;}@
 
-  // \ref{internet.network.v6.creation}, network_v6 creation:
+  // \ref{internet.network.v6.creation}, network_v6 creation
   constexpr network_v6 make_network_v6(const address_v6& addr, int prefix_len);
   network_v6 make_network_v6(const char* str);
   network_v6 make_network_v6(const char* str, error_code& ec) noexcept;
@@ -2466,7 +2466,7 @@ namespace ip {
   network_v6 make_network_v6(string_view str);
   network_v6 make_network_v6(string_view str, error_code& ec) noexcept;
 
-  // \ref{internet.network.v6.io}, network_v6 I/O:
+  // \ref{internet.network.v6.io}, network_v6 I/O
   template<class CharT, class Traits>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>& os, const network_v6& net);
@@ -2679,14 +2679,14 @@ namespace ip {
     // types:
     using protocol_type = InternetProtocol;
 
-    // \ref{internet.endpoint.cons}, constructors:
+    // \ref{internet.endpoint.cons}, constructors
     constexpr basic_endpoint() noexcept;
     constexpr basic_endpoint(const protocol_type& proto,
                              port_type port_num) noexcept;
     constexpr basic_endpoint(const ip::address& addr,
                              port_type port_num) noexcept;
 
-    // \ref{internet.endpoint.members}, members:
+    // \ref{internet.endpoint.members}, members
     constexpr protocol_type protocol() const noexcept;
     constexpr ip::address address() const noexcept;
     void address(const ip::address& addr) noexcept;
@@ -2694,7 +2694,7 @@ namespace ip {
     void port(port_type port_num) noexcept;
   };
 
-  // \ref{internet.endpoint.comparisons}, basic_endpoint comparisons:
+  // \ref{internet.endpoint.comparisons}, basic_endpoint comparisons
   template<class InternetProtocol>
     constexpr bool operator==(const basic_endpoint<InternetProtocol>& a,
                               const basic_endpoint<InternetProtocol>& b) noexcept;
@@ -2717,7 +2717,7 @@ namespace ip {
     @\added{constexpr partial_ordering operator<=>(const basic_endpoint<InternetProtocol>\& a,}@
                                            @\added{const basic_endpoint<InternetProtocol>\& b) noexcept;}@
 
-  // \ref{internet.endpoint.io}, basic_endpoint I/O:
+  // \ref{internet.endpoint.io}, basic_endpoint I/O
   template<class CharT, class Traits, class InternetProtocol>
     basic_ostream<CharT, Traits>& operator<<(
       basic_ostream<CharT, Traits>& os,
@@ -3052,13 +3052,13 @@ namespace ip {
     using protocol_type = InternetProtocol;
     using endpoint_type = typename InternetProtocol::endpoint;
 
-    // \ref{internet.resolver.entry.cons}, constructors:
+    // \ref{internet.resolver.entry.cons}, constructors
     basic_resolver_entry();
     basic_resolver_entry(const endpoint_type& ep,
                          string_view h,
                          string_view s);
 
-    // \ref{internet.resolver.entry.members}, members:
+    // \ref{internet.resolver.entry.members}, members
     endpoint_type endpoint() const;
     operator endpoint_type() const;
     template<class Allocator = allocator<char>>
@@ -3069,7 +3069,7 @@ namespace ip {
         service_name(const Allocator& a = Allocator()) const;
   };
 
-  // \ref{internet.resolver.entry.comparisons}, basic_resolver_entry comparisons:
+  // \ref{internet.resolver.entry.comparisons}, basic_resolver_entry comparisons
   template<class InternetProtocol>
     bool operator==(const basic_resolver_entry<InternetProtocol>& a,
                     const basic_resolver_entry<InternetProtocol>& b);
@@ -3230,7 +3230,7 @@ namespace ip {
     using difference_type = ptrdiff_t;
     using size_type = size_t;
 
-    // \ref{internet.resolver.results.cons}, construct / copy / destroy:
+    // \ref{internet.resolver.results.cons}, construct / copy / destroy
     basic_resolver_results();
     basic_resolver_results(const basic_resolver_results& rhs);
     basic_resolver_results(basic_resolver_results&& rhs) noexcept;
@@ -3238,22 +3238,22 @@ namespace ip {
     basic_resolver_results& operator=(basic_resolver_results&& rhs);
     ~basic_resolver_results();
 
-    // \ref{internet.resolver.results.size}, size:
+    // \ref{internet.resolver.results.size}, size
     size_type size() const noexcept;
     size_type max_size() const noexcept;
     bool empty() const noexcept;
 
-    // \ref{internet.resolver.results.access}, element access:
+    // \ref{internet.resolver.results.access}, element access
     const_iterator begin() const;
     const_iterator end() const;
     const_iterator cbegin() const;
     const_iterator cend() const;
 
-    // \ref{internet.resolver.results.swap}, swap:
+    // \ref{internet.resolver.results.swap}, swap
     void swap(basic_resolver_results& that) noexcept;
   };
 
-  // \ref{internet.resolver.results.comparisons}, basic_resolver_results comparisons:
+  // \ref{internet.resolver.results.comparisons}, basic_resolver_results comparisons
   template<class InternetProtocol>
     bool operator==(const basic_resolver_results<InternetProtocol>& a,
                     const basic_resolver_results<InternetProtocol>& b);
@@ -3539,7 +3539,7 @@ namespace ip {
     using endpoint_type = typename InternetProtocol::endpoint;
     using results_type = basic_resolver_results<InternetProtocol>;
 
-    // \ref{internet.resolver.cons}, construct / copy / destroy:
+    // \ref{internet.resolver.cons}, construct / copy / destroy
 
     explicit basic_resolver(io_context& ctx);
     basic_resolver(const basic_resolver&) = delete;
@@ -3550,7 +3550,7 @@ namespace ip {
     basic_resolver& operator=(const basic_resolver&) = delete;
     basic_resolver& operator=(basic_resolver&& rhs);
 
-    // \ref{internet.resolver.ops}, basic_resolver operations:
+    // \ref{internet.resolver.ops}, basic_resolver operations
 
     executor_type get_executor() noexcept;
 
@@ -3987,7 +3987,7 @@ namespace ip {
     tcp() = delete;
   };
 
-  // \ref{internet.tcp.comparisons}, tcp comparisons:
+  // \ref{internet.tcp.comparisons}, tcp comparisons
   constexpr bool operator==(const tcp& a, const tcp& b) noexcept;
   @\removed{constexpr bool operator!=(const tcp\& a, const tcp\& b) noexcept;}@
 
@@ -4116,7 +4116,7 @@ namespace ip {
     udp() = delete;
   };
 
-  // \ref{internet.udp.comparisons}, udp comparisons:
+  // \ref{internet.udp.comparisons}, udp comparisons
   constexpr bool operator==(const udp& a, const udp& b) noexcept;
   @\removed{constexpr bool operator!=(const udp\& a, const udp\& b) noexcept;}@
 

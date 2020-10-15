@@ -349,7 +349,7 @@ void restart();
   class io_context::executor_type
   {
   public:
-    // \ref{io_context.exec.cons}, construct / copy / destroy:
+    // \ref{io_context.exec.cons}, construct / copy / destroy
 
     executor_type(const executor_type& other) noexcept;
     executor_type(executor_type&& other) noexcept;
@@ -357,7 +357,7 @@ void restart();
     executor_type& operator=(const executor_type& other) noexcept;
     executor_type& operator=(executor_type&& other) noexcept;
 
-    // \ref{io_context.exec.ops}, executor operations:
+    // \ref{io_context.exec.ops}, executor operations
 
     bool running_in_this_thread() const noexcept;
 

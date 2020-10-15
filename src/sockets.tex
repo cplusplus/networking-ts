@@ -39,7 +39,7 @@
   template<class Protocol>
     class basic_socket_acceptor;
 
-  // \ref{socket.iostreams}, Socket streams:
+  // \ref{socket.iostreams}, Socket streams
 
   template<class Protocol, class Clock = chrono::steady_clock,
     class WaitTraits = wait_traits<Clock>>
@@ -49,7 +49,7 @@
     class WaitTraits = wait_traits<Clock>>
       class basic_socket_iostream;
 
-  // \ref{socket.algo.connect}, synchronous connect operations:
+  // \ref{socket.algo.connect}, synchronous connect operations
 
   template<class Protocol, class EndpointSequence>
     typename Protocol::endpoint connect(basic_socket<Protocol>& s,
@@ -85,7 +85,7 @@
                           ConnectCondition c,
                           error_code& ec);
 
-  // \ref{socket.algo.async.connect}, asynchronous connect operations:
+  // \ref{socket.algo.async.connect}, asynchronous connect operations
 
   template<class Protocol, class EndpointSequence, class CompletionToken>
     @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
@@ -1437,7 +1437,7 @@ Class template \tcode{basic_socket<Protocol>} is used as the base class for the 
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
-    // \ref{socket.basic.ops}, basic_socket operations:
+    // \ref{socket.basic.ops}, basic_socket operations
 
     executor_type get_executor() noexcept;
 
@@ -1518,7 +1518,7 @@ Class template \tcode{basic_socket<Protocol>} is used as the base class for the 
       @\DEDUCED@ async_wait(wait_type w, CompletionToken&& token);
 
   protected:
-    // \ref{socket.basic.cons}, construct / copy / destroy:
+    // \ref{socket.basic.cons}, construct / copy / destroy
 
     explicit basic_socket(io_context& ctx);
     basic_socket(io_context& ctx, const protocol_type& protocol);
@@ -2270,7 +2270,7 @@ The class template \tcode{basic_datagram_socket<Protocol>} is used to send and r
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
-    // \ref{socket.dgram.cons}, construct / copy / destroy:
+    // \ref{socket.dgram.cons}, construct / copy / destroy
 
     explicit basic_datagram_socket(io_context& ctx);
     basic_datagram_socket(io_context& ctx, const protocol_type& protocol);
@@ -2289,7 +2289,7 @@ The class template \tcode{basic_datagram_socket<Protocol>} is used to send and r
     template<class OtherProtocol>
       basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol>&& rhs);
 
-    // \ref{socket.dgram.op}, basic_datagram_socket operations:
+    // \ref{socket.dgram.op}, basic_datagram_socket operations
 
     template<class MutableBufferSequence>
       size_t receive(const MutableBufferSequence& buffers);
@@ -2955,7 +2955,7 @@ The class template \tcode{basic_stream_socket<Protocol>} is used to exchange dat
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
-    // \ref{socket.stream.cons}, construct / copy / destroy:
+    // \ref{socket.stream.cons}, construct / copy / destroy
 
     explicit basic_stream_socket(io_context& ctx);
     basic_stream_socket(io_context& ctx, const protocol_type& protocol);
@@ -2974,7 +2974,7 @@ The class template \tcode{basic_stream_socket<Protocol>} is used to exchange dat
     template<class OtherProtocol>
       basic_stream_socket& operator=(basic_stream_socket<OtherProtocol>&& rhs);
 
-    // \ref{socket.stream.ops}, basic_stream_socket operations:
+    // \ref{socket.stream.ops}, basic_stream_socket operations
 
     template<class MutableBufferSequence>
       size_t receive(const MutableBufferSequence& buffers);
@@ -3451,7 +3451,7 @@ An object of class template \tcode{basic_socket_acceptor<AcceptableProtocol>} is
     using endpoint_type = typename protocol_type::endpoint;
     using socket_type = typename protocol_type::socket;
 
-    // \ref{socket.acceptor.cons}, construct / copy / destroy:
+    // \ref{socket.acceptor.cons}, construct / copy / destroy
 
     explicit basic_socket_acceptor(io_context& ctx);
     basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
@@ -3471,7 +3471,7 @@ An object of class template \tcode{basic_socket_acceptor<AcceptableProtocol>} is
     template<class OtherProtocol>
       basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol>&& rhs);
 
-    // \ref{socket.acceptor.ops}, basic_socket_acceptor operations:
+    // \ref{socket.acceptor.ops}, basic_socket_acceptor operations
 
     executor_type get_executor() noexcept;
 

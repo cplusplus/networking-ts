@@ -30,7 +30,7 @@ The class \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} associates
     using duration = typename clock_type::duration;
     using wait_traits_type = WaitTraits;
 
-    // \ref{socket.streambuf.cons}, construct / copy / destroy:
+    // \ref{socket.streambuf.cons}, construct / copy / destroy
 
     basic_socket_streambuf();
     explicit basic_socket_streambuf(basic_stream_socket<protocol_type> s);
@@ -42,7 +42,7 @@ The class \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} associates
     basic_socket_streambuf& operator=(const basic_socket_streambuf&) = delete;
     basic_socket_streambuf& operator=(basic_socket_streambuf&& rhs);
 
-    // \ref{socket.streambuf.members}, members:
+    // \ref{socket.streambuf.members}, members
 
     basic_socket_streambuf* connect(const endpoint_type& e);
     template<class... Args> basic_socket_streambuf* connect(Args&&... );
@@ -379,7 +379,7 @@ The class template \tcode{basic_socket_iostream<Protocol, Clock, WaitTraits>} su
     using duration = typename clock_type::duration;
     using wait_traits_type = WaitTraits;
 
-    // \ref{socket.iostream.cons}, construct / copy / destroy:
+    // \ref{socket.iostream.cons}, construct / copy / destroy
 
     basic_socket_iostream();
     explicit basic_socket_iostream(basic_stream_socket<protocol_type> s);
@@ -391,7 +391,7 @@ The class template \tcode{basic_socket_iostream<Protocol, Clock, WaitTraits>} su
     basic_socket_iostream& operator=(const basic_socket_iostream&) = delete;
     basic_socket_iostream& operator=(basic_socket_iostream&& rhs);
 
-    // \ref{socket.iostream.members}, members:
+    // \ref{socket.iostream.members}, members
 
     template<class... Args> void connect(Args&&... args);
 

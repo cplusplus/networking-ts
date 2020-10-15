@@ -182,7 +182,7 @@ static typename Clock::duration to_wait_duration(
     using time_point = typename clock_type::time_point;
     using traits_type = WaitTraits;
 
-    // \ref{timer.waitable.cons}, construct / copy / destroy:
+    // \ref{timer.waitable.cons}, construct / copy / destroy
 
     explicit basic_waitable_timer(io_context& ctx);
     basic_waitable_timer(io_context& ctx, const time_point& t);
@@ -195,7 +195,7 @@ static typename Clock::duration to_wait_duration(
     basic_waitable_timer& operator=(const basic_waitable_timer&) = delete;
     basic_waitable_timer& operator=(basic_waitable_timer&& rhs);
 
-    // \ref{timer.waitable.ops}, basic_waitable_timer operations:
+    // \ref{timer.waitable.ops}, basic_waitable_timer operations
 
     executor_type get_executor() noexcept;
 
