@@ -990,13 +990,15 @@ const_buffer(
 \pnum
 In the functions below, \tcode{T} shall be a trivially copyable or standard-layout type (\CppXref{basic.types}).
 
-\ednote{ \tcode{vector<>} and \tcode{basic_string<>} are not valid types.}
+\pnum
+For the function overloads below that accept
+\changed{an argument of type \tcode{vector<>}}{a specialization of \tcode{vector}},
+the buffer objects returned are invalidated by any vector operation that also invalidates all references, pointers and iterators referring to the elements in the sequence (\CppXref{vector}).
 
 \pnum
-For the function overloads below that accept an argument of type \tcode{vector<>}, the buffer objects returned are invalidated by any vector operation that also invalidates all references, pointers and iterators referring to the elements in the sequence (\CppXref{vector}).
-
-\pnum
-For the function overloads below that accept an argument of type \tcode{basic_string<>}, the buffer objects returned are invalidated according to the rules defined for invalidation of references, pointers and iterators referring to elements of the sequence (\CppXref{string.require}).
+For the function overloads below that accept
+\changed{an argument of type \tcode{basic_string<>}}{a specialization of \tcode{basic_string}},
+the buffer objects returned are invalidated according to the rules defined for invalidation of references, pointers and iterators referring to elements of the sequence (\CppXref{string.require}).
 
 \indexlibrary{\idxcode{buffer}}%
 \begin{itemdecl}
