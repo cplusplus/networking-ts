@@ -47,11 +47,10 @@ are shown as \CppXref{structure.specifications} without repeating
 
 \vspace{1.5cm}
 
-Open questions:
-\begin{itemize}
-\item Should most uses of \tcode{decay_t} be changed to \tcode{remove_cvref_t}?
-\item Should most non-member operators be specified as hidden friends?
-\end{itemize}
+I am not proposing to replace non-member operators with hidden friends.
+LWG would prefer that to be done in a separate proposal to go via LEWG.
+
+Thanks to Tomasz Kaminski and Frank Birbacher for their detailed reviews of R0.
 
 \newpage
 
