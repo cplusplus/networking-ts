@@ -2134,10 +2134,17 @@ size_t size() const noexcept;
 \pnum
 \returns The number of unique addresses in the range.
 
-\ednote{Should this be done with \constraints ?}
-
 \pnum
+\removed{
 \remarks This member function is not defined when \placeholder{Address} is type \tcode{address_v6}.
+}
+
+\added{
+\constraints \tcode{is_same_v<\placeholder{Address}, address_v4>} is \tcode{true}.
+}
+
+\ednote{Adding \tcode{requires same_as<\placeholder{Address}, address_v4>} would be nicer than using \constraints here.}
+
 \end{itemdescr}
 
 \begin{itemdecl}
