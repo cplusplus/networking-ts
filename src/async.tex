@@ -2229,7 +2229,8 @@ template<class Func, class ProtoAllocator>
 \effects If \tcode{context().stopped()} is \tcode{false},
 creates an object \tcode{f1} initialized with \tcode{\placeholdernc{DECAY_COPY}(forw\-ard<Func>(f))},
 and calls \tcode{f1()} as if in a thread of execution represented by a \tcode{thread} object.
-Any exception propagated from the \changed{execution of \tcode{\placeholdernc{DECAY_COPY}(forward<Func>(f))()}}{initialization of \tcode{f1} or the call
+Any exception propagated from the \changed{execution of \tcode{\placeholdernc{DECAY_COPY}(forward<Func>(f))()}}{initialization of \tcode{f1} or
+\changed{the call}{evaluating}
 \tcode{f1()}}
 results in a call to \tcode{std::terminate}.
 \end{itemdescr}
