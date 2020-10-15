@@ -3977,7 +3977,7 @@ template<class Allocator>
 \pnum
 \removed{\remarks In the last two overloads, ill-formed unless \tcode{allocator_traits<Allocator>::value_type} is \tcode{char}.}
 
-\added{\mandates For the last two overloads, \tcode{is_same_v<allocator_traits<Allocator>::value_type, char>} is \tcode{true}.}
+\added{\mandates For the overloads with an \tcode{Allocator}, \tcode{is_same_v<allocator_traits<Allocator>::value_type, char>} is \tcode{true}.}
 \end{itemdescr}
 
 
