@@ -45,6 +45,9 @@ Updated cross-references of the form \CppXIV{}[structure.specifications]
 are shown as \CppXref{structure.specifications} without repeating
 \removed{2014} every time.
 
+After applying these changes, the editor should reorder all new
+\constraints and \mandates elements to match the conventional order.
+
 \vspace{1.5cm}
 
 I am not proposing to replace non-member operators with hidden friends.
@@ -60,6 +63,7 @@ Changes since R0:
   an italicized \textit{ConceptName} for all rows except one.
 \item Added \tcode{explicit} default constructor to \tcode{executor_arg_t}.
 \item Restored some "shall" requirements on users that should not have been removed.
+\item Fixed \textit{Mandates} for \tcode{executor_binder} constructors.
 \end{itemize}
 
 

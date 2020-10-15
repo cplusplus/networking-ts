@@ -1618,6 +1618,12 @@ to an object or function of type \tcode{T}.
 
 \rSec2[async.exec.binder.cons]{\tcode{executor_binder} constructors}
 
+\ednote{
+There was a comment in the LWG review that 
+"for some of the [async.exec.binder.access] we could use constructor delegation"
+but I'm unsure what the suggestion was. It can probably be done editorially.
+}
+
 \indexlibrary{\idxcode{executor_binder}!constructor}%
 \begin{itemdecl}
 executor_binder(T t, const Executor& ex);
@@ -1638,8 +1644,21 @@ template<class U, class OtherExecutor>
 \changed{
 \requires If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
 }{
-\mandates \tcode{is_convertible_v<U, T>} is \tcode{true}
-and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
+\mandates
+\tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}
+and
+uses-executor construction of \tcode{T} with executor of type \tcode{Executor}
+and a constructor argument of type \tcode{const U\&} is well-formed.
+}
+
+\ednote{
+Fixed value category above, \tcode{const U\&} rather than \tcode{U}.
+Replaced \tcode{is_constructible<v<U,T>} with uses-executor construction.
+Could spell it out as:
+\tcode{uses_executor_v<T, Executor>} is \tcode{true} and
+  \tcode{is_constructible_v<T, executor_arg_t, Executor, const U\&>}
+  is \tcode{true}, or
+\tcode{is_constructible_v<T, const U\&>} is \tcode{true}.
 }
 
 \pnum
@@ -1656,8 +1675,11 @@ template<class U, class OtherExecutor>
 \changed{
 \requires If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
 }{
-\mandates \tcode{is_convertible_v<U, T>} is \tcode{true}
-and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
+\mandates
+\tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}
+and
+uses-executor construction of \tcode{T} with executor of type \tcode{Executor}
+and a constructor argument of type \tcode{U\&\&} is well-formed.
 }
 
 \pnum
