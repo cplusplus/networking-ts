@@ -3687,7 +3687,11 @@ For any executor type \tcode{E}, the associated object for the associator \tcode
 When an object \tcode{r1} of type \tcode{R} is constructed from \tcode{t1}, the expression \tcode{r1.get()} returns a future with the same shared state as \tcode{t1}.
 
 \pnum
-The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are defined in Table~\ref{tab:async.use.future.result.requirements}. After establishing these effects, \tcode{F::operator()} makes the shared state ready. In this table, \placeholder{N} is the value of \tcode{sizeof...(Args)}; let \placeholder{i} be in the range \range{0}{\placeholder{N}} and let \tcode{T}$_i$ be the $i^\text{th}$ type in \tcode{Args}; let \tcode{U}$_i$ be \tcode{decay_t<T}$_i$\tcode{>} for each type \tcode{T}$_i$ in \tcode{Args}; let \tcode{A}$_i$ be the deduced type of the $i^\text{th}$ argument to \tcode{F::operator()}; and let \tcode{a}$_i$ be the $i^\text{th}$ argument to \tcode{F::operator()}.
+The type of \tcode{R::return_type} and the effects of \tcode{F::operator()} are defined in Table~\ref{tab:async.use.future.result.requirements}. After establishing these effects, \tcode{F::operator()} makes the shared state ready. In this table, \placeholder{N} is the value of \tcode{sizeof...(Args)}; let \placeholder{i} be in the range \range{0}{\placeholder{N}} and let \tcode{T}$_i$ be the $i^\text{th}$ type in \tcode{Args}; let \tcode{U}$_i$ be \tcode{\changed{decay_t}{remove_cvref_t}<T}$_i$\tcode{>} for each type \tcode{T}$_i$ in \tcode{Args}; let \tcode{A}$_i$ be the deduced type of the $i^\text{th}$ argument to \tcode{F::operator()}; and let \tcode{a}$_i$ be the $i^\text{th}$ argument to \tcode{F::operator()}.
+
+\ednote{Changed \tcode{decay_t} to \tcode{remove_cvref_t} above, so that
+trying to pass an array of \tcode{T} to a completion handler will be ill-formed,
+instead of returning a \tcode{future<T*>} that is probably a dangling pointer.}
 
 \begin{LongTable}
 {\tcode{async_result<use_future_t<ProtoAllocator>, Result(Args...)>} semantics}

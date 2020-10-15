@@ -50,7 +50,14 @@ are shown as \CppXref{structure.specifications} without repeating
 I am not proposing to replace non-member operators with hidden friends.
 LWG would prefer that to be done in a separate proposal to go via LEWG.
 
-Thanks to Tomasz Kaminski and Frank Birbacher for their detailed reviews of R0.
+Thanks to Tomasz Kamiński and Frank Birbacher for their detailed reviews of R0.
+
+Changes since R0:
+\begin{itemize}
+\item All uses of \tcode{decay_t} reviewed and changed to
+  \tcode{remove_cvref_t} where appropriate.
+\end{itemize}
+
 
 \newpage
 
