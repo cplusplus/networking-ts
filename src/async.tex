@@ -56,7 +56,7 @@
   template<class T>
     @\added{inline}@ constexpr bool is_executor_v = is_executor<T>::value;
 
-  struct executor_arg_t { };
+  struct executor_arg_t { @\added{explicit executor_arg_t() = default;}@ };
   @\added{inline}@ constexpr executor_arg_t executor_arg = executor_arg_t();
 
   template<class T, class Executor> struct uses_executor;
