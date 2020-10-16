@@ -12,8 +12,8 @@
 \indexlibrary{\idxcode{associated_executor_t}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class CompletionToken, class Signature>
@@ -184,8 +184,8 @@
     class async_result<packaged_task<Result(Args...)>, Signature>;
 
 } // inline namespace \added{experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
 
   template<class Allocator>
     struct uses_allocator<experimental::net::@\namespacever@::executor, Allocator>
@@ -808,8 +808,8 @@ determines the return type and return value of an asynchronous operation's initi
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class CompletionToken, class Signature>
@@ -827,9 +827,9 @@ determines the return type and return value of an asynchronous operation's initi
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -882,8 +882,8 @@ Class template \tcode{async_completion} is provided as a convenience, to simplif
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class CompletionToken, class Signature>
@@ -901,9 +901,9 @@ Class template \tcode{async_completion} is provided as a convenience, to simplif
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -940,8 +940,8 @@ Class template \tcode{associated_allocator} is an associator~(\ref{async.reqmts.
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class ProtoAllocator = allocator<void>>
@@ -953,9 +953,9 @@ Class template \tcode{associated_allocator} is an associator~(\ref{async.reqmts.
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \indextext{requirements!\idxcode{associated_allocator} specializations}%
@@ -1056,8 +1056,8 @@ Class \tcode{execution_context} implements an extensible, type-safe, polymorphic
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class execution_context
@@ -1093,9 +1093,9 @@ Class \tcode{execution_context} implements an extensible, type-safe, polymorphic
   class service_already_exists : public logic_error { };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -1252,8 +1252,8 @@ template<class Service> bool has_service(const execution_context& ctx) noexcept;
 \indexlibrary{\idxcode{execution_context::service}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class execution_context::service
@@ -1280,9 +1280,9 @@ template<class Service> bool has_service(const execution_context& ctx) noexcept;
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \indexlibrary{\idxcode{execution_context::service}!constructor}%
@@ -1315,16 +1315,16 @@ The class template \tcode{is_executor} can be used to detect executor types \cha
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T> struct is_executor;
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -1341,17 +1341,17 @@ Class template \tcode{is_executor} is a \changed{UnaryTypeTrait}{\oldconcept{Una
 \indexlibrary{\idxcode{executor_arg}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   struct executor_arg_t { };
   constexpr executor_arg_t executor_arg = executor_arg_t();
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -1367,16 +1367,16 @@ The \tcode{executor_arg_t} struct is an empty structure type used as a unique ty
 \indexlibrary{\idxcode{uses_executor}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor> struct uses_executor;
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -1411,8 +1411,8 @@ Class template \tcode{associated_executor} is an associator~(\ref{async.reqmts.a
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor = system_executor>
@@ -1424,9 +1424,9 @@ Class template \tcode{associated_executor} is an associator~(\ref{async.reqmts.a
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \indextext{requirements!\idxcode{associated_executor} specializations}%
@@ -1551,8 +1551,8 @@ to an object or function of type \tcode{T}.
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor>
@@ -1610,9 +1610,9 @@ to an object or function of type \tcode{T}.
     struct associated_executor<executor_binder<T, Executor>, Executor1>;
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 
@@ -1641,9 +1641,9 @@ template<class U, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-\changed{
+\changed{%
 \requires If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
-}{
+}{%
 \mandates
 \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}
 and
@@ -1672,9 +1672,9 @@ template<class U, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-\changed{
+\changed{%
 \requires If \tcode{U} is not convertible to \tcode{T}, or if \tcode{OtherExecutor} is not convertible to \tcode{Executor}, the program is ill-formed.
-}{
+}{%
 \mandates
 \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}
 and
@@ -1694,9 +1694,9 @@ template<class U, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-\changed{
+\changed{%
 \requires If \tcode{U} is not convertible to \tcode{T} the program is ill-formed.
-}{
+}{%
 \mandates \tcode{is_convertible_v<U, T>} is \tcode{true}.
 }
 
@@ -1714,9 +1714,9 @@ template<class U, class OtherExecutor>
 \ednote{Failing to meet this \requires was undefined, not ill-formed, but I'm changing it to \mandates because that seems right.}
 
 \pnum
-\changed{
+\changed{%
 \requires \tcode{U} is \tcode{T} or convertible to \tcode{T}.
-}{
+}{%
 \mandates \tcode{is_same_v<U, T>} is \tcode{true}
 or \tcode{is_convertible_v<U, T>} is \tcode{true}.
 }
@@ -1775,8 +1775,8 @@ template<class... Args>
 \indexlibrary{\idxcode{async_result}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor, class Signature>
@@ -1799,9 +1799,9 @@ template<class... Args>
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \begin{itemdecl}
@@ -1830,8 +1830,8 @@ return_type get();
 \indexlibrary{\idxcode{associated_allocator}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor, class ProtoAllocator>
@@ -1844,9 +1844,9 @@ return_type get();
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \begin{itemdecl}
@@ -1867,8 +1867,8 @@ static type get(const executor_binder<T, Executor>& b,
 \indexlibrary{\idxcode{associated_executor}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Executor, class Executor1>
@@ -1881,9 +1881,9 @@ static type get(const executor_binder<T, Executor>& b,
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \begin{itemdecl}
@@ -1926,16 +1926,16 @@ template<class ExecutionContext, class CompletionToken>
 
 \begin{itemdescr}
 \pnum
-\removed{
+\removed{%
 \returns \tcode{bind_executor(ctx.get_executor(), forward<T>(t))}.
 }
 
-\added{
+\added{%
 \effects Equivalent to: \tcode{return bind_executor(ctx.get_executor(), forward<T>(t))}.
 }
 
 \pnum
-\removed{
+\removed{%
 \remarks This function shall not participate in overload resolution unless
 \tcode{is_convertible\added{_v}<Exec\-ution\-Context\&, execution_context\&>\removed{::value}} is \tcode{true}.
 }
@@ -1948,8 +1948,8 @@ template<class ExecutionContext, class CompletionToken>
 \indexlibrary{\idxcode{executor_work_guard}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Executor>
@@ -1985,9 +1985,9 @@ template<class ExecutionContext, class CompletionToken>
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 
@@ -2150,8 +2150,8 @@ Class \tcode{system_executor} represents a set of rules where function objects a
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class system_executor
@@ -2180,9 +2180,9 @@ Class \tcode{system_executor} represents a set of rules where function objects a
   @\removed{bool operator!=(const system_executor\&, const system_executor\&) noexcept;}@
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -2273,8 +2273,8 @@ Class \tcode{system_context} implements the execution context associated with \t
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class system_context : public execution_context
@@ -2301,9 +2301,9 @@ Class \tcode{system_context} implements the execution context associated with \t
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -2378,8 +2378,8 @@ An exception of type \tcode{bad_executor} is thrown by \tcode{executor} member f
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class bad_executor : public exception
@@ -2390,9 +2390,9 @@ An exception of type \tcode{bad_executor} is thrown by \tcode{executor} member f
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \begin{itemdecl}
@@ -2418,8 +2418,8 @@ The \tcode{executor} class provides a polymorphic wrapper for types that \change
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class executor
@@ -2487,8 +2487,8 @@ The \tcode{executor} class provides a polymorphic wrapper for types that \change
   void swap(executor& a, executor& b) noexcept;
 
 } // inline namespace \added{experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
 
   template<class Allocator>
     struct uses_allocator<experimental::net::\namespacever::executor, Allocator>
@@ -3139,8 +3139,8 @@ The class template \tcode{strand} is a wrapper around an object of type \tcode{E
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Executor>
@@ -3195,9 +3195,9 @@ The class template \tcode{strand} is a wrapper around an object of type \tcode{E
   @\removed{bool operator!=(const strand<Executor>\& a, const strand<Executor>\& b);}@
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -3322,9 +3322,11 @@ so that \tcode{is_constructible} gives the right answer.}
 
 \begin{itemdescr}
 \pnum
-\changed{
+\removed{%
 \requires \tcode{OtherExecutor} is convertible to \tcode{Executor}.
-}{%
+}
+
+\added{%
 \constraints \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 }
 
@@ -3341,9 +3343,11 @@ template<class OtherExecutor> strand(strand<OtherExecutor>&& other) noexcept;
 
 \begin{itemdescr}
 \pnum
-\changed{
+\removed{%
 \requires \tcode{OtherExecutor} is convertible to \tcode{Executor}.
-}{
+}
+
+\added{%
 \constraints \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 }
 
@@ -3365,9 +3369,11 @@ strand& operator=(const strand& other) noexcept;
 
 \begin{itemdescr}
 \pnum
-\changed{
+\removed{%
 \requires \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
-}{
+}
+
+\added{%
 \mandates \tcode{is_copy_assignable_v<Executor>} is \tcode{true}.
 }
 
@@ -3390,7 +3396,12 @@ strand& operator=(strand&& other) noexcept;
 
 \begin{itemdescr}
 \pnum
-\changed{\requires \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).}{\mandates \tcode{is_move_assignable_v<Executor>} is \tcode{true}.}
+\removed{%
+\requires \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).}
+
+\added{%
+\mandates \tcode{is_move_assignable_v<Executor>} is \tcode{true}.
+}
 
 \pnum
 \postconditions
@@ -3584,8 +3595,8 @@ The class template \tcode{use_future_t} defines a set of types that, when passed
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class ProtoAllocator = allocator<void>>
@@ -3605,9 +3616,9 @@ The class template \tcode{use_future_t} defines a set of types that, when passed
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 
@@ -3818,8 +3829,8 @@ Atomically stores \tcode{forward_as_tuple(\br{}forward<A$_0$>(a$_0$), $\dotsc$, 
 \indextext{\idxcode{async_result}!specialization for \tcode{packaged_task}}%
 \begin{itemdecl}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Result, class... Args, class Signature>
@@ -3840,9 +3851,9 @@ Atomically stores \tcode{forward_as_tuple(\br{}forward<A$_0$>(a$_0$), $\dotsc$, 
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 
 explicit async_result(completion_handler_type& h);
 \end{itemdecl}
