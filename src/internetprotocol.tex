@@ -127,22 +127,6 @@ namespace ip {
   template<> class basic_address_range<address_v6>;
   using address_v6_range = basic_address_range<address_v6>;
 
-@\added{\}\}}@
-
-@\added{namespace std::ranges \{}@
-
-  @\added{template<>}@
-    @\added{inline constexpr bool}@
-      @\added{enable_view<experimental::net::\namespaceverN::ip::address_v4_range> = true;}@
-  @\added{template<>}@
-    @\added{inline constexpr bool}@
-      @\added{enable_borrowed_range<experimental::net::\namespaceverN::ip::address_v6_range> = true;}@
-
-@\added{\}}@
-
-@\added{namespace std::experimental::net::inline \namespaceverN{} \{}@
-@\added{namespace ip \{}@
-
   class network_v4;
   class network_v6;
 
