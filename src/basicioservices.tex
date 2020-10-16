@@ -491,7 +491,11 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{running_in_this_thread()} is \tcode{true}, calls \tcode{\placeholdernc{DECAY_COPY}(forward<Func>(f))()} (\CppXref{thread.decaycopy}). \begin{note} If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \end{note} Otherwise, calls \tcode{post(forward<Func>(f), a)}.
+\effects If \tcode{running_in_this_thread()} is \tcode{true}, calls \exposid{decay-copy}\tcode{(forward<Func>(f))()} (\CppXref{expos.only.func}).
+\begin{note}
+If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}.
+\end{note}
+Otherwise, calls \tcode{post(forward<Func>(f), a)}.
 \end{itemdescr}
 
 \indexlibrarymember{post}{io_context::executor_type}%
