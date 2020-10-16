@@ -12,8 +12,8 @@
 \indexlibrary{\idxcode{stream_errc}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   enum class stream_errc {
@@ -291,8 +291,8 @@
                              CompletionToken&& token);
 
 } // inline namespace \added{experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
 
   template<> struct is_error_code_enum<experimental::net::@\namespacever@::stream_errc>
     : public true_type {};
@@ -592,8 +592,8 @@ error_condition make_error_condition(stream_errc e) noexcept;
 \indexlibrary{\idxcode{mutable_buffer}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class mutable_buffer
@@ -614,9 +614,9 @@ error_condition make_error_condition(stream_errc e) noexcept;
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -681,8 +681,8 @@ and then \tcode{size_} to \tcode{size_ - min(n, size_)}.
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class const_buffer
@@ -704,9 +704,9 @@ and then \tcode{size_} to \tcode{size_ - min(n, size_)}.
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -783,8 +783,8 @@ const_buffer& operator+=(size_t n) noexcept;
 \indexlibrary{\idxcode{is_dynamic_buffer}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T> struct is_mutable_buffer_sequence;
@@ -792,9 +792,9 @@ const_buffer& operator+=(size_t n) noexcept;
   template<class T> struct is_dynamic_buffer;
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -1130,8 +1130,8 @@ Class template \tcode{dynamic_vector_buffer} is an adaptor used to automatically
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class T, class Allocator>
@@ -1164,9 +1164,9 @@ Class template \tcode{dynamic_vector_buffer} is an adaptor used to automatically
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -1296,8 +1296,8 @@ Class template \tcode{dynamic_string_buffer} is an adaptor used to automatically
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class CharT, class Traits, class Allocator>
@@ -1330,9 +1330,9 @@ Class template \tcode{dynamic_string_buffer} is an adaptor used to automatically
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
