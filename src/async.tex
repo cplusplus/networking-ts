@@ -1931,7 +1931,7 @@ template<class ExecutionContext, class CompletionToken>
 }
 
 \added{
-\effects Equivalent to: \tcode{return executor_binder<decay_t<T>, Executor>(forward<T>(t), ex)}.
+\effects Equivalent to: \tcode{return bind_executor(ctx.get_executor(), forward<T>(t))}.
 }
 
 \pnum
