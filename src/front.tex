@@ -78,7 +78,6 @@ Changes since R0:
 \end{itemize}
 
 Future work:
-
 \begin{itemize}
 \item
 Replace non-member operators with hidden friends.
@@ -88,9 +87,23 @@ Use concepts to replace \newoldconcept{TypeRequirements}.
 \item
 Make address ranges satisfy range concepts (currently not possible as
 their iterators don't satisfy \tcode{std::input_or_output_iterator}).
+\item
+Try to specify "completion token" as proper type requirements (or a concept),
+unless SG4 are replacing that part of the spec.
+\item
+Consider replacing \exposid{DEDUCED} with an exposition-only alias template,
+e.g. \exposid{async-return-type}\tcode{<CompletionToken, Signature>}
+or similar.
 \end{itemize}
 
-
+Open questions (probably to be filed as LWG issues):
+\begin{itemize}
+\item
+Clarify intent of \tcode{strand} move constructor and move assignment.
+\item
+Should \tcode{address_v4} comparisons really use \tcode{to_uint()},
+so that whether 1.0.0.4 is less than 2.0.0.3 depends on host endianness?
+\end{itemize}
 
 
 \newpage
