@@ -48,12 +48,21 @@ are shown as \CppXref{structure.specifications} without repeating
 After applying these changes, the editor should reorder all new
 \constraints and \mandates elements to match the conventional order.
 
-\vspace{1.5cm}
-
-I am not proposing to replace non-member operators with hidden friends.
-LWG would prefer that to be done in a separate proposal to go via LEWG.
+\vspace{2.5cm}
 
 Thanks to Tomasz Kamiński and Frank Birbacher for their detailed reviews of R0.
+Thanks to Tim Song for reviewing R1.
+
+Changes since R1:
+\begin{itemize}
+\item Change "signature" to "call signature" in [structure.specifications].
+\item Removed "shall" uses in [err.report.async].
+\item Replaced \exposid{DECAY_COPY} with \exposid{decay-copy} everywhere
+  (and adjusted cross references from [thread.decay.copy] to [expos.only.func]).
+\item Restored \expects in [basic.strand.assign] in addition to \constraints{}.
+\item Fixed \textit{Mandates} for \tcode{executor_binder} constructors.
+\item Restored ordering between v4 and v6 IP addresses.
+\end{itemize}
 
 Changes since R0:
 \begin{itemize}
@@ -64,12 +73,23 @@ Changes since R0:
   an italicized \textit{ConceptName} for all rows except one.
 \item Added \tcode{explicit} default constructor to \tcode{executor_arg_t}.
 \item Restored some "shall" requirements on users that should not have been removed.
-\item Fixed \textit{Mandates} for \tcode{executor_binder} constructors.
 \item Make IP address ranges satisfy borrowed view concept.
-\item Restored specified ordering between v4 and v6 IP addresses.
-\item Replaced \exposid{DECAY_COPY} with \exposid{decay-copy}
-  (and adjusted cross references from [thread.decay.copy] to [expos.only.func]).
 \end{itemize}
+
+Future work:
+
+\begin{itemize}
+\item
+Replace non-member operators with hidden friends.
+LWG would prefer that to be done in a separate proposal to go via LEWG.
+\item
+Use concepts to replace \newoldconcept{TypeRequirements}.
+\item
+Make address ranges satisfy range concepts (currently not possible as
+their iterators don't satisfy \tcode{std::input_or_output_iterator}).
+\end{itemize}
+
+
 
 
 \newpage
