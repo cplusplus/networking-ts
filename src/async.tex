@@ -3309,7 +3309,7 @@ strand(strand&& other) noexcept;
 \item
 \tcode{*this} is equal to the prior value of \tcode{other}
 \item
-\tcode{get_inner_executor() == other.get_inner_executor()}
+\tcode{get_inner_executor() == other.get_inner_executor()} \ednote{Really? RHS is moved from}
 \end{itemize}
 \end{itemdescr}
 
@@ -3327,7 +3327,7 @@ so that \tcode{is_constructible} gives the right answer.}
 }
 
 \added{%
-\constraints \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
+\constraints \tcode{is_convertible_v<const OtherExecutor\&, Executor>} is \tcode{true}.
 }
 
 \pnum
