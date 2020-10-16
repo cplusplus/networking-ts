@@ -399,16 +399,16 @@ An \changed{associator}{\defn{associator}} defines a relationship between differ
 a source object \tcode{s} of type \tcode{S},
 
 \item
-type requirements \tcode{R}, and
+type requirements \newoldconcept{R}, and
 
 \item
-a candidate object \tcode{c} of type \tcode{C} meeting the type requirements \tcode{R},
+a candidate object \tcode{c} of type \tcode{C} meeting the type requirements \newoldconcept{R},
 \end{itemize}
 
-an associated type \tcode{A} meeting the type requirements \tcode{R} may be computed, and an associated object \tcode{a} of type \tcode{A} may be obtained.
+an associated type \tcode{A} meeting the type requirements \newoldconcept{R} may be computed, and an associated object \tcode{a} of type \tcode{A} may be obtained.
 
 \pnum
-An associator shall be a class template that takes two template type arguments. The first template argument is the source type \tcode{S}. The second template argument is the candidate type \tcode{C}. The second template argument shall be defaulted to some default candidate type \tcode{D} that \changed{satisfies}{meets} the type requirements \tcode{R}.
+An associator shall be a class template that takes two template type arguments. The first template argument is the source type \tcode{S}. The second template argument is the candidate type \tcode{C}. The second template argument shall be defaulted to some default candidate type \tcode{D} that \changed{satisfies}{meets} the type requirements \newoldconcept{R}.
 
 \pnum
 An associator shall additionally \changed{satisfy}{meet} the requirements in Table~\ref{tab:async.reqmts.associator.requirements}.
