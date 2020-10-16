@@ -9,8 +9,8 @@
 \indexlibrary{\idxcode{socket_errc}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   enum class socket_errc {
@@ -110,8 +110,8 @@
                           CompletionToken&& token);
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
 
   template<> struct is_error_code_enum<experimental::net::@\namespacever@::socket_errc>
     : public true_type {};
@@ -1010,8 +1010,8 @@ error_condition make_error_condition(socket_errc e) noexcept;
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class socket_base
@@ -1052,9 +1052,9 @@ error_condition make_error_condition(socket_errc e) noexcept;
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -1245,8 +1245,8 @@ The \tcode{linger} class represents a socket option for controlling the behavior
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class socket_base::linger
@@ -1265,9 +1265,9 @@ The \tcode{linger} class represents a socket option for controlling the behavior
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -1279,8 +1279,8 @@ The \tcode{linger} class represents a socket option for controlling the behavior
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   class socket_base::linger
@@ -1298,9 +1298,9 @@ The \tcode{linger} class represents a socket option for controlling the behavior
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \begin{itemdecl}
@@ -1422,8 +1422,8 @@ Class template \tcode{basic_socket<Protocol>} is used as the base class for the 
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Protocol>
@@ -1542,9 +1542,9 @@ Class template \tcode{basic_socket<Protocol>} is used as the base class for the 
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -2257,8 +2257,8 @@ The class template \tcode{basic_datagram_socket<Protocol>} is used to send and r
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Protocol>
@@ -2392,9 +2392,9 @@ The class template \tcode{basic_datagram_socket<Protocol>} is used to send and r
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -2943,8 +2943,8 @@ The class template \tcode{basic_stream_socket<Protocol>} is used to exchange dat
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Protocol>
@@ -3043,9 +3043,9 @@ The class template \tcode{basic_stream_socket<Protocol>} is used to exchange dat
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -3438,8 +3438,8 @@ An object of class template \tcode{basic_socket_acceptor<AcceptableProtocol>} is
 
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class AcceptableProtocol>
@@ -3569,9 +3569,9 @@ An object of class template \tcode{basic_socket_acceptor<AcceptableProtocol>} is
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
