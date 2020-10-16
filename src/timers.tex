@@ -36,8 +36,8 @@ c.run();
 #include <chrono>
 
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Clock> struct wait_traits;
@@ -50,9 +50,9 @@ c.run();
   using high_resolution_timer = basic_waitable_timer<chrono::high_resolution_clock>;
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 
@@ -115,8 +115,8 @@ Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{a
 \indexlibrary{\idxcode{wait_traits}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Clock>
@@ -130,9 +130,9 @@ Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{a
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
@@ -166,8 +166,8 @@ static typename Clock::duration to_wait_duration(
 \indexlibrary{\idxcode{basic_waitable_timer}}%
 \begin{codeblock}
 @\removed{namespace std \{}@
-@\removed{namespace experimental \{ }@
-@\removed{namespace net \{ }@
+@\removed{namespace experimental \{}@
+@\removed{namespace net \{}@
 @\removed{inline }@namespace @\added{std::experimental::net::inline}@ @\namespacever@ {
 
   template<class Clock, class WaitTraits = wait_traits<Clock>>
@@ -214,9 +214,9 @@ static typename Clock::duration to_wait_duration(
   };
 
 } // inline namespace \added{std::experimental::net::}\namespacever
-@\removed{ \} // namespace net}@
-@\removed{ \} // namespace experimental}@
-@\removed{ \} // namespace std}@
+@\removed{\} // namespace net}@
+@\removed{\} // namespace experimental}@
+@\removed{\} // namespace std}@
 \end{codeblock}
 
 \pnum
