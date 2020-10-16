@@ -3368,14 +3368,13 @@ strand& operator=(const strand& other) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
-\removed{%
-\requires \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
-}
-
 \added{%
+\pnum
 \mandates \tcode{is_copy_assignable_v<Executor>} is \tcode{true}.
 }
+
+\pnum
+\changed{\requires}{\expects} \tcode{Executor} is \tcode{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
 \postconditions
@@ -3395,13 +3394,13 @@ strand& operator=(strand&& other) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
-\removed{%
-\requires \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).}
-
 \added{%
+\pnum
 \mandates \tcode{is_move_assignable_v<Executor>} is \tcode{true}.
 }
+
+\pnum
+\changed{\requires}{\expects} \tcode{Executor} is \tcode{MoveAssignable} (\CppXref{moveassignable}).
 
 \pnum
 \postconditions
@@ -3409,7 +3408,7 @@ strand& operator=(strand&& other) noexcept;
 \item
 \tcode{*this} is equal to the prior value of \tcode{other}
 \item
-\tcode{get_inner_executor() == other.get_inner_executor()}
+\tcode{get_inner_executor() == other.get_inner_executor()} \ednote{Really? RHS is moved from}
 \end{itemize}
 
 \pnum
