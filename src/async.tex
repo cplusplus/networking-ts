@@ -3427,6 +3427,7 @@ and \tcode{is_copy_assignable_v<Executor>} is \tcode{true}.}
 
 \pnum
 \effects Assigns \tcode{other.inner_ex_} to \tcode{inner_ex_}.
+\ednote{The \requires (and now \mandates) suggest this should be \tcode{inner_ex_ = Executor(other.inner_ex_)} instead.}
 
 \pnum
 \postconditions \tcode{*this == other}.
@@ -3447,6 +3448,7 @@ and \tcode{is_move_assignable_v<Executor>} is \tcode{true}.}
 
 \pnum
 \effects Assigns \tcode{std::move(other.inner_ex_)} to \tcode{inner_ex_}.
+\ednote{The \requires (and now \mandates) suggest this should be \tcode{inner_ex_ = Executor(std::move(other.inner_ex_))} instead.}
 
 \pnum
 \postconditions \tcode{*this} is equal to the prior value of \tcode{other}.
