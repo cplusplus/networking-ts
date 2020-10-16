@@ -50,7 +50,7 @@ namespace ip {
   @\removed{constexpr bool operator> (const address\&, const address\&) noexcept;}@
   @\removed{constexpr bool operator<=(const address\&, const address\&) noexcept;}@
   @\removed{constexpr bool operator>=(const address\&, const address\&) noexcept;}@
-  @\added{constexpr partial_ordering operator<=>(const address\&, const address\&) noexcept;}@
+  @\added{constexpr strong_ordering operator<=>(const address\&, const address\&) noexcept;}@
 
   // \ref{internet.address.v4.comparisons}, address_v4 comparisons
   constexpr bool operator==(const address_v4&, const address_v4&) noexcept;
@@ -206,8 +206,8 @@ namespace ip {
     @\removed{bool operator>=(const basic_endpoint<InternetProtocol>\&,}@
                     @\removed{const basic_endpoint<InternetProtocol>\&);}@
   @\added{template<class InternetProtocol>}@
-    @\added{partial_ordering operator<=>(const basic_endpoint<InternetProtocol>\&,}@
-                                 @\added{const basic_endpoint<InternetProtocol>\&);}@
+    @\added{strong_ordering operator<=>(const basic_endpoint<InternetProtocol>\&,}@
+                                @\added{const basic_endpoint<InternetProtocol>\&);}@
 
   // \ref{internet.endpoint.io}, basic_endpoint I/O
   template<class CharT, class Traits, class InternetProtocol>
@@ -601,7 +601,7 @@ namespace ip {
   @\removed{constexpr bool operator> (const address\& a, const address\& b) noexcept;}@
   @\removed{constexpr bool operator<=(const address\& a, const address\& b) noexcept;}@
   @\removed{constexpr bool operator>=(const address\& a, const address\& b) noexcept;}@
-  @\added{constexpr partial_ordering operator<=>(const address\&, const address\&) noexcept;}@
+  @\added{constexpr strong_ordering operator<=>(const address\&, const address\&) noexcept;}@
 
   // \ref{internet.address.creation}, address creation
   address make_address(const char* str);
@@ -871,7 +871,7 @@ constexpr bool operator>=(const address& a, const address& b) noexcept;
 \begin{addedblock}
 \indexlibrarymember{operator<=>}{address}%
 \begin{itemdecl}
-constexpr partial_ordering operator<=>(const address& a, const address& b) noexcept;
+constexpr strong_ordering operator<=>(const address& a, const address& b) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -2740,8 +2740,8 @@ namespace ip {
     @\removed{constexpr bool operator>=(const basic_endpoint<InternetProtocol>\& a,}@
                               @\removed{const basic_endpoint<InternetProtocol>\& b) noexcept;}@
   @\added{template<class InternetProtocol>}@
-    @\added{constexpr partial_ordering operator<=>(const basic_endpoint<InternetProtocol>\& a,}@
-                                           @\added{const basic_endpoint<InternetProtocol>\& b) noexcept;}@
+    @\added{constexpr strong_ordering operator<=>(const basic_endpoint<InternetProtocol>\& a,}@
+                                          @\added{const basic_endpoint<InternetProtocol>\& b) noexcept;}@
 
   // \ref{internet.endpoint.io}, basic_endpoint I/O
   template<class CharT, class Traits, class InternetProtocol>
@@ -2961,8 +2961,8 @@ template<class InternetProtocol>
 \begin{addedblock}
 \begin{itemdecl}
 template<class InternetProtocol>
-  constexpr partial_ordering operator<=>(const basic_endpoint<InternetProtocol>& a,
-                                         const basic_endpoint<InternetProtocol>& b) noexcept;
+  constexpr strong_ordering operator<=>(const basic_endpoint<InternetProtocol>& a,
+                                        const basic_endpoint<InternetProtocol>& b) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
