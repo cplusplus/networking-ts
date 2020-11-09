@@ -1069,7 +1069,12 @@ inline namespace v1 {
   template<class Service, class... Args> Service&
     make_service(execution_context& ctx, Args&&... args);
   template<class Service> bool has_service(const execution_context& ctx) noexcept;
-  class service_already_exists : public logic_error { };
+
+  class service_already_exists : public logic_error
+  {
+  public:
+    service_already_exists();
+  };
 
 } // inline namespace v1
 } // namespace net
@@ -1221,8 +1226,13 @@ template<class Service> bool has_service(const execution_context& ctx) noexcept;
 \returns \tcode{true} if an object of type \tcode{Service::key_type} is present in \tcode{ctx}, otherwise \tcode{false}.
 \end{itemdescr}
 
+\rSec2[async.exec.ctx.except]{Class \tcode{service_already_exists}}
 
-
+\indexlibrary{\idxcode{service_already_exists}}%
+\pnum The class \tcode{service_already_exists}
+defines the type of objects thrown as exceptions to report
+an attempt to add an existing service to an
+\tcode{execution_context}.
 
 \rSec1[async.exec.ctx.svc]{Class \tcode{execution_context::service}}
 
