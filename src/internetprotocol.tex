@@ -3525,6 +3525,8 @@ namespace ip {
     using endpoint = basic_endpoint<tcp>;
     using resolver = basic_resolver<tcp>;
     using socket = basic_stream_socket<tcp>;
+    @\addedcode{template<class Executor>}@
+    @\addedcode{  using socket_for = basic_stream_socket<tcp, Executor>}@
     using acceptor = basic_socket_acceptor<tcp>;
     using iostream = basic_socket_iostream<tcp>;
     class no_delay;
@@ -3633,6 +3635,8 @@ namespace ip {
     using endpoint = basic_endpoint<udp>;
     using resolver = basic_resolver<udp>;
     using socket = basic_datagram_socket<udp>;
+    @\addedcode{template<class Executor>}@
+    @\addedcode{  using socket_for = basic_datagram_socket<udp, Executor>}@
 
     // static members:
     static constexpr udp v4() noexcept;
