@@ -8,10 +8,9 @@
 
 \rSec2[buffer.stream.reqmts.syncreadstream]{Buffer-oriented synchronous read stream requirements}
 
-\indextext{\idxcode{SyncReadStream}}%
-\indextext{requirements!\idxcode{SyncReadStream}}%
+\indextext{requirements!\idxnewoldconcept{SyncReadStream}}%
 \pnum
-A type \tcode{X} meets the \tcode{SyncReadStream} requirements if it satisfies the requirements listed in Table~\ref{tab:buffer.stream.reqmts.syncreadstream.requirements}.
+A type \tcode{X} meets the \defnnewoldconcept{SyncReadStream} requirements if it meets the requirements listed in Table~\ref{tab:buffer.stream.reqmts.syncreadstream.requirements}.
 
 \pnum
 An \defn{orderly shutdown} is
@@ -20,12 +19,12 @@ the procedure for shutting down a stream after all work in progress has been com
 \pnum
 In Table~\ref{tab:buffer.stream.reqmts.syncreadstream.requirements},
 \tcode{a} denotes a value of type \tcode{X},
-\tcode{mb} denotes a (possibly const) value of a type satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements,
+\tcode{mb} denotes a  value of a (possibly const) type meeting the \newoldconcept{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements,
 and \tcode{ec} denotes an object of type \tcode{error_code}.
 
 \indexlibrary{\idxcode{read_some}}%
 \begin{libreqtab3}
-{SyncReadStream requirements}
+{\newoldconcept{SyncReadStream} requirements}
 {tab:buffer.stream.reqmts.syncreadstream.requirements}
 \\ \topline
 \lhdr{operation}  &
@@ -50,20 +49,19 @@ If \tcode{buffer_size(mb) > 0}, reads one or more bytes of data from the stream 
 
 \rSec2[buffer.stream.reqmts.asyncreadstream]{Buffer-oriented asynchronous read stream requirements}
 
-\indextext{\idxcode{AsyncReadStream}}%
-\indextext{requirements!\idxcode{AsyncReadStream}}%
+\indextext{requirements!\idxnewoldconcept{AsyncReadStream}}%
 \pnum
-A type \tcode{X} meets the \tcode{AsyncReadStream} requirements if it satisfies the requirements listed below.
+A type \tcode{X} meets the \defnnewoldconcept{AsyncReadStream} requirements if it meets the requirements listed below.
 
 \pnum
 In the table below, \tcode{a} denotes a value of type \tcode{X},
-\tcode{mb} denotes a (possibly const) value of a type satisfying the \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements,
+\tcode{mb} denotes a  value of a (possibly const) type meeting the \newoldconcept{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements,
 and \tcode{t} is a completion token.
 
 \indexlibrary{\idxcode{get_executor}}%
 \indexlibrary{\idxcode{async_read_some}}%
 \begin{libreqtab3}
-{AsyncReadStream requirements}
+{\newoldconcept{AsyncReadStream} requirements}
 {tab:buffer.stream.reqmts.asyncreadstream.requirements}
 \\ \topline
 \lhdr{operation}  &
@@ -78,7 +76,7 @@ and \tcode{t} is a completion token.
 \endhead
 
 \tcode{a.get_executor()}  &
-A type satisfying the Executor requirements~(\ref{async.reqmts.executor}).  &
+A type meeting the \newoldconcept{Executor} requirements~(\ref{async.reqmts.executor}).  &
  Returns the associated I/O executor.  \\ \rowsep
 
 \tcode{a.async_read_some(mb,t)}  &
@@ -91,20 +89,20 @@ If \tcode{buffer_size(mb) > 0}, initiates an asynchronous operation to read one 
 
 \rSec2[buffer.stream.reqmts.syncwritestream]{Buffer-oriented synchronous write stream requirements}
 
-\indextext{\idxcode{SyncWriteStream}}%
-\indextext{requirements!\idxcode{SyncWriteStream}}%
+\indextext{\idxnewoldconcept{SyncWriteStream}}%
+\indextext{requirements!\idxnewoldconcept{SyncWriteStream}}%
 \pnum
-A type \tcode{X} meets the \tcode{SyncWriteStream} requirements if it satisfies the requirements listed below.
+A type \tcode{X} meets the \defnnewoldconcept{SyncWriteStream} requirements if it meets the requirements listed below.
 
 \pnum
 In the table below,
 \tcode{a} denotes a value of type \tcode{X},
-\tcode{cb} denotes a (possibly const) value of a type satisfying the \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements,
+\tcode{cb} denotes a  value of a (possibly const) type meeting the \newoldconcept{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements,
 and \tcode{ec} denotes an object of type \tcode{error_code}.
 
 \indexlibrary{\idxcode{write_some}}%
 \begin{libreqtab3}
-{SyncWriteStream requirements}
+{\newoldconcept{SyncWriteStream} requirements}
 {tab:buffer.stream.reqmts.syncwritestream.requirements}
 \\ \topline
 \lhdr{operation}  &
@@ -130,21 +128,20 @@ If \tcode{buffer_size(cb) > 0}, writes one or more bytes of data to the stream \
 
 \rSec2[buffer.stream.reqmts.asyncwritestream]{Buffer-oriented asynchronous write stream requirements}
 
-\indextext{\idxcode{AsyncWriteStream}}%
-\indextext{requirements!\idxcode{AsyncWriteStream}}%
+\indextext{requirements!\idxnewoldconcept{AsyncWriteStream}}%
 \pnum
-A type \tcode{X} meets the \tcode{AsyncWriteStream} requirements if it satisfies the requirements listed below.
+A type \tcode{X} meets the \defnnewoldconcept{AsyncWriteStream} requirements if it meets the requirements listed below.
 
 \pnum
 In the table below,
 \tcode{a} denotes a value of type \tcode{X},
-\tcode{cb} denotes a (possibly const) value of a type satisfying the \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements,
+\tcode{cb} denotes a  value of a (possibly const) type meeting the \newoldconcept{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements,
 and \tcode{t} is a completion token.
 
 \indexlibrary{\idxcode{get_executor}}%
 \indexlibrary{\idxcode{async_write_some}}%
 \begin{libreqtab3}
-{AsyncWriteStream requirements}
+{\newoldconcept{AsyncWriteStream} requirements}
 {tab:buffer.stream.reqmts.asyncwritestream.requirements}
 \\ \topline
 \lhdr{operation}  &
@@ -159,7 +156,7 @@ and \tcode{t} is a completion token.
 \endhead
 
 \tcode{a.get_executor()}  &
-A type satisfying the Executor requirements~(\ref{async.reqmts.executor}).  &
+A type meeting the \newoldconcept{Executor} requirements~(\ref{async.reqmts.executor}).  &
  Returns the associated I/O executor.  \\ \rowsep
 
 \tcode{a.async_write_some(cb,t)}  &
@@ -173,21 +170,20 @@ If \tcode{buffer_size(cb) > 0}, initiates an asynchronous operation to write one
 
 \rSec2[buffer.stream.reqmts.completioncondition]{Completion condition requirements}
 
-\indextext{\idxcode{CompletionCondition}}%
-\indextext{requirements!\idxcode{CompletionCondition}}%
+\indextext{requirements!\idxnewoldconcept{CompletionCondition}}%
 \pnum
 A completion condition is a function object that is used with the algorithms \tcode{read}~(\ref{buffer.read}), \tcode{async_read}~(\ref{buffer.async.read}), \tcode{write}~(\ref{buffer.write}), and \tcode{async_write}~(\ref{buffer.async.write}) to determine when the algorithm has completed transferring data.
 
 \pnum
-A type \tcode{X} meets the \tcode{CompletionCondition} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \defnnewoldconcept{CompletionCondition} requirements if it meets the requirements of \oldconcept{Destructible} (\CppXref{destructible}) and \oldconcept{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed below.
 
 \pnum
 In the table below, \tcode{x} denotes a value of type \tcode{X},
-\tcode{ec} denotes a (possibly const) value of type \tcode{error_code},
-and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
+\tcode{ec} denotes a  value of type (possibly const) \tcode{error_code},
+and \tcode{n} denotes a  value of type (possibly const) \tcode{size_t}.
 
 \begin{libreqtab3}
-{CompletionCondition requirements}
+{\newoldconcept{CompletionCondition} requirements}
 {tab:buffer.stream.reqmts.completioncondition.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -218,10 +214,7 @@ Returns the maximum number of bytes to be transferred on the next \tcode{read_so
 The class \tcode{transfer_all} is a completion condition that is used to specify that a read or write operation should continue until all of the data has been transferred, or until an error occurs.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   class transfer_all
   {
@@ -229,14 +222,11 @@ inline namespace v1 {
     size_t operator()(const error_code& ec, size_t) const;
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-The class \tcode{transfer_all} satisfies the \tcode{CompletionCondition}~(\ref{buffer.stream.reqmts.completioncondition}) requirements.
+The class \tcode{transfer_all} meets the \newoldconcept{CompletionCondition}~(\ref{buffer.stream.reqmts.completioncondition}) requirements.
 
 \begin{itemdecl}
 size_t operator()(const error_code& ec, size_t) const;
@@ -256,10 +246,7 @@ size_t operator()(const error_code& ec, size_t) const;
 The class \tcode{transfer_at_least} is a completion condition that is used to specify that a read or write operation should continue until a minimum number of bytes has been transferred, or until an error occurs.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   class transfer_at_least
   {
@@ -270,14 +257,11 @@ inline namespace v1 {
     size_t minimum_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-The class \tcode{transfer_at_least} satisfies the \tcode{CompletionCondition}~(\ref{buffer.stream.reqmts.completioncondition}) requirements.
+The class \tcode{transfer_at_least} meets the \newoldconcept{CompletionCondition}~(\ref{buffer.stream.reqmts.completioncondition}) requirements.
 
 \begin{itemdecl}
 explicit transfer_at_least(size_t m);
@@ -306,10 +290,7 @@ size_t operator()(const error_code& ec, size_t n) const;
 The class \tcode{transfer_exactly} is a completion condition that is used to specify that a read or write operation should continue until an exact number of bytes has been transferred, or until an error occurs.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   class transfer_exactly
   {
@@ -320,14 +301,11 @@ inline namespace v1 {
     size_t exact_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-The class \tcode{transfer_exactly} satisfies the \tcode{CompletionCondition}~(\ref{buffer.stream.reqmts.completioncondition}) requirements.
+The class \tcode{transfer_exactly} meets the \newoldconcept{CompletionCondition}~(\ref{buffer.stream.reqmts.completioncondition}) requirements.
 
 \begin{itemdecl}
 explicit transfer_exactly(size_t e);
@@ -377,6 +355,10 @@ template<class SyncReadStream, class MutableBufferSequence,
 A read operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
+\constraints
+\tcode{is_mutable_buffer_sequence_v<MutableBufferSequence>} is \tcode{true}.
+
+\pnum
 \effects Clears \tcode{ec}, then reads data from the buffer-oriented synchronous read stream~(\ref{buffer.stream.reqmts.syncreadstream}) object \tcode{stream} by performing zero or more calls to the stream's \tcode{read_some} member function.
 
 \pnum
@@ -397,9 +379,6 @@ On return, \tcode{ec} contains the \tcode{error_code} value from the most recent
 
 \pnum
 \returns The total number of bytes transferred in the synchronous read operation.
-
-\pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_mutable_buffer_sequence_v<MutableBufferSequence>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{read}}%
@@ -420,6 +399,10 @@ template<class SyncReadStream, class DynamicBuffer,
 \end{itemdecl}
 
 \begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_dynamic_buffer_v<Dynamic\-Buffer>} is \tcode{true}.
+
 \pnum
 \effects Clears \tcode{ec}, then reads data from the synchronous read stream~(\ref{buffer.stream.reqmts.syncreadstream}) object \tcode{stream} by performing zero or more calls to the stream's \tcode{read_some} member function.
 
@@ -442,9 +425,6 @@ On return, \tcode{ec} contains the \tcode{error_code} value from the most recent
 
 \pnum
 \returns The total number of bytes transferred in the synchronous read operation.
-
-\pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_dynamic_buffer_v<Dynamic\-Buffer>} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -473,6 +453,10 @@ A composed asynchronous read operation~(\ref{async.reqmts.async.composed}, \ref{
 \completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
+\constraints
+\tcode{is_mutable_buffer_sequence_v<MutableBufferSequence>} is \tcode{true}.
+
+\pnum
 \effects Reads data from the buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream}) object \tcode{stream} by invoking the stream's \tcode{async_read_some} member function (henceforth referred to as asynchronous read_some operations) zero or more times.
 
 \pnum
@@ -493,9 +477,6 @@ The program shall ensure the \tcode{AsyncReadStream} object \tcode{stream} is va
 
 \pnum
 On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code} value from the most recent asynchronous read_some operation, and \tcode{n} is the total number of bytes transferred.
-
-\pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_mutable_buffer_sequence_v<MutableBufferSequence>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{async_read}}%
@@ -514,6 +495,10 @@ template<class AsyncReadStream, class DynamicBuffer, class CompletionCondition,
 \begin{itemdescr}
 \pnum
 \completionsig \tcode{void(error_code ec, size_t n)}.
+
+\pnum
+\constraints
+\tcode{is_dynamic_buffer_v<DynamicBuffer>} is \tcode{true}.
 
 \pnum
 \effects Initiates an asynchronous operation to read data from the buffer-oriented asynchronous read stream~(\ref{buffer.stream.reqmts.asyncreadstream}) object \tcode{stream} by performing one or more asynchronous read_some operations on the stream.
@@ -539,10 +524,6 @@ The program shall ensure the \tcode{AsyncReadStream} object \tcode{stream} is va
 
 \pnum
 On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code} value from the most recent asynchronous read_some operation, and \tcode{n} is the total number of bytes transferred.
-
-\pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_dynamic_buffer_v<DynamicBuffer>} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -575,6 +556,10 @@ template<class SyncWriteStream, class ConstBufferSequence,
 A write operation~(\ref{buffer.reqmts.read.write}).
 
 \pnum
+\constraints
+\tcode{is_const_buffer_seq\-uence_v<ConstBufferSequence>} is \tcode{true}.
+
+\pnum
 \effects Writes data to the buffer-oriented synchronous write stream~(\ref{buffer.stream.reqmts.syncwritestream}) object \tcode{stream} by performing zero or more calls to the stream's \tcode{write_some} member function.
 
 \pnum
@@ -595,9 +580,6 @@ On return, \tcode{ec} contains the \tcode{error_code} value from the most recent
 
 \pnum
 \returns The total number of bytes transferred in the synchronous write operation.
-
-\pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_const_buffer_seq\-uence<ConstBufferSequence>::value} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{write}}%
@@ -616,6 +598,11 @@ template<class SyncWriteStream, class DynamicBuffer, class CompletionCondition>
 \end{itemdecl}
 
 \begin{itemdescr}
+
+\pnum
+\constraints
+\tcode{is_dynamic_buffer_v<Dynamic\-Buffer>} is \tcode{true}.
+
 \pnum
 \effects Writes data to the synchronous write stream~(\ref{buffer.stream.reqmts.syncwritestream}) object \tcode{stream} by performing zero or more calls to the stream's \tcode{write_some} member function.
 
@@ -638,9 +625,6 @@ On return, \tcode{ec} contains the \tcode{error_code} value from the most recent
 
 \pnum
 \returns The total number of bytes transferred in the synchronous write operation.
-
-\pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_dynamic_buffer_v<Dynamic\-Buffer>} is \tcode{true}.
 \end{itemdescr}
 
 
@@ -669,6 +653,10 @@ A composed asynchronous write operation~(\ref{async.reqmts.async.composed}, \ref
 \completionsig \tcode{void(error_code ec, size_t n)}.
 
 \pnum
+\constraints
+\tcode{is_const_buffer_seq\-uence_v<ConstBufferSequence>} is \tcode{true}.
+
+\pnum
 \effects Initiates an asynchronous operation to write data to the buffer-oriented asynchronous write stream~(\ref{buffer.stream.reqmts.asyncwritestream}) object \tcode{stream} by performing zero or more asynchronous operations on the stream using the stream's \tcode{async_write_some} member function (henceforth referred to as asynchronous write_some operations).
 
 \pnum
@@ -689,9 +677,6 @@ The program shall ensure the \tcode{AsyncWriteStream} object \tcode{stream} is v
 
 \pnum
 On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code} value from the most recent asynchronous write_some operation, and \tcode{n} is the total number of bytes transferred.
-
-\pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_const_buffer_seq\-uence<ConstBufferSequence>::value} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{async_write}}%
@@ -710,6 +695,10 @@ template<class AsyncWriteStream, class DynamicBuffer, class CompletionCondition,
 \begin{itemdescr}
 \pnum
 \completionsig \tcode{void(error_code ec, size_t n)}.
+
+\pnum
+\constraints
+\tcode{is_dynamic_buffer_v<Dynamic\-Buffer>} is \tcode{true}.
 
 \pnum
 \effects Initiates an asynchronous operation to write data to the buffer-oriented asynchronous write stream~(\ref{buffer.stream.reqmts.asyncwritestream}) object \tcode{stream} by performing zero or more asynchronous write_some operations on the stream.
@@ -733,9 +722,6 @@ The program shall ensure both the \tcode{AsyncWriteStream} object \tcode{stream}
 
 \pnum
 On completion of the asynchronous operation, \tcode{ec} is the \tcode{error_code} value from the most recent asynchronous write_some operation, and \tcode{n} is the total number of bytes transferred.
-
-\pnum
-\remarks This function shall not participate in overload resolution unless \tcode{is_dynamic_buffer_v<Dynamic\-Buffer>} is \tcode{true}.
 \end{itemdescr}
 
 

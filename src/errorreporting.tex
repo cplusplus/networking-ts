@@ -90,11 +90,11 @@ Asynchronous network library functions in this document are identified by having
 If a call by the implementation to an operating system or other underlying API results in an error that prevents the asynchronous operation from meeting its specifications, the completion handler is invoked with an \tcode{error_code} value \tcode{ec} that is set as appropriate for the specific error. Otherwise, the \tcode{error_code} value \tcode{ec} is set such that \tcode{!ec} is \tcode{true}.
 
 \item
-Asynchronous operations shall not fail with an error condition that indicates interruption of an operating system or underlying API by a signal. \begin{note} Such as POSIX error number \tcode{EINTR} \end{note} Asynchronous operations shall not fail with any error condition associated with non-blocking operations. \begin{note} Such as POSIX error numbers \tcode{EWOULDBLOCK}, \tcode{EAGAIN}, or \tcode{EINPROGRESS}; Windows error numbers \tcode{WSAEWOULDBLOCK} or \tcode{WSAEINPROGRESS} \end{note}
+Asynchronous operations do not fail with an error condition that indicates interruption of an operating system or underlying API by a signal. \begin{note} Such as POSIX error number \tcode{EINTR} \end{note} Asynchronous operations do not fail with any error condition associated with non-blocking operations. \begin{note} Such as POSIX error numbers \tcode{EWOULDBLOCK}, \tcode{EAGAIN}, or \tcode{EINPROGRESS}; Windows error numbers \tcode{WSAEWOULDBLOCK} or \tcode{WSAEINPROGRESS} \end{note}
 \end{itemize}
 
 \pnum
-In this document, when a type requirement is specified as a call to a function or member function having the prefix \tcode{async_}, then the function shall satisfy the error reporting requirements described above.
+In this document, when a type requirement is specified as a call to a function or member function having the prefix \tcode{async_}, then the function satisfies the error reporting requirements described above.
 
 
 
@@ -115,7 +115,11 @@ Otherwise, the \tcode{error_code} shall be set to an \impldef{values of \tcode{e
 \begin{example} The POSIX specification for \tcode{shutdown} lists \tcode{EBADF} as one of its possible errors. If a function that is specified ``as if'' implemented by \tcode{shutdown} fails with \tcode{EBADF} then the following condition holds for the \tcode{error_code} value \tcode{ec}: \tcode{ec == errc::bad_file_descriptor} \end{example}
 
 \pnum
-When the description of a function contains the element Error conditions, this lists conditions where the operation may fail. The conditions are listed, together with a suitable explanation, as \tcode{enum class} constants. Unless otherwise specified, this list is a subset of the failure conditions associated with the function.
+When the description of a function contains the element
+\errors,
+this lists conditions where the operation may fail.
+The conditions are listed, together with a suitable explanation, as \tcode{enum class} constants.
+Unless otherwise specified, this list is a subset of the failure conditions associated with the function.
 
 
 

@@ -12,10 +12,7 @@ The class \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} associates
  \begin{note} This class is intended for sending and receiving bytes, not characters. Any conversion from characters to bytes, and vice versa, occurs elsewhere. \end{note}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   template<class Protocol, class Clock, class WaitTraits>
   class basic_socket_streambuf : public basic_streambuf<char>
@@ -70,14 +67,11 @@ inline namespace v1 {
     time_point expiry_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_socket_streambuf} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), and \tcode{MoveAssignable} (\CppXref{moveassignable}).
+Specializations of class template \tcode{basic_socket_streambuf} meet the requirements of \oldconcept{Destructible} (\CppXref{destructible}), \oldconcept{MoveConstructible} (\CppXref{moveconstructible}), and \oldconcept{MoveAssignable} (\CppXref{moveassignable}).
 
 
 \rSec2[socket.streambuf.cons]{\tcode{basic_socket_streambuf} constructors}
@@ -198,13 +192,16 @@ template<class... Args>
 
 \begin{itemdescr}
 \pnum
+\constraints
+\tcode{Protocol} meets the requirements for an internet protocol~(\ref{internet.reqmts.protocol}).
+
+\pnum
 \effects Initializes the \tcode{basic_socket_streambuf} as required and closes the socket as if by calling \tcode{socket_.close(ec_)}. Obtains an endpoint sequence \tcode{endpoints} by performing \tcode{protocol_type::resolver(ctx).resolve(forward<Args>(args)...)}, where \tcode{ctx} is an unspecified object of class \tcode{io_context}. For each endpoint \tcode{e} in the sequence, closes and re-opens the socket by performing \tcode{socket_.close(ec_)} and \tcode{socket_.open(e.protocol(), ec_)}, then attempts to establish a connection as if by POSIX \tcode{connect(socket_.native_handle(), static_cast<sockaddr*>(e.data()), e.size())}. \tcode{ec_} is set to reflect the error code produced by the operation. If the operation does not complete before the absolute timeout specified by \tcode{expiry_}, the socket is closed and \tcode{ec_} is set to \tcode{errc::timed_out}.
 
 \pnum
 \returns if \tcode{!ec_}, \tcode{this}; otherwise, a null pointer.
 
-\pnum
-\remarks This function shall not participate in overload resolution unless \tcode{Protocol} meets the requirements for an internet protocol~(\ref{internet.reqmts.protocol}).
+\ednote{Should this also be constrained such that \tcode{declval<protocol_type::resolver\&>().resolve(forward<Args>(args)...)} is valid? It's needed for the \tcode{basic_socket_iostream(Args\&\&...)} constructor to be constrained.}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -358,10 +355,7 @@ The class template \tcode{basic_socket_iostream<Protocol, Clock, WaitTraits>} su
  \begin{note} This class is intended for sending and receiving bytes, not characters. Any conversion from characters to bytes, and vice versa, occurs elsewhere. \end{note}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   template<class Protocol, class Clock, class WaitTraits>
   class basic_socket_iostream : public basic_iostream<char>
@@ -407,14 +401,11 @@ inline namespace v1 {
     basic_socket_streambuf<protocol_type, clock_type, wait_traits_type> sb_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_socket_iostream} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), and \tcode{MoveAssignable} (\CppXref{moveassignable}).
+Specializations of class template \tcode{basic_socket_iostream} meet the requirements of \oldconcept{Destructible} (\CppXref{destructible}), \oldconcept{MoveConstructible} (\CppXref{moveconstructible}), and \oldconcept{MoveAssignable} (\CppXref{moveassignable}).
 
 
 \rSec2[socket.iostream.cons]{\tcode{basic_socket_iostream} constructors}
@@ -451,6 +442,8 @@ template<class... Args>
   explicit basic_socket_iostream(Args&&... args);
 \end{itemdecl}
 
+\ednote{This should be constrained.}
+
 \begin{itemdescr}
 \pnum
 \effects Initializes the base class as \tcode{basic_iostream<char>(addressof(sb_))}, value-initializes \tcode{sb_}, and performs \tcode{setf(std::ios_base::unitbuf)}. Then calls \tcode{rdbuf()->connect(forward<Args>(args)...)}. If that function returns a null pointer, calls \tcode{setstate(failbit)}.
@@ -476,6 +469,8 @@ basic_socket_iostream& operator=(basic_socket_iostream&& rhs);
 template<class... Args>
   void connect(Args&&... args);
 \end{itemdecl}
+
+\ednote{This should be constrained.}
 
 \begin{itemdescr}
 \pnum

@@ -11,10 +11,7 @@
 \indexlibrary{\idxcode{is_dynamic_buffer_v}}%
 \indexlibrary{\idxcode{stream_errc}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   enum class stream_errc {
     eof = @\EXPO{an \impldef{value of \tcode{stream_errc::eof}} non-zero value}@,
@@ -36,11 +33,11 @@ inline namespace v1 {
   template<class T> struct is_dynamic_buffer;
 
   template<class T>
-    constexpr bool is_mutable_buffer_sequence_v = is_mutable_buffer_sequence<T>::value;
+    inline constexpr bool is_mutable_buffer_sequence_v = is_mutable_buffer_sequence<T>::value;
   template<class T>
-    constexpr bool is_const_buffer_sequence_v = is_const_buffer_sequence<T>::value;
+    inline constexpr bool is_const_buffer_sequence_v = is_const_buffer_sequence<T>::value;
   template<class T>
-    constexpr bool is_dynamic_buffer_v = is_dynamic_buffer<T>::value;
+    inline constexpr bool is_dynamic_buffer_v = is_dynamic_buffer<T>::value;
 
   // \ref{buffer.seq.access}, buffer sequence access
 
@@ -290,11 +287,9 @@ inline namespace v1 {
                              DynamicBuffer&& b, string_view delim,
                              CompletionToken&& token);
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
+} // inline namespace experimental::net::\namespacever
 
-  template<> struct is_error_code_enum<experimental::net::v1::stream_errc>
+  template<> struct is_error_code_enum<experimental::net::@\namespacever@::stream_errc>
     : public true_type {};
 
 } // namespace std
@@ -311,16 +306,16 @@ inline namespace v1 {
 A \defn{mutable buffer sequence} represents a set of memory regions that may be used to receive the output of an operation, such as the \tcode{receive} operation of a socket.
 
 \pnum
-A type \tcode{X} meets the \tcode{MutableBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.mutablebuffersequence.requirements}.
+A type \tcode{X} meets the \defnnewoldconcept{MutableBufferSequence} requirements if it meets the requirements of \oldconcept{Destructible}~(\CppXref{destructible}) and \oldconcept{CopyConstructible}~(\CppXref{copyconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.mutablebuffersequence.requirements}.
 
 \pnum
 In Table~\ref{tab:buffer.reqmts.mutablebuffersequence.requirements},
-\tcode{x} denotes a (possibly const) value of type \tcode{X},
+\tcode{x} denotes a  value of type (possibly const) \tcode{X},
 and \tcode{u} denotes an identifier.
 
-\indextext{requirements!\idxcode{MutableBufferSequence}}%
+\indextext{requirements!\idxnewoldconcept{MutableBufferSequence}}%
 \begin{LongTable}
-{MutableBufferSequence requirements}
+{\newoldconcept{MutableBufferSequence} requirements}
 {tab:buffer.reqmts.mutablebuffersequence.requirements}
 {x{.27\hsize}x{.23\hsize}x{.40\hsize}}
 \\ \topline
@@ -344,7 +339,7 @@ and \tcode{u} denotes an identifier.
 \tcode{net::buffer_sequence_begin(x)}\br
 \tcode{net::buffer_sequence_end(x)}  &
 An iterator type whose \tcode{reference} type is convertible to \tcode{mutable_buffer},
-and which satisfies all the requirements for bidirectional iterators (\CppXref{bidirectional.iterators})
+and which meets all the requirements for bidirectional iterators (\CppXref{bidirectional.iterators})
 except that:
 \begin{itemize}
 \item there is no requirement that \tcode{operator->} is provided, and
@@ -356,7 +351,7 @@ For a dereferenceable iterator, no increment, decrement, or dereference operatio
 \tcode{X u(x);}
   &
   &
-post: \begin{codeblock}
+\postconditions \begin{codeblock}
 equal(
   net::buffer_sequence_begin(x),
   net::buffer_sequence_end(x),
@@ -379,16 +374,16 @@ equal(
 A \defn{constant buffer sequence} represents a set of memory regions that may be used as input to an operation, such as the \tcode{send} operation of a socket.
 
 \pnum
-A type \tcode{X} meets the \tcode{ConstBufferSequence} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements}.
+A type \tcode{X} meets the \defnnewoldconcept{ConstBufferSequence} requirements if it meets the requirements of \oldconcept{Destructible}~(\CppXref{destructible}) and \oldconcept{CopyConstructible}~(\CppXref{copyconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements}.
 
 \pnum
 In Table~\ref{tab:buffer.reqmts.constbuffersequence.requirements},
-\tcode{x} denotes a (possibly const) value of type \tcode{X},
+\tcode{x} denotes a  value of type (possibly const) \tcode{X},
 and \tcode{u} denotes an identifier.
 
-\indextext{requirements!\idxcode{ConstBufferSequence}}%
+\indextext{requirements!\idxnewoldconcept{ConstBufferSequence}}%
 \begin{LongTable}
-{ConstBufferSequence requirements}
+{\newoldconcept{ConstBufferSequence} requirements}
 {tab:buffer.reqmts.constbuffersequence.requirements}
 {x{.27\hsize}x{.22\hsize}x{.40\hsize}}
 \\ \topline
@@ -412,7 +407,7 @@ and \tcode{u} denotes an identifier.
 \tcode{net::buffer_sequence_begin(x)}\br
 \tcode{net::buffer_sequence_end(x)}  &
 An iterator type whose \tcode{reference} type is convertible to \tcode{const_buffer},
-and which satisfies all the requirements for bidirectional iterators (\CppXref{bidirectional.iterators})
+and which meets all the requirements for bidirectional iterators (\CppXref{bidirectional.iterators})
 except that:
 \begin{itemize}
 \item there is no requirement that \tcode{operator->} is provided, and
@@ -424,7 +419,7 @@ For a dereferenceable iterator, no increment, decrement, or dereference operatio
 \tcode{X u(x);}
   &
   &
-post:
+\postconditions
 \begin{codeblock}
 equal(
   net::buffer_sequence_begin(x),
@@ -446,7 +441,7 @@ equal(
 
 \pnum
 Several places in this document make unqualified calls to \tcode{buffer_size}.
-The context in which these calls are evaluated shall ensure that
+The context in which these calls are evaluated ensures that
 a unary non-member function named \tcode{buffer_size}
 is selected via overload resolution (\CppXref{over.match})
 on a candidate set that includes:
@@ -463,7 +458,7 @@ on a candidate set that includes:
 A \defn{dynamic buffer} encapsulates memory storage that may be automatically resized as required, where the memory is divided into two regions: readable bytes followed by writable bytes. These memory regions are internal to the dynamic buffer, but direct access to the elements is provided to permit them to be efficiently used with I/O operations. \begin{note} Such as the \tcode{send} or \tcode{receive} operations of a socket. The readable bytes would be used as the constant buffer sequence for \tcode{send}, and the writable bytes used as the mutable buffer sequence for \tcode{receive}. \end{note} Data written to the writable bytes of a dynamic buffer object is appended to the readable bytes of the same object.
 
 \pnum
-A type \tcode{X} meets the \tcode{DynamicBuffer} requirements if it satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}.
+A type \tcode{X} meets the \defnnewoldconcept{DynamicBuffer} requirements if it meets the requirements of \oldconcept{Destructible}~(\CppXref{destructible}) and \oldconcept{MoveConstructible}~(\CppXref{moveconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}.
 
 \pnum
 In Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements},
@@ -471,9 +466,9 @@ In Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements},
 \tcode{x1} denotes a (possibly const) value of type \tcode{X},
 and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
 
-\indextext{requirements!\idxcode{DynamicBuffer}}%
+\indextext{requirements!\idxnewoldconcept{DynamicBuffer}}%
 \begin{libreqtab3}
-{DynamicBuffer requirements}
+{\newoldconcept{DynamicBuffer} requirements}
 {tab:buffer.reqmts.dynamicbuffer.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -488,11 +483,11 @@ and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
 \endhead
 
 \tcode{X::const_buffers_type}  &
-type meeting ConstBufferSequence~(\ref{buffer.reqmts.constbuffersequence}) requirements.  &
+type meeting \newoldconcept{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements.  &
  This type represents the memory associated with the readable bytes.  \\ \rowsep
 
 \tcode{X::mutable_buffers_type}  &
-type meeting MutableBufferSequence~(\ref{buffer.reqmts.constbuffersequence}) requirements.  &
+type meeting \newoldconcept{MutableBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements.  &
  This type represents the memory associated with the writable bytes.  \\ \rowsep
 
 \tcode{x1.size()}  &
@@ -530,14 +525,14 @@ Removes \tcode{n} bytes from beginning of the readable bytes. If \tcode{n} is gr
 \rSec2[buffer.reqmts.read.write]{Requirements on read and write operations}
 
 \pnum
-A \defn{read operation} is an operation that reads data into a mutable buffer sequence argument of a type meeting \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements. The mutable buffer sequence specifies memory where the data should be placed. A read operation shall always fill a buffer in the sequence completely before proceeding to the next.
+A \defn{read operation} is an operation that reads data into a mutable buffer sequence argument of a type meeting the \newoldconcept{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}) requirements. The mutable buffer sequence specifies memory where the data should be placed. A read operation fills a buffer in the sequence completely before proceeding to the next.
 
 \pnum
-A \defn{write operation} is an operation that writes data from a constant buffer sequence argument of a type meeting \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements. The constant buffer sequence specifies memory where the data to be written is located. A write operation shall always write a buffer in the sequence completely before proceeding to the next.
+A \defn{write operation} is an operation that writes data from a constant buffer sequence argument of a type meeting the \newoldconcept{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements. The constant buffer sequence specifies memory where the data to be written is located. A write operation writes a buffer in the sequence completely before proceeding to the next.
 
 \indextext{asynchronous operation}%
 \pnum
-If a read or write operation is also an asynchronous operation~(\ref{async.reqmts.async}), the operation shall maintain one or more copies of the buffer sequence until such time as the operation no longer requires access to the memory specified by the buffers in the sequence. The program shall ensure the memory remains valid until:
+If a read or write operation is also an asynchronous operation~(\ref{async.reqmts.async}), the operation maintains one or more copies of the buffer sequence until such time as the operation no longer requires access to the memory specified by the buffers in the sequence. The program shall ensure the memory remains valid until:
 
 \begin{itemize}
 \item the last copy of the buffer sequence is destroyed, or
@@ -591,10 +586,7 @@ error_condition make_error_condition(stream_errc e) noexcept;
 
 \indexlibrary{\idxcode{mutable_buffer}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   class mutable_buffer
   {
@@ -613,14 +605,11 @@ inline namespace v1 {
     size_t size_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-The \tcode{mutable_buffer} class satisfies the requirements of \tcode{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}), \tcode{Default\-Cons\-tr\-uct\-ible} (\CppXref{defaultconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
+The \tcode{mutable_buffer} class meets the requirements of \newoldconcept{MutableBufferSequence}~(\ref{buffer.reqmts.mutablebuffersequence}), \oldconcept{Default\-Cons\-tr\-uct\-ible} (\CppXref{defaultconstructible}), and \oldconcept{CopyAssignable} (\CppXref{copyassignable}).
 
 \indexlibrary{\idxcode{mutable_buffer}!constructor}%
 \begin{itemdecl}
@@ -680,10 +669,7 @@ and then \tcode{size_} to \tcode{size_ - min(n, size_)}.
 \rSec1[buffer.const]{Class \tcode{const_buffer}}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   class const_buffer
   {
@@ -703,14 +689,11 @@ inline namespace v1 {
     size_t size_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-The \tcode{const_buffer} class satisfies requirements of \tcode{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}), \tcode{DefaultConstructible} (\CppXref{defaultconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
+The \tcode{const_buffer} class meets requirements of \newoldconcept{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}), \oldconcept{DefaultConstructible} (\CppXref{defaultconstructible}), and \oldconcept{CopyAssignable} (\CppXref{copyassignable}).
 
 \indexlibrary{\idxcode{const_buffer}!constructor}%
 \begin{itemdecl}
@@ -782,23 +765,17 @@ const_buffer& operator+=(size_t n) noexcept;
 \indexlibrary{\idxcode{is_const_buffer_sequence}}%
 \indexlibrary{\idxcode{is_dynamic_buffer}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   template<class T> struct is_mutable_buffer_sequence;
   template<class T> struct is_const_buffer_sequence;
   template<class T> struct is_dynamic_buffer;
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-This subclause contains templates that may be used to query the properties of a type at compile time. Each of these templates is a UnaryTypeTrait (\CppXref{meta.rqmts}) with a BaseCharacteristic of \tcode{true_type} if the corresponding condition is true, otherwise \tcode{false_type}.
+This subclause contains templates that may be used to query the properties of a type at compile time. Each of these templates is a \oldconcept{UnaryTypeTrait} (\CppXref{meta.rqmts}) with a base characteristic of \tcode{true_type} if the corresponding condition is true, otherwise \tcode{false_type}.
 
 \begin{libreqtab3}
 {Buffer type traits}
@@ -991,10 +968,14 @@ const_buffer(
 In the functions below, \tcode{T} shall be a trivially copyable or standard-layout type (\CppXref{basic.types}).
 
 \pnum
-For the function overloads below that accept an argument of type \tcode{vector<>}, the buffer objects returned are invalidated by any vector operation that also invalidates all references, pointers and iterators referring to the elements in the sequence (\CppXref{vector}).
+For the function overloads below that accept
+a specialization of \tcode{vector},
+the buffer objects returned are invalidated by any vector operation that also invalidates all references, pointers and iterators referring to the elements in the sequence (\CppXref{vector}).
 
 \pnum
-For the function overloads below that accept an argument of type \tcode{basic_string<>}, the buffer objects returned are invalidated according to the rules defined for invalidation of references, pointers and iterators referring to elements of the sequence (\CppXref{string.require}).
+For the function overloads below that accept
+a specialization of \tcode{basic_string},
+the buffer objects returned are invalidated according to the rules defined for invalidation of references, pointers and iterators referring to elements of the sequence (\CppXref{string.require}).
 
 \indexlibrary{\idxcode{buffer}}%
 \begin{itemdecl}
@@ -1125,10 +1106,7 @@ template<class CharT, class Traits>
 Class template \tcode{dynamic_vector_buffer} is an adaptor used to automatically grow or shrink a \tcode{vector} object, to reflect the data successfully transferred in an I/O operation.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   template<class T, class Allocator>
   class dynamic_vector_buffer
@@ -1159,17 +1137,14 @@ inline namespace v1 {
     const size_t max_size_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-The \tcode{dynamic_vector_buffer} class template meets the requirements of \tcode{DynamicBuffer}~(\ref{buffer.reqmts.dynamicbuffer}).
+The \tcode{dynamic_vector_buffer} class template meets the requirements of \newoldconcept{DynamicBuffer}~(\ref{buffer.reqmts.dynamicbuffer}).
 
 \pnum
-The \tcode{dynamic_vector_buffer} class template requires that \tcode{T} is a trivially copyable or standard-layout type (\CppXref{basic.types}) and that \tcode{sizeof(T) == 1}.
+The \tcode{dynamic_vector_buffer} class template requires that \tcode{T} is a trivially copyable or standard-layout type (\CppXref{basic.types}) and that \tcode{sizeof(T) == 1}, otherwise the program is ill-formed.
 
 \indexlibrary{\idxcode{dynamic_vector_buffer}!constructor}%
 \begin{itemdecl}
@@ -1189,7 +1164,7 @@ dynamic_vector_buffer(vector<T, Allocator>& vec,
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{vec.size() <= maximum_size}.
+\expects \tcode{vec.size() <= maximum_size}.
 
 \pnum
 \effects Initializes \tcode{vec_} with \tcode{vec}, \tcode{size_} with \tcode{vec.size()}, and \tcode{max_size_} with \tcode{maximum_size}.
@@ -1248,7 +1223,7 @@ mutable_buffers_type prepare(size_t n);
 \returns \tcode{buffer(buffer(vec_) + size_, n)}.
 
 \pnum
-\remarks \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
+\throws \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
 \end{itemdescr}
 
 \indexlibrarymember{commit}{dynamic_vector_buffer}%
@@ -1291,10 +1266,7 @@ size_ -= m;
 Class template \tcode{dynamic_string_buffer} is an adaptor used to automatically grow or shrink a \tcode{basic_string} object, to reflect the data successfully transferred in an I/O operation.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   template<class CharT, class Traits, class Allocator>
   class dynamic_string_buffer
@@ -1325,17 +1297,14 @@ inline namespace v1 {
     const size_t max_size_; // \expos
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-The \tcode{dynamic_string_buffer} class template meets the requirements of \tcode{DynamicBuffer}~(\ref{buffer.reqmts.dynamicbuffer}).
+The \tcode{dynamic_string_buffer} class template meets the requirements of \newoldconcept{DynamicBuffer}~(\ref{buffer.reqmts.dynamicbuffer}).
 
 \pnum
-The \tcode{dynamic_string_buffer} class template requires that \tcode{sizeof(CharT) == 1}.
+The \tcode{dynamic_string_buffer} class template requires that \tcode{sizeof(CharT) == 1}, otherwise the program is ill-formed.
 
 \indexlibrary{\idxcode{dynamic_string_buffer}!constructor}%
 \begin{itemdecl}
@@ -1355,7 +1324,7 @@ dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str,
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{str.size() <= maximum_size}.
+\expects \tcode{str.size() <= maximum_size}.
 
 \pnum
 \effects Initializes \tcode{str_} with \tcode{str}, \tcode{size_} with \tcode{str.size()}, and \tcode{max_size_} with \tcode{maximum_size}.
@@ -1414,7 +1383,7 @@ mutable_buffers_type prepare(size_t n);
 \returns \tcode{buffer(buffer(str_) + size_, n)}.
 
 \pnum
-\remarks \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
+\throws \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
 \end{itemdescr}
 
 \indexlibrarymember{commit}{dynamic_string_buffer}%

@@ -35,10 +35,7 @@ c.run();
 \begin{codeblock}
 #include <chrono>
 
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   template<class Clock> struct wait_traits;
 
@@ -49,10 +46,7 @@ inline namespace v1 {
   using steady_timer = basic_waitable_timer<chrono::steady_clock>;
   using high_resolution_timer = basic_waitable_timer<chrono::high_resolution_clock>;
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 
@@ -76,16 +70,16 @@ The \tcode{basic_waitable_timer} template uses wait traits to allow programs to 
  Preventing duration overflow. That is, a program can set a timer's expiry \tcode{e} to be \tcode{Clock::max()} (meaning never reached) or \tcode{Clock::min()} (meaning always in the past). As a result, computing the duration until timer expiry as \tcode{e - Clock::now()} can cause overflow. \end{itemize}\end{note}
 
 \pnum
-For a type \tcode{Clock} meeting the \tcode{Clock} requirements (\CppXref{time.clock.req}), a type \tcode{X} meets the \tcode{WaitTraits} requirements if it satisfies the requirements listed below.
+For a type \tcode{Clock} meeting the \oldconcept{Clock} requirements~(\CppXref{time.clock.req}), a type \tcode{X} meets the \newoldconcept{WaitTraits} requirements if it meets the requirements listed below.
 
 \pnum
 In Table~\ref{tab:timer.reqmts.waittraits.requirements},
-\tcode{t} denotes a (possibly const) value of type \tcode{Clock::time_point};
-and \tcode{d} denotes a (possibly const) value of type \tcode{Clock::duration}.
+\tcode{t} denotes a  value of type (possibly const) \tcode{Clock::time_point};
+and \tcode{d} denotes a  value of type (possibly const) \tcode{Clock::duration}.
 
-\indextext{requirements!\idxcode{WaitTraits}}%
+\indextext{requirements!\idxnewoldconcept{WaitTraits}}%
 \begin{libreqtab3}
-{WaitTraits requirements}
+{\newoldconcept{WaitTraits} requirements}
 {tab:timer.reqmts.waittraits.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -114,10 +108,7 @@ Returns a \tcode{Clock::duration} value to be used in a \tcode{wait} or \tcode{a
 
 \indexlibrary{\idxcode{wait_traits}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   template<class Clock>
   struct wait_traits
@@ -129,14 +120,11 @@ inline namespace v1 {
       const typename Clock::time_point& t);
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-Class template \tcode{wait_traits} satisfies the \tcode{WaitTraits}~(\ref{timer.reqmts.waittraits}) type requirements. Template argument \tcode{Clock} is a type meeting the \tcode{Clock} requirements (\CppXref{time.clock.req}).
+Class template \tcode{wait_traits} meets the \newoldconcept{WaitTraits}~(\ref{timer.reqmts.waittraits}) type requirements. Template argument \tcode{Clock} is a type meeting the \oldconcept{Clock} requirements (\CppXref{time.clock.req}).
 
 \indexlibrarymember{to_wait_duration}{wait_traits}%
 \begin{itemdecl}
@@ -165,10 +153,7 @@ static typename Clock::duration to_wait_duration(
 
 \indexlibrary{\idxcode{basic_waitable_timer}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   template<class Clock, class WaitTraits = wait_traits<Clock>>
   class basic_waitable_timer
@@ -213,14 +198,11 @@ inline namespace v1 {
       @\DEDUCED@ async_wait(CompletionToken&& token);
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-Instances of class template \tcode{basic_waitable_timer} meet the requirements of \tcode{Destructible} (\CppXref{destructible}), \tcode{MoveConstructible} (\CppXref{moveconstructible}), and \tcode{MoveAssignable} (\CppXref{moveassignable}).
+Specializations of class template \tcode{basic_waitable_timer} meet the requirements of \oldconcept{Destructible}~(\CppXref{destructible}), \oldconcept{MoveConstructible}~(\CppXref{moveconstructible}), and \oldconcept{MoveAssignable}~(\CppXref{moveassignable}).
 
 
 \rSec2[timer.waitable.cons]{\tcode{basic_waitable_timer} constructors}

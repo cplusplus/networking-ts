@@ -12,10 +12,9 @@
 \indexlibrary{\idxcode{v4_mapped_t}}%
 \indexlibrary{\idxcode{v4_mapped}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+#include <compare>
+
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   enum class resolver_errc {
@@ -43,27 +42,15 @@ namespace ip {
 
   // \ref{internet.address.comparisons}, address comparisons
   constexpr bool operator==(const address&, const address&) noexcept;
-  constexpr bool operator!=(const address&, const address&) noexcept;
-  constexpr bool operator< (const address&, const address&) noexcept;
-  constexpr bool operator> (const address&, const address&) noexcept;
-  constexpr bool operator<=(const address&, const address&) noexcept;
-  constexpr bool operator>=(const address&, const address&) noexcept;
+  constexpr strong_ordering operator<=>(const address\&, const address\&) noexcept;
 
   // \ref{internet.address.v4.comparisons}, address_v4 comparisons
   constexpr bool operator==(const address_v4&, const address_v4&) noexcept;
-  constexpr bool operator!=(const address_v4&, const address_v4&) noexcept;
-  constexpr bool operator< (const address_v4&, const address_v4&) noexcept;
-  constexpr bool operator> (const address_v4&, const address_v4&) noexcept;
-  constexpr bool operator<=(const address_v4&, const address_v4&) noexcept;
-  constexpr bool operator>=(const address_v4&, const address_v4&) noexcept;
+  constexpr strong_ordering operator<=>(const address_v4\&, const address_v4\&) noexcept;
 
   // \ref{internet.address.v6.comparisons}, address_v6 comparisons
   constexpr bool operator==(const address_v6&, const address_v6&) noexcept;
-  constexpr bool operator!=(const address_v6&, const address_v6&) noexcept;
-  constexpr bool operator< (const address_v6&, const address_v6&) noexcept;
-  constexpr bool operator> (const address_v6&, const address_v6&) noexcept;
-  constexpr bool operator<=(const address_v6&, const address_v6&) noexcept;
-  constexpr bool operator>=(const address_v6&, const address_v6&) noexcept;
+  constexpr strong_ordering operator<=>(const address_v6\&, const address_v6\&) noexcept;
 
   // \ref{internet.address.creation}, address creation
   address make_address(const char*);
@@ -127,11 +114,9 @@ namespace ip {
 
   // \ref{internet.network.v4.comparisons}, network_v4 comparisons
   bool operator==(const network_v4&, const network_v4&) noexcept;
-  bool operator!=(const network_v4&, const network_v4&) noexcept;
 
   // \ref{internet.network.v6.comparisons}, network_v6 comparisons
   bool operator==(const network_v6&, const network_v6&) noexcept;
-  bool operator!=(const network_v6&, const network_v6&) noexcept;
 
   // \ref{internet.network.v4.creation}, network_v4 creation
   network_v4 make_network_v4(const address_v4&, int);
@@ -170,20 +155,8 @@ namespace ip {
     bool operator==(const basic_endpoint<InternetProtocol>&,
                     const basic_endpoint<InternetProtocol>&);
   template<class InternetProtocol>
-    bool operator!=(const basic_endpoint<InternetProtocol>&,
-                    const basic_endpoint<InternetProtocol>&);
-  template<class InternetProtocol>
-    bool operator< (const basic_endpoint<InternetProtocol>&,
-                    const basic_endpoint<InternetProtocol>&);
-  template<class InternetProtocol>
-    bool operator> (const basic_endpoint<InternetProtocol>&,
-                    const basic_endpoint<InternetProtocol>&);
-  template<class InternetProtocol>
-    bool operator<=(const basic_endpoint<InternetProtocol>&,
-                    const basic_endpoint<InternetProtocol>&);
-  template<class InternetProtocol>
-    bool operator>=(const basic_endpoint<InternetProtocol>&,
-                    const basic_endpoint<InternetProtocol>&);
+    strong_ordering operator<=>(const basic_endpoint<InternetProtocol>\&,
+                                const basic_endpoint<InternetProtocol>\&);
 
   // \ref{internet.endpoint.io}, basic_endpoint I/O
   template<class CharT, class Traits, class InternetProtocol>
@@ -197,18 +170,12 @@ namespace ip {
   template<class InternetProtocol>
     bool operator==(const basic_resolver_entry<InternetProtocol>&,
                     const basic_resolver_entry<InternetProtocol>&);
-  template<class InternetProtocol>
-    bool operator!=(const basic_resolver_entry<InternetProtocol>&,
-                    const basic_resolver_entry<InternetProtocol>&);
 
   template<class InternetProtocol>
     class basic_resolver_results;
 
   template<class InternetProtocol>
     bool operator==(const basic_resolver_results<InternetProtocol>&,
-                    const basic_resolver_results<InternetProtocol>&);
-  template<class InternetProtocol>
-    bool operator!=(const basic_resolver_results<InternetProtocol>&,
                     const basic_resolver_results<InternetProtocol>&);
 
   class resolver_base;
@@ -229,13 +196,11 @@ namespace ip {
 
   // \ref{internet.tcp.comparisons}, tcp comparisons
   bool operator==(const tcp& a, const tcp& b);
-  bool operator!=(const tcp& a, const tcp& b);
 
   class udp;
 
   // \ref{internet.udp.comparisons}, udp comparisons
   bool operator==(const udp& a, const udp& b);
-  bool operator!=(const udp& a, const udp& b);
 
   class v6_only;
 
@@ -259,18 +224,16 @@ namespace ip {
 
   } // namespace multicast
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
+} // inline namespace std::experimental::net::\namespacever
 
-  template<> struct is_error_condition_enum<experimental::net::v1::ip::resolver_errc>
+  template<> struct is_error_condition_enum<experimental::net::@\namespacever@::ip::resolver_errc>
     : public true_type {};
 
   // \ref{internet.hash}, hash support
   template<class T> struct hash;
-  template<> struct hash<experimental::net::v1::ip::address>;
-  template<> struct hash<experimental::net::v1::ip::address_v4>;
-  template<> struct hash<experimental::net::v1::ip::address_v6>;
+  template<> struct hash<experimental::net::@\namespacever@::ip::address>;
+  template<> struct hash<experimental::net::@\namespacever@::ip::address_v4>;
+  template<> struct hash<experimental::net::@\namespacever@::ip::address_v6>;
 
 } // namespace std
 \end{codeblock}
@@ -280,19 +243,18 @@ namespace ip {
 \rSec1[internet.reqmts]{Requirements}
 
 
-\indextext{\idxcode{InternetProtocol}}%
-\indextext{requirements!\idxcode{InternetProtocol}}%
+\indextext{requirements!\idxnewoldconcept{InternetProtocol}}%
 \rSec2[internet.reqmts.protocol]{Internet protocol requirements}
 
 \pnum
-A type \tcode{X} meets the \tcode{InternetProtocol} requirements if it satisfies the requirements of \tcode{Acceptable\-Proto\-col} (\ref{socket.reqmts.acceptableprotocol}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \defnnewoldconcept{InternetProtocol} requirements if it meets the requirements of \newoldconcept{AcceptableProtocol} (\ref{socket.reqmts.acceptableprotocol}), as well as the additional requirements listed below.
 
 \pnum
 In the table below,
-\tcode{a} and \tcode{b} denote (possibly const) values of type \tcode{X}.
+\tcode{a} and \tcode{b} denote  values of type (possibly const) \tcode{X}.
 
 \begin{libreqtab3}
-{InternetProtocol requirements}
+{\newoldconcept{InternetProtocol} requirements}
 {tab:internet.reqmts.protocol.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -330,23 +292,22 @@ Returns \tcode{!(a == b)}.  \\
 
 
 
-\indextext{\idxcode{MulticastGroupSocketOption}}%
-\indextext{requirements!\idxcode{MulticastGroupSocketOption}}%
+\indextext{requirements!\idxnewoldconcept{MulticastGroupSocketOption}}%
 \rSec2[internet.reqmts.opt.mcast]{Multicast group socket options}
 
 \pnum
-A type \tcode{X} meets the \tcode{MulticastGroupSocketOption} requirements if it satisfies the requirements of \tcode{Destruct\-ible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
+A type \tcode{X} meets the \defnnewoldconcept{MulticastGroupSocketOption} requirements if it meets the requirements of \oldconcept{Destructible} (\CppXref{destructible}), \oldconcept{CopyConstructible} (\CppXref{copyconstructible}), \oldconcept{CopyAssignable} (\CppXref{copyassignable}), and \newoldconcept{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}), as well as the additional requirements listed below.
 
 \pnum
 In the table below,
-\tcode{a} denotes a (possibly const) value of type \tcode{address},
+\tcode{a} denotes a  value of type (possibly const) \tcode{address},
 \tcode{b} and \tcode{c} denote (possibly const) values of type \tcode{address_v4},
-\tcode{d} denotes a (possibly const) value of type \tcode{address_v6},
-\tcode{e} denotes a (possibly const) value of type \tcode{unsigned int},
+\tcode{d} denotes a  value of type (possibly const) \tcode{address_v6},
+\tcode{e} denotes a  value of type (possibly const) \tcode{unsigned int},
 and \tcode{u} denotes an identifier.
 
 \begin{libreqtab3}
-{MulticastGroupSocketOption requirements}
+{\newoldconcept{MulticastGroupSocketOption} requirements}
 {tab:internet.reqmts.opt.mcast.requirements}
 \\ \topline
 \lhdr{expression}  &
@@ -375,7 +336,7 @@ and \tcode{u} denotes an identifier.
 \end{libreqtab3}
 
 \pnum
-In this document, types that satisfy the \tcode{MulticastGroupSocketOption} requirements are defined as follows.
+In this document, types that meet the \newoldconcept{MulticastGroupSocketOption} requirements are defined as follows.
 
 \begin{codeblock}
 class @\placeholder{C}@
@@ -390,7 +351,7 @@ public:
 };
 \end{codeblock}
 
-\indexextensible{MulticastGroupSocketOption}%
+\indexextensiblereq{MulticastGroupSocketOption}%
 \pnum
 Extensible implementations provide the following member functions:
 
@@ -535,10 +496,7 @@ The class \tcode{address} is a version-independent representation for an IP addr
 \indexlibrary{\idxcode{address}!\idxcode{is_multicast}}%
 \indexlibrary{\idxcode{address}!\idxcode{to_string}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   class address
@@ -574,11 +532,7 @@ namespace ip {
 
   // \ref{internet.address.comparisons}, address comparisons
   constexpr bool operator==(const address& a, const address& b) noexcept;
-  constexpr bool operator!=(const address& a, const address& b) noexcept;
-  constexpr bool operator< (const address& a, const address& b) noexcept;
-  constexpr bool operator> (const address& a, const address& b) noexcept;
-  constexpr bool operator<=(const address& a, const address& b) noexcept;
-  constexpr bool operator>=(const address& a, const address& b) noexcept;
+  constexpr strong_ordering operator<=>(const address\&, const address\&) noexcept;
 
   // \ref{internet.address.creation}, address creation
   address make_address(const char* str);
@@ -594,15 +548,12 @@ namespace ip {
       basic_ostream<CharT, Traits>& os, const address& addr);
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \indexlibrary{\idxcode{address}}%
 \pnum
-\tcode{address} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
+Class \tcode{address} meets the requirements for \oldconcept{Destructible} (\CppXref{destructible}), \oldconcept{CopyConstructible} (\CppXref{copyconstructible}), and \oldconcept{CopyAssignable} (\CppXref{copyassignable}).
 
 
 \indexlibrary{\idxcode{address}!constructor}%
@@ -704,7 +655,7 @@ constexpr address_v4 to_v4() const;
 \returns \tcode{v4_}.
 
 \pnum
-\remarks \tcode{bad_address_cast} if \tcode{is_v4() == false}.
+\throws \tcode{bad_address_cast} if \tcode{is_v4() == false}.
 \end{itemdescr}
 
 \indexlibrarymember{to_v6}{address}%
@@ -717,7 +668,7 @@ constexpr address_v6 to_v6() const;
 \returns \tcode{v6_}.
 
 \pnum
-\remarks \tcode{bad_address_cast} if \tcode{is_v6() == false}.
+\throws \tcode{bad_address_cast} if \tcode{is_v6() == false}.
 \end{itemdescr}
 
 \indexlibrarymember{is_unspecified}{address}%
@@ -783,19 +734,9 @@ constexpr bool operator==(const address& a, const address& b) noexcept;
 \end{itemize}
 \end{itemdescr}
 
-\indexlibrarymember{operator"!=}{address}%
+\indexlibrarymember{operator<=>}{address}%
 \begin{itemdecl}
-constexpr bool operator!=(const address& a, const address& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a == b)}.
-\end{itemdescr}
-
-\indexlibrarymember{operator<}{address}%
-\begin{itemdecl}
-constexpr bool operator< (const address& a, const address& b) noexcept;
+constexpr strong_ordering operator<=>(const address& a, const address& b) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -803,44 +744,13 @@ constexpr bool operator< (const address& a, const address& b) noexcept;
 \returns
 \begin{itemize}
 \item
- if \tcode{a.is_v4() \&\& !b.is_v4()}, \tcode{true};
+ if \tcode{a.is_v4() != b.is_v4()}, the result of \tcode{b.is_v4() <=> a.is_v4()};
 \item
- if \tcode{!a.is_v4() \&\& b.is_v4()}, \tcode{false};
+ otherwise, if \tcode{a.is_v4()} is \tcode{true}, the result of \tcode{a.v4_ <=> b.v4_};
 \item
- if \tcode{a.is_v4()}, the result of \tcode{a.v4_ < b.v4_};
-\item
- otherwise, the result of \tcode{a.v6_ < b.v6_}.
+ otherwise, the result of \tcode{a.v6_ <=> b.v6_}.
 \end{itemize}
-\end{itemdescr}
 
-\indexlibrarymember{operator>}{address}%
-\begin{itemdecl}
-constexpr bool operator> (const address& a, const address& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{b < a}.
-\end{itemdescr}
-
-\indexlibrarymember{operator<=}{address}%
-\begin{itemdecl}
-constexpr bool operator<=(const address& a, const address& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(b < a)}.
-\end{itemdescr}
-
-\indexlibrarymember{operator>=}{address}%
-\begin{itemdecl}
-constexpr bool operator>=(const address& a, const address& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a < b)}.
 \end{itemdescr}
 
 
@@ -904,10 +814,7 @@ The class \tcode{address_v4} is a representation of an IPv4 address.
 
 \indexlibrary{\idxcode{address_v4}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   class address_v4
@@ -944,11 +851,7 @@ namespace ip {
 
   // \ref{internet.address.v4.comparisons}, address_v4 comparisons
   constexpr bool operator==(const address_v4& a, const address_v4& b) noexcept;
-  constexpr bool operator!=(const address_v4& a, const address_v4& b) noexcept;
-  constexpr bool operator< (const address_v4& a, const address_v4& b) noexcept;
-  constexpr bool operator> (const address_v4& a, const address_v4& b) noexcept;
-  constexpr bool operator<=(const address_v4& a, const address_v4& b) noexcept;
-  constexpr bool operator>=(const address_v4& a, const address_v4& b) noexcept;
+  constexpr strong_ordering operator<=>(const address_v4\& a, const address_v4\& b) noexcept;
 
   // \ref{internet.address.v4.creation}, address_v4 creation
   constexpr address_v4 make_address_v4(const address_v4::bytes_type& bytes);
@@ -967,24 +870,18 @@ namespace ip {
       basic_ostream<CharT, Traits>& os, const address_v4& addr);
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-\tcode{address_v4} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
+\tcode{address_v4} meets the requirements for \oldconcept{Destructible} (\CppXref{destructible}), \oldconcept{CopyConstructible} (\CppXref{copyconstructible}), and \oldconcept{CopyAssignable} (\CppXref{copyassignable}).
 
 
 \rSec2[internet.address.v4.bytes]{Struct \tcode{ip::address_v4::bytes_type}}
 
 \indexlibrarymember{bytes_type}{address_v4}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   struct address_v4::bytes_type : array<unsigned char, 4>
@@ -994,10 +891,7 @@ namespace ip {
   };
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
@@ -1023,7 +917,7 @@ constexpr address_v4(const bytes_type& bytes);
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \tcode{[0, 0xFF]}. \begin{note} For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \end{note}
+\throws \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \tcode{[0, 0xFF]}. \begin{note} For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \end{note}
 
 \pnum
 \postconditions \tcode{to_bytes() == bytes} and \tcode{to_uint() == (bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3]}.
@@ -1035,7 +929,7 @@ explicit constexpr address_v4(address_v4::uint_type val);
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{out_of_range} if \tcode{val} is not in the range \tcode{[0, 0xFFFFFFFF]}. \begin{note} For implementations where \tcode{numeric_limits<address_v4::uint_type>::max() == 0xFFFFFFFF}, no out-of-range detection is needed. \end{note}
+\throws \tcode{out_of_range} if \tcode{val} is not in the range \tcode{[0, 0xFFFFFFFF]}. \begin{note} For implementations where \tcode{numeric_limits<address_v4::uint_type>::max() == 0xFFFFFFFF}, no out-of-range detection is needed. \end{note}
 
 \pnum
 \postconditions \tcode{to_uint() == val} and \tcode{to_bytes()} is:
@@ -1158,56 +1052,15 @@ constexpr bool operator==(const address_v4& a, const address_v4& b) noexcept;
 \returns \tcode{a.to_uint() == b.to_uint()}.
 \end{itemdescr}
 
-\indexlibrarymember{operator"!=}{address_v4}%
+\indexlibrarymember{operator<=>}{address_v4}%
 \begin{itemdecl}
-constexpr bool operator!=(const address_v4& a, const address_v4& b) noexcept;
+constexpr strong_ordering operator<=>(const address_v4& a, const address_v4& b) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{!(a == b)}.
+\returns \tcode{a.to_uint() <=> b.to_uint()}.
 \end{itemdescr}
-
-\indexlibrarymember{operator<}{address_v4}%
-\begin{itemdecl}
-constexpr bool operator< (const address_v4& a, const address_v4& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{a.to_uint() < b.to_uint()}.
-\end{itemdescr}
-
-\indexlibrarymember{operator>}{address_v4}%
-\begin{itemdecl}
-constexpr bool operator> (const address_v4& a, const address_v4& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{b < a}.
-\end{itemdescr}
-
-\indexlibrarymember{operator<=}{address_v4}%
-\begin{itemdecl}
-constexpr bool operator<=(const address_v4& a, const address_v4& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(b < a)}.
-\end{itemdescr}
-
-\indexlibrarymember{operator>=}{address_v4}%
-\begin{itemdecl}
-constexpr bool operator>=(const address_v4& a, const address_v4& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a < b)}.
-\end{itemdescr}
-
 
 
 \indexlibrary{\idxcode{make_address_v4}}%
@@ -1246,7 +1099,7 @@ return address_v4(v4b);
 
 
 \pnum
-\remarks \tcode{bad_address_cast} if \tcode{a.is_v4_mapped()} is \tcode{false}.
+\throws \tcode{bad_address_cast} if \tcode{a.is_v4_mapped()} is \tcode{false}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1299,10 +1152,7 @@ The class \tcode{address_v6} is a representation of an IPv6 address.
 
 \indexlibrary{\idxcode{address_v6}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   class address_v6
@@ -1346,11 +1196,7 @@ namespace ip {
 
   // \ref{internet.address.v6.comparisons}, address_v6 comparisons
   constexpr bool operator==(const address_v6& a, const address_v6& b) noexcept;
-  constexpr bool operator!=(const address_v6& a, const address_v6& b) noexcept;
-  constexpr bool operator< (const address_v6& a, const address_v6& b) noexcept;
-  constexpr bool operator> (const address_v6& a, const address_v6& b) noexcept;
-  constexpr bool operator<=(const address_v6& a, const address_v6& b) noexcept;
-  constexpr bool operator>=(const address_v6& a, const address_v6& b) noexcept;
+  constexpr strong_ordering operator<=>(const address_v6\& a, const address_v6\& b) noexcept;
 
   // \ref{internet.address.v6.creation}, address_v6 creation
   constexpr address_v6 make_address_v6(const address_v6::bytes_type& bytes,
@@ -1369,14 +1215,11 @@ namespace ip {
       basic_ostream<CharT, Traits>& os, const address_v6& addr);
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-\tcode{address_v6} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
+\tcode{address_v6} meets the requirements for \oldconcept{Destructible} (\CppXref{destructible}), \oldconcept{CopyConstructible} (\CppXref{copyconstructible}), and \oldconcept{CopyAssignable} (\CppXref{copyassignable}).
 
 \pnum
 \begin{note} The implementations of the functions \tcode{is_unspecified}, \tcode{is_loopback}, \tcode{is_multicast}, \tcode{is_link_local}, \tcode{is_site_local}, \tcode{is_v4_mapped}, \tcode{is_multicast_node_local}, \tcode{is_multicast_link_local}, \tcode{is_mul\-ti\-cast_site_local}, \tcode{is_multicast_org_local} and \tcode{is_multicast_global} are determined by [RFC4291]. \end{note}
@@ -1386,10 +1229,7 @@ namespace ip {
 
 \indexlibrarymember{bytes_type}{address_v6}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   struct address_v6::bytes_type : array<unsigned char, 16>
@@ -1399,10 +1239,7 @@ namespace ip {
   };
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
@@ -1429,7 +1266,7 @@ constexpr address_v6(const bytes_type& bytes,
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \crange{0}{0xFF}. \begin{note} For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \end{note}
+\throws \tcode{out_of_range} if any element of \tcode{bytes} is not in the range \crange{0}{0xFF}. \begin{note} For implementations where \tcode{numeric_limits<unsigned char>::max() == 0xFF}, no out-of-range detection is needed. \end{note}
 
 \pnum
 \postconditions \tcode{to_bytes() == bytes} and \tcode{scope_id() == scope}.
@@ -1653,56 +1490,15 @@ constexpr bool operator==(const address_v6& a, const address_v6& b) noexcept;
 \returns \tcode{a.to_bytes() == b.to_bytes() \&\& a.scope_id() == b.scope_id()}.
 \end{itemdescr}
 
-\indexlibrarymember{operator"!=}{address_v6}%
+\indexlibrarymember{operator<=>}{address_v6}%
 \begin{itemdecl}
-constexpr bool operator!=(const address_v6& a, const address_v6& b) noexcept;
+constexpr strong_ordering operator<=>(const address_v6& a, const address_v6& b) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{!(a == b)}.
+\returns \tcode{tie(a.to_bytes(), a.scope_id()) <=> tie(b.to_bytes(), b.scope_id())}.
 \end{itemdescr}
-
-\indexlibrarymember{operator<}{address_v6}%
-\begin{itemdecl}
-constexpr bool operator< (const address_v6& a, const address_v6& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{tie(a.to_bytes(), a.scope_id()) < tie(b.to_bytes(), b.scope_id())}.
-\end{itemdescr}
-
-\indexlibrarymember{operator>}{address_v6}%
-\begin{itemdecl}
-constexpr bool operator> (const address_v6& a, const address_v6& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{b < a}.
-\end{itemdescr}
-
-\indexlibrarymember{operator<=}{address_v6}%
-\begin{itemdecl}
-constexpr bool operator<=(const address_v6& a, const address_v6& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(b < a)}.
-\end{itemdescr}
-
-\indexlibrarymember{operator>=}{address_v6}%
-\begin{itemdecl}
-constexpr bool operator>=(const address_v6& a, const address_v6& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a < b)}.
-\end{itemdescr}
-
 
 
 \indexlibrary{\idxcode{make_address_v6}}%
@@ -1784,10 +1580,7 @@ template<class CharT, class Traits>
 An exception of type \tcode{bad_address_cast} is thrown by a failed \tcode{address_cast}.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   class bad_address_cast : public bad_cast
@@ -1798,10 +1591,7 @@ namespace ip {
   };
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \begin{itemdecl}
@@ -1821,14 +1611,14 @@ bad_address_cast() noexcept;
 \rSec1[internet.hash]{Hash support}
 
 \begin{itemdecl}
-template<> struct hash<experimental::net::v1::ip::address>;
-template<> struct hash<experimental::net::v1::ip::address_v4>;
-template<> struct hash<experimental::net::v1::ip::address_v6>;
+template<> struct hash<experimental::net::@\namespacever@::ip::address>;
+template<> struct hash<experimental::net::@\namespacever@::ip::address_v4>;
+template<> struct hash<experimental::net::@\namespacever@::ip::address_v6>;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\requires the template specializations shall meet the requirements of class template \tcode{hash} (\CppXref{unord.hash}).
+The template specializations are enabled (\CppXref{unord.hash}).
 \end{itemdescr}
 
 
@@ -1840,10 +1630,7 @@ template<> struct hash<experimental::net::v1::ip::address_v6>;
 The class template \tcode{basic_address_iterator} enables iteration over IP addresses in network byte order. This clause defines two specializations of the class template \tcode{basic_address_iterator}: \tcode{basic_address_iterator<address_v4>} and \tcode{basic_address_iterator<address_v6>}. The members and operational semantics of these specializations are defined below.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   template<> class basic_address_iterator<@\placeholder{Address}@>
@@ -1874,14 +1661,11 @@ namespace ip {
   };
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-Specializations of \tcode{basic_address_iterator} satisfy the requirements for input iterators (\CppXref{input.iterators}).
+Specializations of \tcode{basic_address_iterator} meet the requirements for input iterators (\CppXref{input.iterators}).
 
 \begin{itemdecl}
 basic_address_iterator(const @\placeholder{Address}@& a) noexcept;
@@ -1967,10 +1751,7 @@ basic_address_iterator operator--(int) noexcept;
 The class template \tcode{basic_address_range} represents a range of IP addresses in network byte order. This clause defines two specializations of the class template \tcode{basic_address_range}: \tcode{basic_address_range<address_v4>} and \tcode{basic_address_range<address_v6>}. The members and operational semantics of these specializations are defined below.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   template<> class basic_address_range<@\placeholder{Address}@>
@@ -1993,14 +1774,11 @@ namespace ip {
   };
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-Specializations of \tcode{basic_address_range} satisfy the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
+Specializations of \tcode{basic_address_range} meet the requirements for \oldconcept{Destructible} (\CppXref{destructible}), \oldconcept{CopyConstructible} (\CppXref{copyconstructible}), and \oldconcept{CopyAssignable} (\CppXref{copyassignable}).
 
 \begin{itemdecl}
 basic_address_range() noexcept;
@@ -2054,10 +1832,10 @@ size_t size() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns The number of unique addresses in the range.
+\constraints \tcode{is_same_v<\placeholder{Address}, address_v4>} is \tcode{true}.
 
 \pnum
-\remarks This member function is not defined when \placeholder{Address} is type \tcode{address_v6}.
+\returns The number of unique addresses in the range.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2081,10 +1859,7 @@ Complexity: Constant time.
 The class \tcode{network_v4} provides the ability to use and manipulate IPv4 network addresses.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   class network_v4
@@ -2112,7 +1887,6 @@ namespace ip {
 
   // \ref{internet.network.v4.comparisons}, network_v4 comparisons
   constexpr bool operator==(const network_v4& a, const network_v4& b) noexcept;
-  constexpr bool operator!=(const network_v4& a, const network_v4& b) noexcept;
 
   // \ref{internet.network.v4.creation}, network_v4 creation
   constexpr network_v4 make_network_v4(const address_v4& addr, int prefix_len);
@@ -2130,14 +1904,11 @@ namespace ip {
       basic_ostream<CharT, Traits>& os, const network_v4& net);
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-\tcode{network_v4} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
+\tcode{network_v4} meets the requirements for \oldconcept{Destructible} (\CppXref{destructible}), \oldconcept{CopyConstructible} (\CppXref{copyconstructible}), and \oldconcept{CopyAssignable} (\CppXref{copyassignable}).
 
 
 \rSec2[internet.network.v4.cons]{\tcode{ip::network_v4} constructors}
@@ -2160,7 +1931,7 @@ constexpr network_v4(const address_v4& addr, int prefix_len);
 \postconditions \tcode{this->address() == addr} and \tcode{prefix_length() == prefix_len}.
 
 \pnum
-\remarks \tcode{out_of_range} if \tcode{prefix_len < 0} or \tcode{prefix_len > 32}.
+\throws \tcode{out_of_range} if \tcode{prefix_len < 0} or \tcode{prefix_len > 32}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2172,7 +1943,7 @@ constexpr network_v4(const address_v4& addr, const address_v4& mask);
 \postconditions \tcode{this->address() == addr} and \tcode{prefix_length()} is equal to the number of contiguous non-zero bits in \tcode{mask}.
 
 \pnum
-\remarks \tcode{invalid_argument} if \tcode{mask} contains non-contiguous non-zero bits, or if the most significant bit is zero and any other bits are non-zero.
+\throws \tcode{invalid_argument} if \tcode{mask} contains non-contiguous non-zero bits, or if the most significant bit is zero and any other bits are non-zero.
 \end{itemdescr}
 
 
@@ -2287,15 +2058,6 @@ constexpr bool operator==(const network_v4& a, const network_v4& b) noexcept;
 \returns \tcode{true} if \tcode{a.address() == b.address()} and \tcode{a.prefix_length() == b.prefix_length()}, otherwise \tcode{false}.
 \end{itemdescr}
 
-\begin{itemdecl}
-constexpr bool operator!=(const network_v4& a, const network_v4& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a == b)}.
-\end{itemdescr}
-
 
 
 \rSec2[internet.network.v4.creation]{\tcode{ip::network_v4} creation}
@@ -2364,10 +2126,7 @@ template<class CharT, class Traits>
 The class \tcode{network_v6} provides the ability to use and manipulate IPv6 network addresses.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   class network_v6
@@ -2392,7 +2151,6 @@ namespace ip {
 
   // \ref{internet.network.v6.comparisons}, network_v6 comparisons
   constexpr bool operator==(const network_v6& a, const network_v6& b) noexcept;
-  constexpr bool operator!=(const network_v6& a, const network_v6& b) noexcept;
 
   // \ref{internet.network.v6.creation}, network_v6 creation
   constexpr network_v6 make_network_v6(const address_v6& addr, int prefix_len);
@@ -2409,14 +2167,11 @@ namespace ip {
       basic_ostream<CharT, Traits>& os, const network_v6& net);
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-\tcode{network_v6} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), and \tcode{CopyAssignable} (\CppXref{copyassignable}).
+\tcode{network_v6} meets the requirements for \oldconcept{Destructible} (\CppXref{destructible}), \oldconcept{CopyConstructible} (\CppXref{copyconstructible}), and \oldconcept{CopyAssignable} (\CppXref{copyassignable}).
 
 
 \rSec2[internet.network.v6.cons]{\tcode{ip::network_v6} constructors}
@@ -2439,7 +2194,7 @@ constexpr network_v6(const address_v6& addr, int prefix_len);
 \postconditions \tcode{this->address() == addr} and \tcode{prefix_length() == prefix_len}.
 
 \pnum
-\remarks \tcode{out_of_range} if \tcode{prefix_len < 0} or \tcode{prefix_len > 128}.
+\throws \tcode{out_of_range} if \tcode{prefix_len < 0} or \tcode{prefix_len > 128}.
 \end{itemdescr}
 
 
@@ -2533,15 +2288,6 @@ constexpr bool operator==(const network_v6& a, const network_v6& b) noexcept;
 \returns \tcode{true} if \tcode{a.address() == b.address()} and \tcode{a.prefix_length() == b.prefix_length()}, otherwise \tcode{false}.
 \end{itemdescr}
 
-\begin{itemdecl}
-constexpr bool operator!=(const network_v6& a, const network_v6& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a == b)}.
-\end{itemdescr}
-
 
 
 \rSec2[internet.network.v6.creation]{\tcode{ip::network_v6} creation}
@@ -2601,10 +2347,7 @@ template<class CharT, class Traits>
 An object of type \tcode{basic_endpoint<InternetProtocol>} represents a protocol-specific endpoint, where an endpoint consists of an IP address and port number. Endpoints may be used to identify sources and destinations for socket connections and datagrams.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   template<class InternetProtocol>
@@ -2634,20 +2377,8 @@ namespace ip {
     constexpr bool operator==(const basic_endpoint<InternetProtocol>& a,
                               const basic_endpoint<InternetProtocol>& b) noexcept;
   template<class InternetProtocol>
-    constexpr bool operator!=(const basic_endpoint<InternetProtocol>& a,
-                              const basic_endpoint<InternetProtocol>& b) noexcept;
-  template<class InternetProtocol>
-    constexpr bool operator< (const basic_endpoint<InternetProtocol>& a,
-                              const basic_endpoint<InternetProtocol>& b) noexcept;
-  template<class InternetProtocol>
-    constexpr bool operator> (const basic_endpoint<InternetProtocol>& a,
-                              const basic_endpoint<InternetProtocol>& b) noexcept;
-  template<class InternetProtocol>
-    constexpr bool operator<=(const basic_endpoint<InternetProtocol>& a,
-                              const basic_endpoint<InternetProtocol>& b) noexcept;
-  template<class InternetProtocol>
-    constexpr bool operator>=(const basic_endpoint<InternetProtocol>& a,
-                              const basic_endpoint<InternetProtocol>& b) noexcept;
+    constexpr strong_ordering operator<=>(const basic_endpoint<InternetProtocol>\& a,
+                                          const basic_endpoint<InternetProtocol>\& b) noexcept;
 
   // \ref{internet.endpoint.io}, basic_endpoint I/O
   template<class CharT, class Traits, class InternetProtocol>
@@ -2656,24 +2387,18 @@ namespace ip {
       const basic_endpoint<InternetProtocol>& ep);
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-Instances of the \tcode{basic_endpoint} class template meet the requirements for an \tcode{Endpoint}~(\ref{socket.reqmts.endpoint}).
+Specializations of the \tcode{basic_endpoint} class template meet the requirements for an \newoldconcept{Endpoint}~(\ref{socket.reqmts.endpoint}).
 
-\indexextensible{basic_endpoint}%
+\indexextensibletype{basic_endpoint}%
 \pnum
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   template<class InternetProtocol>
@@ -2695,10 +2420,7 @@ namespace ip {
   };
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 
@@ -2720,7 +2442,7 @@ constexpr basic_endpoint(const protocol_type& proto,
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{proto == protocol_type::v4() || proto == protocol_type::v6()}.
+\expects \tcode{proto == protocol_type::v4() || proto == protocol_type::v6()}.
 
 \pnum
 \postconditions
@@ -2809,59 +2531,14 @@ template<class InternetProtocol>
 
 \begin{itemdecl}
 template<class InternetProtocol>
-  constexpr bool operator!=(const basic_endpoint<InternetProtocol>& a,
-                            const basic_endpoint<InternetProtocol>& b) noexcept;
+  constexpr strong_ordering operator<=>(const basic_endpoint<InternetProtocol>& a,
+                                        const basic_endpoint<InternetProtocol>& b) noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{!(a == b)}.
+\returns \tcode{tie(a.address(), a.port()) <=> tie(b.address(), b.port())}.
 \end{itemdescr}
-
-\begin{itemdecl}
-template<class InternetProtocol>
-  constexpr bool operator< (const basic_endpoint<InternetProtocol>& a,
-                            const basic_endpoint<InternetProtocol>& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{tie(a.address(), a.port()) < tie(b.address(), b.port())}.
-\end{itemdescr}
-
-\begin{itemdecl}
-template<class InternetProtocol>
-  constexpr bool operator> (const basic_endpoint<InternetProtocol>& a,
-                            const basic_endpoint<InternetProtocol>& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{b < a}.
-\end{itemdescr}
-
-\begin{itemdecl}
-template<class InternetProtocol>
-  constexpr bool operator<=(const basic_endpoint<InternetProtocol>& a,
-                            const basic_endpoint<InternetProtocol>& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(b < a)}.
-\end{itemdescr}
-
-\begin{itemdecl}
-template<class InternetProtocol>
-  constexpr bool operator>=(const basic_endpoint<InternetProtocol>& a,
-                            const basic_endpoint<InternetProtocol>& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a < b)}.
-\end{itemdescr}
-
 
 
 \rSec2[internet.endpoint.io]{\tcode{ip::basic_endpoint} I/O}
@@ -2930,7 +2607,7 @@ void resize(size_t s);
 
 \begin{itemdescr}
 \pnum
-\remarks \tcode{length_error} if either of the following conditions is \tcode{true}:
+\throws \tcode{length_error} if either of the following conditions is \tcode{true}:
 \begin{itemize}
 \item \tcode{protocol().family() == AF_INET6 \&\& s != sizeof(sock\-addr_in6)},
 \item \tcode{protocol().family() == AF_INET4 \&\& s != sizeof(sockaddr_in)}.
@@ -2956,10 +2633,7 @@ constexpr size_t capacity() const noexcept;
 An object of type \tcode{basic_resolver_entry<InternetProtocol>} represents a single element in the results returned by a name resolution operation.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   template<class InternetProtocol>
@@ -2991,15 +2665,9 @@ namespace ip {
   template<class InternetProtocol>
     bool operator==(const basic_resolver_entry<InternetProtocol>& a,
                     const basic_resolver_entry<InternetProtocol>& b);
-  template<class InternetProtocol>
-    bool operator!=(const basic_resolver_entry<InternetProtocol>& a,
-                    const basic_resolver_entry<InternetProtocol>& b);
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 
@@ -3063,10 +2731,10 @@ template<class Allocator = allocator<char>>
 
 \begin{itemdescr}
 \pnum
-\returns The host name associated with the resolver entry.
+\mandates \tcode{is_same_v<allocator_traits<Allocator>::value_type, char>} is \tcode{true}.
 
 \pnum
-\remarks Ill-formed unless \tcode{allocator_traits<Allocator>::value_type} is \tcode{char}.
+\returns The host name associated with the resolver entry.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3077,10 +2745,10 @@ template<class Allocator = allocator<char>>
 
 \begin{itemdescr}
 \pnum
-\returns The service name associated with the resolver entry.
+\mandates \tcode{is_same_v<allocator_traits<Allocator>::value_type, char>} is \tcode{true}.
 
 \pnum
-\remarks Ill-formed unless \tcode{allocator_traits<Allocator>::value_type} is \tcode{char}.
+\returns The service name associated with the resolver entry.
 \end{itemdescr}
 
 
@@ -3098,17 +2766,6 @@ template<class InternetProtocol>
 \returns \tcode{a.endpoint() == b.endpoint() \&\& a.host_name() == b.host_name() \&\& a.service_name() == b.service_name()}.
 \end{itemdescr}
 
-\begin{itemdecl}
-template<class InternetProtocol>
-  bool operator!=(const basic_resolver_entry<InternetProtocol>& a,
-                  const basic_resolver_entry<InternetProtocol>& b);
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a == b)}.
-\end{itemdescr}
-
 
 
 
@@ -3121,10 +2778,7 @@ represents a sequence of \tcode{basic_res\-olver_entry<InternetProtocol>} elemen
 resulting from a single name resolution operation.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   template<class InternetProtocol>
@@ -3169,19 +2823,13 @@ namespace ip {
   template<class InternetProtocol>
     bool operator==(const basic_resolver_results<InternetProtocol>& a,
                     const basic_resolver_results<InternetProtocol>& b);
-  template<class InternetProtocol>
-    bool operator!=(const basic_resolver_results<InternetProtocol>& a,
-                    const basic_resolver_results<InternetProtocol>& b);
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-The class template \tcode{basic_resolver_results} satisfies the requirements of a sequence container (\CppXref{sequence.reqmts}), except that only the operations defined for const-qualified sequence containers are supported. The class template \tcode{basic_resolver_results} supports forward iterators.
+The class template \tcode{basic_resolver_results} meets the requirements of a sequence container (\CppXref{sequence.reqmts}), except that only the operations defined for const-qualified sequence containers are supported. The class template \tcode{basic_resolver_results} supports forward iterators.
 
 \pnum
 A default-constructed \tcode{basic_resolver_results} object is empty. A non-empty results object is obtained only by calling a \tcode{basic_resolver} object's \tcode{wait} or \tcode{async_wait} operations, or otherwise by copy construction, move construction, assignment, or swap from another non-empty results object.
@@ -3327,18 +2975,6 @@ template<class InternetProtocol>
 \returns \tcode{a.size() == b.size() \&\& equal(a.cbegin(), a.cend(), b.cbegin())}.
 \end{itemdescr}
 
-\begin{itemdecl}
-template<class InternetProtocol>
-  bool operator!=(const basic_resolver_results<InternetProtocol>& a,
-                  const basic_resolver_results<InternetProtocol>& b);
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a == b)}.
-\end{itemdescr}
-
-
 
 
 \indexlibrary{\idxcode{resolver_base}}%
@@ -3346,10 +2982,7 @@ template<class InternetProtocol>
 
 \indexlibrary{\idxcode{resolve_base}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   class resolver_base
@@ -3370,10 +3003,7 @@ namespace ip {
   };
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
@@ -3433,10 +3063,7 @@ If used with \tcode{v4_mapped}, return all matching IPv6 and IPv4 addresses.  \\
 Objects of type \tcode{basic_resolver<InternetProtocol>} are used to perform name resolution. Name resolution is the translation of a host name and service name into a sequence of endpoints, or the translation of an endpoint into its corresponding host name and service name.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   template<class InternetProtocol>
@@ -3512,10 +3139,7 @@ namespace ip {
   };
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 
@@ -3857,10 +3481,10 @@ template<class Allocator>
 
 \begin{itemdescr}
 \pnum
-\returns The standard host name for the current machine, determined as if by POSIX \tcode{gethostname}.
+\mandates For the overloads with an \tcode{Allocator}, \tcode{is_same_v<allocator_traits<Allocator>::value_type, char>} is \tcode{true}.
 
 \pnum
-\remarks In the last two overloads, ill-formed unless \tcode{allocator_traits<Allocator>::value_type} is \tcode{char}.
+\returns The standard host name for the current machine, determined as if by POSIX \tcode{gethostname}.
 \end{itemdescr}
 
 
@@ -3872,10 +3496,7 @@ template<class Allocator>
 The class \tcode{tcp} encapsulates the types and flags necessary for TCP sockets.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   class tcp
@@ -3898,27 +3519,20 @@ namespace ip {
 
   // \ref{internet.tcp.comparisons}, tcp comparisons
   constexpr bool operator==(const tcp& a, const tcp& b) noexcept;
-  constexpr bool operator!=(const tcp& a, const tcp& b) noexcept;
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-The \tcode{tcp} class meets the requirements for an \tcode{InternetProtocol}~(\ref{internet.reqmts.protocol}).
+The \tcode{tcp} class meets the requirements for an \newoldconcept{InternetProtocol}~(\ref{internet.reqmts.protocol}).
 
-\indexextensible{tcp}%
+\indexextensibletype{tcp}%
 \pnum
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   class tcp
@@ -3931,10 +3545,7 @@ namespace ip {
   };
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
@@ -3984,16 +3595,6 @@ constexpr bool operator==(const tcp& a, const tcp& b) noexcept;
 \returns A boolean indicating whether two objects of class \tcode{tcp} are equal, such that the expression \tcode{tcp::v4() == tcp::v4()} is \tcode{true}, the expression \tcode{tcp::v6() == tcp::v6()} is \tcode{true}, and the expression \tcode{tcp::v4() == tcp::v6()} is \tcode{false}.
 \end{itemdescr}
 
-\begin{itemdecl}
-constexpr bool operator!=(const tcp& a, const tcp& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a == b)}.
-\end{itemdescr}
-
-
 
 
 \indexlibrary{\idxcode{udp}}%
@@ -4003,10 +3604,7 @@ constexpr bool operator!=(const tcp& a, const tcp& b) noexcept;
 The class \tcode{udp} encapsulates the types and flags necessary for UDP sockets.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   class udp
@@ -4026,27 +3624,20 @@ namespace ip {
 
   // \ref{internet.udp.comparisons}, udp comparisons
   constexpr bool operator==(const udp& a, const udp& b) noexcept;
-  constexpr bool operator!=(const udp& a, const udp& b) noexcept;
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-The \tcode{udp} class meets the requirements for an \tcode{InternetProtocol}~(\ref{internet.reqmts.protocol}).
+The \tcode{udp} class meets the requirements for an \newoldconcept{InternetProtocol}~(\ref{internet.reqmts.protocol}).
 
-\indexextensible{udp}%
+\indexextensibletype{udp}%
 \pnum
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
   class udp
@@ -4059,10 +3650,7 @@ namespace ip {
   };
 
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
@@ -4112,15 +3700,6 @@ constexpr bool operator==(const udp& a, const udp& b) noexcept;
 \returns A boolean indicating whether two objects of class \tcode{udp} are equal, such that the expression \tcode{udp::v4() == udp::v4()} is \tcode{true}, the expression \tcode{udp::v6() == udp::v6()} is \tcode{true}, and the expression \tcode{udp::v4() == udp::v6()} is \tcode{false}.
 \end{itemdescr}
 
-\begin{itemdecl}
-constexpr bool operator!=(const udp& a, const udp& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a == b)}.
-\end{itemdescr}
-
 
 
 
@@ -4167,34 +3746,34 @@ and let \tcode{F} be the value of \tcode{p.family()}.
 \tcode{IPPROTO_TCP}  &
 \tcode{TCP_NODELAY}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a TCP socket will avoid coalescing of small segments. \begin{note} That is, setting this option disables the Nagle algorithm. \end{note}  \\ \rowsep
+Meets the \newoldconcept{BooleanSocketOption} (\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a TCP socket will avoid coalescing of small segments. \begin{note} That is, setting this option disables the Nagle algorithm. \end{note}  \\ \rowsep
 
 \tcode{ip::v6_only}  &
 \tcode{IPPROTO_IPV6}  &
 \tcode{IPV6_V6ONLY}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket created for an IPv6 protocol is restricted to IPv6 communications only. Implementations are not required to support setting the \tcode{v6_only} option to \tcode{false}, and the initial value of the \tcode{v6_only} option for a socket is \impldef{initial value of the \tcode{v6_only} option for a socket}. \begin{note} As not all operating systems support dual stack IP networking. Some operating systems that do provide dual stack support offer a configuration option to disable it or to set the initial value of the \tcode{v6_only} socket option. \end{note}  \\ \rowsep
+Meets the \newoldconcept{BooleanSocketOption} (\ref{socket.reqmts.opt.bool}) type requirements. Determines whether a socket created for an IPv6 protocol is restricted to IPv6 communications only. Implementations are not required to support setting the \tcode{v6_only} option to \tcode{false}, and the initial value of the \tcode{v6_only} option for a socket is \impldef{initial value of the \tcode{v6_only} option for a socket}. \begin{note} As not all operating systems support dual stack IP networking. Some operating systems that do provide dual stack support offer a configuration option to disable it or to set the initial value of the \tcode{v6_only} socket option. \end{note}  \\ \rowsep
 
 \tcode{ip::unicast::}
 \tcode{hops}  &
 \tcode{IPPROTO_IPV6} if \tcode{F == AF_INET6}, otherwise \tcode{IPPROTO_IP}  &
 \tcode{IPV6_UNICAST_HOPS} if \tcode{F == AF_INET6}, otherwise \tcode{IP_TTL}  &
 \tcode{int}  &
-Satisfies the \tcode{IntegerSocket\-Option}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams. The constructor and assignment operator for the \tcode{ip::unicast::hops} class throw \tcode{out_of_range} if the \tcode{int} argument is not in the range \crange{0}{255}.  \\ \rowsep
+Meets the \newoldconcept{IntegerSocketOption} (\ref{socket.reqmts.opt.int}) type requirements. Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams. The constructor and assignment operator for the \tcode{ip::unicast::hops} class throw \tcode{out_of_range} if the \tcode{int} argument is not in the range \crange{0}{255}.  \\ \rowsep
 
 \tcode{ip::multicast::}
 \tcode{join_group}  &
 \tcode{IPPROTO_IPV6} if \tcode{F == AF_INET6}, otherwise \tcode{IPPROTO_IP}  &
 \tcode{IPV6_JOIN_GROUP} if \tcode{F == AF_INET6}, otherwise \tcode{IP_ADD_MEMBERSHIP}  &
 \tcode{ipv6_mreq} if \tcode{F == AF_INET6}, otherwise \tcode{ip_mreq}  &
-Satisfies the \tcode{MulticastGroupSock\-etOption}~(\ref{internet.reqmts.opt.mcast}) type requirements. Requests that the socket join the specified multicast group.  \\ \rowsep
+Meets the \newoldconcept{MulticastGroupSocketOption} (\ref{internet.reqmts.opt.mcast}) type requirements. Requests that the socket join the specified multicast group.  \\ \rowsep
 
 \tcode{ip::multicast::}
 \tcode{leave_group}  &
 \tcode{IPPROTO_IPV6} if \tcode{F == AF_INET6}, otherwise \tcode{IPPROTO_IP}  &
 \tcode{IPV6_LEAVE_GROUP} if \tcode{F == AF_INET6}, otherwise \tcode{IP_DROP_MEMBERSHIP}  &
 \tcode{ipv6_mreq} if \tcode{F == AF_INET6}, otherwise \tcode{ip_mreq}  &
-Satisfies the \tcode{MulticastGroupSock\-etOption}~(\ref{internet.reqmts.opt.mcast}) type requirements. Requests that the socket leave the specified multicast group.  \\ \rowsep
+Meets the \newoldconcept{MulticastGroupSocketOption} (\ref{internet.reqmts.opt.mcast}) type requirements. Requests that the socket leave the specified multicast group.  \\ \rowsep
 
 \tcode{ip::multicast::}
 \tcode{outbound_interface}\br~(\ref{internet.multicast.outbound})  &
@@ -4208,14 +3787,14 @@ Satisfies the \tcode{MulticastGroupSock\-etOption}~(\ref{internet.reqmts.opt.mca
 \tcode{IPPROTO_IPV6} if \tcode{F == AF_INET6}, otherwise \tcode{IPPROTO_IP}  &
 \tcode{IPV6_MULTICAST_HOPS} if \tcode{F == AF_INET6}, otherwise \tcode{IP_MULTICAST_TTL}  &
 \tcode{int}  &
-Satisfies the \tcode{IntegerSocket\-Option}~(\ref{socket.reqmts.opt.int}) type requirements. Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams. The constructor and assignment operator for the \tcode{ip::multicast::hops} class throw \tcode{out_of_range} if the \tcode{int} argument is not in the range \crange{0}{255}.  \\ \rowsep
+Meets the \newoldconcept{IntegerSocketOption} (\ref{socket.reqmts.opt.int}) type requirements. Specifies the default number of hops (also known as time-to-live or TTL) on outbound datagrams. The constructor and assignment operator for the \tcode{ip::multicast::hops} class throw \tcode{out_of_range} if the \tcode{int} argument is not in the range \crange{0}{255}.  \\ \rowsep
 
 \tcode{ip::multicast::}
 \tcode{enable_loopback}  &
 \tcode{IPPROTO_IPV6} if \tcode{F == AF_INET6}, otherwise \tcode{IPPROTO_IP}  &
 \tcode{IPV6_MULTICAST_LOOP} if \tcode{F == AF_INET6}, otherwise \tcode{IP_MULTICAST_LOOP}  &
 \tcode{int}  &
-Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type requirements. Determines whether multicast datagrams are delivered back to the local application.  \\
+Meets the \newoldconcept{BooleanSocketOption} (\ref{socket.reqmts.opt.bool}) type requirements. Determines whether multicast datagrams are delivered back to the local application.  \\
 
 \end{LongTable}
 
@@ -4227,10 +3806,7 @@ Satisfies the \tcode{BooleanSocket\-Option}~(\ref{socket.reqmts.opt.bool}) type 
 The \tcode{outbound_interface} class represents a socket option that specifies the network interface to use for outgoing multicast datagrams.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 namespace multicast {
 
@@ -4244,24 +3820,18 @@ namespace multicast {
 
 } // namespace multicast
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-\tcode{outbound_interface} satisfies the requirements for \tcode{Destructible} (\CppXref{destructible}), \tcode{CopyConstructible} (\CppXref{copyconstructible}), \tcode{CopyAssignable} (\CppXref{copyassignable}), and \tcode{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
+\tcode{outbound_interface} meets the requirements for \oldconcept{Destructible} (\CppXref{destructible}), \oldconcept{CopyConstructible} (\CppXref{copyconstructible}), \oldconcept{CopyAssignable} (\CppXref{copyassignable}), and \newoldconcept{SettableSocketOption}~(\ref{socket.reqmts.settablesocketoption}).
 
-\indexextensible{outbound_interface}%
+\indexextensibletype{outbound_interface}%
 \pnum
  Extensible implementations provide the following member functions:
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 namespace multicast {
 
@@ -4280,10 +3850,7 @@ namespace multicast {
 
 } // namespace multicast
 } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \begin{itemdecl}

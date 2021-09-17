@@ -1,25 +1,73 @@
 %!TEX root = ts.tex
-\input{cover-wd}
-% \input{cover-reg}
+\begingroup
+\def\hd{\begin{tabular}{ll}
+          \textbf{Document Number:} & {\larger\docno}             \\
+          \textbf{Date:}            & \reldate                    \\
+          \textbf{Audience:}        & LWG                         \\
+          \textbf{Reply to:}        & Jonathan Wakely             \\
+                                    & cxx@kayari.org
+          \end{tabular}
+}
+\newlength{\hdwidth}
+\settowidth{\hdwidth}{\hd}
+\hfill\begin{minipage}{\hdwidth}\hd\end{minipage}
+\endgroup
 
-\vfill
+\vspace{2.5cm}
+\begin{center}
+\textbf{\Huge
+\doctitle}
+\end{center}
+\vspace{2.5cm}
+
+
 \textbf{Foreword}
 
 This document contains the combined result of the Networking TS and all
 papers subsequently approved by SG4.
-This is not a working draft for the Networking TS.
-The document exists so that SG4 (and the rest of the committee) can easily
-see the current state of their work.
-It is expected to become a proposal for inclusion in the IS at some later time.
+
+This is not intended to become a new draft TS.
+It is intended for the Networking Study Group (SG4)
+to use as a basis for future work.
 
 The non-editorial changes since the TS are:
 
 \begin{itemize}
 \item LWG issues 3414 and 3443.
+\item P2172R2 Rebasing the Networking TS on C++20
 \end{itemize}
 \newpage
 
 
+\vspace{2.5cm}
+
+Future work:
+\begin{itemize}
+\item
+Replace non-member operators with hidden friends.
+LWG would prefer that to be done in a separate proposal to go via LEWG.
+\item
+Use concepts to replace \newoldconcept{TypeRequirements}.
+\item
+Make address ranges satisfy range concepts (currently not possible as
+their iterators don't satisfy \tcode{std::input_or_output_iterator}).
+\item
+Try to specify "completion token" as proper type requirements (or a concept),
+unless SG4 are replacing that part of the spec.
+\item
+Consider replacing \exposid{DEDUCED} with an exposition-only alias template,
+e.g. \exposid{async-return-type}\tcode{<CompletionToken, Signature>}
+or similar.
+\end{itemize}
+
+Open questions (probably to be filed as LWG issues):
+\begin{itemize}
+\item
+Clarify intent of \tcode{strand} move constructor and move assignment.
+\end{itemize}
+
+
+\newpage
 
 %%--------------------------------------------------
 %% The table of contents

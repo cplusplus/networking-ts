@@ -7,17 +7,11 @@
 \rSec1[io_context.synop]{Header \tcode{<experimental/io_context>} synopsis}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   class io_context;
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 
@@ -26,10 +20,7 @@ inline namespace v1 {
 
 \indexlibrary{\idxcode{io_context}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   class io_context : public execution_context
   {
@@ -73,14 +64,11 @@ inline namespace v1 {
     void restart();
   };
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-The class \tcode{io_context} satisfies the ExecutionContext type requirements~(\ref{async.reqmts.executioncontext}).
+The class \tcode{io_context} meets the \newoldconcept{ExecutionContext} type requirements~(\ref{async.reqmts.executioncontext}).
 
 \indexlibrarymember{count_type}{io_context}%
 \pnum
@@ -341,10 +329,7 @@ void restart();
 
 \indexlibrary{\idxcode{io_context::executor_type}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   class io_context::executor_type
   {
@@ -376,17 +361,12 @@ inline namespace v1 {
 
   bool operator==(const io_context::executor_type& a,
                   const io_context::executor_type& b) noexcept;
-  bool operator!=(const io_context::executor_type& a,
-                  const io_context::executor_type& b) noexcept;
 
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
-\tcode{io_context::executor_type} is a type satisfying the Executor requirements~(\ref{async.reqmts.executor}). Objects of type \tcode{io_context::executor_type} are associated with an \tcode{io_context}, and function objects submitted using the \tcode{dispatch}, \tcode{post}, or \tcode{defer} member functions will be executed by the \tcode{io_context} from within a run function.
+\tcode{io_context::executor_type} is a type meeting the \newoldconcept{Executor} requirements~(\ref{async.reqmts.executor}). Objects of type \tcode{io_context::executor_type} are associated with an \tcode{io_context}, and function objects submitted using the \tcode{dispatch}, \tcode{post}, or \tcode{defer} member functions will be executed by the \tcode{io_context} from within a run function.
 
 
 \rSec2[io_context.exec.cons]{\tcode{io_context::executor_type} constructors}
@@ -491,7 +471,11 @@ template<class Func, class ProtoAllocator>
 
 \begin{itemdescr}
 \pnum
-\effects If \tcode{running_in_this_thread()} is \tcode{true}, calls \tcode{\placeholdernc{DECAY_COPY}(forward<Func>(f))()} (\CppXref{thread.decaycopy}). \begin{note} If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}. \end{note} Otherwise, calls \tcode{post(forward<Func>(f), a)}.
+\effects If \tcode{running_in_this_thread()} is \tcode{true}, calls \exposid{decay-copy}\tcode{(forward<Func>(f))()} (\CppXref{expos.only.func}).
+\begin{note}
+If \tcode{f} exits via an exception, the exception propagates to the caller of \tcode{dispatch()}.
+\end{note}
+Otherwise, calls \tcode{post(forward<Func>(f), a)}.
 \end{itemdescr}
 
 \indexlibrarymember{post}{io_context::executor_type}%
@@ -530,18 +514,5 @@ bool operator==(const io_context::executor_type& a,
 \pnum
 \returns \tcode{addressof(a.context()) == addressof(b.context())}.
 \end{itemdescr}
-
-\indexlibrarymember{operator"!=}{io_context::executor_type}%
-\begin{itemdecl}
-bool operator!=(const io_context::executor_type& a,
-                const io_context::executor_type& b) noexcept;
-\end{itemdecl}
-
-\begin{itemdescr}
-\pnum
-\returns \tcode{!(a == b)}.
-\end{itemdescr}
-
-
 
 

@@ -7,10 +7,7 @@
 \rSec1[fwd.decl.synop]{Header \tcode{<experimental/netfwd>} synopsis}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
-inline namespace v1 {
+namespace std::experimental::net::inline @\namespacever@ {
 
   class execution_context;
   template<class T, class Executor>
@@ -73,10 +70,7 @@ inline namespace v1 {
     class udp;
 
   } // namespace ip
-} // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
 \pnum
