@@ -22,6 +22,9 @@ namespace std::experimental::net::inline @\namespacever@ {
   template<class T, class ProtoAllocator = allocator<void>>
     struct associated_allocator;
 
+  template<class T, class ProtoAllocator>
+    struct associated_allocator<reference_wrapper<T>, ProtoAllocator>;
+
   template<class T, class ProtoAllocator = allocator<void>>
     using associated_allocator_t = typename associated_allocator<T, ProtoAllocator>::type;
 
@@ -63,6 +66,9 @@ namespace std::experimental::net::inline @\namespacever@ {
 
   template<class T, class Executor = system_executor>
     struct associated_executor;
+
+  template<class T, class Executor>
+    struct associated_executor<reference_wrapper<T>, Executor>;
 
   template<class T, class Executor = system_executor>
     using associated_executor_t = typename associated_executor<T, Executor>::type;
@@ -906,6 +912,15 @@ namespace std::experimental::net::inline @\namespacever@ {
     static type get(const T& t, const ProtoAllocator& a = ProtoAllocator()) noexcept;
   };
 
+  template<class T, class ProtoAllocator>
+  struct associated_allocator<reference_wrapper<T>, ProtoAllocator>
+  {
+    using type = associated_allocator_t<T, ProtoAllocator>;
+
+    static type get(reference_wrapper<T> t,
+                    const ProtoAllocator& a = ProtoAllocator()) noexcept;
+  };
+
 } // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
@@ -971,7 +986,16 @@ is valid and denotes a type~(\CppXref{temp.deduct}).
 Otherwise \tcode{a}.
 \end{itemdescr}
 
+\rSec2[async.assoc.alloc.refwrap]{\tcode{associated_allocator<reference_wrapper<T>, ProtoAllocator>} members}
 
+\begin{itemdecl}
+type get(reference_wrapper<T> t, const ProtoAllocator& a = ProtoAllocator()) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{associated_allocator<T, ProtoAllocator>::get(t.get(), a)}.
+\end{itemdescr}
 
 \rSec1[async.assoc.alloc.get]{Function \tcode{get_associated_allocator}}
 
@@ -1346,6 +1370,14 @@ namespace std::experimental::net::inline @\namespacever@ {
     static type get(const T& t, const Executor& e = Executor()) noexcept;
   };
 
+  template<class T, class Executor>
+  struct associated_executor<reference_wrapper<T>, Executor>
+  {
+    using type = associated_executor_t<T, Executor>;
+
+    static type get(reference_wrapper<T> t, const Executor& e = Executor()) noexcept;
+  };
+
 } // inline namespace std::experimental::net::\namespacever
 \end{codeblock}
 
@@ -1412,6 +1444,16 @@ Otherwise \tcode{e}.
 \end{itemdescr}
 
 
+\rSec2[async.assoc.exec.refwrap]{\tcode{associated_executor<reference_wrapper<T>, ProtoAllocator>} members}
+
+\begin{itemdecl}
+type get(reference_wrapper<T> t, const Executor& e = Executor()) noexcept;
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{associated_executor<T, ProtoAllocator>::get(t.get(), e)}.
+\end{itemdescr}
 
 
 \rSec1[async.assoc.exec.get]{Function \tcode{get_associated_executor}}
