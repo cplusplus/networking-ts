@@ -174,14 +174,14 @@ namespace std::experimental::net::inline @\namespacever@ {
                   error_code& ec);
 
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read(SyncReadStream& stream, DynamicBuffer&& b);
+    size_t read(SyncReadStream& stream, DynamicBuffer b);
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read(SyncReadStream& stream, DynamicBuffer&& b, error_code& ec);
+    size_t read(SyncReadStream& stream, DynamicBuffer b, error_code& ec);
   template<class SyncReadStream, class DynamicBuffer, class CompletionCondition>
-    size_t read(SyncReadStream& stream, DynamicBuffer&& b,
+    size_t read(SyncReadStream& stream, DynamicBuffer b,
                 CompletionCondition completion_condition);
   template<class SyncReadStream, class DynamicBuffer, class CompletionCondition>
-    size_t read(SyncReadStream& stream, DynamicBuffer&& b,
+    size_t read(SyncReadStream& stream, DynamicBuffer b,
                 CompletionCondition completion_condition, error_code& ec);
 
   // \ref{buffer.async.read}, asynchronous read operations
@@ -200,11 +200,11 @@ namespace std::experimental::net::inline @\namespacever@ {
 
   template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
     @\DEDUCED@ async_read(AsyncReadStream& stream,
-                       DynamicBuffer&& b, CompletionToken&& token);
+                       DynamicBuffer b, CompletionToken&& token);
   template<class AsyncReadStream, class DynamicBuffer,
     class CompletionCondition, class CompletionToken>
       @\DEDUCED@ async_read(AsyncReadStream& stream,
-                         DynamicBuffer&& b,
+                         DynamicBuffer b,
                          CompletionCondition completion_condition,
                          CompletionToken&& token);
 
@@ -229,14 +229,14 @@ namespace std::experimental::net::inline @\namespacever@ {
                    error_code& ec);
 
   template<class SyncWriteStream, class DynamicBuffer>
-    size_t write(SyncWriteStream& stream, DynamicBuffer&& b);
+    size_t write(SyncWriteStream& stream, DynamicBuffer b);
   template<class SyncWriteStream, class DynamicBuffer>
-    size_t write(SyncWriteStream& stream, DynamicBuffer&& b, error_code& ec);
+    size_t write(SyncWriteStream& stream, DynamicBuffer b, error_code& ec);
   template<class SyncWriteStream, class DynamicBuffer, class CompletionCondition>
-    size_t write(SyncWriteStream& stream, DynamicBuffer&& b,
+    size_t write(SyncWriteStream& stream, DynamicBuffer b,
                  CompletionCondition completion_condition);
   template<class SyncWriteStream, class DynamicBuffer, class CompletionCondition>
-    size_t write(SyncWriteStream& stream, DynamicBuffer&& b,
+    size_t write(SyncWriteStream& stream, DynamicBuffer b,
                  CompletionCondition completion_condition, error_code& ec);
 
   // \ref{buffer.async.write}, asynchronous write operations
@@ -255,36 +255,36 @@ namespace std::experimental::net::inline @\namespacever@ {
 
   template<class AsyncWriteStream, class DynamicBuffer, class CompletionToken>
     @\DEDUCED@ async_write(AsyncWriteStream& stream,
-                     DynamicBuffer&& b, CompletionToken&& token);
+                     DynamicBuffer b, CompletionToken&& token);
   template<class AsyncWriteStream, class DynamicBuffer,
     class CompletionCondition, class CompletionToken>
       @\DEDUCED@ async_write(AsyncWriteStream& stream,
-                          DynamicBuffer&& b,
+                          DynamicBuffer b,
                           CompletionCondition completion_condition,
                           CompletionToken&& token);
 
   // \ref{buffer.read.until}, synchronous delimited read operations
 
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read_until(SyncReadStream& s, DynamicBuffer&& b, char delim);
+    size_t read_until(SyncReadStream& s, DynamicBuffer b, char delim);
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read_until(SyncReadStream& s, DynamicBuffer&& b,
+    size_t read_until(SyncReadStream& s, DynamicBuffer b,
                       char delim, error_code& ec);
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read_until(SyncReadStream& s, DynamicBuffer&& b, string_view delim);
+    size_t read_until(SyncReadStream& s, DynamicBuffer b, string_view delim);
   template<class SyncReadStream, class DynamicBuffer>
-    size_t read_until(SyncReadStream& s, DynamicBuffer&& b,
+    size_t read_until(SyncReadStream& s, DynamicBuffer b,
                       string_view delim, error_code& ec);
 
   // \ref{buffer.async.read.until}, asynchronous delimited read operations
 
   template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
     @\DEDUCED@ async_read_until(AsyncReadStream& s,
-                             DynamicBuffer&& b, char delim,
+                             DynamicBuffer b, char delim,
                              CompletionToken&& token);
   template<class AsyncReadStream, class DynamicBuffer, class CompletionToken>
     @\DEDUCED@ async_read_until(AsyncReadStream& s,
-                             DynamicBuffer&& b, string_view delim,
+                             DynamicBuffer b, string_view delim,
                              CompletionToken&& token);
 
 } // inline namespace experimental::net::\namespacever
@@ -455,15 +455,16 @@ on a candidate set that includes:
 \rSec2[buffer.reqmts.dynamicbuffer]{Dynamic buffer requirements}
 
 \pnum
-A \defn{dynamic buffer} encapsulates memory storage that may be automatically resized as required, where the memory is divided into two regions: readable bytes followed by writable bytes. These memory regions are internal to the dynamic buffer, but direct access to the elements is provided to permit them to be efficiently used with I/O operations. \begin{note} Such as the \tcode{send} or \tcode{receive} operations of a socket. The readable bytes would be used as the constant buffer sequence for \tcode{send}, and the writable bytes used as the mutable buffer sequence for \tcode{receive}. \end{note} Data written to the writable bytes of a dynamic buffer object is appended to the readable bytes of the same object.
+A \defn{dynamic buffer} encapsulates memory storage that may be automatically resized as required. Direct access to the elements is provided to permit them to be efficiently used with I/O operations. \begin{note} Such as the \tcode{send} or \tcode{receive} operations of a socket. \end{note}
 
 \pnum
-A type \tcode{X} meets the \defnnewoldconcept{DynamicBuffer} requirements if it meets the requirements of \oldconcept{Destructible}~(\CppXref{destructible}) and \oldconcept{MoveConstructible}~(\CppXref{moveconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}.
+A type \tcode{X} meets the \defnnewoldconcept{DynamicBuffer} requirements if it meets the requirements of \oldconcept{Destructible} (\CppXref{destructible}) and \oldconcept{CopyConstructible} (\CppXref{copyconstructible}), as well as the additional requirements listed in Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements}.
 
 \pnum
 In Table~\ref{tab:buffer.reqmts.dynamicbuffer.requirements},
 \tcode{x} denotes a value of type \tcode{X},
 \tcode{x1} denotes a (possibly const) value of type \tcode{X},
+\tcode{pos} denotes a (possibly const) value of type \tcode{size_t},
 and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
 
 \indextext{requirements!\idxnewoldconcept{DynamicBuffer}}%
@@ -484,39 +485,43 @@ and \tcode{n} denotes a (possibly const) value of type \tcode{size_t}.
 
 \tcode{X::const_buffers_type}  &
 type meeting \newoldconcept{ConstBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements.  &
- This type represents the memory associated with the readable bytes.  \\ \rowsep
+ This type represents the underlying memory as non-modifiable bytes.  \\ \rowsep
 
 \tcode{X::mutable_buffers_type}  &
 type meeting \newoldconcept{MutableBufferSequence}~(\ref{buffer.reqmts.constbuffersequence}) requirements.  &
- This type represents the memory associated with the writable bytes.  \\ \rowsep
+ This type represents the underlying memory as modifiable bytes.  \\ \rowsep
 
 \tcode{x1.size()}  &
 \tcode{size_t}  &
- Returns the number of readable bytes.  \\ \rowsep
+ Returns the number of bytes.  \\ \rowsep
 
 \tcode{x1.max_size()}  &
 \tcode{size_t}  &
-Returns the maximum number of bytes, both readable and writable, that can be held by \tcode{x1}.  \\ \rowsep
+Returns the maximum number of bytes that can be held by \tcode{x1}.  \\ \rowsep
 
 \tcode{x1.capacity()}  &
 \tcode{size_t}  &
-Returns the maximum number of bytes, both readable and writable, that can be held by \tcode{x1} without requiring reallocation.  \\ \rowsep
+Returns the maximum number of bytes that can be held by \tcode{x1} without requiring reallocation.  \\ \rowsep
 
-\tcode{x1.data()}  &
+\tcode{x1.data(pos, n)}  &
 \tcode{X::const_buffers_type}  &
-Returns a constant buffer sequence \tcode{u} that represents the readable bytes, and where \tcode{buffer_size(u) == size()}.  \\ \rowsep
+Returns a constant buffer sequence \tcode{u} that represents the region of underlying memory at offset \tcode{pos} and length \tcode{n}.  \\ \rowsep
 
-\tcode{x.prepare(n)}  &
+\tcode{x.data(pos, n)}  &
 \tcode{X::mutable_buffers_type}  &
-Returns a mutable buffer sequence \tcode{u} representing the writable bytes, and where \tcode{buffer_size(u) == n}. The dynamic buffer reallocates memory as required. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.\br \throws\ \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.  \\ \rowsep
+Returns a mutable buffer sequence \tcode{u} that represents the region of underlying memory at offset \tcode{pos} and length \tcode{n}.  \\ \rowsep
 
-\tcode{x.commit(n)}  &
+\tcode{x.grow(n)}  &
   &
-Appends \tcode{n} bytes from the start of the writable bytes to the end of the readable bytes. The remainder of the writable bytes are discarded. If \tcode{n} is greater than the number of writable bytes, all writable bytes are appended to the readable bytes. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.  \\ \rowsep
+Adds \tcode{n} bytes of space at the end of the underlying memory. All constant or mutable buffer sequences previously obtained using \tcode{data()} are invalidated.  \\ \rowsep
+
+\tcode{x.shrink(n)}  &
+  &
+Removes \tcode{n} bytes of space from the end of the underlying memory. If \tcode{n} is greater than the number of bytes, all bytes are discarded. All constant or mutable buffer sequences previously obtained using \tcode{data()} are invalidated.  \\ \rowsep
 
 \tcode{x.consume(n)}  &
   &
-Removes \tcode{n} bytes from beginning of the readable bytes. If \tcode{n} is greater than the number of readable bytes, all readable bytes are removed. All constant or mutable buffer sequences previously obtained using \tcode{data()} or \tcode{prepare()} are invalidated.  \\
+Removes \tcode{n} bytes from beginning of the bytes. If \tcode{n} is greater than the number of bytes, all bytes are removed. All constant or mutable buffer sequences previously obtained using \tcode{data()} are invalidated.  \\
 
 \end{libreqtab3}
 
@@ -1120,20 +1125,19 @@ namespace std::experimental::net::inline @\namespacever@ {
     explicit dynamic_vector_buffer(vector<T, Allocator>& vec) noexcept;
     dynamic_vector_buffer(vector<T, Allocator>& vec,
                           size_t maximum_size) noexcept;
-    dynamic_vector_buffer(dynamic_vector_buffer&&) = default;
 
     // members:
     size_t size() const noexcept;
     size_t max_size() const noexcept;
     size_t capacity() const noexcept;
-    const_buffers_type data() const noexcept;
-    mutable_buffers_type prepare(size_t n);
-    void commit(size_t n);
+    mutable_buffers_type data(size_t pos, size_t n) noexcept;
+    const_buffers_type data(size_t pos, size_t n) const noexcept;
+    void grow(size_t n);
+    void shrink(size_t n);
     void consume(size_t n);
 
   private:
     vector<T, Allocator>& vec_; // \expos
-    size_t size_; // \expos
     const size_t max_size_; // \expos
   };
 
@@ -1153,7 +1157,7 @@ explicit dynamic_vector_buffer(vector<T, Allocator>& vec) noexcept;
 
 \begin{itemdescr}
 \pnum
-\effects Initializes \tcode{vec_} with \tcode{vec}, \tcode{size_} with \tcode{vec.size()}, and \tcode{max_size_} with \tcode{vec.max_size()}.
+\effects Initializes \tcode{vec_} with \tcode{vec} and \tcode{max_size_} with \tcode{vec.max_size()}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{dynamic_vector_buffer}!constructor}%
@@ -1167,7 +1171,7 @@ dynamic_vector_buffer(vector<T, Allocator>& vec,
 \expects \tcode{vec.size() <= maximum_size}.
 
 \pnum
-\effects Initializes \tcode{vec_} with \tcode{vec}, \tcode{size_} with \tcode{vec.size()}, and \tcode{max_size_} with \tcode{maximum_size}.
+\effects Initializes \tcode{vec_} with \tcode{vec} and \tcode{max_size_} with \tcode{maximum_size}.
 \end{itemdescr}
 
 \indexlibrarymember{size}{dynamic_vector_buffer}%
@@ -1177,7 +1181,7 @@ size_t size() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{size_}.
+\returns \tcode{min(vec_.size(), max_size_)}.
 \end{itemdescr}
 
 \indexlibrarymember{max_size}{dynamic_vector_buffer}%
@@ -1197,48 +1201,41 @@ size_t capacity() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{vec_.capacity()}.
+\returns \tcode{min(vec_.capacity(), max_size_)}.
 \end{itemdescr}
 
 \indexlibrarymember{data}{dynamic_vector_buffer}%
 \begin{itemdecl}
-const_buffers_type data() const noexcept;
+mutable_buffers_type data(size_t pos, size_t n) noexcept;
+const_buffers_type data(size_t pos, size_t n) const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{buffer(vec_, size_)}.
+\returns \tcode{buffer(buffer(vec_, max_size_) + pos, n)}.
 \end{itemdescr}
 
-\indexlibrarymember{prepare}{dynamic_vector_buffer}%
+\indexlibrarymember{grow}{dynamic_vector_buffer}%
 \begin{itemdecl}
-mutable_buffers_type prepare(size_t n);
+void grow(size_t n);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Performs \tcode{vec_.resize(size_ + n)}.
+\effects Performs \tcode{vec_.resize(size() + n);}.
 
 \pnum
-\returns \tcode{buffer(buffer(vec_) + size_, n)}.
-
-\pnum
-\throws \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
+\throws \tcode{length_error} if \tcode{size() > max_size() || max_size() - size() < n}.
 \end{itemdescr}
 
-\indexlibrarymember{commit}{dynamic_vector_buffer}%
+\indexlibrarymember{shrink}{dynamic_vector_buffer}%
 \begin{itemdecl}
-void commit(size_t n);
+void shrink(size_t n);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Performs:
-\begin{codeblock}
-size_ += min(n, vec_.size() - size_);
-vec_.resize(size_);
-\end{codeblock}
-
+\effects Performs \tcode{vec_.resize(n > size() ? 0 : size() - n);}.
 \end{itemdescr}
 
 \indexlibrarymember{consume}{dynamic_vector_buffer}%
@@ -1250,9 +1247,7 @@ void consume(size_t n);
 \pnum
 \effects Performs:
 \begin{codeblock}
-size_t m = min(n, size_);
-vec_.erase(vec_.begin(), vec_.begin() + m);
-size_ -= m;
+vec_.erase(vec_.begin(), vec_.begin() + min(n, size()));
 \end{codeblock}
 
 \end{itemdescr}
@@ -1280,20 +1275,19 @@ namespace std::experimental::net::inline @\namespacever@ {
     explicit dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str) noexcept;
     dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str,
                           size_t maximum_size) noexcept;
-    dynamic_string_buffer(dynamic_string_buffer&&) = default;
 
     // members:
     size_t size() const noexcept;
     size_t max_size() const noexcept;
     size_t capacity() const noexcept;
-    const_buffers_type data() const noexcept;
-    mutable_buffers_type prepare(size_t n);
-    void commit(size_t n) noexcept;
+    mutable_buffers_type data(size_t pos, size_t n) noexcept;
+    const_buffers_type data(size_t pos, size_t n) const noexcept;
+    void grow(size_t n);
+    void shrink(size_t n);
     void consume(size_t n);
 
   private:
     basic_string<CharT, Traits, Allocator>& str_; // \expos
-    size_t size_; // \expos
     const size_t max_size_; // \expos
   };
 
@@ -1313,7 +1307,7 @@ explicit dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str) noex
 
 \begin{itemdescr}
 \pnum
-\effects Initializes \tcode{str_} with \tcode{str}, \tcode{size_} with \tcode{str.size()}, and \tcode{max_size_} with \tcode{str.max_size()}.
+\effects Initializes \tcode{str_} with \tcode{str} and \tcode{max_size_} with \tcode{str.max_size()}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{dynamic_string_buffer}!constructor}%
@@ -1327,7 +1321,7 @@ dynamic_string_buffer(basic_string<CharT, Traits, Allocator>& str,
 \expects \tcode{str.size() <= maximum_size}.
 
 \pnum
-\effects Initializes \tcode{str_} with \tcode{str}, \tcode{size_} with \tcode{str.size()}, and \tcode{max_size_} with \tcode{maximum_size}.
+\effects Initializes \tcode{str_} with \tcode{str} and \tcode{max_size_} with \tcode{maximum_size}.
 \end{itemdescr}
 
 \indexlibrarymember{size}{dynamic_string_buffer}%
@@ -1337,7 +1331,7 @@ size_t size() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{size_}.
+\returns \tcode{min(str_.size(), max_size_)}.
 \end{itemdescr}
 
 \indexlibrarymember{max_size}{dynamic_string_buffer}%
@@ -1357,48 +1351,41 @@ size_t capacity() const noexcept;
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{str_.capacity()}.
+\returns \tcode{min(str_.capacity(), max_size_)}.
 \end{itemdescr}
 
 \indexlibrarymember{data}{dynamic_string_buffer}%
 \begin{itemdecl}
-const_buffers_type data() const noexcept;
+mutable_buffers_type data(size_t pos, size_t n) noexcept;
+const_buffers_type data(size_t pos, size_t n) const noexcept;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{buffer(str_, size_)}.
+\returns \tcode{buffer(buffer(str_, max_size_) + pos, n)}.
 \end{itemdescr}
 
-\indexlibrarymember{prepare}{dynamic_string_buffer}%
+\indexlibrarymember{grow}{dynamic_string_buffer}%
 \begin{itemdecl}
-mutable_buffers_type prepare(size_t n);
+void grow(size_t n);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Performs \tcode{str_.resize(size_ + n)}.
+\effects Performs \tcode{str_.resize(size() + n);}.
 
 \pnum
-\returns \tcode{buffer(buffer(str_) + size_, n)}.
-
-\pnum
-\throws \tcode{length_error} if \tcode{size() + n} exceeds \tcode{max_size()}.
+\throws \tcode{length_error} if \tcode{size() > max_size() || max_size() - size() < n}.
 \end{itemdescr}
 
-\indexlibrarymember{commit}{dynamic_string_buffer}%
+\indexlibrarymember{shrink}{dynamic_string_buffer}%
 \begin{itemdecl}
-void commit(size_t n) noexcept;
+void shrink(size_t n);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Performs:
-\begin{codeblock}
-size_ += min(n, str_.size() - size_);
-str_.resize(size_);
-\end{codeblock}
-
+\effects Performs \tcode{str_.resize(n > size() ? 0 : size() - n);}.
 \end{itemdescr}
 
 \indexlibrarymember{consume}{dynamic_string_buffer}%
@@ -1410,9 +1397,7 @@ void consume(size_t n);
 \pnum
 \effects Performs:
 \begin{codeblock}
-size_t m = min(n, size_);
-str_.erase(0, m);
-size_ -= m;
+str_.erase(0, min(n, size()));
 \end{codeblock}
 
 \end{itemdescr}
