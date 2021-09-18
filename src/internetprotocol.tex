@@ -180,7 +180,7 @@ namespace ip {
 
   class resolver_base;
 
-  template<class InternetProtocol@\addedcode{, class Executor = executor}@>
+  template<class InternetProtocol, class Executor = executor>
     class basic_resolver;
 
   string host_name();
@@ -3066,25 +3066,25 @@ Objects of type \tcode{basic_resolver<InternetProtocol, Executor>} are used to p
 namespace std::experimental::net::inline @\namespacever@ {
 namespace ip {
 
-  template<class InternetProtocol@\addedcode{, class Executor = executor}@>
+  template<class InternetProtocol, class Executor = executor>
   class basic_resolver : public resolver_base
   {
   public:
     // types:
 
-    using executor_type = @\removedcode{io_context::executor_type}\addedcode{Executor}@;
+    using executor_type = Executor;
     using protocol_type = InternetProtocol;
     using endpoint_type = typename InternetProtocol::endpoint;
     using results_type = basic_resolver_results<InternetProtocol>;
 
-    @\addedcode{template<class OtherExecutor>}@
-    @\addedcode{using rebind_executor =}@
-    @\addedcode{  basic_resolver<InternetProtocol, OtherExecutor>;}@
+    template<class OtherExecutor>
+    using rebind_executor =
+      basic_resolver<InternetProtocol, OtherExecutor>;
 
     // \ref{internet.resolver.cons}, construct / copy / destroy
 
-    explicit basic_resolver(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@);
-    @\addedcode{template<class ExecutionContext> explicit basic_resolver(ExecutionContext\& ctx);}@
+    explicit basic_resolver(const executor_type& ex);
+    template<class ExecutionContext> explicit basic_resolver(ExecutionContext& ctx);
     basic_resolver(const basic_resolver&) = delete;
     basic_resolver(basic_resolver&& rhs) noexcept;
 
@@ -3151,26 +3151,26 @@ namespace ip {
 \rSec2[internet.resolver.cons]{\tcode{ip::basic_resolver} constructors}
 
 \begin{itemdecl}
-explicit basic_resolver(@\removedcode{io_context\& ctx}\addedcode{const executor_type\& ex}@);
+explicit basic_resolver(const executor_type& ex);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\postconditions \tcode{get_executor() == \removed{ctx.get_executor()}\added{ex}}.
+\postconditions \tcode{get_executor() == ex}.
 \end{itemdescr}
 
 \begin{itemdecl}
-@\addedcode{template<class ExecutionContext> explicit basic_resolver(ExecutionContext\& ctx);}@
+template<class ExecutionContext> explicit basic_resolver(ExecutionContext\& ctx);
 \end{itemdecl}
 
 \begin{itemdescr}
-\addedpnum
-\added{\postconditions \tcode{get_executor() == ctx.get_executor()}.}
+\pnum
+\postconditions \tcode{get_executor() == ctx.get_executor()}.
 
-\addedpnum
-\added{\remarks This function shall not participate in overload resolution unless
+\pnum
+\remarks This function shall not participate in overload resolution unless
 \tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.}
+and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3525,8 +3525,8 @@ namespace ip {
     using endpoint = basic_endpoint<tcp>;
     using resolver = basic_resolver<tcp>;
     using socket = basic_stream_socket<tcp>;
-    @\addedcode{template<class Executor>}@
-    @\addedcode{  using socket_for = basic_stream_socket<tcp, Executor>}@
+    template<class Executor>
+      using socket_for = basic_stream_socket<tcp, Executor>
     using acceptor = basic_socket_acceptor<tcp>;
     using iostream = basic_socket_iostream<tcp>;
     class no_delay;
@@ -3635,8 +3635,8 @@ namespace ip {
     using endpoint = basic_endpoint<udp>;
     using resolver = basic_resolver<udp>;
     using socket = basic_datagram_socket<udp>;
-    @\addedcode{template<class Executor>}@
-    @\addedcode{  using socket_for = basic_datagram_socket<udp, Executor>}@
+    template<class Executor>
+      using socket_for = basic_datagram_socket<udp, Executor>
 
     // static members:
     static constexpr udp v4() noexcept;

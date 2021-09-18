@@ -22,25 +22,25 @@ namespace std::experimental::net::inline @\namespacever@ {
   class io_context;
 
   template<class Clock> struct wait_traits;
-  template<class Clock, class WaitTraits = wait_traits<Clock>@\addedcode{, class Executor = executor}@>
+  template<class Clock, class WaitTraits = wait_traits<Clock>, class Executor = executor>
     class basic_waitable_timer;
   using system_timer = basic_waitable_timer<chrono::system_clock>;
   using steady_timer = basic_waitable_timer<chrono::steady_clock>;
   using high_resolution_timer = basic_waitable_timer<chrono::high_resolution_clock>;
 
-  template<class Protocol@\addedcode{, class Executor = executor}@>
+  template<class Protocol, class Executor = executor>
     class basic_socket;
-  template<class Protocol@\addedcode{, class Executor = executor}@>
+  template<class Protocol, class Executor = executor>
     class basic_datagram_socket;
-  template<class Protocol@\addedcode{, class Executor = executor}@>
+  template<class Protocol, class Executor = executor>
     class basic_stream_socket;
-  template<class Protocol@\addedcode{, class Executor = executor}@>
+  template<class Protocol, class Executor = executor>
     class basic_socket_acceptor;
   template<class Protocol, class Clock = chrono::steady_clock,
-    class WaitTraits = wait_traits<Clock>@\addedcode{, class Executor = executor}@>
+    class WaitTraits = wait_traits<Clock>, class Executor = executor>
       class basic_socket_streambuf;
   template<class Protocol, class Clock = chrono::steady_clock,
-    class WaitTraits = wait_traits<Clock>@\addedcode{, class Executor = executor}@>
+    class WaitTraits = wait_traits<Clock>, class Executor = executor>
       class basic_socket_iostream;
 
   namespace ip {
@@ -64,7 +64,7 @@ namespace std::experimental::net::inline @\namespacever@ {
       class basic_resolver_entry;
     template<class InternetProtocol>
       class basic_resolver_results;
-    template<class InternetProtocol@\addedcode{, class Executor = executor}@>
+    template<class InternetProtocol, class Executor = executor>
       class basic_resolver;
     class tcp;
     class udp;

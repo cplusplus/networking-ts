@@ -6,11 +6,11 @@
 \rSec1[socket.algo.connect]{Synchronous connect operations}
 
 \begin{itemdecl}
-template<class Protocol@\addedcode{, class Executor}@, class EndpointSequence>
-  typename Protocol::endpoint connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+template<class Protocol, class Executor, class EndpointSequence>
+  typename Protocol::endpoint connect(basic_socket<Protocol, Executor>& s,
                                       const EndpointSequence& endpoints);
-template<class Protocol@\addedcode{, class Executor}@, class EndpointSequence>
-  typename Protocol::endpoint connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+template<class Protocol, class Executor, class EndpointSequence>
+  typename Protocol::endpoint connect(basic_socket<Protocol, Executor>& s,
                                       const EndpointSequence& endpoints,
                                       error_code& ec);
 \end{itemdecl}
@@ -21,12 +21,12 @@ template<class Protocol@\addedcode{, class Executor}@, class EndpointSequence>
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class Protocol@\addedcode{, class Executor}@, class EndpointSequence, class ConnectCondition>
-  typename Protocol::endpoint connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+template<class Protocol, class Executor, class EndpointSequence, class ConnectCondition>
+  typename Protocol::endpoint connect(basic_socket<Protocol, Executor>& s,
                                       const EndpointSequence& endpoints,
                                       ConnectCondition c);
-template<class Protocol@\addedcode{, class Executor}@, class EndpointSequence, class ConnectCondition>
-  typename Protocol::endpoint connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+template<class Protocol, class Executor, class EndpointSequence, class ConnectCondition>
+  typename Protocol::endpoint connect(basic_socket<Protocol, Executor>& s,
                                       const EndpointSequence& endpoints,
                                       ConnectCondition c, error_code& ec);
 \end{itemdecl}
@@ -57,11 +57,11 @@ template<class Protocol@\addedcode{, class Executor}@, class EndpointSequence, c
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class Protocol@\addedcode{, class Executor}@, class InputIterator>
-  InputIterator connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+template<class Protocol, class Executor, class InputIterator>
+  InputIterator connect(basic_socket<Protocol, Executor>& s,
                         InputIterator first, InputIterator last);
-template<class Protocol@\addedcode{, class Executor}@, class InputIterator>
-  InputIterator connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+template<class Protocol, class Executor, class InputIterator>
+  InputIterator connect(basic_socket<Protocol, Executor>& s,
                         InputIterator first, InputIterator last,
                         error_code& ec);
 \end{itemdecl}
@@ -72,12 +72,12 @@ template<class Protocol@\addedcode{, class Executor}@, class InputIterator>
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class Protocol@\addedcode{, class Executor}@, class InputIterator, class ConnectCondition>
-  InputIterator connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+template<class Protocol, class Executor, class InputIterator, class ConnectCondition>
+  InputIterator connect(basic_socket<Protocol, Executor>& s,
                         InputIterator first, InputIterator last,
                         ConnectCondition c);
-template<class Protocol@\addedcode{, class Executor}@, class InputIterator, class ConnectCondition>
-  InputIterator connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+template<class Protocol, class Executor, class InputIterator, class ConnectCondition>
+  InputIterator connect(basic_socket<Protocol, Executor>& s,
                         InputIterator first, InputIterator last,
                         ConnectCondition c, error_code& ec);
 \end{itemdecl}
@@ -112,8 +112,8 @@ template<class Protocol@\addedcode{, class Executor}@, class InputIterator, clas
 \rSec1[socket.algo.async.connect]{Asynchronous connect operations}
 
 \begin{itemdecl}
-template<class Protocol@\addedcode{, class Executor}@, class EndpointSequence, class CompletionToken>
-  @\DEDUCED@ async_connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+template<class Protocol, class Executor, class EndpointSequence, class CompletionToken>
+  @\DEDUCED@ async_connect(basic_socket<Protocol, Executor>& s,
                         const EndpointSequence& endpoints,
                         CompletionToken&& token);
 \end{itemdecl}
@@ -127,9 +127,9 @@ async_connect(s, endpoints, [](auto, auto){ return true; }, forward<CompletionTo
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class Protocol@\addedcode{, class Executor}@, class EndpointSequence,
+template<class Protocol, class Executor, class EndpointSequence,
   class ConnectCondition, class CompletionToken>
-    @\DEDUCED@ async_connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+    @\DEDUCED@ async_connect(basic_socket<Protocol, Executor>& s,
                           const EndpointSequence& endpoints,
                           ConnectCondition c,
                           CompletionToken&& token);
@@ -168,8 +168,8 @@ A composed asynchronous operation~(\ref{async.reqmts.async.composed}).
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class Protocol@\addedcode{, class Executor}@, class InputIterator, class CompletionToken>
-  @\DEDUCED@ async_connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+template<class Protocol, class Executor, class InputIterator, class CompletionToken>
+  @\DEDUCED@ async_connect(basic_socket<Protocol, Executor>& s,
                         InputIterator first, InputIterator last,
                         CompletionToken&& token);
 \end{itemdecl}
@@ -184,9 +184,9 @@ async_connect(s, first, last, [](auto, auto){ return true; },
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class Protocol@\addedcode{, class Executor}@, class InputIterator,
+template<class Protocol, class Executor, class InputIterator,
   class ConnectCondition, class CompletionToken>
-    @\DEDUCED@ async_connect(basic_socket<Protocol@\addedcode{, Executor}@>& s,
+    @\DEDUCED@ async_connect(basic_socket<Protocol, Executor>& s,
                           InputIterator first, InputIterator last,
                           ConnectCondition c,
                           CompletionToken&& token);
