@@ -83,14 +83,14 @@ basic_socket_streambuf();
 
 \begin{itemdescr}
 \pnum
+\constraints
+\tcode{is_constructible_v<executor_type, io_context::executor_type>} is \tcode{true}.
+
+\pnum
 \effects Initializes \tcode{socket_} with \tcode{ctx}, where \tcode{ctx} is an unspecified object of class \tcode{io_context}.
 
 \pnum
 \postconditions \tcode{expiry() == time_point::max()} and \tcode{!error()}.
-
-\pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_constructible<executor_type, io_context::executor_type>::value} is \tcode{true}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -422,11 +422,11 @@ basic_socket_iostream();
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class as \tcode{basic_iostream<char>(addressof(sb_))}, value-initializes \tcode{sb_}, and performs \tcode{setf(std::ios_base::unitbuf)}.
+\constraints
+\tcode{is_default_constructible_v<basic_socket_streambuf<protocol_type, clock_type, wait_traits_type, executor_type>>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_default_constructible<basic_socket_streambuf<protocol_type, clock_type, wait_traits_type, executor_type>>::value} is \tcode{true}.
+\effects Initializes the base class as \tcode{basic_iostream<char>(addressof(sb_))}, value-initializes \tcode{sb_}, and performs \tcode{setf(std::ios_base::unitbuf)}.
 \end{itemdescr}
 
 \begin{itemdecl}

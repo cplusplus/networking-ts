@@ -234,12 +234,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_waitable_timer(ctx.get_executor())}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_waitable_timer(ctx.get_executor())}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -264,12 +264,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_waitable_timer(ctx.get_executor(), t)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_waitable_timer(ctx.get_executor(), t)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -291,12 +291,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_waitable_timer(ctx.get_executor(), d)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_waitable_timer(ctx.get_executor(), d)}.
 \end{itemdescr}
 
 \begin{itemdecl}

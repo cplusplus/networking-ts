@@ -3165,12 +3165,12 @@ template<class ExecutionContext> explicit basic_resolver(ExecutionContext\& ctx)
 
 \begin{itemdescr}
 \pnum
-\postconditions \tcode{get_executor() == ctx.get_executor()}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\postconditions \tcode{get_executor() == ctx.get_executor()}.
 \end{itemdescr}
 
 \begin{itemdecl}

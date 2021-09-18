@@ -1568,12 +1568,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_socket(ctx.get_executor())}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_socket(ctx.get_executor())}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1605,12 +1605,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_socket(ctx.get_executor(), protocol)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_socket(ctx.get_executor(), protocol)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1647,12 +1647,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_socket(ctx.get_executor(), endpoint)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_socket(ctx.get_executor(), endpoint)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1689,12 +1689,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_socket(ctx.get_executor(), protocol, native_socket)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_socket(ctx.get_executor(), protocol, native_socket)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -1730,7 +1730,7 @@ template<class OtherProtocol, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_socket<Protocol, Executor>} that refers to the state originally represented by \tcode{rhs}.
@@ -1751,9 +1751,6 @@ template<class OtherProtocol, class OtherExecutor>
 \item
 \tcode{rhs.is_open() == false}.
 \end{itemize}
-
-\pnum
-\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
 \end{itemdescr}
 
 
@@ -1807,7 +1804,7 @@ template<class OtherProtocol, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this socket. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}. Disables the linger socket option to prevent the assignment from blocking, and releases socket resources as if by POSIX \tcode{close(native_handle())}. Moves into \tcode{*this} the state originally represented by \tcode{rhs}.
@@ -1829,9 +1826,6 @@ template<class OtherProtocol, class OtherExecutor>
 
 \pnum
 \returns \tcode{*this}.
-
-\pnum
-\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
 \end{itemdescr}
 
 
@@ -2477,12 +2471,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor())}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor())}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2501,12 +2495,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), protocol)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), protocol)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2525,12 +2519,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), endpoint)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), endpoint)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2551,12 +2545,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), protocol, native_socket)}.
-
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+
+\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), protocol, native_socket)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2575,13 +2569,10 @@ template<class OtherProtocol, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol, Executor>}, initializing the base class with \tcode{basic_socket<Protocol, Executor>(std::move(rhs))}.
-
-\pnum
-\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
 \end{itemdescr}
 
 
@@ -3185,12 +3176,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor())}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor())}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3209,12 +3200,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor(), protocol)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor(), protocol)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3233,12 +3224,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor(), endpoint)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor(), endpoint)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3259,12 +3250,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor(), protocol, native_socket)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor(), protocol, native_socket)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3283,13 +3274,10 @@ template<class OtherProtocol, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_stream_socket<Protocol, Executor>}, initializing the base class with \tcode{basic_socket<Protocol, Executor>(std::move(rhs))}.
-
-\pnum
-\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
 \end{itemdescr}
 
 
@@ -3315,16 +3303,13 @@ template<class OtherProtocol, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
 \effects Equivalent to \tcode{basic_socket<Protocol, Executor>::operator=(std::move(rhs))}.
 
 \pnum
 \returns \tcode{*this}.
-
-\pnum
-\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
 \end{itemdescr}
 
 
@@ -3793,12 +3778,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor())}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor())}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3832,12 +3817,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), protocol)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), protocol)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3881,12 +3866,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), endpoint, reuse_addr)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), endpoint, reuse_addr)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3925,12 +3910,12 @@ template<class ExecutionContext>
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), protocol, native_socket)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
 
 \pnum
-\remarks This function shall not participate in overload resolution unless
-\tcode{is_convertible<Exec\-ution\-Context\&, execution_context\&>::value} is \tcode{true}
-and \tcode{is_constructible<executor_type, typename Exec\-ution\-Context::executor_type>::value} is \tcode{true}.
+\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), protocol, native_socket)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3968,7 +3953,7 @@ template<class OtherProtocol, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
+\constraints \tcode{is_convertible_v<OtherProtocol, AcceptableProtocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
 \effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol, Executor>} that refers to the state originally represented by \tcode{rhs}.
@@ -3991,9 +3976,6 @@ template<class OtherProtocol, class OtherExecutor>
 \item
 \tcode{rhs.is_open() == false}.
 \end{itemize}
-
-\pnum
-\remarks This constructor shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
 \end{itemdescr}
 
 
@@ -4051,7 +4033,7 @@ template<class OtherProtocol, class OtherExecutor>
 
 \begin{itemdescr}
 \pnum
-\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
+\constraints \tcode{is_convertible_v<OtherProtocol, AcceptableProtocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this acceptor, and releases acceptor resources as if by POSIX \tcode{close(native_handle())}. Then moves into \tcode{*this} the state originally represented by \tcode{rhs}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
@@ -4077,9 +4059,6 @@ template<class OtherProtocol, class OtherExecutor>
 
 \pnum
 \returns \tcode{*this}.
-
-\pnum
-\remarks This assignment operator shall not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
 \end{itemdescr}
 
 
