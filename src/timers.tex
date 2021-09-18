@@ -39,7 +39,7 @@ namespace std::experimental::net::inline @\namespacever@ {
 
   template<class Clock> struct wait_traits;
 
-  template<class Clock, class WaitTraits = wait_traits<Clock>>
+  template<class Clock, class WaitTraits = wait_traits<Clock>, class Executor = executor>
     class basic_waitable_timer;
 
   using system_timer = basic_waitable_timer<chrono::system_clock>;
@@ -155,23 +155,33 @@ static typename Clock::duration to_wait_duration(
 \begin{codeblock}
 namespace std::experimental::net::inline @\namespacever@ {
 
-  template<class Clock, class WaitTraits = wait_traits<Clock>>
+  template<class Clock, class WaitTraits = wait_traits<Clock>, class Executor = executor>
   class basic_waitable_timer
   {
   public:
     // types:
 
-    using executor_type = io_context::executor_type;
+    using executor_type = Executor;
     using clock_type = Clock;
     using duration = typename clock_type::duration;
     using time_point = typename clock_type::time_point;
     using traits_type = WaitTraits;
 
+    template<class OtherExecutor>
+    using rebind_executor =
+      basic_waitable_timer<Clock, WaitTraits, OtherExecutor>;
+
     // \ref{timer.waitable.cons}, construct / copy / destroy
 
-    explicit basic_waitable_timer(io_context& ctx);
-    basic_waitable_timer(io_context& ctx, const time_point& t);
-    basic_waitable_timer(io_context& ctx, const duration& d);
+    explicit basic_waitable_timer(const executor_type& ex);
+    template<class ExecutionContext>
+      explicit basic_waitable_timer(ExecutionContext& ctx);
+    basic_waitable_timer(const executor_type& ex, const time_point& t);
+    template<class ExecutionContext>
+      basic_waitable_timer(ExecutionContext& ctx, const time_point& t);
+    basic_waitable_timer(const executor_type& ex, const duration& d);
+    template<class ExecutionContext>
+      basic_waitable_timer(ExecutionContext& ctx, const duration& d);
     basic_waitable_timer(const basic_waitable_timer&) = delete;
     basic_waitable_timer(basic_waitable_timer&& rhs);
 
@@ -209,16 +219,31 @@ Specializations of class template \tcode{basic_waitable_timer} meet the requirem
 
 \indexlibrary{\idxcode{basic_waitable_timer}!constructor}%
 \begin{itemdecl}
-explicit basic_waitable_timer(io_context& ctx);
+explicit basic_waitable_timer(const executor_type& ex);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_waitable_timer(ctx, time_point())}.
+\effects Equivalent to \tcode{basic_waitable_timer(ex, time_point())}.
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_waitable_timer(io_context& ctx, const time_point& t);
+template<class ExecutionContext>
+  explicit basic_waitable_timer(ExecutionContext& ctx);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_waitable_timer(ctx.get_executor())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_waitable_timer(const executor_type& ex, const time_point& t);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -226,14 +251,29 @@ basic_waitable_timer(io_context& ctx, const time_point& t);
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == ex}.
 \item
 \tcode{expiry() == t}.
 \end{itemize}
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_waitable_timer(io_context& ctx, const duration& d);
+template<class ExecutionContext>
+  basic_waitable_timer(ExecutionContext& ctx, const time_point& t);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_waitable_timer(ctx.get_executor(), t)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_waitable_timer(const executor_type& ex, const duration& d);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -241,7 +281,22 @@ basic_waitable_timer(io_context& ctx, const duration& d);
 \effects Sets the expiry time as if by calling \tcode{expires_after(d)}.
 
 \pnum
-\postconditions \tcode{get_executor() == ctx.get_executor()}.
+\postconditions \tcode{get_executor() == ex}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext>
+  basic_waitable_timer(ExecutionContext& ctx, const duration& d);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_waitable_timer(ctx.get_executor(), d)}.
 \end{itemdescr}
 
 \begin{itemdecl}

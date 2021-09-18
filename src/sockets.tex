@@ -24,84 +24,84 @@ namespace std::experimental::net::inline @\namespacever@ {
 
   class socket_base;
 
-  template<class Protocol>
+  template<class Protocol, class Executor = executor>
     class basic_socket;
 
-  template<class Protocol>
+  template<class Protocol, class Executor = executor>
     class basic_datagram_socket;
 
-  template<class Protocol>
+  template<class Protocol, class Executor = executor>
     class basic_stream_socket;
 
-  template<class Protocol>
+  template<class Protocol, class Executor = executor>
     class basic_socket_acceptor;
 
   // \ref{socket.iostreams}, Socket streams
 
   template<class Protocol, class Clock = chrono::steady_clock,
-    class WaitTraits = wait_traits<Clock>>
+    class WaitTraits = wait_traits<Clock>, class Executor = executor>
       class basic_socket_streambuf;
 
   template<class Protocol, class Clock = chrono::steady_clock,
-    class WaitTraits = wait_traits<Clock>>
+    class WaitTraits = wait_traits<Clock>, class Executor = executor>
       class basic_socket_iostream;
 
   // \ref{socket.algo.connect}, synchronous connect operations
 
-  template<class Protocol, class EndpointSequence>
-    typename Protocol::endpoint connect(basic_socket<Protocol>& s,
+  template<class Protocol, class Executor, class EndpointSequence>
+    typename Protocol::endpoint connect(basic_socket<Protocol, Executor>& s,
                                         const EndpointSequence& endpoints);
-  template<class Protocol, class EndpointSequence>
-    typename Protocol::endpoint connect(basic_socket<Protocol>& s,
+  template<class Protocol, class Executor, class EndpointSequence>
+    typename Protocol::endpoint connect(basic_socket<Protocol, Executor>& s,
                                         const EndpointSequence& endpoints,
                                         error_code& ec);
-  template<class Protocol, class EndpointSequence, class ConnectCondition>
-    typename Protocol::endpoint connect(basic_socket<Protocol>& s,
+  template<class Protocol, class Executor, class EndpointSequence, class ConnectCondition>
+    typename Protocol::endpoint connect(basic_socket<Protocol, Executor>& s,
                                         const EndpointSequence& endpoints,
                                         ConnectCondition c);
-  template<class Protocol, class EndpointSequence, class ConnectCondition>
-    typename Protocol::endpoint connect(basic_socket<Protocol>& s,
+  template<class Protocol, class Executor, class EndpointSequence, class ConnectCondition>
+    typename Protocol::endpoint connect(basic_socket<Protocol, Executor>& s,
                                         const EndpointSequence& endpoints,
                                         ConnectCondition c,
                                         error_code& ec);
 
-  template<class Protocol, class InputIterator>
-    InputIterator connect(basic_socket<Protocol>& s,
+  template<class Protocol, class Executor, class InputIterator>
+    InputIterator connect(basic_socket<Protocol, Executor>& s,
                           InputIterator first, InputIterator last);
-  template<class Protocol, class InputIterator>
-    InputIterator connect(basic_socket<Protocol>& s,
+  template<class Protocol, class Executor, class InputIterator>
+    InputIterator connect(basic_socket<Protocol, Executor>& s,
                           InputIterator first, InputIterator last,
                           error_code& ec);
-  template<class Protocol, class InputIterator, class ConnectCondition>
-    InputIterator connect(basic_socket<Protocol>& s,
+  template<class Protocol, class Executor, class InputIterator, class ConnectCondition>
+    InputIterator connect(basic_socket<Protocol, Executor>& s,
                           InputIterator first, InputIterator last,
                           ConnectCondition c);
-  template<class Protocol, class InputIterator, class ConnectCondition>
-    InputIterator connect(basic_socket<Protocol>& s,
+  template<class Protocol, class Executor, class InputIterator, class ConnectCondition>
+    InputIterator connect(basic_socket<Protocol, Executor>& s,
                           InputIterator first, InputIterator last,
                           ConnectCondition c,
                           error_code& ec);
 
   // \ref{socket.algo.async.connect}, asynchronous connect operations
 
-  template<class Protocol, class EndpointSequence, class CompletionToken>
-    @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
+  template<class Protocol, class Executor, class EndpointSequence, class CompletionToken>
+    @\DEDUCED@ async_connect(basic_socket<Protocol, Executor>& s,
                           const EndpointSequence& endpoints,
                           CompletionToken&& token);
-  template<class Protocol, class EndpointSequence, class ConnectCondition,
+  template<class Protocol, class Executor, class EndpointSequence, class ConnectCondition,
            class CompletionToken>
-    @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
+    @\DEDUCED@ async_connect(basic_socket<Protocol, Executor>& s,
                           const EndpointSequence& endpoints,
                           ConnectCondition c,
                           CompletionToken&& token);
 
-  template<class Protocol, class InputIterator, class CompletionToken>
-    @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
+  template<class Protocol, class Executor, class InputIterator, class CompletionToken>
+    @\DEDUCED@ async_connect(basic_socket<Protocol, Executor>& s,
                           InputIterator first, InputIterator last,
                           CompletionToken&& token);
-  template<class Protocol, class InputIterator, class ConnectCondition,
+  template<class Protocol, class Executor, class InputIterator, class ConnectCondition,
            class CompletionToken>
-    @\DEDUCED@ async_connect(basic_socket<Protocol>& s,
+    @\DEDUCED@ async_connect(basic_socket<Protocol, Executor>& s,
                           InputIterator first, InputIterator last,
                           ConnectCondition c,
                           CompletionToken&& token);
@@ -385,6 +385,8 @@ Returns a value suitable for passing as the protocol argument to POSIX \tcode{so
 \pnum
 A type \tcode{X} meets the \defnnewoldconcept{AcceptableProtocol} requirements if it meets the requirements of \newoldconcept{Protocol}~(\ref{socket.reqmts.protocol}) as well as the additional requirements listed below.
 
+In the table below, \tcode{E} is a type that satisfies the Executor requirements~(\ref{async.reqmts.executor}).
+
 \begin{libreqtab3}
 {\newoldconcept{AcceptableProtocol} requirements}
 {tab:socket.reqmts.acceptableprotocol.requirements}
@@ -402,6 +404,10 @@ A type \tcode{X} meets the \defnnewoldconcept{AcceptableProtocol} requirements i
 
 \tcode{X::socket}  &
 A type that meets the requirements of \oldconcept{Destructible} (\CppXref{destructible}) and \oldconcept{MoveConstructible} (\CppXref{moveconstructible}), and that is publicly and unambiguously derived from \tcode{basic_socket<X>}.  &
+  \\
+
+\tcode{X::socket_for<E>}  &
+A type that satisfies the requirements of \tcode{Destructible} (\CppXref{destructible}) and \tcode{MoveConstructible} (\CppXref{moveconstructible}), and that is publicly and unambiguously derived from \tcode{basic_socket<X, E>}.  &
   \\
 
 \end{libreqtab3}
@@ -1053,13 +1059,13 @@ namespace std::experimental::net::inline @\namespacever@ {
 \item
 socket option classes \tcode{broadcast}, \tcode{debug}, \tcode{do_not_route}, \tcode{keep_alive}, \tcode{linger}, \tcode{out_of_band_inline}, \tcode{receive_buffer_size}, \tcode{receive_low_watermark}, \tcode{reuse_address}, \tcode{send_buffer_size}, and \tcode{send_low_watermark};
 \item
-an enumerated type, \tcode{shutdown_type}, for use with the \tcode{basic_socket<Protocol>} class's \tcode{shutdown} member function.
+an enumerated type, \tcode{shutdown_type}, for use with the \tcode{basic_socket<Protocol, Executor>} class's \tcode{shutdown} member function.
 \item
-an enumerated type, \tcode{wait_type}, for use with the \tcode{basic_socket<Protocol>} and \tcode{basic_socket_acceptor<Protocol>} classes' \tcode{wait} and \tcode{async_wait} member functions,
+an enumerated type, \tcode{wait_type}, for use with the \tcode{basic_socket<Protocol, Executor>} and \tcode{basic_socket_acceptor<Protocol, Executor>} classes' \tcode{wait} and \tcode{async_wait} member functions,
 \item
-a bitmask type, \tcode{message_flags}, for use with the \tcode{basic_stream_socket<Protocol>} class's \tcode{send}, \tcode{async_send}, \tcode{receive}, and \tcode{async_receive} member functions, and the \tcode{basic_datagram_socket<Pro\-t\-o\-col>} class's \tcode{send}, \tcode{async_send}, \tcode{send_to}, \tcode{async_send_to}, \tcode{receive}, \tcode{async_receive}, \tcode{receive_from}, and \tcode{async_receive_from} member functions.
+a bitmask type, \tcode{message_flags}, for use with the \tcode{basic_stream_socket<Protocol, Executor>} class's \tcode{send}, \tcode{async_send}, \tcode{receive}, and \tcode{async_receive} member functions, and the \tcode{basic_datagram_socket<Pro\-t\-o\-col>} class's \tcode{send}, \tcode{async_send}, \tcode{send_to}, \tcode{async_send_to}, \tcode{receive}, \tcode{async_receive}, \tcode{receive_from}, and \tcode{async_receive_from} member functions.
 \item
-a constant, \tcode{max_listen_connections}, for use with the \tcode{basic_socket_acceptor<Protocol>} class's \tcode{listen} member function.
+a constant, \tcode{max_listen_connections}, for use with the \tcode{basic_socket_acceptor<Protocol, Executor>} class's \tcode{listen} member function.
 \end{itemize}
 
 \begin{libreqtab3}
@@ -1395,21 +1401,25 @@ template<class Protocol> void resize(const Protocol& p, size_t s);
 \rSec1[socket.basic]{Class template \tcode{basic_socket}}
 
 \pnum
-Class template \tcode{basic_socket<Protocol>} is used as the base class for the \tcode{basic_datagram_socket<Pro\-t\-o\-col>} and \tcode{basic_stream_socket<Protocol>} class templates. It provides functionality that is common to both types of socket.
+Class template \tcode{basic_socket<Protocol, Executor>} is used as the base class for the \tcode{basic_datagram_socket<Pro\-t\-o\-col, Executor>} and \tcode{basic_stream_socket<Protocol, Executor>} class templates. It provides functionality that is common to both types of socket.
 
 \begin{codeblock}
 namespace std::experimental::net::inline @\namespacever@ {
 
-  template<class Protocol>
+  template<class Protocol, class Executor>
   class basic_socket : public socket_base
   {
   public:
     // types:
 
-    using executor_type = io_context::executor_type;
+    using executor_type = Executor;
     using native_handle_type = @\impdefx{type of \tcode{basic_socket::native_handle_type}}@; // \nativeref
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
+
+    template<class OtherExecutor>
+    using rebind_executor =
+      basic_socket<Protocol, OtherExecutor>;
 
     // \ref{socket.basic.ops}, basic_socket operations
 
@@ -1494,22 +1504,31 @@ namespace std::experimental::net::inline @\namespacever@ {
   protected:
     // \ref{socket.basic.cons}, construct / copy / destroy
 
-    explicit basic_socket(io_context& ctx);
-    basic_socket(io_context& ctx, const protocol_type& protocol);
-    basic_socket(io_context& ctx, const endpoint_type& endpoint);
-    basic_socket(io_context& ctx, const protocol_type& protocol,
+    explicit basic_socket(const executor_type& ex);
+    template<class ExecutionContext>
+      explicit basic_socket(ExecutionContext& ctx);
+    basic_socket(const executor_type& ex, const protocol_type& protocol);
+    template<class ExecutionContext>
+      basic_socket(ExecutionContext& ctx, const protocol_type& protocol);
+    basic_socket(const executor_type& ex, const endpoint_type& endpoint);
+    template<class ExecutionContext>
+      basic_socket(ExecutionContext& ctx, const endpoint_type& endpoint);
+    basic_socket(const executor_type& ex, const protocol_type& protocol,
                  const native_handle_type& native_socket); // \nativeref
+    template<class ExecutionContext>
+      basic_socket(ExecutionContext& ctx, const protocol_type& protocol,
+                   const native_handle_type& native_socket); // \nativeref
     basic_socket(const basic_socket&) = delete;
     basic_socket(basic_socket&& rhs);
-    template<class OtherProtocol>
-      basic_socket(basic_socket<OtherProtocol>&& rhs);
+    template<class OtherProtocol, class OtherExecutor>
+      basic_socket(basic_socket<OtherProtocol, OtherExecutor>&& rhs);
 
     ~basic_socket();
 
     basic_socket& operator=(const basic_socket&) = delete;
     basic_socket& operator=(basic_socket&& rhs);
-    template<class OtherProtocol>
-      basic_socket& operator=(basic_socket<OtherProtocol>&& rhs);
+    template<class OtherProtocol, class OtherExecutor>
+      basic_socket& operator=(basic_socket<OtherProtocol, OtherExecutor>&& rhs);
 
   private:
     protocol_type protocol_; // \expos
@@ -1528,7 +1547,7 @@ When an operation has its effects specified as if by passing the result of \tcod
 \rSec2[socket.basic.cons]{\tcode{basic_socket} constructors}
 
 \begin{itemdecl}
-explicit basic_socket(io_context& ctx);
+explicit basic_socket(const executor_type& ex);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1536,14 +1555,29 @@ explicit basic_socket(io_context& ctx);
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == ex}.
 \item
 \tcode{is_open() == false}.
 \end{itemize}
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket(io_context& ctx, const protocol_type& protocol);
+template<class ExecutionContext>
+  explicit basic_socket(ExecutionContext& ctx);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_socket(ctx.get_executor())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket(const executor_type& ex, const protocol_type& protocol);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1554,7 +1588,7 @@ basic_socket(io_context& ctx, const protocol_type& protocol);
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == ex}.
 \item
 \tcode{is_open() == true}.
 \item
@@ -1565,7 +1599,22 @@ basic_socket(io_context& ctx, const protocol_type& protocol);
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket(io_context& ctx, const endpoint_type& endpoint);
+template<class ExecutionContext>
+  explicit basic_socket(ExecutionContext& ctx, const protocol_type& protocol);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_socket(ctx.get_executor(), protocol)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket(const executor_type& ex, const endpoint_type& endpoint);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -1581,7 +1630,7 @@ bind(endpoint);
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == ex}.
 \item
 \tcode{is_open() == true}.
 \item
@@ -1592,7 +1641,22 @@ bind(endpoint);
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket(io_context& ctx, const protocol_type& protocol,
+template<class ExecutionContext>
+  explicit basic_socket(ExecutionContext& ctx, const endpoint_type& endpoint);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_socket(ctx.get_executor(), endpoint)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket(const executor_type& ex, const protocol_type& protocol,
              const native_handle_type& native_socket);
 \end{itemdecl}
 
@@ -1607,7 +1671,7 @@ basic_socket(io_context& ctx, const protocol_type& protocol,
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == ex}.
 \item
 \tcode{is_open() == true}.
 \item
@@ -1618,12 +1682,28 @@ basic_socket(io_context& ctx, const protocol_type& protocol,
 \end{itemdescr}
 
 \begin{itemdecl}
+template<class ExecutionContext>
+  basic_socket(ExecutionContext& ctx, const protocol_type& protocol,
+               const native_handle_type& native_socket);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_socket(ctx.get_executor(), protocol, native_socket)}.
+\end{itemdescr}
+
+\begin{itemdecl}
 basic_socket(basic_socket&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Move constructs an object of class \tcode{basic_socket<Protocol>} that refers to the state originally represented by \tcode{rhs}.
+\effects Move constructs an object of class \tcode{basic_socket<Protocol, Executor>} that refers to the state originally represented by \tcode{rhs}.
 
 \pnum
 \postconditions
@@ -1644,16 +1724,16 @@ basic_socket(basic_socket&& rhs);
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_socket(basic_socket<OtherProtocol>&& rhs);
+template<class OtherProtocol, class OtherExecutor>
+  basic_socket(basic_socket<OtherProtocol, OtherExecutor>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
-\effects Move constructs an object of class \tcode{basic_socket<Protocol>} that refers to the state originally represented by \tcode{rhs}.
+\effects Move constructs an object of class \tcode{basic_socket<Protocol, Executor>} that refers to the state originally represented by \tcode{rhs}.
 
 \pnum
 \postconditions
@@ -1718,13 +1798,13 @@ basic_socket& operator=(basic_socket&& rhs);
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_socket& operator=(basic_socket<OtherProtocol>&& rhs);
+template<class OtherProtocol, class OtherExecutor>
+  basic_socket& operator=(basic_socket<OtherProtocol, OtherExecutor>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this socket. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}. Disables the linger socket option to prevent the assignment from blocking, and releases socket resources as if by POSIX \tcode{close(native_handle())}. Moves into \tcode{*this} the state originally represented by \tcode{rhs}.
@@ -2205,39 +2285,53 @@ When there are multiple outstanding asynchronous wait operations on this socket 
 \rSec1[socket.dgram]{Class template \tcode{basic_datagram_socket}}
 
 \pnum
-The class template \tcode{basic_datagram_socket<Protocol>} is used to send and receive discrete messages of fixed maximum length.
+The class template \tcode{basic_datagram_socket<Protocol, Executor>} is used to send and receive discrete messages of fixed maximum length.
 
 \begin{codeblock}
 namespace std::experimental::net::inline @\namespacever@ {
 
-  template<class Protocol>
-  class basic_datagram_socket : public basic_socket<Protocol>
+  template<class Protocol, class Executor>
+  class basic_datagram_socket : public basic_socket<Protocol, Executor>
   {
   public:
     // types:
 
+    using executor_type = Executor;
     using native_handle_type = @\impdefx{type of \tcode{basic_datagram_socket::native_handle_type}}@; // \nativeref
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
+    template<class OtherExecutor>
+    using rebind_executor =
+      basic_datagram_socket<Protocol, OtherExecutor>;
+
     // \ref{socket.dgram.cons}, construct / copy / destroy
 
-    explicit basic_datagram_socket(io_context& ctx);
-    basic_datagram_socket(io_context& ctx, const protocol_type& protocol);
-    basic_datagram_socket(io_context& ctx, const endpoint_type& endpoint);
-    basic_datagram_socket(io_context& ctx, const protocol_type& protocol,
+    explicit basic_datagram_socket(const executor_type& ex);
+    template<class ExecutionContext>
+      explicit basic_datagram_socket(ExecutionContext& ctx);
+    basic_datagram_socket(const executor_type& ex, const protocol_type& protocol);
+    template<class ExecutionContext>
+      basic_datagram_socket(ExecutionContext& ctx, const protocol_type& protocol);
+    basic_datagram_socket(const executor_type& ex, const endpoint_type& endpoint);
+    template<class ExecutionContext>
+      basic_datagram_socket(ExecutionContext& ctx, const endpoint_type& endpoint);
+    basic_datagram_socket(const executor_type& ex, const protocol_type& protocol,
                           const native_handle_type& native_socket);
+    template<class ExecutionContext>
+      basic_datagram_socket(ExecutionContext& ctx, const protocol_type& protocol,
+                            const native_handle_type& native_socket);
     basic_datagram_socket(const basic_datagram_socket&) = delete;
     basic_datagram_socket(basic_datagram_socket&& rhs);
-    template<class OtherProtocol>
-      basic_datagram_socket(basic_datagram_socket<OtherProtocol>&& rhs);
+    template<class OtherProtocol, class OtherExecutor>
+      basic_datagram_socket(basic_datagram_socket<OtherProtocol, OtherExecutor>&& rhs);
 
     ~basic_datagram_socket();
 
     basic_datagram_socket& operator=(const basic_datagram_socket&) = delete;
     basic_datagram_socket& operator=(basic_datagram_socket&& rhs);
-    template<class OtherProtocol>
-      basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol>&& rhs);
+    template<class OtherProtocol, class OtherExecutor>
+      basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol, OtherExecutor>&& rhs);
 
     // \ref{socket.dgram.op}, basic_datagram_socket operations
 
@@ -2356,36 +2450,81 @@ If a program performs a synchronous operation on this socket, other than \tcode{
 When an operation has its effects specified as if by passing the result of \tcode{native_handle()} to a POSIX function, then the operation fails with error condition \tcode{errc::bad_file_descriptor} if \tcode{is_open() == false} at the point in the effects when the POSIX function is called.
 
 \pnum
-If \tcode{native_handle_type} and \tcode{basic_socket<Protocol>::native_handle_type}
+If \tcode{native_handle_type} and \tcode{basic_socket<Protocol, Executor>::native_handle_type}
 are both defined then they name the same type.
 
 \rSec2[socket.dgram.cons]{\tcode{basic_datagram_socket} constructors}
 
 \begin{itemdecl}
-explicit basic_datagram_socket(io_context& ctx);
+explicit basic_datagram_socket(const executor_type& ex);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx)}.
+\effects Initializes the base class with \tcode{basic_socket<Protocol, Executor>(ex)}.
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_datagram_socket(io_context& ctx, const protocol_type& protocol);
+template<class ExecutionContext>
+  explicit basic_datagram_socket(ExecutionContext& ctx);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, protocol)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor())}.
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_datagram_socket(io_context& ctx, const endpoint_type& endpoint);
+basic_datagram_socket(const executor_type& ex, const protocol_type& protocol);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, endpoint)}.
+\effects Initializes the base class with \tcode{basic_socket<Protocol, Executor>(ctx, protocol)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext>
+  explicit basic_datagram_socket(ExecutionContext& ctx, const protocol_type& protocol);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), protocol)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_datagram_socket(const executor_type& ex, const endpoint_type& endpoint);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol, Executor>(ctx, endpoint)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext>
+  explicit basic_datagram_socket(ExecutionContext& ctx, const endpoint_type& endpoint);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), endpoint)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2395,7 +2534,23 @@ basic_datagram_socket(io_context& ctx, const protocol_type& protocol,
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, protocol, native_socket)}.
+\effects Initializes the base class with \tcode{basic_socket<Protocol, Executor>(ctx, protocol, native_socket)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext>
+  basic_datagram_socket(ExecutionContext& ctx, const protocol_type& protocol,
+                        const native_handle_type& native_socket);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+\pnum
+
+\effects Equivalent to \tcode{basic_datagram_socket(ctx.get_executor(), protocol, native_socket)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -2404,20 +2559,20 @@ basic_datagram_socket(basic_datagram_socket&& rhs);
 
 \begin{itemdescr}
 \pnum
-\effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
+\effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol, Executor>}, initializing the base class with \tcode{basic_socket<Protocol, Executor>(std::move(rhs))}.
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_datagram_socket(basic_datagram_socket<OtherProtocol>&& rhs);
+template<class OtherProtocol, class OtherExecutor>
+  basic_datagram_socket(basic_datagram_socket<OtherProtocol, OtherExecutor>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
-\effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
+\effects Move constructs an object of class \tcode{basic_datagram_socket<Protocol, Executor>}, initializing the base class with \tcode{basic_socket<Protocol, Executor>(std::move(rhs))}.
 \end{itemdescr}
 
 
@@ -2430,26 +2585,29 @@ basic_datagram_socket& operator=(basic_datagram_socket&& rhs);
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
+\effects Equivalent to \tcode{basic_socket<Protocol, Executor>::operator=(std::move(rhs))}.
 
 \pnum
 \returns \tcode{*this}.
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol>&& rhs);
+template<class OtherProtocol, class OtherExecutor>
+  basic_datagram_socket& operator=(basic_datagram_socket<OtherProtocol, OtherExecutor>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\requires \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
 
 \pnum
-\effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
+\effects Equivalent to \tcode{basic_socket<Protocol, Executor>::operator=(std::move(rhs))}.
 
 \pnum
 \returns \tcode{*this}.
+
+\pnum
+\remarks This assignment operator not participate in overload resolution unless \tcode{OtherProtocol} is implicitly convertible to \tcode{Protocol} and \tcode{OtherExecutor} is implicitly convertible to \tcode{Executor}.
 \end{itemdescr}
 
 
@@ -2866,39 +3024,53 @@ If the operation completes successfully, \tcode{n} is the number of bytes sent. 
 \rSec1[socket.stream]{Class template \tcode{basic_stream_socket}}
 
 \pnum
-The class template \tcode{basic_stream_socket<Protocol>} is used to exchange data with a peer over a sequenced, reliable, bidirectional, connection-mode byte stream.
+The class template \tcode{basic_stream_socket<Protocol, Executor>} is used to exchange data with a peer over a sequenced, reliable, bidirectional, connection-mode byte stream.
 
 \begin{codeblock}
 namespace std::experimental::net::inline @\namespacever@ {
 
-  template<class Protocol>
-  class basic_stream_socket : public basic_socket<Protocol>
+  template<class Protocol, class Executor>
+  class basic_stream_socket : public basic_socket<Protocol, Executor>
   {
   public:
     // types:
 
+    using executor_type = Executor;
     using native_handle_type = @\impdefx{type of \tcode{basic_stream_socket::native_handle_type}}@; // \nativeref
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
 
+    template<class OtherExecutor>
+    using rebind_executor =
+      basic_stream_socket<Protocol, OtherExecutor>;
+
     // \ref{socket.stream.cons}, construct / copy / destroy
 
-    explicit basic_stream_socket(io_context& ctx);
-    basic_stream_socket(io_context& ctx, const protocol_type& protocol);
-    basic_stream_socket(io_context& ctx, const endpoint_type& endpoint);
-    basic_stream_socket(io_context& ctx, const protocol_type& protocol,
+    explicit basic_stream_socket(const executor_type& ex);
+    template<class ExecutionContext>
+      explicit basic_stream_socket(ExecutionContext& ctx);
+    basic_stream_socket(const executor_type& ex, const protocol_type& protocol);
+    template<class ExecutionContext>
+      basic_stream_socket(ExecutionContext& ctx, const protocol_type& protocol);
+    basic_stream_socket(const executor_type& ex, const endpoint_type& endpoint);
+    template<class ExecutionContext>
+      basic_stream_socket(ExecutionContext& ctx, const endpoint_type& endpoint);
+    basic_stream_socket(const executor_type& ex, const protocol_type& protocol,
                         const native_handle_type& native_socket);
+    template<class ExecutionContext>
+      basic_stream_socket(ExecutionContext& ctx, const protocol_type& protocol,
+                          const native_handle_type& native_socket);
     basic_stream_socket(const basic_stream_socket&) = delete;
     basic_stream_socket(basic_stream_socket&& rhs);
-    template<class OtherProtocol>
-      basic_stream_socket(basic_stream_socket<OtherProtocol>&& rhs);
+    template<class OtherProtocol, class OtherExecutor>
+      basic_stream_socket(basic_stream_socket<OtherProtocol, OtherExecutor>&& rhs);
 
     ~basic_stream_socket();
 
     basic_stream_socket& operator=(const basic_stream_socket&) = delete;
     basic_stream_socket& operator=(basic_stream_socket&& rhs);
-    template<class OtherProtocol>
-      basic_stream_socket& operator=(basic_stream_socket<OtherProtocol>&& rhs);
+    template<class OtherProtocol, class OtherExecutor>
+      basic_stream_socket& operator=(basic_stream_socket<OtherProtocol, OtherExecutor>&& rhs);
 
     // \ref{socket.stream.ops}, basic_stream_socket operations
 
@@ -2982,47 +3154,108 @@ If a program performs a synchronous operation on this socket, other than \tcode{
 When an operation has its effects specified as if by passing the result of \tcode{native_handle()} to a POSIX function, then the operation fails with error condition \tcode{errc::bad_file_descriptor} if \tcode{is_open() == false} at the point in the effects when the POSIX function is called.
 
 \pnum
-If \tcode{native_handle_type} and \tcode{basic_socket<Protocol>::native_handle_type}
+If \tcode{native_handle_type} and \tcode{basic_socket<Protocol, Executor>::native_handle_type}
 are both defined then they name the same type.
 
 
 \rSec2[socket.stream.cons]{\tcode{basic_stream_socket} constructors}
 
 \begin{itemdecl}
-explicit basic_stream_socket(io_context& ctx);
+explicit basic_stream_socket(const executor_type& ex);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx)}.
+\effects Initializes the base class with \tcode{basic_socket<Protocol, Executor>(ctx)}.
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_stream_socket(io_context& ctx, const protocol_type& protocol);
+template<class ExecutionContext>
+  explicit basic_stream_socket(ExecutionContext& ctx);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, protocol)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor())}.
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_stream_socket(io_context& ctx, const endpoint_type& endpoint);
+basic_stream_socket(const executor_type& ex, const protocol_type& protocol);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, endpoint)}.
+\effects Initializes the base class with \tcode{basic_socket<Protocol, Executor>(ctx, protocol)}.
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_stream_socket(io_context& ctx, const protocol_type& protocol,
+template<class ExecutionContext>
+  explicit basic_stream_socket(ExecutionContext& ctx, const protocol_type& protocol);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor(), protocol)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_stream_socket(const executor_type& ex, const endpoint_type& endpoint);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol, Executor>(ctx, endpoint)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext>
+  explicit basic_stream_socket(ExecutionContext& ctx, const endpoint_type& endpoint);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor(), endpoint)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_stream_socket(const executor_type& ex, const protocol_type& protocol,
+                    const native_handle_type& native_socket);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\effects Initializes the base class with \tcode{basic_socket<Protocol, Executor>(ctx, protocol, native_socket)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext>
+  basic_stream_socket(ExecutionContext& ctx, const protocol_type& protocol,
                       const native_handle_type& native_socket);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Initializes the base class with \tcode{basic_socket<Protocol>(ctx, protocol, native_socket)}.
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_stream_socket(ctx.get_executor(), protocol, native_socket)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -3031,20 +3264,20 @@ basic_stream_socket(basic_stream_socket&& rhs);
 
 \begin{itemdescr}
 \pnum
-\effects Move constructs an object of class \tcode{basic_stream_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
+\effects Move constructs an object of class \tcode{basic_stream_socket<Protocol, Executor>}, initializing the base class with \tcode{basic_socket<Protocol, Executor>(std::move(rhs))}.
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_stream_socket(basic_stream_socket<OtherProtocol>&& rhs);
+template<class OtherProtocol, class OtherExecutor>
+  basic_stream_socket(basic_stream_socket<OtherProtocol, OtherExecutor>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
-\effects Move constructs an object of class \tcode{basic_stream_socket<Protocol>}, initializing the base class with \tcode{basic_socket<Protocol>(std::move(rhs))}.
+\effects Move constructs an object of class \tcode{basic_stream_socket<Protocol, Executor>}, initializing the base class with \tcode{basic_socket<Protocol, Executor>(std::move(rhs))}.
 \end{itemdescr}
 
 
@@ -3057,23 +3290,23 @@ basic_stream_socket& operator=(basic_stream_socket&& rhs);
 
 \begin{itemdescr}
 \pnum
-\effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
+\effects Equivalent to \tcode{basic_socket<Protocol, Executor>::operator=(std::move(rhs))}.
 
 \pnum
 \returns \tcode{*this}.
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_stream_socket& operator=(basic_stream_socket<OtherProtocol>&& rhs);
+template<class OtherProtocol, class OtherExecutor>
+  basic_stream_socket& operator=(basic_stream_socket<OtherProtocol, OtherExecutor>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
-\effects Equivalent to \tcode{basic_socket<Protocol>::operator=(std::move(rhs))}.
+\effects Equivalent to \tcode{basic_socket<Protocol, Executor>::operator=(std::move(rhs))}.
 
 \pnum
 \returns \tcode{*this}.
@@ -3336,42 +3569,59 @@ template<class ConstBufferSequence, class CompletionToken>
 \rSec1[socket.acceptor]{Class template \tcode{basic_socket_acceptor}}
 
 \pnum
-An object of class template \tcode{basic_socket_acceptor<AcceptableProtocol>} is used to listen for, and queue, incoming socket connections. Socket objects that represent the incoming connections are dequeued by calling \tcode{accept} or \tcode{async_accept}.
+An object of class template \tcode{basic_socket_acceptor<AcceptableProtocol, Executor>} is used to listen for, and queue, incoming socket connections. Socket objects that represent the incoming connections are dequeued by calling \tcode{accept} or \tcode{async_accept}.
 
 \begin{codeblock}
 namespace std::experimental::net::inline @\namespacever@ {
 
-  template<class AcceptableProtocol>
+  template<class AcceptableProtocol, class Executor>
   class basic_socket_acceptor : public socket_base
   {
   public:
     // types:
 
-    using executor_type = io_context::executor_type;
+    using executor_type = Executor;
     using native_handle_type = @\impdefx{type of \tcode{basic_socket_acceptor::native_handle_type}}@; // \nativeref
     using protocol_type = AcceptableProtocol;
     using endpoint_type = typename protocol_type::endpoint;
     using socket_type = typename protocol_type::socket;
+    template<class OtherExecutor>
+    using socket_type_for
+      = typename protocol_type::socket_for<OtherExecutor>;
+
+    template<class OtherExecutor>
+    using rebind_executor =
+      basic_socket_acceptor<AcceptableProtocol, OtherExecutor>;
 
     // \ref{socket.acceptor.cons}, construct / copy / destroy
 
-    explicit basic_socket_acceptor(io_context& ctx);
-    basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
-    basic_socket_acceptor(io_context& ctx, const endpoint_type& endpoint,
+    explicit basic_socket_acceptor(const executor_type& ex);
+    template<class ExecutionContext>
+      explicit basic_socket_acceptor(ExecutionContext& ctx);
+    basic_socket_acceptor(const executor_type& ex, const protocol_type& protocol);
+    template<class ExecutionContext>
+      basic_socket_acceptor(ExecutionContext& ctx, const protocol_type& protocol);
+    basic_socket_acceptor(const executor_type& ex, const endpoint_type& endpoint,
                           bool reuse_addr = true);
-    basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
-                          const native_handle_type& native_acceptor);
+    template<class ExecutionContext>
+      basic_socket_acceptor(ExecutionContext& ctx, const endpoint_type& endpoint,
+                            bool reuse_addr = true);
+    basic_socket_acceptor(const executor_type& ex, const protocol_type& protocol,
+                          const native_handle_type& native_socket);
+    template<class ExecutionContext>
+      basic_socket_acceptor(ExecutionContext& ctx, const protocol_type& protocol,
+                            const native_handle_type& native_socket);
     basic_socket_acceptor(const basic_socket_acceptor&) = delete;
     basic_socket_acceptor(basic_socket_acceptor&& rhs);
-    template<class OtherProtocol>
-      basic_socket_acceptor(basic_socket_acceptor<OtherProtocol>&& rhs);
+    template<class OtherProtocol, class OtherExecutor>
+      basic_socket_acceptor(basic_socket_acceptor<OtherProtocol, OtherExecutor>&& rhs);
 
     ~basic_socket_acceptor();
 
     basic_socket_acceptor& operator=(const basic_socket_acceptor&) = delete;
     basic_socket_acceptor& operator=(basic_socket_acceptor&& rhs);
-    template<class OtherProtocol>
-      basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol>&& rhs);
+    template<class OtherProtocol, class OtherExecutor>
+      basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol, OtherExecutor>&& rhs);
 
     // \ref{socket.acceptor.ops}, basic_socket_acceptor operations
 
@@ -3436,25 +3686,49 @@ namespace std::experimental::net::inline @\namespacever@ {
 
     socket_type accept();
     socket_type accept(error_code& ec);
-    socket_type accept(io_context& ctx);
-    socket_type accept(io_context& ctx, error_code& ec);
+    template<class OtherExecutor>
+      socket_type_for<OtherExecutor>
+        accept(const OtherExecutor& ex);
+    template<class OtherExecutor>
+      socket_type_for<OtherExecutor>
+        accept(const OtherExecutor& ex, error_code& ec);
+    template<class ExecutionContext>
+      socket_type_for<typename ExecutionContext::executor_type>
+        accept(ExecutionContext& ctx);
+    template<class ExecutionContext>
+      socket_type_for<typename ExecutionContext::executor_type>
+        accept(ExecutionContext& ctx, error_code& ec);
 
     template<class CompletionToken>
       @\DEDUCED@ async_accept(CompletionToken&& token);
-    template<class CompletionToken>
-      @\DEDUCED@ async_accept(io_context& ctx, CompletionToken&& token);
+    template<class OtherExecutor, class CompletionToken>
+      \DEDUCED\ async_accept(const OtherExecutor& ex, CompletionToken&& token);
+    template<class ExecutionContext, class CompletionToken>
+      \DEDUCED\ async_accept(ExecutionContext& ctx, CompletionToken&& token);
 
     socket_type accept(endpoint_type& endpoint);
     socket_type accept(endpoint_type& endpoint, error_code& ec);
-    socket_type accept(io_context& ctx, endpoint_type& endpoint);
-    socket_type accept(io_context& ctx, endpoint_type& endpoint,
-                       error_code& ec);
+    template<class OtherExecutor>
+      socket_type_for<OtherExecutor>
+        accept(const OtherExecutor& ex, endpoint_type& endpoint);
+    template<class OtherExecutor>
+      socket_type_for<OtherExecutor>
+        accept(const OtherExecutor& ex, endpoint_type& endpoint, error_code& ec);
+    template<class ExecutionContext>
+      socket_type_for<typename ExecutionContext::executor_type>
+        accept(ExecutionContext& ctx, endpoint_type& endpoint);
+    template<class ExecutionContext>
+      socket_type_for<typename ExecutionContext::executor_type>
+        accept(ExecutionContext& ctx, endpoint_type& endpoint, error_code& ec);
 
     template<class CompletionToken>
       @\DEDUCED@ async_accept(endpoint_type& endpoint,
                            CompletionToken&& token);
-    template<class CompletionToken>
-      @\DEDUCED@ async_accept(io_context& ctx, endpoint_type& endpoint,
+    template<class OtherExecutor, class CompletionToken>
+      \DEDUCED\ async_accept(const OtherExecutor& ex, endpoint_type& endpoint,
+                           CompletionToken&& token);
+    template<class ExecutionContext, class CompletionToken>
+      \DEDUCED\ async_accept(ExecutionContext& ctx, endpoint_type& endpoint,
                            CompletionToken&& token);
 
     void wait(wait_type w);
@@ -3483,7 +3757,7 @@ When an operation has its effects specified as if by passing the result of \tcod
 \rSec2[socket.acceptor.cons]{\tcode{basic_socket_acceptor} constructors}
 
 \begin{itemdecl}
-explicit basic_socket_acceptor(io_context& ctx);
+explicit basic_socket_acceptor(const executor_type& ex);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3491,14 +3765,29 @@ explicit basic_socket_acceptor(io_context& ctx);
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == ex}.
 \item
 \tcode{is_open() == false}.
 \end{itemize}
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
+template<class ExecutionContext>
+  explicit basic_socket_acceptor(ExecutionContext& ctx);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor())}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_acceptor(const executor_type& ex, const protocol_type& protocol);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -3509,7 +3798,7 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == ex}.
 \item
 \tcode{is_open() == true}.
 \item
@@ -3522,7 +3811,22 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol);
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket_acceptor(io_context& ctx, const endpoint_type& endpoint,
+template<class ExecutionContext>
+  explicit basic_socket_acceptor(ExecutionContext& ctx, const protocol_type& protocol);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), protocol)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_acceptor(const executor_type& ex, const endpoint_type& endpoint,
                       bool reuse_addr = true);
 \end{itemdecl}
 
@@ -3542,7 +3846,7 @@ listen();
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == ex}.
 \item
 \tcode{is_open() == true}.
 \item
@@ -3555,7 +3859,23 @@ listen();
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
+template<class ExecutionContext>
+  explicit basic_socket_acceptor(ExecutionContext& ctx, const endpoint_type& endpoint,
+                                 bool reuse_addr = true);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), endpoint, reuse_addr)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+basic_socket_acceptor(const executor_type& ex, const protocol_type& protocol,
                       const native_handle_type& native_acceptor);
 \end{itemdecl}
 
@@ -3570,7 +3890,7 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
 \postconditions
 \begin{itemize}
 \item
-\tcode{get_executor() == ctx.get_executor()}.
+\tcode{get_executor() == ex}.
 \item
 \tcode{is_open() == true}.
 \item
@@ -3583,12 +3903,28 @@ basic_socket_acceptor(io_context& ctx, const protocol_type& protocol,
 \end{itemdescr}
 
 \begin{itemdecl}
+template<class ExecutionContext>
+  basic_socket_acceptor(ExecutionContext& ctx, const protocol_type& protocol,
+                        const native_handle_type& native_socket);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\constraints
+\tcode{is_convertible_v<Exec\-ution\-Context\&, execution_context\&>} is \tcode{true}
+and \tcode{is_constructible_v<executor_type, typename Exec\-ution\-Context::executor_type>} is \tcode{true}.
+
+\pnum
+\effects Equivalent to \tcode{basic_socket_acceptor(ctx.get_executor(), protocol, native_socket)}.
+\end{itemdescr}
+
+\begin{itemdecl}
 basic_socket_acceptor(basic_socket_acceptor&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol>} that refers to the state originally represented by \tcode{rhs}.
+\effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol, Executor>} that refers to the state originally represented by \tcode{rhs}.
 
 \pnum
 \postconditions
@@ -3611,16 +3947,16 @@ basic_socket_acceptor(basic_socket_acceptor&& rhs);
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_socket_acceptor(basic_socket_acceptor<OtherProtocol>&& rhs);
+template<class OtherProtocol, class OtherExecutor>
+  basic_socket_acceptor(basic_socket_acceptor<OtherProtocol, OtherExecutor>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\constraints \tcode{is_convertible_v<OtherProtocol, AcceptableProtocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
-\effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol>} that refers to the state originally represented by \tcode{rhs}.
+\effects Move constructs an object of class \tcode{basic_socket_acceptor<AcceptableProtocol, Executor>} that refers to the state originally represented by \tcode{rhs}.
 
 \pnum
 \postconditions
@@ -3691,13 +4027,13 @@ basic_socket_acceptor& operator=(basic_socket_acceptor&& rhs);
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class OtherProtocol>
-  basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol>&& rhs);
+template<class OtherProtocol, class OtherExecutor>
+  basic_socket_acceptor& operator=(basic_socket_acceptor<OtherProtocol, OtherExecutor>&& rhs);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\constraints \tcode{is_convertible_v<OtherProtocol, Protocol>} is \tcode{true}.
+\constraints \tcode{is_convertible_v<OtherProtocol, AcceptableProtocol>} is \tcode{true} and \tcode{is_convertible_v<OtherExecutor, Executor>} is \tcode{true}.
 
 \pnum
 \effects If \tcode{is_open()} is \tcode{true}, cancels all outstanding asynchronous operations associated with this acceptor, and releases acceptor resources as if by POSIX \tcode{close(native_handle())}. Then moves into \tcode{*this} the state originally represented by \tcode{rhs}. Completion handlers for canceled operations are passed an error code \tcode{ec} such that \tcode{ec == errc::operation_canceled} yields \tcode{true}.
@@ -4090,12 +4426,16 @@ socket_type accept(error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{accept(get_executor().context(), ec)}.
+\returns \tcode{accept(get_executor(), ec)}.
 \end{itemdescr}
 
 \begin{itemdecl}
-socket_type accept(io_context& ctx);
-socket_type accept(io_context& ctx, error_code& ec);
+template<class OtherExecutor>
+  socket_type_for<OtherExecutor>
+    accept(const OtherExecutor& ex);
+template<class OtherExecutor>
+  socket_type_for<OtherExecutor>
+    accept(const OtherExecutor& ex, error_code& ec);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -4107,7 +4447,21 @@ native_handle_type h = accept(native_handle(), nullptr, 0);
 
 
 \pnum
-\returns On success, \tcode{socket_type(ctx, protocol_, h)}. Otherwise \tcode{socket_type(ctx)}.
+\returns On success, \tcode{socket_type_for<OtherExecutor>(ex, protocol_, h)}. Otherwise \tcode{socket_type_for<OtherExecutor>(ex)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext>
+  socket_type_for<typename ExecutionContext::executor_type>
+    accept(ExecutionContext& ctx);
+template<class ExecutionContext>
+  socket_type_for<typename ExecutionContext::executor_type>
+    accept(ExecutionContext& ctx, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{accept(ctx.get_executor(), ec)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4119,25 +4473,41 @@ template<class CompletionToken>
 \pnum
 \returns
 \begin{codeblock}
-async_accept(get_executor().context(), forward<CompletionToken>(token))
+async_accept(get_executor(), forward<CompletionToken>(token))
 \end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class CompletionToken>
-  @\DEDUCED@ async_accept(io_context& ctx, CompletionToken&& token);
+template<class OtherExecutor, class CompletionToken>
+  \DEDUCED\ async_accept(const OtherExecutor& ex, CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\completionsig \tcode{void(error_code ec, socket_type s)}.
+Let \tcode{S} be the type \tcode{socket_type_for<OtherExecutor>}.
+
+\pnum
+\completionsig \tcode{void(error_code ec, S s)}.
 
 \pnum
 \effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX:
 \begin{codeblock}
 native_handle_type h = accept(native_handle(), nullptr, 0);
 \end{codeblock}
- On success, \tcode{s} is \tcode{socket_type(ctx, protocol_, h)}. Otherwise, \tcode{s} is \tcode{socket_type(ctx)}.
+On success, \tcode{s} is \tcode{S(ex, protocol_, h)}. Otherwise,  \tcode{s} is  \tcode{S(ex)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext, class CompletionToken>
+  \DEDUCED\ async_accept(ExecutionContext& ctx, CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns
+\begin{codeblock}
+async_accept(ctx.get_executor(), forward<CompletionToken>(token))
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4147,13 +4517,16 @@ socket_type accept(endpoint_type& endpoint, error_code& ec);
 
 \begin{itemdescr}
 \pnum
-\returns \tcode{accept(get_executor().context(), endpoint, ec)}.
+\returns \tcode{accept(get_executor(), endpoint, ec)}.
 \end{itemdescr}
 
 \begin{itemdecl}
-socket_type accept(io_context& ctx, endpoint_type& endpoint);
-socket_type accept(io_context& ctx, endpoint_type& endpoint,
-                   error_code& ec);
+template<class OtherExecutor>
+  socket_type_for<OtherExecutor>
+    accept(const OtherExecutor& ex, endpoint_type& endpoint);
+template<class OtherExecutor>
+  socket_type_for<OtherExecutor>
+    accept(const OtherExecutor& ex, endpoint_type& endpoint, error_code& ec);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -4170,7 +4543,21 @@ if (h >= 0)
 
 
 \pnum
-\returns On success, \tcode{socket_type(ctx, protocol_, h)}. Otherwise \tcode{socket_type(ctx)}.
+\returns On success, \tcode{socket_type(ex, protocol_, h)}. Otherwise \tcode{socket_type(ex)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext>
+  socket_type_for<typename ExecutionContext::executor_type>
+    accept(ExecutionContext& ctx, endpoint_type& endpoint);
+template<class ExecutionContext>
+  socket_type_for<typename ExecutionContext::executor_type>
+    accept(ExecutionContext& ctx, endpoint_type& endpoint, error_code& ec);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns \tcode{accept(ctx.get_executor(), endpoint, ec)}.
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -4183,19 +4570,22 @@ template<class CompletionToken>
 \pnum
 \returns
 \begin{codeblock}
-async_accept(get_executor().context(), endpoint, forward<CompletionToken>(token))
+async_accept(get_executor(), endpoint, forward<CompletionToken>(token))
 \end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}
-template<class CompletionToken>
-  @\DEDUCED@ async_accept(io_context& ctx, endpoint_type& endpoint,
+template<class OtherExecutor, class CompletionToken>
+  \DEDUCED\ async_accept(const OtherExecutor& ex, endpoint_type& endpoint,
                        CompletionToken&& token);
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-\completionsig \tcode{void(error_code ec, socket_type s)}.
+Let \tcode{S} be the type \tcode{socket_type_for<OtherExecutor>}.
+
+\pnum
+\completionsig \tcode{void(error_code ec, S s)}.
 
 \pnum
 \effects Initiates an asynchronous operation to extract a socket from the queue of pending connections of the acceptor, as if by POSIX:
@@ -4207,7 +4597,21 @@ native_handle_type h = accept(native_handle(),
 if (h >= 0)
   endpoint.resize(endpoint_len);
 \end{codeblock}
-On success, \tcode{s} is \tcode{socket_type(ctx, protocol_, h)}. Otherwise,  \tcode{s} is  \tcode{socket_type(ctx)}.
+On success, \tcode{s} is \tcode{S(ex, protocol_, h)}. Otherwise,  \tcode{s} is  \tcode{S(ex)}.
+\end{itemdescr}
+
+\begin{itemdecl}
+template<class ExecutionContext, class CompletionToken>
+  \DEDUCED\ async_accept(ExecutionContext& ctx, endpoint_type& endpoint,
+                       CompletionToken&& token);
+\end{itemdecl}
+
+\begin{itemdescr}
+\pnum
+\returns
+\begin{codeblock}
+async_accept(ctx.get_executor(), forward<CompletionToken>(token))
+\end{codeblock}
 \end{itemdescr}
 
 \begin{itemdecl}

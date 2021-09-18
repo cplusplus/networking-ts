@@ -6,7 +6,7 @@
 \rSec1[socket.streambuf]{Class template \tcode{basic_socket_streambuf}}
 
 \pnum
-The class \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} associates both the input sequence and the output sequence with a socket. The input and output sequences do not support seeking. \begin{note} The input and output sequences are independent as a stream socket provides full duplex I/O. \end{note}
+The class \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits, Executor>} associates both the input sequence and the output sequence with a socket. The input and output sequences do not support seeking. \begin{note} The input and output sequences are independent as a stream socket provides full duplex I/O. \end{note}
 
 \pnum
  \begin{note} This class is intended for sending and receiving bytes, not characters. Any conversion from characters to bytes, and vice versa, occurs elsewhere. \end{note}
@@ -14,12 +14,13 @@ The class \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} associates
 \begin{codeblock}
 namespace std::experimental::net::inline @\namespacever@ {
 
-  template<class Protocol, class Clock, class WaitTraits>
+  template<class Protocol, class Clock, class WaitTraits, class Executor = executor>
   class basic_socket_streambuf : public basic_streambuf<char>
   {
   public:
     // types:
 
+    using executor_type = Executor;
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
     using clock_type = Clock;
@@ -30,7 +31,7 @@ namespace std::experimental::net::inline @\namespacever@ {
     // \ref{socket.streambuf.cons}, construct / copy / destroy
 
     basic_socket_streambuf();
-    explicit basic_socket_streambuf(basic_stream_socket<protocol_type> s);
+    explicit basic_socket_streambuf(basic_stream_socket<protocol_type, executor_type> s);
     basic_socket_streambuf(const basic_socket_streambuf&) = delete;
     basic_socket_streambuf(basic_socket_streambuf&& rhs);
 
@@ -46,7 +47,7 @@ namespace std::experimental::net::inline @\namespacever@ {
 
     basic_socket_streambuf* close();
 
-    basic_socket<protocol_type>& socket();
+    basic_socket<protocol_type, executor_type>& socket();
     error_code error() const;
 
     time_point expiry() const;
@@ -62,7 +63,7 @@ namespace std::experimental::net::inline @\namespacever@ {
     virtual streambuf* setbuf(char_type* s, streamsize n) override;
 
   private:
-    basic_stream_socket<protocol_type> socket_; // \expos
+    basic_stream_socket<protocol_type, executor_type> socket_; // \expos
     error_code ec_; // \expos
     time_point expiry_; // \expos
   };
@@ -82,6 +83,10 @@ basic_socket_streambuf();
 
 \begin{itemdescr}
 \pnum
+\constraints
+\tcode{is_constructible_v<executor_type, io_context::executor_type>} is \tcode{true}.
+
+\pnum
 \effects Initializes \tcode{socket_} with \tcode{ctx}, where \tcode{ctx} is an unspecified object of class \tcode{io_context}.
 
 \pnum
@@ -89,7 +94,7 @@ basic_socket_streambuf();
 \end{itemdescr}
 
 \begin{itemdecl}
-explicit basic_socket_streambuf(basic_stream_socket<protocol_type> s);
+explicit basic_socket_streambuf(basic_stream_socket<protocol_type, executor_type> s);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -152,7 +157,7 @@ virtual ~basic_socket_streambuf();
 
 \begin{itemdescr}
 \pnum
-\effects If a put area exists, calls \tcode{overflow(traits_type::eof())} to flush characters. \begin{note} The socket is closed by the \tcode{basic_stream_socket<protocol_type>} destructor. \end{note}
+\effects If a put area exists, calls \tcode{overflow(traits_type::eof())} to flush characters. \begin{note} The socket is closed by the \tcode{basic_stream_socket<protocol_type, executor_type>} destructor. \end{note}
 \end{itemdescr}
 
 \begin{itemdecl}
@@ -210,7 +215,7 @@ basic_socket_streambuf* close();
 
 \begin{itemdescr}
 \pnum
-\effects If a put area exists, calls \tcode{overflow(traits_type::eof())} to flush characters. Regardless of whether the preceding call fails or throws an exception, the function closes the socket as if by \tcode{basic_socket<protocol_type>::close(ec_)}. If any of the calls made by the function fail, \tcode{close} fails by returning a null pointer. If one of these calls throws an exception, the exception is caught and rethrown after closing the socket.
+\effects If a put area exists, calls \tcode{overflow(traits_type::eof())} to flush characters. Regardless of whether the preceding call fails or throws an exception, the function closes the socket as if by \tcode{basic_socket<protocol_type, executor_type>::close(ec_)}. If any of the calls made by the function fail, \tcode{close} fails by returning a null pointer. If one of these calls throws an exception, the exception is caught and rethrown after closing the socket.
 
 \pnum
 \returns \tcode{this} on success, a null pointer otherwise.
@@ -220,7 +225,7 @@ basic_socket_streambuf* close();
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket<protocol_type>& socket();
+basic_socket<protocol_type, executor_type>& socket();
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -349,7 +354,7 @@ virtual streambuf* setbuf(char_type* s, streamsize n) override;
 \rSec1[socket.iostream]{Class template \tcode{basic_socket_iostream}}
 
 \pnum
-The class template \tcode{basic_socket_iostream<Protocol, Clock, WaitTraits>} supports reading and writing on sockets. It uses a \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits>} object to control the associated sequences.
+The class template \tcode{basic_socket_iostream<Protocol, Clock, WaitTraits, Executor>} supports reading and writing on sockets. It uses a \tcode{basic_socket_streambuf<Protocol, Clock, WaitTraits, Executor>} object to control the associated sequences.
 
 \pnum
  \begin{note} This class is intended for sending and receiving bytes, not characters. Any conversion from characters to bytes, and vice versa, occurs elsewhere. \end{note}
@@ -357,12 +362,13 @@ The class template \tcode{basic_socket_iostream<Protocol, Clock, WaitTraits>} su
 \begin{codeblock}
 namespace std::experimental::net::inline @\namespacever@ {
 
-  template<class Protocol, class Clock, class WaitTraits>
+  template<class Protocol, class Clock, class WaitTraits, class Executor = executor>
   class basic_socket_iostream : public basic_iostream<char>
   {
   public:
     // types:
 
+    using executor_type = Executor;
     using protocol_type = Protocol;
     using endpoint_type = typename protocol_type::endpoint;
     using clock_type = Clock;
@@ -373,7 +379,7 @@ namespace std::experimental::net::inline @\namespacever@ {
     // \ref{socket.iostream.cons}, construct / copy / destroy
 
     basic_socket_iostream();
-    explicit basic_socket_iostream(basic_stream_socket<protocol_type> s);
+    explicit basic_socket_iostream(basic_stream_socket<protocol_type, executor_type> s);
     basic_socket_iostream(const basic_socket_iostream&) = delete;
     basic_socket_iostream(basic_socket_iostream&& rhs);
     template<class... Args>
@@ -388,9 +394,9 @@ namespace std::experimental::net::inline @\namespacever@ {
 
     void close();
 
-    basic_socket_streambuf<protocol_type, clock_type, wait_traits_type>* rdbuf() const;
+    basic_socket_streambuf<protocol_type, clock_type, wait_traits_type, executor_type>* rdbuf() const;
 
-    basic_socket<protocol_type>& socket();
+    basic_socket<protocol_type, executor_type>& socket();
     error_code error() const;
 
     time_point expiry() const;
@@ -398,7 +404,7 @@ namespace std::experimental::net::inline @\namespacever@ {
     void expires_after(const duration& d);
 
   private:
-    basic_socket_streambuf<protocol_type, clock_type, wait_traits_type> sb_; // \expos
+    basic_socket_streambuf<protocol_type, clock_type, wait_traits_type, executor_type> sb_; // \expos
   };
 
 } // inline namespace std::experimental::net::\namespacever
@@ -416,11 +422,15 @@ basic_socket_iostream();
 
 \begin{itemdescr}
 \pnum
+\constraints
+\tcode{is_default_constructible_v<basic_socket_streambuf<protocol_type, clock_type, wait_traits_type, executor_type>>} is \tcode{true}.
+
+\pnum
 \effects Initializes the base class as \tcode{basic_iostream<char>(addressof(sb_))}, value-initializes \tcode{sb_}, and performs \tcode{setf(std::ios_base::unitbuf)}.
 \end{itemdescr}
 
 \begin{itemdecl}
-explicit basic_socket_iostream(basic_stream_socket<protocol_type> s);
+explicit basic_socket_iostream(basic_stream_socket<protocol_type, executor_type> s);
 \end{itemdecl}
 
 \begin{itemdescr}
@@ -487,19 +497,19 @@ void close();
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket_streambuf<protocol_type, clock_type, wait_traits_type>* rdbuf() const;
+basic_socket_streambuf<protocol_type, clock_type, wait_traits_type, executor_type>* rdbuf() const;
 \end{itemdecl}
 
 \begin{itemdescr}
 \pnum
-Let \tcode{SB} be the type \tcode{basic_socket_streambuf<protocol_type, clock_type, wait_traits_type>}.
+Let \tcode{SB} be the type \tcode{basic_socket_streambuf<protocol_type, clock_type, wait_traits_type, executor_type>}.
 
 \pnum
 \returns \tcode{const_cast<SB*>(addressof(sb_))}.
 \end{itemdescr}
 
 \begin{itemdecl}
-basic_socket<protocol_type>& socket();
+basic_socket<protocol_type, executor_type>& socket();
 \end{itemdecl}
 
 \begin{itemdescr}
