@@ -218,9 +218,7 @@ Returns the maximum number of bytes to be transferred on the next \tcode{read_so
 The class \tcode{transfer_all} is a completion condition that is used to specify that a read or write operation should continue until all of the data has been transferred, or until an error occurs.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   class transfer_all
@@ -230,9 +228,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -256,9 +252,7 @@ size_t operator()(const error_code& ec, size_t) const;
 The class \tcode{transfer_at_least} is a completion condition that is used to specify that a read or write operation should continue until a minimum number of bytes has been transferred, or until an error occurs.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   class transfer_at_least
@@ -271,9 +265,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -306,9 +298,7 @@ size_t operator()(const error_code& ec, size_t n) const;
 The class \tcode{transfer_exactly} is a completion condition that is used to specify that a read or write operation should continue until an exact number of bytes has been transferred, or until an error occurs.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   class transfer_exactly
@@ -321,9 +311,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum

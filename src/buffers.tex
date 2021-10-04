@@ -12,8 +12,7 @@
 \indexlibrary{\idxcode{stream_errc}}%
 \begin{codeblock}
 namespace std {
-namespace experimental {
-namespace net {
+namespace experimental::net {
 inline namespace v1 {
 
   enum class stream_errc {
@@ -291,8 +290,7 @@ inline namespace v1 {
                              CompletionToken&& token);
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
+} // namespace experimental::net
 
   template<> struct is_error_code_enum<experimental::net::v1::stream_errc>
     : public true_type {};
@@ -591,9 +589,7 @@ error_condition make_error_condition(stream_errc e) noexcept;
 
 \indexlibrary{\idxcode{mutable_buffer}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   class mutable_buffer
@@ -614,9 +610,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -680,9 +674,7 @@ and then \tcode{size_} to \tcode{size_ - min(n, size_)}.
 \rSec1[buffer.const]{Class \tcode{const_buffer}}
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   class const_buffer
@@ -704,9 +696,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -782,9 +772,7 @@ const_buffer& operator+=(size_t n) noexcept;
 \indexlibrary{\idxcode{is_const_buffer_sequence}}%
 \indexlibrary{\idxcode{is_dynamic_buffer}}%
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class T> struct is_mutable_buffer_sequence;
@@ -792,9 +780,7 @@ inline namespace v1 {
   template<class T> struct is_dynamic_buffer;
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -1125,9 +1111,7 @@ template<class CharT, class Traits>
 Class template \tcode{dynamic_vector_buffer} is an adaptor used to automatically grow or shrink a \tcode{vector} object, to reflect the data successfully transferred in an I/O operation.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class T, class Allocator>
@@ -1160,9 +1144,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
@@ -1291,9 +1273,7 @@ size_ -= m;
 Class template \tcode{dynamic_string_buffer} is an adaptor used to automatically grow or shrink a \tcode{basic_string} object, to reflect the data successfully transferred in an I/O operation.
 
 \begin{codeblock}
-namespace std {
-namespace experimental {
-namespace net {
+namespace std::experimental::net {
 inline namespace v1 {
 
   template<class CharT, class Traits, class Allocator>
@@ -1326,9 +1306,7 @@ inline namespace v1 {
   };
 
 } // inline namespace v1
-} // namespace net
-} // namespace experimental
-} // namespace std
+} // namespace std::experimental::net
 \end{codeblock}
 
 \pnum
